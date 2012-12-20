@@ -71,13 +71,14 @@ namespace ConsoleApplication1
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
 
             Socket listener =
-                    new Socket(localEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                    new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             listener.Bind(localEndPoint);
             listener.Listen(port);
 
             Console.WriteLine(" >> Server Started, waiting for a connection...");
             Socket clientSocket = listener.Accept();
-            Console.WriteLine(" >> Accepted connection from client");
+            string remoteIP = ((IPEndPoint)clientSocket.RemoteEndPoint).ToString(); //IP:port
+            Console.WriteLine(" >> Accepted connection from client " + remoteIP);
 
             // http://msdn.microsoft.com/en-us/library/w93yy28a.aspx
             int requestCount = 0;
