@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
 // Porgram: SocketFileServer
 // Purpose: Use io.Copy to service a file to socket
-// Authors: Tong Sun (c) 2013; Jan Newmarch (c) 2012
+// Authors: Tong Sun (c) 2013, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
 package main
@@ -39,7 +39,6 @@ func handleClient(conn net.Conn) {
     defer src.Close()
 
     dst := conn
-
     io.Copy(dst, src)
     // we're finished with this client
 }
