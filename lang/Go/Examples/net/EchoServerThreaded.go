@@ -4,6 +4,8 @@
 // Authors: Tong Sun (c) 2013; Jan Newmarch (c) 2012
 ////////////////////////////////////////////////////////////////////////////
 
+// Style: gofmt -tabs=false -tabwidth=2
+
 package main
 
 import (
