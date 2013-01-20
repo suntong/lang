@@ -4,6 +4,8 @@
 // Authors: Tong Sun (c) 2013, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
+// Style: gofmt -tabs=false -tabwidth=2
+
 package main
 
 import (
