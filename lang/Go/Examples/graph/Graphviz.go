@@ -14,6 +14,7 @@ import (
   "os"
 
   "code.google.com/p/gographviz"
+  "code.google.com/p/gographviz/ast"
   "code.google.com/p/gographviz/parser"
 )
 
@@ -33,7 +34,7 @@ import (
 //   return s + "\n"
 // }
 
-func openfile(filename string) *gographviz.Graph {
+func parser2graph(filename string) *gographviz.Graph {
   f, err := os.Open(filename)
   checkError(err)
   all, err := ioutil.ReadAll(f)
@@ -49,6 +50,17 @@ func openfile(filename string) *gographviz.Graph {
   return ag
 }
 
+func parse2graph(filename string) *ast.Graph {
+  f, err := os.Open(filename)
+  checkError(err)
+  all, err := ioutil.ReadAll(f)
+  checkError(err)
+  g, err := gographviz.Parse(all)
+  checkError(err)
+  fmt.Printf("Parsed: %v\n", g)
+  return g
+}
+
 func main() {
   if len(os.Args) != 2 {
     fmt.Fprintf(os.Stderr, "Usage:\n %s graphviz_file\n", os.Args[0])
@@ -56,7 +68,8 @@ func main() {
   }
   gf := os.Args[1]
 
-  _ = openfile(gf)
+  //_ = parser2graph(gf)
+  _ = parse2graph(gf)
   os.Exit(0)
 }
 
