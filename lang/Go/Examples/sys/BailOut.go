@@ -5,7 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 // Style: gofmt -tabs=false -tabwidth=2
-// By Jan Mercl, http://play.golang.org/p/m96skGjRjo
 
 package main
 
@@ -14,6 +13,39 @@ import (
   "runtime/debug"
   "time"
 )
+
+// defer/trace demo
+// http://tip.golang.org/doc/effective_go.html#defer
+
+// Arguments to deferred functions are evaluated when the defer executes. 
+// The tracing routine can set up the argument to the untracing routine.
+
+func trace(s string) string {
+  log.Println("entering:", s)
+  return s
+}
+
+func un(s string) {
+  log.Println("leaving:", s)
+}
+
+func a() {
+  defer un(trace("a"))
+  log.Println("in a")
+  // Deferred functions are executed in LIFO order, will print 4 3 2 1 0
+  for i := 0; i < 5; i++ {
+    defer log.Printf("%d ", i)
+  }
+}
+
+func b() {
+  defer un(trace("b"))
+  log.Println("in b")
+  a()
+}
+
+// panic & recover demo
+// By Jan Mercl, http://play.golang.org/p/m96skGjRjo
 
 func deep2(n int) {
   defer func() {
@@ -50,5 +82,7 @@ func main() {
   }()
 
   log.Println("Main started")
+  b()
+
   deep1(1)
 }
