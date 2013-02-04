@@ -14,6 +14,25 @@ import (
   "time"
 )
 
+// init function demo
+// http://tip.golang.org/doc/effective_go.html#init
+
+// each source file can define its own niladic init function to set up
+// whatever state is required.  init is called after all the variable
+// declarations in the package have evaluated their initializers, and those
+// are evaluated only after all the imported packages have been initialized.
+
+func init() {
+  defer un(trace("init1"))
+  log.Println("initing A ...")
+}
+
+// (Actually each file can have multiple init functions.)
+func init() {
+  defer un(trace("init2"))
+  log.Println("initing B ...")
+}
+
 // defer/trace demo
 // http://tip.golang.org/doc/effective_go.html#defer
 
