@@ -29,9 +29,11 @@
     #,[string]$Password = $( Read-Host "Input password, please" )
  )
 
+Write-Host "All args: $args";
+
 Write-Host "Switch: $Recurse";
-Write-Host "Arg: $foo";
-Write-Host "Arg: $bar";
+Write-Host "Arg `$foo: $foo";
+Write-Host "Arg `$bar: $bar";
 
 # The scriptblock is a block of script code that exists as an object reference 
 # but does not require a name. Scriptblocks are also known as anonymous 
