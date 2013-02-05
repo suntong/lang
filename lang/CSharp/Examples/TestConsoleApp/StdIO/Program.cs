@@ -1,4 +1,10 @@
-﻿using System;
+﻿////////////////////////////////////////////////////////////////////////////
+// Porgram: StdIO
+// Purpose: A demo of C# IO
+// Authors: Tong Sun (c) 2013, All rights reserved
+////////////////////////////////////////////////////////////////////////////
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,12 +42,13 @@ namespace StdIO
         {
             MailMessage message = new MailMessage();
 
-            message.From = new MailAddress("noreply@dayforce.com", "Backfill Wizard");
-            message.To.Add(new MailAddress("asun@Dayforce.com"));
+            message.From = new MailAddress(Properties.Settings.Default.email_noreply, 
+                                            Properties.Settings.Default.email_name);
+            message.To.Add(new MailAddress(Properties.Settings.Default.email_to));
             message.Subject = "Sending mail";
             message.Body = "Check sending email by Exchange from asp.net code <> ";
 
-            SmtpClient client = new SmtpClient("dffs1", 25);
+            SmtpClient client = new SmtpClient(Properties.Settings.Default.email_smtp, 25);
 
             try
             {
