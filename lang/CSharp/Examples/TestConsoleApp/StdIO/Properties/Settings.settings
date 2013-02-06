@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="StdIO.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="email_noreply" Type="System.String" Scope="User">
+      <Value Profile="(Default)">noreply@mycorp.com</Value>
+    </Setting>
+    <Setting Name="email_name" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Full Name</Value>
+    </Setting>
+    <Setting Name="email_to" Type="System.String" Scope="User">
+      <Value Profile="(Default)">me@mycorp.com</Value>
+    </Setting>
+    <Setting Name="email_smtp" Type="System.String" Scope="User">
+      <Value Profile="(Default)">dffs1</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
