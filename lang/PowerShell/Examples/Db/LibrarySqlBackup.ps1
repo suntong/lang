@@ -1,5 +1,11 @@
-# LibrarySqlBackup, SQL Server backup and restore functions using sqlpsx
+# LibrarySqlBackup, Standalone SQL Server backup and restore functions adapted from sqlpsx
 # http://poshcode.org/1188
+
+# Usage:
+# . .\LibrarySqlBackup.ps1
+# $serverName = 'Z002\SqlExpress'; $dbName = 'pubs'
+# $server = new-object ("Microsoft.SqlServer.Management.Smo.Server") $serverName
+# invoke-sqlbackup $serverName $dbName $($server.BackupDirectory + "\$dbName.bak")
 
 # ---------------------------------------------------------------------------
 ### <Script>
