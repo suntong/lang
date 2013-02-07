@@ -1,4 +1,11 @@
-param($sqlserver, $filepath)
+##----------------------------------------------------------------------------
+## Porgram: Restore-Database
+## Purpose: Restore SQL database properly using SQLPSX
+## Authors: Antonio Sun (c) 2013, All rights reserved
+##          Chad Miller (c) 2011, http://poshcode.org/2531
+##---------------------------------------------------------------------------
+
+param($sqlserver, $filepath, $dbname='')
 
 import-module sqlserver -force
 
@@ -6,7 +13,9 @@ import-module sqlserver -force
 $server = get-sqlserver $sqlserver
 
 $filepath = Resolve-Path $filepath | select -ExpandProperty Path
-$dbname = Get-ChildItem $filePath | select -ExpandProperty basename
+if ($dbname -eq '') {
+    $dbname = (Get-ChildItem $filePath | select -ExpandProperty basename)  -replace('_.*','')
+    }
 
 $dataPath = Get-SqlDefaultDir -sqlserver $server -dirtype Data
 $logPath = Get-SqlDefaultDir -sqlserver $server -dirtype Log
