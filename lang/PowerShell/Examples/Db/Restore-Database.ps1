@@ -5,7 +5,7 @@
 ##          Chad Miller (c) 2011, http://poshcode.org/2531
 ##---------------------------------------------------------------------------
 
-param($sqlserver, $filepath, $dbname='')
+param($sqlserver=$(throw 'sqlserver required.'), $filepath=$(throw 'filepath required.'), $dbname='')
 
 import-module sqlserver -force
 
