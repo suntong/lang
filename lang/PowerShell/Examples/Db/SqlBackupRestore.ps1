@@ -1,10 +1,29 @@
 ##----------------------------------------------------------------------------
-## Porgram: Restore-Database
-## Purpose: Restore SQL database properly using SQLPSX
+## Porgram: SqlBackupRestore
+## Purpose: SQL server Backup & Restore using SQLPSX
 ## Authors: Antonio Sun (c) 2013, All rights reserved
 ##---------------------------------------------------------------------------
 
 import-module sqlserver -force
+
+function Do-SqlBackup {
+    param($sqlserver=$(throw 'sqlserver required.'), 
+        $dbname=$(throw 'dbname required.'), 
+        $bakname='',
+        $Directory='')
+
+    if ($bakname -eq "") {
+        $bakname = "$dbname.bak";
+    }
+
+    if (-not ($Directory -eq "")) {
+        $Directory += "\";
+    }
+    
+    $server = Get-SqlServer $sqlserver
+    Invoke-SqlBackup $sqlserver $dbname $($server.BackupDirectory+ "\"+ $Directory+ $bakname)
+}
+
 
 function Do-SqlRestore {
     ## Authors: Chad Miller (c) 2011, http://poshcode.org/2531
