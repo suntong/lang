@@ -1,3 +1,30 @@
+##----------------------------------------------------------------------------
+## Porgram: LibRunTime
+## Purpose: General runtime supporting functions
+## Authors: Antonio Sun (c) 2013, All rights reserved
+##---------------------------------------------------------------------------
+
+function start-logging ($logName='', $logParams=@{NoCLobber=$true;Append=$true;Path="$env:temp\log.txt"}) {
+	#get current login info
+	#$CS = Gwmi Win32_ComputerSystem -Comp "."
+	#$LogonHost=$CS.Name
+	#$LogonUser=$CS.UserName
+
+    if (-not ($logName -eq "")) {
+        $logParams.Path = "$env:temp\$logName"
+    }
+
+	start-transcript @logParams | Out-Null 
+	#write-host "`n`nLogging started at" (get-date -format s) "on $LogonHost by $LogonUser`n"
+    return "$logParams.Path"
+}
+
+function stop-logging ($logFile){
+    stop-transcript
+    "`r`n" | Out-File -FilePath $logFile -Append
+}
+
+
 ## by Vidrine
 ## http://poshcode.org/3502
 
