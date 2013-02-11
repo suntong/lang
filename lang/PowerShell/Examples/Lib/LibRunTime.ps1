@@ -4,22 +4,79 @@
 ## Authors: Antonio Sun (c) 2013, All rights reserved
 ##---------------------------------------------------------------------------
 
-function start-logging ($logName='', $logParams=@{NoCLobber=$true;Append=$true;Path="$env:temp\log.txt"}) {
+	<#
+		.SYNOPSIS
+			Temp name generator.
+
+		.DESCRIPTION
+			Generate a temp name based on the given name skeleton and current date & time.
+
+		.PARAMETER Name
+			The name skeleton used for generating the temp name.
+
+		.PARAMETER TimeFormat
+			The time format string used for generating the temp name (default: 'MMdd_HHmm').
+		
+		.PARAMETER AddTemp
+			Add system temp path to the front of the return.
+		
+
+		.EXAMPLE
+			PS C:\> Get-TempName 'abc.txt'
+            abc_0211_1559.txt
+
+		.EXAMPLE
+			PS C:\> Get-TempName -AddTemp 'abc.txt'
+            C:\Users\...\Temp\abc_0211_1600.txt
+
+		.EXAMPLE
+			PS C:\> $fn = Get-TempName -TimeFormat "yyyy-MM-dd_hhmmss" 'test.log'
+            PS C:\> $fn 
+            test_2013-02-12_090523.log
+
+		.INPUTS
+			System.String
+
+		.OUTPUTS
+			System.String.
+			
+	#>
+
+function Get-TempName {
+    param(
+        [Parameter(ValueFromPipeline=$true,Mandatory=$true)] [ValidateNotNullOrEmpty()]
+		[string] $Name,
+
+		[Parameter()]
+		[String] $TimeFormat='MMdd_HHmm',
+
+		[Parameter()]
+		[Switch] $AddTemp
+    )
+
+    $dateStr = get-date -format $TimeFormat
+    $fileName = $Name -replace '(.*)\.(.*)', "`$1_$dateStr.`$2"
+
+    if ($AddTemp) { $fileName = "$env:temp\$fileName" }
+    return $fileName
+}
+
+function Start-Logging ($logName='', $logParams=@{NoCLobber=$true;Append=$true;Path="$env:temp\log.txt"}) {
 	#get current login info
 	#$CS = Gwmi Win32_ComputerSystem -Comp "."
 	#$LogonHost=$CS.Name
 	#$LogonUser=$CS.UserName
 
     if (-not ($logName -eq "")) {
-        $logParams.Path = "$env:temp\$logName"
+        $logParams.Path = Get-TempName -AddTemp $logName
     }
 
 	start-transcript @logParams | Out-Null 
 	#write-host "`n`nLogging started at" (get-date -format s) "on $LogonHost by $LogonUser`n"
-    return "$logParams.Path"
+    return $logParams.Path
 }
 
-function stop-logging ($logFile){
+function Stop-Logging ($logFile){
     stop-transcript
     "`r`n" | Out-File -FilePath $logFile -Append
 }
