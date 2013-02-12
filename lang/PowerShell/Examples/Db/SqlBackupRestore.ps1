@@ -42,7 +42,7 @@ function Do-SqlRestore {
     $server = get-sqlserver $sqlserver
 
     if ($dbname -eq '') {
-        $dbname = $filepath -replace('_.*','')
+        $dbname = $filepath -replace('^.*[\\/]','') -replace('[_.].*','')
         }
 
     $dataPath = Get-SqlDefaultDir -sqlserver $server -dirtype Data
