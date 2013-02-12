@@ -41,9 +41,8 @@ function Do-SqlRestore {
 
     $server = get-sqlserver $sqlserver
 
-    $filepath = Resolve-Path $filepath | select -ExpandProperty Path
     if ($dbname -eq '') {
-        $dbname = (Get-ChildItem $filePath | select -ExpandProperty basename)  -replace('_.*','')
+        $dbname = $filepath -replace('_.*','')
         }
 
     $dataPath = Get-SqlDefaultDir -sqlserver $server -dirtype Data
