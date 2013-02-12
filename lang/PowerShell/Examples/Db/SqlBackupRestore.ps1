@@ -28,7 +28,9 @@ function Do-SqlBackup {
     }
     
     $server = Get-SqlServer $sqlserver
-    Invoke-SqlBackup $sqlserver $dbname $($server.BackupDirectory+ "\"+ $Directory+ $bakname)
+    $bakname = $($server.BackupDirectory+ "\"+ $Directory+ $bakname)
+    Invoke-SqlBackup $sqlserver $dbname $bakname
+    return $bakname
 }
 
 

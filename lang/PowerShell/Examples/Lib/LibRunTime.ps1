@@ -62,10 +62,6 @@ function Get-TempName {
 }
 
 function Start-Logging ($logName='', $logParams=@{NoCLobber=$true;Append=$true;Path="$env:temp\log.txt"}) {
-	#get current login info
-	#$CS = Gwmi Win32_ComputerSystem -Comp "."
-	#$LogonHost=$CS.Name
-	#$LogonUser=$CS.UserName
 
     if (-not ($logName -eq "")) {
         $logParams.Path = Get-TempName -AddTemp $logName
