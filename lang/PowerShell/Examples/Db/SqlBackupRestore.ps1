@@ -6,6 +6,13 @@
 
 import-module sqlserver -force
 
+##--------------------------------------------------------
+## SYNOPSIS: Database Level Backup & Restore
+## DESCRIPTION: Backup & Restore a single DB in MS SQL Server
+##--------------------------------------------------------
+
+#region DatabaseLevel
+
 function Do-SqlBackup {
     param($sqlserver=$(throw 'sqlserver required.'), 
         $dbname=$(throw 'dbname required.'), 
@@ -53,3 +60,62 @@ function Do-SqlRestore {
 
     Invoke-SqlRestore -sqlserver $server -dbname $dbname -filepath $filepath -relocatefiles $relocateFiles -Verbose -force
 }
+
+#endregion
+
+##--------------------------------------------------------
+## SYNOPSIS: Server Level Backup & Restore
+## DESCRIPTION: Backup & Restore the entire MS SQL Server
+##--------------------------------------------------------
+
+#region ServerLevel
+
+	<#
+		.SYNOPSIS
+			Server Backup.
+
+		.DESCRIPTION
+			Backup the given MS SQL Server of the given DBs.
+
+		.PARAMETER ServerName 
+			The name of the MS SQL Server to backup.
+
+		.PARAMETER DBs
+			DBs within the given server to backup (regexp). If empty, all dbs are to be backup.
+		
+		.PARAMETER Directory
+			Directory name underneath the MS SQL Server default backup directory used for backup.
+            CAUTION: The directory must pre-exist.
+		
+		.EXAMPLE
+			Do-SvrBackup 'MySvr001' 'this|that|th[eo]se' '20130212'
+			
+	#>
+
+function Do-SvrBackup {
+    param(
+        [Parameter(ValueFromPipeline=$true,Mandatory=$true)] [ValidateNotNullOrEmpty()]
+		[string] $ServerName ,
+
+		[Parameter()]
+		[String] $DBs='',
+    
+		[Parameter()]
+		[String] $Directory=''
+    )
+
+    
+    Get-SqlDatabase $ServerName |
+         where-object { $_.Name -match $DBs } | 
+         Select-Object Name | foreach {
+         Write-Host "Backing up $($_.Name) under $Directory"
+         Do-SqlBackup -Directory $Directory $ServerName $($_.Name)
+         }
+}
+
+
+function Do-SvrRestore {
+
+}
+
+#endregion
