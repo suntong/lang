@@ -94,7 +94,7 @@ function Do-SqlRestore {
 
 function Do-SvrBackup {
     param(
-        [Parameter(ValueFromPipeline=$true,Mandatory=$true)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]
 		[string] $ServerName ,
 
 		[Parameter()]
@@ -108,14 +108,49 @@ function Do-SvrBackup {
     Get-SqlDatabase $ServerName |
          where-object { $_.Name -match $DBs } | 
          Select-Object Name | foreach {
-         Write-Host "Backing up $($_.Name) under $Directory"
+         Write-Host -NoNewline "Backing up $($_.Name) under $Directory... "
          Do-SqlBackup -Directory $Directory $ServerName $($_.Name)
+         Write-Host "Done."
          }
 }
 
+<#
+	.SYNOPSIS
+		Server Restore.
 
+	.DESCRIPTION
+		Restore the MS SQL Server backups from the given directory locally.
+
+	.PARAMETER Directory
+		Directory containing the SQL Server backups files.
+
+	.PARAMETER DbExt
+		DB extension of the SQL Server backups files (default: 'bak').
+		
+		
+	.EXAMPLE
+		Do-SvrBackup D:\MyDBBackups\20130212
+			
+#>
 function Do-SvrRestore {
+    param(
+        [Parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]
+		[String] $Directory='',
 
+		[Parameter()]
+		[String] $DbExt='bak'
+    )
+
+	#get current login info
+	$CS = Gwmi Win32_ComputerSystem -Comp "."
+	$LogonHost=$CS.Name
+	$LogonUser=$CS.UserName
+
+    get-childitem $Directory *.$DbExt | foreach {
+        write-host "$Directory\$_ restoring started ... "
+        Do-SqlRestore $LogonHost $Directory\$_
+        Write-Host "$Directory\$_ restoring finished."
+    }
 }
 
 #endregion
