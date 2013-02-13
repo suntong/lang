@@ -87,7 +87,14 @@ function Do-SqlRestore {
 		.PARAMETER Directory
 			Directory name underneath the MS SQL Server default backup directory used for backup.
             CAUTION: The directory must pre-exist.
+
+		.PARAMETER Check
+			Check the DB selection of the given DBs.
 		
+		.EXAMPLE
+			Do-SvrBackup MySvr001 -Check
+			Do-SvrBackup 'MySvr001' 'this|that|th[eo]se' -Check
+
 		.EXAMPLE
 			Do-SvrBackup 'MySvr001' 'this|that|th[eo]se' '20130212'
 			
@@ -102,16 +109,26 @@ function Do-SvrBackup {
 		[String] $DBs='',
     
 		[Parameter()]
-		[String] $Directory=''
+		[String] $Directory='',
+
+		[Parameter()]
+		[Switch] $Check
     )
 
-    
+    if ($Check) { 
+            Write-Host "DBs to be backed up are:`n------------------------"
+    }
+
     Get-SqlDatabase $ServerName |
          where-object { $_.Name -match $DBs } | 
          Select-Object Name | foreach {
-         Write-Host -NoNewline "Backing up $($_.Name) under $Directory... "
-         Do-SqlBackup -Directory $Directory $ServerName $($_.Name)
-         Write-Host "Done."
+         if ($Check) { 
+            Write-Host "$($_.Name)"
+         } else {
+             Write-Host -NoNewline "Backing up '$($_.Name)' under '$Directory'... "
+             Do-SqlBackup -Directory $Directory $ServerName $($_.Name)
+             Write-Host "Done."
+         }
          }
 }
 
