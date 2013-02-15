@@ -173,19 +173,18 @@ function Do-SvrRestore {
 
 
 
-function Defrag-SQLServer-Indexes
+function Defrag-SvrIndexes
 {
-# http://zogamorph.blogspot.ca/2012/02/sql-server-maintenance-via-powershell.html
-#Author: Steve Wright
-#Date: 20/01/2012 
-#Script: Update-SQLServer-Statistics
+# Adapted by: Antonio Sun,  Date: 12/02/2013
+# Initial by: Steve Wright, Date: 20/01/2012
+#             
 
 <#
 .SYNOPSIS
-Defrag the Indexes of the request SQL Server database
+Defrag the Indexes of the requestd SQL Server databases
 
 .DESCRIPTION
-For the selected database on the SQL Server will loop through all the user tables indexes to see if they 
+For the selected databases on the SQL Server will loop through all the user tables indexes to see if they 
 need to be Reorganize or Rebuild.
 Using windows authentication for connecting to remote servers.
 Also to be able to use the funcation the SQL Server SMO and powershell SQL Provider
@@ -194,13 +193,18 @@ Also to be able to use the funcation the SQL Server SMO and powershell SQL Provi
 The function will either Reorganize Index or Rebuild Index
 If the index AverageFragmentation ranges in between 5% to 30% then it is better to perform Reorganize Index.
 If the index AverageFragmentation is greater than 30% then the best strategy will be to use Rebuild Index.
-Recommandations where found on many articles on the internet
+Recommandations where found on many articles on the internet.
+
+WARNING: It takes several magnitudes longer than building offline in SSMS.
 
 .PARAMETER server 
-The name of the SQL Server to connect to gather the file usages of the database. Default Value:(local)
+The name of the SQL Server to connect to gather the file usages of the database.
 
-.PARAMETER databaseName
-The name of the database which needs to have the indexes Defrag
+.PARAMETER DBs
+DBs within the given server to defrag the indexes (regexp). Empty means all dbs.
+
+.PARAMETER Full
+Output full report, including the skipped tables.
 
 .PARAMETER fragmentationOption
 The specify the levels of detail of collected fragmentation information
@@ -209,35 +213,38 @@ Sampled:Calculates statistics based on samples of data. This option is available
 Detailed:(Default) Calculates statistics based on 100% of the data. This option is available starting with SQL Server 2005.  
 
 .EXAMPLE
-Connects to the local server database myDB using windows authentication
+Connects to the local server database myDB using windows authentication, with verbose progress info
 	
-Defrag-SQLServer-Indexes -databaseName myDB
+Defrag-SvrIndexes '(local)' -databaseName myDB -Verbose
 
 .EXAMPLE
-Connects to the remote server database using windows authentication
+Connects to the remote server database using windows authentication, output to GridView
 	
-Defrag-SQLServer-Indexes -server SQLServer01 -databaseName myDB
+Defrag-SvrIndexes -server SQLServer01 -databaseName myDB | 
+  select-Object -property Database, Table, Index, AverageFragmentation, ActionTaken | 
+  Out-GridView
 
 .EXAMPLE
 Connects to the local server database using windows authentication with fragmentationOption of Fast
 	
-Defrag-SQLServer-Indexes -databaseName myDB -fragmentationOption [Microsoft.SqlServer.Management.Smo.FragmentationOption]::Fast 
+Defrag-SvrIndexes '(local)' -databaseName myDB -fragmentationOption [Microsoft.SqlServer.Management.Smo.FragmentationOption]::Fast 
 
 .EXAMPLE
 Connects to the remote server database using windows authentication with fragmentationOption of Sampled
 	
-Defrag-SQLServer-Indexes -server SQLServer01 -databaseName myDB -fragmentationOption [Microsoft.SqlServer.Management.Smo.FragmentationOption]::Sampled 
+Defrag-SvrIndexes -server SQLServer01 -databaseName myDB -fragmentationOption [Microsoft.SqlServer.Management.Smo.FragmentationOption]::Sampled 
 	
 .INPUTS
-None. You cannot pipe objects to Defrag-SQLServer-Indexes
+None. You cannot pipe objects to Defrag-SvrIndexes
  
 .Outputs
 Array of PSObject with the following properties: 
-Database
-Table
-Index
-AverageFragmentation
-ActionTaken
+
+    Database
+    Table
+    Index
+    AverageFragmentation
+    ActionTaken
 
 .COMPONENT
 Microsoft® Windows PowerShell Extensions for SQL Server® 2008 R2.
@@ -246,17 +253,21 @@ Microsoft® Windows PowerShell Extensions for SQL Server® 2008 R2.
 Microsoft® SQL Server® 2008 R2 Shared Management Objects.
 
 .LINK
-Components Download http://www.microsoft.com/download/en/details.aspx?displaylang=en&id=16978 
+Initial script: http://zogamorph.blogspot.ca/2012/02/sql-server-maintenance-via-powershell.html
+Components Download: http://www.microsoft.com/download/en/details.aspx?displaylang=en&id=16978 
 #>
 	[CmdletBinding()]
 	param (
-		[string]
-		# The server that the Job should be run on
-		$server = "(local)",
-		[string]
-		# The name of the database to Backup
-		$databaseName,
-		#The level of the Fragmentation Scan
+        [Parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]
+		[string]$server,
+
+		[Parameter()]
+		[string]$DBs='',
+
+		[Parameter()]
+		[Switch] $Full,
+
+		[Parameter()]
 		[Microsoft.SqlServer.Management.Smo.FragmentationOption]
 		$fragmentationOption = [Microsoft.SqlServer.Management.Smo.FragmentationOption]::Detailed
 	)
@@ -269,38 +280,51 @@ Components Download http://www.microsoft.com/download/en/details.aspx?displaylan
 					}
 
 	$srv = New-Object -TypeName Microsoft.SqlServer.Management.SMO.Server -ArgumentList $server
-	$db = $srv.Databases[$databaseName]
-	$results = @()
 
-	foreach($dbtable in $db.Tables) 
-	{
-		foreach($dbIndex in $dbtable.Indexes) 
-		{
-			$indexResults = $dbIndex.EnumFragmentation($fragmentationOption)
-			$methodTaken = New-Object PSObject -Property $properties
-			$methodTaken.Database = $db.Name
-			$methodTaken.Table = $dbtable
-			$methodTaken.Index = $dbIndex.Name
-			$methodTaken.AverageFragmentation = $indexResults.Rows[0]["AverageFragmentation"]
+    $srv.Databases | where-object {(!$_.IsSystemObject) -and 
+                          $_.IsAccessible -and $_.name -match $DBs } | 
+    foreach {
+
+        $databaseName = $_.name
+
+	    $db = $srv.Databases[$databaseName]
+	    $results = @()
+
+	    foreach($dbtable in $db.Tables) 
+	    {
+		    foreach($dbIndex in $dbtable.Indexes) 
+		    {
+			    $indexResults = $dbIndex.EnumFragmentation($fragmentationOption)
+			    $methodTaken = New-Object PSObject -Property $properties
+			    $methodTaken.Database = $db.Name
+			    $methodTaken.Table = $dbtable
+			    $methodTaken.Index = $dbIndex.Name
+			    $methodTaken.AverageFragmentation = $indexResults.Rows[0]["AverageFragmentation"]
 			  
-			 if($methodTaken.AverageFragmentation -ge 30 )
-			 {
-			 	$methodTaken.ActionTaken = "Rebuild"
-			 	$dbIndex.Rebuild()
-			 }
-			 elseif($methodTaken.AverageFragmentation -ge 5) 
-			 {
-			 	$methodTaken.ActionTaken = "Reorganize"
-			 	$dbIndex.Reorganize()
-			 }
-			 else
-			 {
-			 	$methodTaken.ActionTaken = "None"
-			 }
+			     if($methodTaken.AverageFragmentation -ge 30 )
+			     {
+                    Write-Verbose "$databaseName.$dbtable.$($dbIndex.Name): Rebuilding"
+			 	    $methodTaken.ActionTaken = "Rebuild"
+			 	    $dbIndex.Rebuild()
+			     }
+			     elseif($methodTaken.AverageFragmentation -ge 5) 
+			     {
+                    Write-Verbose "$databaseName.$dbtable.$($dbIndex.Name): Reorganizing"
+			 	    $methodTaken.ActionTaken = "Reorganize"
+			 	    $dbIndex.Reorganize()
+			     }
+			     else
+			     {
+                    if ($Full) { 
+                        Write-Verbose "$databaseName.$dbtable.$($dbIndex.Name): Skipped"
+			 	        $methodTaken.ActionTaken = "None"
+                    }
+			     }
 			 
-			 $results += $methodTaken
-		}	
-	}
+			     $results += $methodTaken
+		    }	
+	    }
+    }
 	return $results
 }
 
