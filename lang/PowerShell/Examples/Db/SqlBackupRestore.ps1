@@ -198,9 +198,14 @@ function Do-SvrBackup {
 	.PARAMETER DbExt
 		DB extension of the SQL Server backups files (default: 'bak').
 		
+	.PARAMETER Remote
+		Do DB restore remotely on the given SQL Server
 		
 	.EXAMPLE
 		Do-SvrBackup D:\MyDBBackups\20130212
+
+	.EXAMPLE
+		Do-SvrBackup D:\MyDBBackups\20130212 -Remote MySvr002
 			
 #>
 function Do-SvrRestore {
@@ -209,7 +214,10 @@ function Do-SvrRestore {
 		[String] $Directory='',
 
 		[Parameter()]
-		[String] $DbExt='bak'
+		[String] $DbExt='bak', 
+
+		[Parameter()]
+		[String] $Remote=''
     )
 
 	#get current login info
@@ -217,9 +225,17 @@ function Do-SvrRestore {
 	$LogonHost=$CS.Name
 	$LogonUser=$CS.UserName
 
-    get-childitem $Directory *.$DbExt | foreach {
-        write-host "$Directory\$_ restoring started ... "
-        Do-SqlRestore $LogonHost $Directory\$_
+    $ServerName = $LogonHost
+    $LookupDirectory = $Directory
+    if (-not ($Remote -eq "")) {
+        $ServerName = $Remote;
+        $LookupDirectory="\\$ServerName\"+$Directory.Replace(':','$')
+        Write-Verbose $LookupDirectory
+    }
+    
+    get-childitem $LookupDirectory *.$DbExt | foreach {
+        Write-Host "$Directory\$_ restoring started ... "
+        Do-SqlRestore $ServerName $Directory\$_
         Write-Host "$Directory\$_ restoring finished."
     }
 }
