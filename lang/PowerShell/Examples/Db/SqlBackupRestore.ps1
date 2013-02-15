@@ -13,6 +13,35 @@ import-module sqlserver -force
 
 #region DatabaseLevel
 
+<#
+	.SYNOPSIS
+		SQL Server Database Backup.
+
+	.DESCRIPTION
+		Backup the given MS SQL Server database (as given file).
+
+	.PARAMETER sqlserver 
+		The name of the MS SQL Server to backup from.
+
+	.PARAMETER dbname
+		Database within the given server to backup.
+		
+	.PARAMETER bakname
+		backup name. If empty, default to $dbname.bak.
+
+	.PARAMETER Directory
+		Directory name underneath the MS SQL Server default backup directory used for backup.
+        CAUTION: The directory must pre-exist. default: empty, i.e., not sub directory used.
+		
+	.EXAMPLE
+		Do-SqlBackup MySvr001 MyDB
+		Do-SqlBackup MySvr001 MyDB MyDB_20130212.bak
+
+	.EXAMPLE
+		Do-SqlBackup MySvr001 MyDB -Directory '20130212'
+			
+#>
+
 function Do-SqlBackup {
     param($sqlserver=$(throw 'sqlserver required.'), 
         $dbname=$(throw 'dbname required.'), 
@@ -33,6 +62,30 @@ function Do-SqlBackup {
     return $bakname
 }
 
+<#
+	.SYNOPSIS
+		Restore SQL Server Database Backup.
+
+	.DESCRIPTION
+		Restore the given db-backup file to the given MS SQL Server
+
+	.PARAMETER sqlserver 
+		The name of the MS SQL Server to restore to.
+
+	.PARAMETER filepath
+		The db-backup file to restore.
+		
+	.PARAMETER dbname
+		The actual database name if it contains '_'s or extra '.'s.
+
+	.EXAMPLE
+        Do-SqlRestore MySvr002 D:\MyDBBackups\MyDB.bak
+		Do-SqlRestore MySvr002 D:\MyDBBackups\MyDB_20130212.bak
+
+	.EXAMPLE
+		Do-SqlRestore MySvr002 D:\MyDBBackups\My_DB_20130212.bak My_DB
+			
+#>
 
 function Do-SqlRestore {
     ## Authors: Chad Miller (c) 2011, http://poshcode.org/2531
@@ -71,34 +124,34 @@ function Do-SqlRestore {
 
 #region ServerLevel
 
-	<#
-		.SYNOPSIS
-			Server Backup.
+<#
+	.SYNOPSIS
+		Server Backup.
 
-		.DESCRIPTION
-			Backup the given MS SQL Server of the given DBs.
+	.DESCRIPTION
+		Backup the given MS SQL Server of the given DBs.
 
-		.PARAMETER ServerName 
-			The name of the MS SQL Server to backup.
+	.PARAMETER ServerName 
+		The name of the MS SQL Server to backup.
 
-		.PARAMETER DBs
-			DBs within the given server to backup (regexp). If empty, all dbs are to be backup.
+	.PARAMETER DBs
+		DBs within the given server to backup (regexp). If empty, all dbs are to be backup.
 		
-		.PARAMETER Directory
-			Directory name underneath the MS SQL Server default backup directory used for backup.
-            CAUTION: The directory must pre-exist.
+	.PARAMETER Directory
+		Directory name underneath the MS SQL Server default backup directory used for backup.
+        CAUTION: The directory must pre-exist.
 
-		.PARAMETER Check
-			Check the DB selection of the given DBs.
+	.PARAMETER Check
+		Check the DB selection of the given DBs.
 		
-		.EXAMPLE
-			Do-SvrBackup MySvr001 -Check
-			Do-SvrBackup 'MySvr001' 'this|that|th[eo]se' -Check
+	.EXAMPLE
+		Do-SvrBackup MySvr001 -Check
+		Do-SvrBackup 'MySvr001' 'this|that|th[eo]se' -Check
 
-		.EXAMPLE
-			Do-SvrBackup 'MySvr001' 'this|that|th[eo]se' '20130212'
+	.EXAMPLE
+		Do-SvrBackup 'MySvr001' 'this|that|th[eo]se' '20130212'
 			
-	#>
+#>
 
 function Do-SvrBackup {
     param(
