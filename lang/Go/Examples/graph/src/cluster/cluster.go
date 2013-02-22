@@ -1,3 +1,15 @@
+////////////////////////////////////////////////////////////////////////////
+// Porgram: cluster
+// Purpose: cluster graphviz into sub graphs
+// Authors: Tong Sun (c) 2013, All rights reserved
+////////////////////////////////////////////////////////////////////////////
+
+// Style: gofmt -tabs=false -tabwidth=2
+
+
+////////////////////////////////////////////////////////////////////////////
+// Original Authors: Walter Schulze <awalterschulze@gmail.com>
+//
 //Copyright 2013 Vastech SA (PTY) LTD
 //
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,22 +23,24 @@
 //WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //See the License for the specific language governing permissions and
 //limitations under the License.
+////////////////////////////////////////////////////////////////////////////
 
-package gographviz
+package cluster
 
 import (
+	"code.google.com/p/gographviz"
 	"code.google.com/p/gographviz/ast"
 )
 
 //Creates a Graph structure by analysing an Abstract Syntax Tree representing a parsed graph.
-func NewAnalysedGraph(graph *ast.Graph) *Graph {
-	g := NewGraph()
+func NewAnalysedGraph(graph *ast.Graph) *gographviz.Graph {
+	g := gographviz.NewGraph()
 	Analyse(graph, g)
 	return g
 }
 
 //Analyses an Abstract Syntax Tree representing a parsed graph into a newly created graph structure Interface.
-func Analyse(graph *ast.Graph, g Interface) {
+func Analyse(graph *ast.Graph, g gographviz.Interface) {
 	graph.Walk(&graphVisitor{g})
 }
 
@@ -38,7 +52,7 @@ func (this *nilVisitor) Visit(v ast.Elem) ast.Visitor {
 }
 
 type graphVisitor struct {
-	g Interface
+	g gographviz.Interface
 }
 
 func (this *graphVisitor) Visit(v ast.Elem) ast.Visitor {
@@ -53,16 +67,17 @@ func (this *graphVisitor) Visit(v ast.Elem) ast.Visitor {
 	return newStmtVisitor(this.g, graphName)
 }
 
-func newStmtVisitor(g Interface, graphName string) *stmtVisitor {
-	return &stmtVisitor{g, graphName, make(Attrs), make(Attrs), make(Attrs)}
+func newStmtVisitor(g gographviz.Interface, graphName string) *stmtVisitor {
+	return &stmtVisitor{g, graphName, 
+    make(gographviz.Attrs), make(gographviz.Attrs), make(gographviz.Attrs)}
 }
 
 type stmtVisitor struct {
-	g                 Interface
+	g                 gographviz.Interface
 	graphName         string
-	currentNodeAttrs  Attrs
-	currentEdgeAttrs  Attrs
-	currentGraphAttrs Attrs
+	currentNodeAttrs  gographviz.Attrs
+	currentEdgeAttrs  gographviz.Attrs
+	currentGraphAttrs gographviz.Attrs
 }
 
 func (this *stmtVisitor) Visit(v ast.Elem) ast.Visitor {
@@ -89,7 +104,7 @@ func (this *stmtVisitor) Visit(v ast.Elem) ast.Visitor {
 	return this
 }
 
-func ammend(attrs Attrs, add Attrs) Attrs {
+func ammend(attrs gographviz.Attrs, add gographviz.Attrs) gographviz.Attrs {
 	for key, value := range add {
 		if _, ok := attrs[key]; !ok {
 			attrs[key] = value
@@ -98,7 +113,7 @@ func ammend(attrs Attrs, add Attrs) Attrs {
 	return attrs
 }
 
-func overwrite(attrs Attrs, overwrite Attrs) Attrs {
+func overwrite(attrs gographviz.Attrs, overwrite gographviz.Attrs) gographviz.Attrs {
 	for key, value := range overwrite {
 		attrs[key] = value
 	}
@@ -106,7 +121,7 @@ func overwrite(attrs Attrs, overwrite Attrs) Attrs {
 }
 
 func (this *stmtVisitor) nodeStmt(stmt ast.NodeStmt) ast.Visitor {
-	attrs := Attrs(stmt.Attrs.GetMap())
+	attrs := gographviz.Attrs(stmt.Attrs.GetMap())
 	attrs = ammend(attrs, this.currentNodeAttrs)
 	this.g.AddNode(this.graphName, stmt.NodeId.String(), attrs)
 	return &nilVisitor{}
