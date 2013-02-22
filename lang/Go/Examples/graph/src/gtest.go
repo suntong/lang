@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
-// Porgram: Graphviz
-// Purpose: gographviz demo
+// Porgram: gtest
+// Purpose: tester program for cluster/cluster.go
 // Authors: Tong Sun (c) 2013, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
@@ -27,7 +27,10 @@ func parse2graph(filename string) *gographviz.Graph {
   checkError(err)
   fmt.Printf("Parsed: %v\n", g)
   //ag := gographviz.NewAnalysedGraph(g) // *Graph
-  ag := cluster.NewAnalysedGraph(g) // *Graph
+  //ag := cluster.NewAnalysedGraph(g) // *Graph
+	ag := gographviz.NewGraph()
+	cluster.Analyse(g, ag)
+
   //fmt.Printf("Analysed: %v\n", ag)
   fmt.Printf("Written: %v\n", ag.String())
   return ag
