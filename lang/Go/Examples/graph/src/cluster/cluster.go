@@ -8,7 +8,8 @@
 
 
 ////////////////////////////////////////////////////////////////////////////
-// Original Authors: Walter Schulze <awalterschulze@gmail.com>
+// Based on code.google.com/p/gographviz/analyse.go by Walter Schulze
+// http://code.google.com/p/gographviz/source/browse/analyse.go
 //
 //Copyright 2013 Vastech SA (PTY) LTD
 //
@@ -33,14 +34,14 @@ import (
 )
 
 //Creates a Graph structure by analysing an Abstract Syntax Tree representing a parsed graph.
-func NewAnalysedGraph(graph *ast.Graph) *gographviz.Graph {
-	g := gographviz.NewGraph()
-	Analyse(graph, g)
-	return g
-}
+// func NewAnalysedGraph(graph *ast.Graph) *gographviz.Graph {
+// 	g := gographviz.NewGraph()
+// 	Analyse(graph, g)
+// 	return g
+// }
 
 //Analyses an Abstract Syntax Tree representing a parsed graph into a newly created graph structure Interface.
-func Analyse(graph *ast.Graph, g gographviz.Interface) {
+func Cluster(graph *ast.Graph, g gographviz.Interface) {
 	graph.Walk(&graphVisitor{g})
 }
 
