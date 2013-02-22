@@ -29,7 +29,7 @@ func parse2graph(filename string) *gographviz.Graph {
   //ag := gographviz.NewAnalysedGraph(g) // *Graph
   //ag := cluster.NewAnalysedGraph(g) // *Graph
 	ag := gographviz.NewGraph()
-	cluster.Analyse(g, ag)
+	cluster.Cluster(g, ag)
 
   //fmt.Printf("Analysed: %v\n", ag)
   fmt.Printf("Written: %v\n", ag.String())
