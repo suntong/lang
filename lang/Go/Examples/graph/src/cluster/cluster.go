@@ -6,7 +6,6 @@
 
 // Style: gofmt -tabs=false -tabwidth=2
 
-
 ////////////////////////////////////////////////////////////////////////////
 // Based on code.google.com/p/gographviz/analyse.go by Walter Schulze
 // http://code.google.com/p/gographviz/source/browse/analyse.go
@@ -33,6 +32,11 @@ import (
 	"code.google.com/p/gographviz/ast"
 )
 
+func debugLn(x string)  { println("DEBUG: " + x) }
+func debugNop(x string) {}
+
+var debug func(x string) = debugLn
+
 //Creates a Graph structure by analysing an Abstract Syntax Tree representing a parsed graph.
 // func NewAnalysedGraph(graph *ast.Graph) *gographviz.Graph {
 // 	g := gographviz.NewGraph()
@@ -43,6 +47,7 @@ import (
 //Analyses an Abstract Syntax Tree representing a parsed graph into a newly created graph structure Interface.
 func Cluster(graph *ast.Graph, g gographviz.Interface) {
 	graph.Walk(&graphVisitor{g})
+  //debug("Done")
 }
 
 type nilVisitor struct {
@@ -84,8 +89,10 @@ type stmtVisitor struct {
 func (this *stmtVisitor) Visit(v ast.Elem) ast.Visitor {
 	switch s := v.(type) {
 	case ast.NodeStmt:
+    debug("Visiting " + s.String())
 		return this.nodeStmt(s)
 	case ast.EdgeStmt:
+    debug("Visiting " + s.String())
 		return this.edgeStmt(s)
 	case ast.NodeAttrs:
 		return this.nodeAttrs(s)
