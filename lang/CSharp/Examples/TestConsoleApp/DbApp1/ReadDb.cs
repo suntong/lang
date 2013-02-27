@@ -17,10 +17,11 @@ public class ReadDb
         TestOleDB();
         TestSqlDBL();
         TestSqlDB2();
-        TestSqlDBR();
+        //TestSqlDBR();
         TestSqlAsOleDB();
         TestDictionary();
-        TestSqlSP();
+        //TestSqlSP();
+        TestSqlGetFirst();
 
         // Keep the console window open in debug mode.
         Console.WriteLine("Press any key to exit.");
@@ -201,7 +202,7 @@ public class ReadDb
         string DAM = "[ReadSqlDb]";
 
         string myConnectionString =
-                    "Data Source=Torsvdb04;Initial Catalog=QAPAYROLL5;uid=wbpoc;pwd=sql@tfs2008;";
+                    "Data Source=dbsv01;Initial Catalog=db1;uid=uuu;pwd=ppp;";
 
         Console.WriteLine("\n\n== Test SqlDB\n");
 
@@ -361,7 +362,7 @@ public class ReadDb
         string DAM = "[ReadSqlSP]";
 
         string myConnectionString =
-                    "Data Source=perfdb01;Initial Catalog=perfdb;uid=wbpoc;pwd=sql@tfs2008;";
+                    "Data Source=svr01;Initial Catalog=db02;uid=uuu;pwd=ppp;";
 
         Console.WriteLine("\n\n== Test SqlSP\n");
 
@@ -448,11 +449,52 @@ public class ReadDb
     }
 
     /// <summary>
-    /// TestMSBin1, Test MSBin1 
+    /// TestSqlGetFirst, Test the following C# GetFirst function
     /// </summary>
-    static void TestMSBin1()
+    static void TestSqlGetFirst()
     {
-        Console.WriteLine("== Test MSBin1");
+        Object[] ret = GetFirst("SELECT top 1 name, recovery_model_desc FROM sys.databases order by name",
+            "Data Source=(local);Initial Catalog=master;Integrated Security=True");
+
+        Console.WriteLine(" | {0} | {1} | ", ret[0].ToString(), ret[1].ToString());
 
     }
+
+    /// <summary>
+    /// GetFirst, Get first record of the given SQL command and ConnectionString
+    /// </summary>
+    /// <param name="_SqlCommand">
+    /// the Sql Command
+    /// </param>
+    /// <param name="_ConnectionStr">
+    /// the ConnectionString
+    /// </param>
+    /// <returns>
+    /// Object[] array that holds the first record
+    /// </returns>
+    public static Object[] GetFirst(string _SqlCommand, string _ConnectionStr)
+    {
+        Object[] ret;
+
+        using (SqlConnection connection = new SqlConnection(_ConnectionStr))
+        using (SqlCommand cmd = connection.CreateCommand())
+        {
+            connection.Open();
+            cmd.CommandText = _SqlCommand;
+
+            using (SqlDataReader dr = cmd.ExecuteReader())
+            {
+                // get the first record
+                if (dr.Read())
+                {
+                    ret = new Object[dr.FieldCount];
+                    dr.GetValues(ret);
+                    return ret;
+                }
+                else
+                    return null;
+            }
+        }
+    }
+
 }
