@@ -26,10 +26,12 @@ func parse2graph(filename string) *gographviz.Graph {
   g, err := gographviz.Parse(all) // *ast.Graph
   checkError(err)
   //fmt.Printf("Parsed: %v\n", g)
-  ag := gographviz.NewAnalysedGraph(g) // *Graph
+  //ag := gographviz.NewAnalysedGraph(g) // *Graph
+  ag := gographviz.NewGraph() // *Graph
+  cluster.Read(g, ag);
 
   //fmt.Printf("Analysed: %v\n", ag)
-  //fmt.Printf("Written: %v\n", ag.String())
+  fmt.Printf("Written: %v\n", ag.String())
   return ag
 }
 

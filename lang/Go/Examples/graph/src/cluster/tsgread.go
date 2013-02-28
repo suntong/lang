@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
-// Porgram: cluster
-// Purpose: cluster graphviz into sub graphs
+// Porgram: tsgread
+// Purpose: Read (analyse) ast.Graph as tsgraph
 // Authors: Tong Sun (c) 2013, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
@@ -45,7 +45,7 @@ var debug func(x string) = debugLn
 // }
 
 //Analyses an Abstract Syntax Tree representing a parsed graph into a newly created graph structure Interface.
-func Cluster(graph *ast.Graph, g gographviz.Interface) {
+func Read(graph *ast.Graph, g gographviz.Interface) {
   graph.Walk(&graphVisitor{g})
   //debug("Done")
 }
@@ -89,7 +89,7 @@ type stmtVisitor struct {
 func (this *stmtVisitor) Visit(v ast.Elem) ast.Visitor {
   switch s := v.(type) {
   case ast.NodeStmt:
-    debug("Visiting " + s.String())
+    //debug("Visiting " + s.String())
     return this.nodeStmt(s)
   case ast.EdgeStmt:
     debug("Visiting " + s.String())
@@ -101,6 +101,7 @@ func (this *stmtVisitor) Visit(v ast.Elem) ast.Visitor {
   case ast.GraphAttrs:
     return this.graphAttrs(s)
   case *ast.SubGraph:
+    debug("Visiting " + s.String())
     return this.subGraph(s)
   case *ast.Attr:
     return this.attr(s)
