@@ -1,36 +1,28 @@
 ////////////////////////////////////////////////////////////////////////////
 // Porgram: tsgread
-// Purpose: Read (analyse) ast.Graph as tsgraph
+// Purpose: Read (analyse) ast.Graph as gographviz.Graph, with SubGraphs flattened out
 // Authors: Tong Sun (c) 2013, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
 // Style: gofmt -tabs=false -tabwidth=2
 
-////////////////////////////////////////////////////////////////////////////
-// Based on code.google.com/p/gographviz/analyse.go by Walter Schulze
+/////////////////////////////////////////////////////////////////
+// Based on gographviz.analyse.go by Walter Schulze
 // http://code.google.com/p/gographviz/source/browse/analyse.go
-//
 //Copyright 2013 Vastech SA (PTY) LTD
-//
 //Licensed under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License.
-//You may obtain a copy of the License at
-//
-//    http://www.apache.org/licenses/LICENSE-2.0
-//
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS,
-//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//See the License for the specific language governing permissions and
-//limitations under the License.
-////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
 
 package cluster
 
 import (
   "code.google.com/p/gographviz"
   "code.google.com/p/gographviz/ast"
+
+  "github.com/davecgh/go-spew/spew"
 )
+
+var _ = spew.Config
 
 func debugLn(x string)  { println("DEBUG: " + x) }
 func debugNop(x string) {}
@@ -44,10 +36,9 @@ var debug func(x string) = debugLn
 // 	return g
 // }
 
-//Analyses an Abstract Syntax Tree representing a parsed graph into a newly created graph structure Interface.
+//Reads (analyses) an Abstract Syntax Tree representing a parsed graph into a newly created graph structure Interface.
 func Read(graph *ast.Graph, g gographviz.Interface) {
   graph.Walk(&graphVisitor{g})
-  //debug("Done")
 }
 
 type nilVisitor struct {
@@ -101,8 +92,8 @@ func (this *stmtVisitor) Visit(v ast.Elem) ast.Visitor {
   case ast.GraphAttrs:
     return this.graphAttrs(s)
   case *ast.SubGraph:
-    debug("Visiting " + s.String())
-    return this.subGraph(s)
+    //debug("Visiting " + s.String())
+    //return this.subGraph(s)
   case *ast.Attr:
     return this.attr(s)
   case ast.AttrList:
@@ -146,11 +137,28 @@ func (this *stmtVisitor) edgeStmt(stmt ast.EdgeStmt) ast.Visitor {
   }
   srcPort := stmt.Source.GetPort()
   for i := range stmt.EdgeRHS {
+    debug("  Processing " + stmt.EdgeRHS[i].String())
     directed := bool(stmt.EdgeRHS[i].Op)
     dst := stmt.EdgeRHS[i].Destination.GetId()
     dstName := dst.String()
     if stmt.EdgeRHS[i].Destination.IsNode() {
       this.g.AddNode(this.graphName, dstName, this.currentNodeAttrs.Copy())
+      debug("     AddNode: " + dstName)
+    } else {
+      // debug("     Peek: " + stmt.EdgeRHS[i].Destination.String())
+      // spew.Dump("     -Destination: ", stmt.EdgeRHS[i].Destination)
+      // spew.Dump("     -StmtList: ", stmt.EdgeRHS[i].Destination.(*ast.SubGraph).StmtList)
+      d := stmt.EdgeRHS[i].Destination.(*ast.SubGraph).StmtList
+      for j := range d {
+        //spew.Dump(d[j]) // (*ast.NodeStmt)
+        dstid := d[j].(*ast.NodeStmt).NodeId
+        dstName = dstid.String()
+        //spew.Dump(dstid, dstName)
+        this.g.AddNode(this.graphName, dstName, this.currentNodeAttrs.Copy())
+        dstPort := stmt.EdgeRHS[i].Destination.GetPort()
+        this.g.AddEdge(srcName, srcPort.String(), dstName, dstPort.String(), directed, attrs)
+      }
+      continue
     }
     dstPort := stmt.EdgeRHS[i].Destination.GetPort()
     this.g.AddEdge(srcName, srcPort.String(), dstName, dstPort.String(), directed, attrs)

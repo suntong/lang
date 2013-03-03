@@ -26,8 +26,8 @@ func parse2graph(filename string) *gographviz.Graph {
   g, err := gographviz.Parse(all) // *ast.Graph
   checkError(err)
   //fmt.Printf("Parsed: %v\n", g)
-  //ag := gographviz.NewAnalysedGraph(g) // *Graph
-  ag := gographviz.NewGraph() // *Graph
+  //ag := gographviz.NewAnalysedGraph(g) // *gographviz.Graph
+  ag := gographviz.NewGraph() // *gographviz.Graph
   cluster.Read(g, ag);
 
   //fmt.Printf("Analysed: %v\n", ag)
@@ -45,11 +45,11 @@ func main() {
 
   //_ = parser2graph(gf)
   g := parse2graph(gf)
-  cg := cluster.Graph{*g}
+  cg := cluster.Graph{*g}; _ = cg
   
-  fmt.Printf("%#v\n", cg.Lookup(nn))
-  fmt.Printf("%#v\n", cg.EdgesToParents(nn))
-  fmt.Printf("%#v\n", cg.EdgesToChildren(nn))
+  // fmt.Printf("%#v\n", cg.Lookup(nn))
+  // fmt.Printf("%#v\n", cg.EdgesToParents(nn))
+  // fmt.Printf("%#v\n", cg.EdgesToChildren(nn))
 
   os.Exit(0)
 }
