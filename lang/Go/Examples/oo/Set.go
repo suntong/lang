@@ -58,21 +58,103 @@ func main1() {
   fmt.Printf("Has(abc) = %v\n", s.Has("abc"))
 }
 
+const N = 6
+
+var v []int = make([]int, N)
+
+type SetNp interface {
+  Insert(*int)
+  Has(*int) bool
+  Remove(*int)
+}
+
+type setNp map[*int]struct{}
+
+func (s setNp) Insert(a *int)   { s[a] = struct{}{} }
+func (s setNp) Remove(a *int)   { delete(s, a) }
+func (s setNp) Has(a *int) bool { _, ok := s[a]; return ok }
+
+/*
+
+On Mon, Mar 4, 2013 at 2:16 AM, Dominik Honnef @fork-bomb.org wrote:
+
+>>> Now a problem that still bewilders me -- how to iterate through the
+>>> dynamically changing set? Think of the web crawler. It visit the first page
+>>> and put all the urls from within the page into the toVisit set, then iterate
+>>> through this toVisit set while putting more urls into the set (with
+>>> predefined conditions of course), until all items have been removed from the
+>>> toVisit set to the hasSeen set.
+>>
+>> It's generally a bad idea to modify a collection while you're iterating
+>> through it. In most implementations this will either fail with a runtime
+>> exception, or just have "undefined behavior" (including crashing.)
+>
+> It's ok in Go (although that doesn't necessarily make your other advice
+> incorrect. From http://golang.org/ref/spec#For_statements :
+>
+> "If map entries that have not yet been reached are deleted during
+> iteration, the corresponding iteration values will not be produced. If
+> map entries are inserted during iteration, the behavior is
+> implementation-dependent, but the iteration values for each entry will
+> be produced at most once."
+
+Technically, the spec isn't 100% clear here, either. It says that each
+entry will be produced "at most once". This implies that newly added
+entries might never be produced. That'd still be covered by "at least
+once". And in this case, OP expects them to be produced.
+
+*/
+
+func main2() {
+  fmt.Println("===")
+  for i := range v {
+    v[i] = i * 11
+  }
+
+  s := &setNp{}
+
+  s.Insert(&v[1])
+  s.Insert(&v[2])
+  s.Insert(&v[5])
+
+  i := 1
+  for len(*s) > 0 {
+    for item := range *s {
+      spew.Dump(item)
+      if i==1 { i++; s.Insert(&v[i]); i++; s.Insert(&v[i]); s.Remove(&v[5]); }
+      s.Remove(item)
+    }
+    fmt.Println("---")
+  }
+
+  /*
+
+   The behaviour is not deterministic, despite what the spec says.
+   There are at least two results I've witnessed:
+
+     ===
+     (*int)(0xf84002a144)(11)
+     (*int)(0xf84002a148)(22)
+     (*int)(0xf84002a14c)(33)
+     ---
+
+   or,
+
+     ===
+     (*int)(0xf84002a154)(55)
+     (*int)(0xf84002a144)(11)
+     (*int)(0xf84002a148)(22)
+     ---
+     (*int)(0xf84002a14c)(33)
+     ---
+
+   */
+
+}
+
 /*
 
 On Mon, Mar 4, 2013 at 5:37 AM, Rémy Oudompheng wrote:
-
->> Now a problem that still bewilders me -- how to iterate through the
->> dynamically changing set? Think of the web crawler. It visit the first page
->> and put all the urls from within the page into the toVisit set, then iterate
->> through this toVisit set while putting more urls into the set (with
->> predefined conditions of course), until all items have been removed from the
->> toVisit set to the hasSeen set.
->
->
-> It's generally a bad idea to modify a collection while you're iterating
-> through it. In most implementations this will either fail with a runtime
-> exception, or just have "undefined behavior" (including crashing.)
 
 Go correctly defines the behaviour of range loops when you mutate the
 collection. In particular, the very common pattern of deleting the key
@@ -91,24 +173,8 @@ for len(set) > 0 {
 
 */
 
-const N = 6
-
-var v []int = make([]int, N)
-
-type SetNp interface {
-  Insert(*int)
-  Has(*int) bool
-  Remove(*int)
-}
-
-type setNp map[*int]struct{}
-
-func (s setNp) Insert(a *int)   { s[a] = struct{}{} }
-func (s setNp) Remove(a *int)   { delete(s, a) }
-func (s setNp) Has(a *int) bool { _, ok := s[a]; return ok }
-
-
-func main2() {
+func main3() {
+  fmt.Println("===")
   for i := range v {
     v[i] = i * 11
   }
@@ -138,4 +204,5 @@ func main2() {
 func main() {
   main1()
   main2()
+  main3()
 }
