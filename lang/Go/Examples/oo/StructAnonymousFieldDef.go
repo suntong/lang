@@ -28,6 +28,12 @@ type House struct {
   Bedroom    //anonymous field
 }
 
+// https://groups.google.com/forum/?fromgroups=#!topic/golang-nuts/kXPaEaIwhHM
+type Livingroom struct {
+  Room
+  items map[string]int
+}
+
 func main() {
 
   // use composed type name to initialize 
@@ -58,15 +64,25 @@ func main() {
 
   r := Room{5}
   var br Bedroom = Bedroom{r}
-  fmt.Println("Bedroom br has this many lamps:", br.Room.numOfLamps)
+  fmt.Println("Bedroom br has this many lamps:", br.Room.numOfLamps, br.numOfLamps)
 
+  h = House{6, Kitchen{12}, br}
+  fmt.Println("House h has this many lamps:", h.numOfLamps, h.Bedroom)
+
+  pr := &r
+  l := Livingroom{*pr, map[string]int{"sofa": 2, "chair": 4}}
+  fmt.Printf("%#v\n", l)
+  fmt.Println("Livingroom l has this many lamps:", l.numOfLamps)
   /*
   House h has this many rooms: 3
   House h has this many plates: 10
   The Kitchen contents of this house are: {10}
   House h has this many lamps: 2 {{2}}
   The Kitchen: {10}
-  Bedroom br has this many lamps: 5
+  Bedroom br has this many lamps: 5 5
+  House h has this many lamps: 5 {{5}}
+  main.Livingroom{Room:main.Room{numOfLamps:5}, items:map[string]int{"chair":4, "sofa":2}}
+  Livingroom l has this many lamps: 5
   */
 
 }
