@@ -26,47 +26,6 @@ func debugNop(x string) {}
 var debug func(x string) = debugLn
 //////////////////////
 
-
-// Type T is an interface which can be regarded as a generic type that
-// represents any of those types that has a method called "String" which
-// returns a `string`; and can do assignments between them.
-type T interface {
-  String() string
-}
-
-// Type Set represents a generic SET data structure in Go of type T
-type Set interface {
-  Add(T)
-  Has(T) bool
-  Del(T)
-}
-
-type set map[T]struct{}
-
-func (s set) Add(a T)   { s[a] = struct{}{} }
-func (s set) Del(a T)   { delete(s, a) }
-func (s set) Has(a T) bool { _, ok := s[a]; return ok }
-
-
-/*
- Type Node gives gographviz.Node a proper String() function which it should have
-*/
-type Node struct {
-  *gographviz.Node
-}
-
-func (this *Node) String() string { return this.Name }
-
-/*
- Type Edge gives gographviz.Edge a proper String() function which it should have
-*/
-type Edge struct {
-  *gographviz.Edge
-}
-
-func (this *Edge) String() string { return this.Src + " -> " + this.Dst }
-
-
 /*
 
 Type Graph gives proper wrapping for gographviz.Graph, code.google.com/p/gographviz.
@@ -85,8 +44,8 @@ access methods instead, a practice known as encapsulation in software engineerin
 type Graph struct {
   *gographviz.Graph
   nodesStats map[*gographviz.Node]nodeStat
-  Starter nodeCollection
-  Hub nodeCollection
+  Starter nodeSet
+  Hub nodeSet
 }
 
 type nodeStat struct {
@@ -94,20 +53,41 @@ type nodeStat struct {
   CntO int
 }
 
-type nodeCollection map[*gographviz.Node]struct{}
+// Type NodeSet represents a generic SET data structure of type *gographviz.Node
+type NodeSet interface {
+  Add(*gographviz.Node)
+  Has(*gographviz.Node) bool
+  Del(*gographviz.Node)
+}
+type nodeSet map[*gographviz.Node]struct{}
 
+func (s nodeSet) Add(a *gographviz.Node)   { s[a] = struct{}{} }
+func (s nodeSet) Del(a *gographviz.Node)   { delete(s, a) }
+func (s nodeSet) Has(a *gographviz.Node) bool { _, ok := s[a]; return ok }
+
+// Type EdgeSet represents a generic SET data structure of type *gographviz.Edge
+type EdgeSet interface {
+  Add(*gographviz.Edge)
+  Has(*gographviz.Edge) bool
+  Del(*gographviz.Edge)
+}
+type edgeSet map[*gographviz.Edge]struct{}
+
+func (s edgeSet) Add(a *gographviz.Edge)   { s[a] = struct{}{} }
+func (s edgeSet) Del(a *gographviz.Edge)   { delete(s, a) }
+func (s edgeSet) Has(a *gographviz.Edge) bool { _, ok := s[a]; return ok }
 
 
 func NewGraph(g *gographviz.Graph) *Graph {
 	return &Graph{g, 
     make(map[*gographviz.Node]nodeStat),
-    make(nodeCollection),
-    make(nodeCollection),
+    make(nodeSet),
+    make(nodeSet),
   }
 }
 
 // Add an existing node to a graph
-func (this *Graph) AddNode(np *Node) {
+func (this *Graph) AddNode(np *gographviz.Node) {
   this.Graph.AddNode(this.Name, np.Name, np.Attrs);
 }
 
@@ -143,27 +123,27 @@ func (this *Graph) NodesStats() {
   }
   for node, nodeStat := range this.nodesStats {
     //spew.Dump(node, nodeStat) 
-    if nodeStat.CntI == 0 { this.Starter[node] = struct{}{} } 
-    if nodeStat.CntI >= 3 { this.Hub[node] = struct{}{}  } 
+    if nodeStat.CntI == 0 { this.Starter.Add(node) } 
+    if nodeStat.CntI >= 3 { this.Hub.Add(node)  } 
   }
   //spew.Dump(this.Starter, this.Hub) 
 }
 
 // Starters returns all the starter nodes within the given Graph.
 // Starters are those nodes that has only outgoing edges but no incoming ones.
-func (this *Graph) Starters() *nodeCollection {
+func (this *Graph) Starters() *nodeSet {
   return &this.Starter;
 }
 
 // Hubs returns all the hub nodes within the given Graph.
 // Hubs are those nodes with the number of incoming edges over the given threshold.
-func (this *Graph) Hubs() *nodeCollection {
+func (this *Graph) Hubs() *nodeSet {
   return &this.Hub;
 }
 
 // Hubs returns all the hub nodes within the given Graph.
 // Hubs are those nodes with the number of incoming edges over the given threshold.
-func (this *Graph) IsHub(n *Node) bool {
-  _, ok := this.Hub[n.Node]; return ok
+func (this *Graph) IsHub(n *gographviz.Node) bool {
+  _, ok := this.Hub[n]; return ok
 }
 

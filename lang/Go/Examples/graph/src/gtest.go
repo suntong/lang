@@ -18,6 +18,11 @@ import (
   "cluster"
 )
 
+////// Debugging //////
+import "github.com/davecgh/go-spew/spew"
+var _ = spew.Config
+//////////////////////
+
 func parse2graph(filename string) *gographviz.Graph {
   f, err := os.Open(filename)
   checkError(err)
@@ -49,11 +54,17 @@ func main() {
   //fmt.Printf("Written: %v\n", ag.String())
   cg.NodesStats()
 
-  fmt.Printf("%#v\n", cg.Lookup(nn))
+  _ = nn
+  // fmt.Printf("%#v\n", cg.Lookup(nn))
   // fmt.Printf("%#v\n", cg.EdgesToParents(nn))
   // fmt.Printf("%#v\n", cg.EdgesToChildren(nn))
 
-  cg.Cluster()
+  subGraphs := cg.Cluster()
+  for i := range subGraphs {
+    //spew.Dump(i, subGraphs[i].Graph)
+    fmt.Printf("Written: %v: %v\n", i, subGraphs[i].Graph.String())
+  }
+
   os.Exit(0)
 }
 

@@ -18,7 +18,7 @@ var _ = spew.Config
 //////////////////////
 
 // Cluster break down the given Graph into clusters and returns all the sub-graphs.
-func (this *Graph) Cluster() []*gographviz.Graph {
+func (this *Graph) Cluster() []*Graph {
   /*
 
    Algorithm synopsis:
@@ -44,45 +44,52 @@ func (this *Graph) Cluster() []*gographviz.Graph {
   sgNdx := -1
   sgRet := make([]*Graph,0)
 
-  toVisit := make(set); hasVisited := make(set)
-  toWalk := make(set); hasWalked := make(set)
+  toVisit := make(nodeSet); hasVisited := make(nodeSet)
+  toWalk := make(edgeSet); hasWalked := make(edgeSet)
 
   for starter := range *this.Starters() {
     // define an empty sub-graph and, put it into the toVisit set
     sgRet = append(sgRet, NewGraph(gographviz.NewGraph())); sgNdx++; 
     sgRet[sgNdx].Attrs = this.Attrs
-    toVisit.Add(&Node{starter})
+    toVisit.Add(starter)
+    hubVisited := make(nodeSet)
     for len(toVisit) > 0 { for nodep := range toVisit {
+      toVisit.Del(nodep);       //print("O ")
+      if this.IsHub(nodep) && hasVisited.Has(nodep) && !hubVisited.Has(nodep) { 
+        // add the already-visited but not-in-this-graph hub node to the sub-graph
+        sgRet[sgNdx].AddNode(nodep)
+        hubVisited.Add(nodep)
+        continue 
+      }
       if hasVisited.Has(nodep) { continue }
-      spew.Dump("toVisit", nodep)
+      //spew.Dump("toVisit", nodep)
       // add the node to the sub-graph
-      sgRet[sgNdx].AddNode(nodep.(*Node))
+      sgRet[sgNdx].AddNode(nodep)
       // remove the nodes into the hasVisited node set
-      toVisit.Del(nodep); hasVisited.Add(nodep)
+      hasVisited.Add(nodep)
       // stop at the hub nodes
-      if this.IsHub(nodep.(*Node)) { continue }
+      if this.IsHub(nodep) { continue }
       // put all its incoming and outgoing edge into the the toWalk set
-      noden := nodep.(*Node).String()
+      noden := nodep.Name
       for _, ep := range this.EdgesToParents(noden) {
-        toWalk.Add(&Edge{ep})
+        toWalk.Add(ep)
       }
       for _, ep := range this.EdgesToChildren(noden) {
-        toWalk.Add(&Edge{ep})
+        toWalk.Add(ep)
       }
       for edgep := range toWalk  {
+        toWalk.Del(edgep);         //print("- ")
         if hasWalked.Has(edgep) { continue }
-        spew.Dump("toWalk", edgep)
-        sgRet[sgNdx].Edges.Add(edgep.(*Edge).Edge)
+        //spew.Dump("toWalk", edgep)
+        sgRet[sgNdx].Edges.Add(edgep)
         // put its connected nodes into the toVisit node set
-        toVisit.Add(&Node{this.Lookup(edgep.(*Edge).Edge.Src)})
-        toVisit.Add(&Node{this.Lookup(edgep.(*Edge).Edge.Dst)})
-        // remove the edge from the toWalk edge set into the hasWalked edge set
-        toWalk.Del(edgep); hasWalked.Add(edgep)
+        toVisit.Add(this.Lookup(edgep.Src))
+        toVisit.Add(this.Lookup(edgep.Dst))
+        // remove the edge into the hasWalked edge set
+        hasWalked.Add(edgep)
       }
-      //spew.Dump(toVisit)
-      //spew.Dump(sgRet)
     }}
-    spew.Dump(sgNdx)
+    //spew.Dump(sgNdx)
   }
-  return nil
+  return sgRet
 }
