@@ -18,16 +18,12 @@ package cluster
 import (
   "code.google.com/p/gographviz"
   "code.google.com/p/gographviz/ast"
-
-  "github.com/davecgh/go-spew/spew"
 )
 
+////// Debugging //////
+import "github.com/davecgh/go-spew/spew"
 var _ = spew.Config
-
-func debugLn(x string)  { println("DEBUG: " + x) }
-func debugNop(x string) {}
-
-var debug func(x string) = debugLn
+//////////////////////
 
 //Creates a Graph structure by analysing an Abstract Syntax Tree representing a parsed graph.
 // func NewAnalysedGraph(graph *ast.Graph) *gographviz.Graph {
@@ -39,6 +35,9 @@ var debug func(x string) = debugLn
 //Reads (analyses) an Abstract Syntax Tree representing a parsed graph into a newly created graph structure Interface.
 func Read(graph *ast.Graph, g gographviz.Interface) {
   graph.Walk(&graphVisitor{g})
+  delete(g.(*gographviz.Graph).Attrs, "rank")
+  delete(g.(*gographviz.Graph).Attrs, "size")
+  debug("Done.")
 }
 
 type nilVisitor struct {
@@ -83,7 +82,7 @@ func (this *stmtVisitor) Visit(v ast.Elem) ast.Visitor {
     //debug("Visiting " + s.String())
     return this.nodeStmt(s)
   case ast.EdgeStmt:
-    debug("Visiting " + s.String())
+    //debug("Visiting " + s.String())
     return this.edgeStmt(s)
   case ast.NodeAttrs:
     return this.nodeAttrs(s)
@@ -137,13 +136,13 @@ func (this *stmtVisitor) edgeStmt(stmt ast.EdgeStmt) ast.Visitor {
   }
   srcPort := stmt.Source.GetPort()
   for i := range stmt.EdgeRHS {
-    debug("  Processing " + stmt.EdgeRHS[i].String())
+    //debug("  Processing " + stmt.EdgeRHS[i].String())
     directed := bool(stmt.EdgeRHS[i].Op)
     dst := stmt.EdgeRHS[i].Destination.GetId()
     dstName := dst.String()
     if stmt.EdgeRHS[i].Destination.IsNode() {
       this.g.AddNode(this.graphName, dstName, this.currentNodeAttrs.Copy())
-      debug("     AddNode: " + dstName)
+      //debug("     AddNode: " + dstName)
     } else {
       // debug("     Peek: " + stmt.EdgeRHS[i].Destination.String())
       // spew.Dump("     -Destination: ", stmt.EdgeRHS[i].Destination)
