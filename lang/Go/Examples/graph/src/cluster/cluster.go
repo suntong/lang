@@ -9,6 +9,8 @@
 package cluster
 
 import (
+  "fmt"
+
   "code.google.com/p/gographviz"
 )
 
@@ -51,6 +53,9 @@ func (this *Graph) Cluster() []*Graph {
     // define an empty sub-graph and, put it into the toVisit set
     sgRet = append(sgRet, NewGraph(gographviz.NewGraph())); sgNdx++; 
     sgRet[sgNdx].Attrs = this.Attrs
+    sgRet[sgNdx].SetDir(this.Directed)
+    graphName := fmt.Sprintf("%s_%03d\n", this.Name, sgNdx);
+    sgRet[sgNdx].SetName(graphName)
     toVisit.Add(starter)
     hubVisited := make(nodeSet)
     for len(toVisit) > 0 { for nodep := range toVisit {
