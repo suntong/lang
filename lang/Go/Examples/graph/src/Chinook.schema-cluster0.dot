@@ -1,0 +1,14 @@
+digraph Perl_000
+ {
+        rankdir="TB";
+        "invoiceline":port2->"invoice":port2[ color="grey", label="" ];
+        "invoiceline":port2->"track":port2[ color="grey", label="" ];
+        "invoice":port2->"customer":port2[ color="grey", label="" ];
+        "customer":port2->"employee":port2[ color="grey", label="" ];
+        "customer" [ color="blue", label="{<port1> customer|<port2> 1: address\l2: city\l3: company\l4: country\l5: customerid\l6: email\l7: fax\l8: firstname\l9: lastname\l10: phone\l11: postalcode\l12: state\l13: supportrepid\l}", shape="record" ];
+        "employee" [ color="blue", label="{<port1> employee|<port2> 1: address\l2: birthdate\l3: city\l4: country\l5: email\l6: employeeid\l7: fax\l8: firstname\l9: hiredate\l10: lastname\l11: phone\l12: postalcode\l13: reportsto\l14: state\l15: title\l}", shape="record" ];
+        "invoice" [ color="blue", label="{<port1> invoice|<port2> 1: billingaddress\l2: billingcity\l3: billingcountry\l4: billingpostalcode\l5: billingstate\l6: customerid\l7: invoicedate\l8: invoiceid\l9: total\l}", shape="record" ];
+        "invoiceline" [ color="blue", label="{<port1> invoiceline|<port2> 1: invoiceid\l2: invoicelineid\l3: quantity\l4: trackid\l5: unitprice\l}", shape="record" ];
+        "track" [ color="blue", label="{<port1> track|<port2> 1: albumid\l2: bytes\l3: composer\l4: genreid\l5: mediatypeid\l6: milliseconds\l7: name\l8: trackid\l9: unitprice\l}", shape="record" ];
+
+}
