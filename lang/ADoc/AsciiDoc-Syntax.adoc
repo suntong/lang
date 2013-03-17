@@ -77,6 +77,24 @@ A normal paragraph.           (styles: literal,verse,quote,listing,
   An indented literal
   paragraph.
 
+.Optional Title
+NOTE: This is an example
+      single-paragraph note.
+
+.Optional Title
+[NOTE]
+This is an example
+single-paragraph note.
+
+TIP: Tip.
+
+IMPORTANT: Important.
+
+WARNING: Warning.
+
+CAUTION: Caution.
+
+
 Delimited blocks
 ----------------
 Delimiters must begin at left margin.
@@ -85,22 +103,44 @@ Delimiters must begin at left margin.
   listing block
   -------------------
 
+-------------------         (styles: source,music,graphviz)
+listing block
+-------------------
+
   ...................         (styles: listing,verse)
   literal block
   ...................
 
+...................         (styles: listing,verse)
+literal block
+...................
+
   *******************
   sidebar block
   *******************
+
+*******************
+sidebar block
+*******************
+
 
   [style, author, cite]
   ___________________         (styles: quote,verse)
   quote block
   ___________________
 
+[style, author, cite]
+___________________         (styles: quote,verse)
+quote block
+___________________
+
   ===================         (styles: NOTE,TIP,WARNING,
   example block                        IMPORTANT,CAUTION)
   ===================
+
+===================         (styles: NOTE,TIP,WARNING,
+example block                        IMPORTANT,CAUTION)
+===================
 
   ///////////////////
   comment block
@@ -114,6 +154,12 @@ Delimiters must begin at left margin.
   --
   open block
   --
+
+[style]
+--
+open block
+(styles: abstract,partintro)
+--
 
 More block elements
 -------------------
