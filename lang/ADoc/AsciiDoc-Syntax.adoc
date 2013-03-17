@@ -103,16 +103,18 @@ Delimiters must begin at left margin.
   listing block
   -------------------
 
--------------------         (styles: source,music,graphviz)
+-------------------
 listing block
+(styles: source,music,graphviz)
 -------------------
 
   ...................         (styles: listing,verse)
   literal block
   ...................
 
-...................         (styles: listing,verse)
+...................
 literal block
+(styles: listing,verse)
 ...................
 
   *******************
@@ -130,16 +132,18 @@ sidebar block
   ___________________
 
 [style, author, cite]
-___________________         (styles: quote,verse)
+___________________
 quote block
+(styles: quote,verse)
 ___________________
 
   ===================         (styles: NOTE,TIP,WARNING,
   example block                        IMPORTANT,CAUTION)
   ===================
 
-===================         (styles: NOTE,TIP,WARNING,
-example block                        IMPORTANT,CAUTION)
+===================
+example block   
+(styles: NOTE,TIP,WARNING,IMPORTANT,CAUTION)
 ===================
 
   ///////////////////
