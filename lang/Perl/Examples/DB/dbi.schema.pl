@@ -37,10 +37,16 @@ my($graph) = GraphViz2 -> new
 	 logger => $logger,
 	 node   => {color => 'blue', shape => 'oval'},
 	);
-my($dbh) = DBI -> connect($ENV{DBI_DSN}, $ENV{DBI_USER}, $ENV{DBI_PASS});
-my($g)   = GraphViz2::DBI -> new(dbh => $dbh, graph => $graph);
+my($attr)              = {};
+$$attr{sqlite_unicode} = 1 if ($ENV{DBI_DSN} =~ /SQLite/i);
+my($dbh)               = DBI -> connect($ENV{DBI_DSN}, $ENV{DBI_USER}, $ENV{DBI_PASS}, $attr);
 
-$g -> create(name => 'App-Office-CMS');
+$dbh -> do('PRAGMA foreign_keys = ON')           if ($ENV{DBI_DSN} =~ /SQLite/i);
+$dbh -> do("set search_path = $ENV{DBI_SCHEMA}") if ($ENV{DBI_SCHEMA});
+
+my($g) = GraphViz2::DBI -> new(dbh => $dbh, graph => $graph);
+
+$g -> create(name => '');
 
 my($format)      = shift || 'svg';
 my($output_file) = shift || File::Spec -> catfile('html', "dbi.schema.$format");
