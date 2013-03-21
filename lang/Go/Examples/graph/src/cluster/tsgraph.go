@@ -124,7 +124,7 @@ func (this *Graph) NodesStats() {
   for node, nodeStat := range this.nodesStats {
     //spew.Dump(node, nodeStat) 
     if nodeStat.CntI == 0 { this.Starter.Add(node) } 
-    if nodeStat.CntI >= 3 { this.Hub.Add(node)  } 
+    if nodeStat.CntI >= 2 { this.Hub.Add(node)  } 
   }
   //spew.Dump(this.Starter, this.Hub) 
 }

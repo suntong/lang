@@ -1,0 +1,10 @@
+digraph Perl_001
+ {
+        rankdir="TB";
+        "playlisttrack":port2->"playlist":port2[ color="grey", label="" ];
+        "playlisttrack":port2->"track":port2[ color="grey", label="" ];
+        "playlist" [ color="blue", label="{<port1> playlist|<port2> 1: name\l2: playlistid\l}", shape="record" ];
+        "playlisttrack" [ color="blue", label="{<port1> playlisttrack|<port2> 1: playlistid\l2: trackid\l}", shape="record" ];
+        "track" [ color="blue", label="{<port1> track|<port2> 1: albumid\l2: bytes\l3: composer\l4: genreid\l5: mediatypeid\l6: milliseconds\l7: name\l8: trackid\l9: unitprice\l}", shape="record" ];
+
+}

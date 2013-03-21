@@ -94,11 +94,12 @@ func main() {
   //_ = parser2graph(gf)
   // g := parse2graph(gf)
   g := read2graph(gf); _ = g
+  fmt.Printf(g.String())
   //showNodes(g)
   //spew.Dump("Nodes: ", g.Nodes)
-  //spew.Dump("Edges ", g.Edges)
-  //spew.Dump("Edges ", g.Edges.SrcToDsts)
-  showEdges(g)
+  // spew.Dump("Edges ", g.Edges)
+  // spew.Dump("Edges ", g.Edges.SrcToDsts)
+  // showEdges(g)
   // spew.Dump("Relations P-C: ", g.Relations.ParentToChildren)
   // spew.Dump("Relations C-T: ", g.Relations.ChildToParents)
 

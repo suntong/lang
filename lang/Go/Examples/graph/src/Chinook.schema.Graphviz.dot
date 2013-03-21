@@ -1,0 +1,26 @@
+digraph Perl {
+	rankdir="TB";
+	"album":port2->"artist":port2[ color="grey", label="" ];
+	"customer":port2->"employee":port2[ color="grey", label="" ];
+	"employee":port2->"employee":port2[ color="grey", label="" ];
+	"invoice":port2->"customer":port2[ color="grey", label="" ];
+	"invoiceline":port2->"track":port2[ color="grey", label="" ];
+	"invoiceline":port2->"invoice":port2[ color="grey", label="" ];
+	"playlisttrack":port2->"track":port2[ color="grey", label="" ];
+	"playlisttrack":port2->"playlist":port2[ color="grey", label="" ];
+	"track":port2->"mediatype":port2[ color="grey", label="" ];
+	"track":port2->"album":port2[ color="grey", label="" ];
+	"track":port2->"genre":port2[ color="grey", label="" ];
+	"album" [ color="blue", label="{<port1> album|<port2> 1: albumid\l2: artistid\l3: title\l}", shape="record" ];
+	"artist" [ color="blue", label="{<port1> artist|<port2> 1: artistid\l2: name\l}", shape="record" ];
+	"customer" [ color="blue", label="{<port1> customer|<port2> 1: address\l2: city\l3: company\l4: country\l5: customerid\l6: email\l7: fax\l8: firstname\l9: lastname\l10: phone\l11: postalcode\l12: state\l13: supportrepid\l}", shape="record" ];
+	"employee" [ color="blue", label="{<port1> employee|<port2> 1: address\l2: birthdate\l3: city\l4: country\l5: email\l6: employeeid\l7: fax\l8: firstname\l9: hiredate\l10: lastname\l11: phone\l12: postalcode\l13: reportsto\l14: state\l15: title\l}", shape="record" ];
+	"genre" [ color="blue", label="{<port1> genre|<port2> 1: genreid\l2: name\l}", shape="record" ];
+	"invoice" [ color="blue", label="{<port1> invoice|<port2> 1: billingaddress\l2: billingcity\l3: billingcountry\l4: billingpostalcode\l5: billingstate\l6: customerid\l7: invoicedate\l8: invoiceid\l9: total\l}", shape="record" ];
+	"invoiceline" [ color="blue", label="{<port1> invoiceline|<port2> 1: invoiceid\l2: invoicelineid\l3: quantity\l4: trackid\l5: unitprice\l}", shape="record" ];
+	"mediatype" [ color="blue", label="{<port1> mediatype|<port2> 1: mediatypeid\l2: name\l}", shape="record" ];
+	"playlist" [ color="blue", label="{<port1> playlist|<port2> 1: name\l2: playlistid\l}", shape="record" ];
+	"playlisttrack" [ color="blue", label="{<port1> playlisttrack|<port2> 1: playlistid\l2: trackid\l}", shape="record" ];
+	"track" [ color="blue", label="{<port1> track|<port2> 1: albumid\l2: bytes\l3: composer\l4: genreid\l5: mediatypeid\l6: milliseconds\l7: name\l8: trackid\l9: unitprice\l}", shape="record" ];
+
+}

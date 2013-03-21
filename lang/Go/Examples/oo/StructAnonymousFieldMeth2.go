@@ -24,12 +24,12 @@ type Student struct {
 }
 
 type Employee struct {
-  Human   //an anonymous field of type Human
+  *Human  //an anonymous field of type Human
   company string
 }
 
 type Manager struct {
-  *Human   //an anonymous field of type *Human
+  *Human  //an anonymous field of type *Human
   company string
 }
 
@@ -46,10 +46,31 @@ func (e *Employee) SayHi() {
 
 func main() {
   mark := Student{Human{"Mark", 25, "222-222-YYYY"}, "MIT"}
-  sam := Employee{Human{"Sam", 45, "111-888-XXXX"}, "Golang Inc"}
+  sam := Employee{&Human{"Sam", 45, "111-888-XXXX"}, "Golang Inc"}
   tom := Manager{&Human{"Tom", 55, "222-999-XXXX"}, "Golang Inc"}
 
   mark.SayHi()
-  sam.SayHi()
   tom.SayHi()
+  sam.SayHi()
+  sam.Human.SayHi()
+
+  /*
+
+  Hi, I am Mark you can call me on 222-222-YYYY
+  Hi, I am Tom you can call me on 222-999-XXXX
+  Hi, I am Sam, I work at Golang Inc. Call me on 111-888-XXXX
+  Hi, I am Sam you can call me on 111-888-XXXX
+
+  The way anonymous embedding works with functions is that when you attempt to
+  call a method on the struct, the compiler will first look for methods
+  directly on that struct that match the function name. If it finds one,
+  that's the one it'll assume you mean. If it does not find one, it'll look at
+  embedded structs for matching function names.  Note that only the name
+  matters, not the signature, so a function with the name Foo will hide any
+  function named Foo in an embedded struct, even if they take different
+  arguments and return different values.
+
+    -- Nate Finch
+
+  */
 }
