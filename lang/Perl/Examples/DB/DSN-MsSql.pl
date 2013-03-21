@@ -57,6 +57,7 @@ for my $cs (
      "DBI:ODBC:Driver={SQL Server};Server=$db_instance;Database=$db_name;UID=$db_user;PWD=$db_pass"
   , "DBI:ODBC:Driver={SQL Server};Server=$db_instance;Database=$db_name;Trusted_Connection=yes;"
   , "DBI:ODBC:Driver={SQL Server};Server=$db_instance;Database=$db_name;"
+  , "DBI:ODBC:Driver={SQL Server};Server=(local);Database=$db_name;"
   ,  'DBI:ODBC:Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\Projects\DBs\Northwind.accdb;User Id=;Password='
 #    , "DBI:ODBC:DSN=AdvWork;"
 #    , "DBI:ADO:DSN=AdvWork;"
