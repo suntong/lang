@@ -182,6 +182,15 @@ namespace CommandLineSwitch
                     Console.WriteLine("  - {0}", s);
             }
 
+            // To access non-switch parameters
+            // what remains is split (by the parser) into white-space delimited (or quoted) strings, in the property Parameters
+            // BUG: the following command-line switches/parameters will not be correctly processed, 
+            // because the quote is erroneously aggressive
+            //   /user "New Name" --age 32 a b "c D"
+            Console.WriteLine("Non-switch Params : {0}", parser.Parameters.Length);
+            for (int j = 0; j < parser.Parameters.Length; j++)
+                Console.WriteLine("{0} : {1}", j, parser.Parameters[j]);
+
             return 0;
         }
         #endregion
