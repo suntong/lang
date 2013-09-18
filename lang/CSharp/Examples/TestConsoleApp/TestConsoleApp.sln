@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketClient", "Socket\Sock
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine", "CommandLine\CommandLine.csproj", "{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineSwitch", "CommandLineSwitch\CommandLineSwitch.csproj", "{C1EC263B-EEBF-400E-A869-E55F87E0A349}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -167,6 +169,16 @@ Global
 		{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}.Release|x86.ActiveCfg = Release|Any CPU
+		{C1EC263B-EEBF-400E-A869-E55F87E0A349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1EC263B-EEBF-400E-A869-E55F87E0A349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1EC263B-EEBF-400E-A869-E55F87E0A349}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C1EC263B-EEBF-400E-A869-E55F87E0A349}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C1EC263B-EEBF-400E-A869-E55F87E0A349}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C1EC263B-EEBF-400E-A869-E55F87E0A349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1EC263B-EEBF-400E-A869-E55F87E0A349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1EC263B-EEBF-400E-A869-E55F87E0A349}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C1EC263B-EEBF-400E-A869-E55F87E0A349}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C1EC263B-EEBF-400E-A869-E55F87E0A349}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
