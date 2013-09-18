@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApplication1\ConsoleApp1.csproj", "{59653B25-8330-4D76-836A-5D7814352D1D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp2", "ConsoleApplication2\ConsoleApp2.csproj", "{4ABA2408-7F8F-41D7-A0E7-6E36AB4E9BAA}"
@@ -24,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketServer", "Socket\SocketServer\SocketServer.csproj", "{AE3C63DC-89C8-443F-81B1-6229702A754D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketClient", "Socket\SocketClient\SocketClient.csproj", "{AC44A609-C360-475C-8BC2-D11754004E27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine", "CommandLine\CommandLine.csproj", "{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -155,6 +157,16 @@ Global
 		{AC44A609-C360-475C-8BC2-D11754004E27}.Release|Mixed Platforms.Build.0 = Release|x86
 		{AC44A609-C360-475C-8BC2-D11754004E27}.Release|x86.ActiveCfg = Release|x86
 		{AC44A609-C360-475C-8BC2-D11754004E27}.Release|x86.Build.0 = Release|x86
+		{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5CA698A0-3445-4D9F-A3FE-AE79B4BED58C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
