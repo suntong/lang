@@ -4,6 +4,8 @@
 // Authors: Tong Sun (c) 2013, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
+// http://godoc.org/bitbucket.org/kardianos/table
+
 // Style: gofmt -tabs=false -tabwidth=2 -w
 
 package main
@@ -32,6 +34,13 @@ func main() {
     log.Fatal(err)
   }
 
+  dumpTable(table)
+  
+  fmt.Fprintf(os.Stderr, "\nFinished correctly\n")
+  return
+}
+
+func dumpTable(table *table.Buffer) {
   for i, element := range table.ColumnName {
     if i != 0 {
       fmt.Printf(",")
@@ -66,7 +75,4 @@ func main() {
     }
     fmt.Printf("\n")
   }
-
-  fmt.Fprintf(os.Stderr, "\nFinished correctly\n")
-  return
 }
