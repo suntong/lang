@@ -36,8 +36,39 @@ func main() {
 
   dumpTable(table)
   
+  testTVF(conn)
+  
   fmt.Fprintf(os.Stderr, "\nFinished correctly\n")
   return
+}
+
+/*
+
+testTVF: to test Table-Valued Functions of MS SQL Server
+
+Need to define the following in tempdb:
+
+	Create Function Instances (@Bottom int)
+	Returns Table     
+	As
+	Return
+	(
+	select top 5 database_id, name, create_date from sys.databases WHERE database_id >= @Bottom
+	)
+
+Here is how to run:
+
+	Select * from Instances(5)
+
+*/
+func testTVF(conn *sql.DB) {
+  table, err := table.Get(conn, "Select * from Instances(?)", 5)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  dumpTable(table)
+
 }
 
 func dumpTable(table *table.Buffer) {
