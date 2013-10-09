@@ -37,6 +37,7 @@ func main() {
   dumpTable(table)
   
   testTVF(conn)
+  testExec(conn)
   
   fmt.Fprintf(os.Stderr, "\nFinished correctly\n")
   return
@@ -63,6 +64,16 @@ Here is how to run:
 */
 func testTVF(conn *sql.DB) {
   table, err := table.Get(conn, "Select * from Instances(?)", 5)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  dumpTable(table)
+
+}
+
+func testExec(conn *sql.DB) {
+  table, err := table.Get(conn, "EXEC sp_executesql N'Select * from Instances(5)'")
   if err != nil {
     log.Fatal(err)
   }
