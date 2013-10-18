@@ -25,7 +25,7 @@ import (
 var progname string = "PerfCounterExport" // os.Args[0]
 
 var (
-	fSqlConnectionString = flag.String("c", "driver=sql server;server=localhost;database=LoadTest2010;trusted_connection=yes;",
+	fSqlConnectionString = flag.String("c", "driver=sql server;server=(local);database=LoadTest2010;trusted_connection=yes",
 		"Go MSSQL Odbc ConnectionString to MS SQL Server\n\tDefault: LoadTest2010 on local machine\n")
 
 	fLoadTestRunId = flag.Int("id", -1,
@@ -69,7 +69,7 @@ func main() {
 	log.Printf("[%s] Exporting LoadTest %d to %s...\n", progname,
 		*fLoadTestRunId, ResultFilePre)
 
-	if *fMachineNameFilter == "" {
+	if *fMachineNameFilter != "" {
 		log.Printf("[%s] (only exporting machine %s)\n", progname,
 			*fMachineNameFilter)
 		savePerfmonAsCsv(conn, *fMachineNameFilter, *fLoadTestRunId, ResultFilePre)
