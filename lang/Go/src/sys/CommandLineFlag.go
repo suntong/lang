@@ -17,13 +17,13 @@ import (
 
 var (
   // main operation modes
-  write = flag.Bool("w", false, "write result back instead of stdout")
+  write = flag.Bool("w", false, "write result back instead of stdout\n\t\tDefault: No write back")
 
   // layout control
-  tabWidth = flag.Int("tabwidth", 8, "tab width")
+  tabWidth = flag.Int("tabwidth", 8, "tab width\n\t\tDefault: Standard")
 
   // debugging
-  cpuprofile = flag.String("cpuprofile", "", "write cpu profile to this file")
+  cpuprofile = flag.String("cpuprofile", "", "write cpu profile to this file\n\t\tDefault: no default")
 )
 
 func usage() {
