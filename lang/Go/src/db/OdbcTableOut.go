@@ -69,6 +69,9 @@ func main() {
 	if len(os.Args) > 1 && len(os.Args[1]) > 1 {
 		connStr = os.Args[1]
 	}
+
+	fmt.Fprintf(os.Stderr, "\nProgram starts\n")
+
 	//log.Printf("Connecting with '%s'\n", connStr)
 	conn, err := sql.Open("odbc", connStr)
 	if err != nil {
@@ -86,8 +89,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	fmt.Fprintf(os.Stderr, "\nDump table\n")
 	dumpTable(table)
-
 	fmt.Fprintf(os.Stderr, "\nFinished correctly\n")
 	return
 }
@@ -123,7 +126,9 @@ func dumpTable(table *table.Buffer) {
 			}
 			switch x := row.MustGet(colname).(type) {
 			case string: // x is a string
-				fmt.Fprintf(file, "\"%s\"", x)
+				for j := 1; j <= 300; j++ {
+					fmt.Fprintf(file, "\"%s\"", x)
+				}
 			case int: // now x is an int
 				fmt.Fprintf(file, "\"%d\"", x)
 			case int32: // now x is an int32
@@ -142,6 +147,7 @@ func dumpTable(table *table.Buffer) {
 		}
 		fmt.Fprintf(file, "\n")
 		fmt.Fprintf(os.Stderr, ".")
+		//fmt.Fprintf(os.Stderr, "Now: %s\n", time.Now().Format(time.RFC3339Nano))
 	}
 	fmt.Fprintf(os.Stderr, "\n")
 
