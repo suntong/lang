@@ -35,7 +35,7 @@ var (
 		"machineNameFilter for exporting the performance counters\n\tDefault: export all machines\n")
 
 	fStep = flag.Int("s", 50,
-		"Output step\n\tDefault: Progress indicator every 50 loadtest record output\n")
+		"Progress step\n\tDefault: Progress indicator every 50 loadtest record output\n")
 )
 
 func main() {
@@ -66,12 +66,11 @@ func main() {
 		maxRunId := runId.MustGetScaler(0, "RunId")
 		*fLoadTestRunId = int(maxRunId.(int32))
 	}
-	log.Printf("[%s] Exporting LoadTest %d to %s...\n", progname,
-		*fLoadTestRunId, ResultFilePre)
+	log.Printf("[%s] Exporting LoadTest %d\n  to %s\n  with progress step of %d\n",
+		progname, *fLoadTestRunId, ResultFilePre, *fStep)
 
 	if *fMachineNameFilter != "" {
-		log.Printf("[%s] (only exporting machine %s)\n", progname,
-			*fMachineNameFilter)
+		fmt.Printf("  limiting to only export machine %s\n", *fMachineNameFilter)
 		savePerfmonAsCsv(conn, *fMachineNameFilter, *fLoadTestRunId, ResultFilePre)
 		os.Exit(0)
 	}
@@ -104,7 +103,6 @@ func main() {
 	for _, machine := range machines.Rows {
 		machineName := machine.MustGet("MachineName").(string)
 		if machineName != thismachine {
-			log.Printf("[%s]   Exporting %s...\n", progname, machineName)
 			savePerfmonAsCsv(conn, machineName, *fLoadTestRunId, ResultFilePre)
 		} else {
 			log.Printf("[%s]   (local host %s skipped)\n", progname, machineName)
@@ -117,12 +115,16 @@ func main() {
 
 func savePerfmonAsCsv(conn *sql.DB, machine string, _runId int, resultFilePre string) {
 
+	log.Printf("[%s]   Collecting data for %s...\n", progname, machine)
+
 	sql := fmt.Sprintf("exec TSL_prc_PerfCounterCollectionInCsvFormat"+
 		" @RunId = %d, @InstanceName=N'\\\\%s\\%%'", _runId, machine)
 	table, err := table.Get(conn, sql)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	log.Printf("[%s]   Exporting %s data...\n", progname, machine)
 
 	// open the output file
 	file, err := os.Create(resultFilePre + "-" + machine + ".csv")
