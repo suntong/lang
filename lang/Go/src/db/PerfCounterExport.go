@@ -41,6 +41,8 @@ var (
 	fMachineNameFilter = flag.String("m", "",
 		"machineNameFilter for exporting the performance counters\n\tDefault: export all machines\n")
 
+	fNoClobber = flag.Bool("nc", false, "no clobber, do not overwrite existing files\n\tDefault: overwrite them\n")
+
 	fStep = flag.Int("s", 50,
 		"Progress step\n\tDefault: Progress indicator every 50 loadtest record output\n")
 )
@@ -134,6 +136,14 @@ func main() {
 			log.Printf("[%s]   (Collecting host %s skipped)\n",
 				progname, machineName)
 			continue
+		}
+		// if no clobber and the destination file exists, skip
+		if *fNoClobber {
+			if _, err := os.Stat(ResultFilePre + "-" + machineName + ".csv"); err == nil {
+				log.Printf("[%s]   (Host %s skipped for no clobbering)\n",
+					progname, machineName)
+				continue
+			}
 		}
 		savePerfmonAsCsv(conn, machineName, *fLoadTestRunId, ResultFilePre)
 
