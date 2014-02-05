@@ -140,6 +140,20 @@ Then, add all of the digits together:
 
 If the SIN is valid, this number will be evenly divisible by 10.
 
+
+United States Social Security number
+https://sourcegraph.com/github.com/django/django-localflavor-us/symbols/python/django_localflavor_us/forms/USSocialSecurityNumberField
+
+Checks the following rules to determine whether the number is valid:
+
+    * Conforms to the XXX-XX-XXXX format.
+    * No group consists entirely of zeroes.
+    * The leading group is not "666" (block "666" will never be allocated).
+    * The number is not in the promotional block 987-65-4320 through
+      987-65-4329, which are permanently invalid.
+    * The number is not one known to be invalid due to otherwise widespread
+      promotional use or distribution (078-05-1120 or 219-09-9999).
+
 */
 
 var multiply []int = []int{1, 2, 1, 2, 1, 2, 1, 2, 1}
