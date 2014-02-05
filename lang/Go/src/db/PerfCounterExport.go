@@ -25,8 +25,15 @@ import (
 var progname string = "PerfCounterExport" // os.Args[0]
 
 var (
-	fSqlConnectionString = flag.String("c", "driver=sql server;server=(local);database=LoadTest2010;trusted_connection=yes",
-		"Go MSSQL Odbc ConnectionString to MS SQL Server\n\tDefault: LoadTest2010 on local machine\n")
+	fSqlConnectionString = flag.String("c", "",
+		"ConnectionString of Go MSSQL Odbc to MS SQL Server\n\tDefault: empty, which means using the -cs -cd setting. Sample: \n"+
+			"  'driver=sql server;server=(local);database=LoadTest2010;uid=user;pwd=pass'\n")
+
+	fServer = flag.String("cs", "(local)",
+		"Connection Server, server to PerfCounter info from\n\tDefault: local machine.\n")
+
+	fPerfDb = flag.String("cd", "LoadTest2010",
+		"Connection DB, db that holds the PerfCounter info\n\tDefault: LoadTest2010\n")
 
 	fLoadTestRunId = flag.Int("id", -1,
 		"Loadtest RunId\n\tDefault: Max RunId\n")
@@ -48,12 +55,34 @@ func main() {
 	}
 	ResultFilePre := flag.Args()[0]
 
-	conn, err := sql.Open("odbc", *fSqlConnectionString)
+	// Construct the Go MSSQL odbc SqlConnectionString
+	// https://code.google.com/p/odbc/source/browse/mssql_test.go
+	var c string
+	if *fSqlConnectionString == "" {
+		var params map[string]string
+		params = map[string]string{
+			"driver":             "sql server",
+			"server":             *fServer,
+			"database":           *fPerfDb,
+			"trusted_connection": "yes",
+		}
+
+		for n, v := range params {
+			c += n + "=" + v + ";"
+		}
+	} else {
+		c = *fSqlConnectionString
+	}
+	log.Println("Connection string: " + c)
+
+	conn, err := sql.Open("odbc", c)
 	if err != nil {
 		fmt.Println("Connecting Error")
 		return
 	}
 	defer conn.Close()
+
+	log.Printf("[%s] Program started\n", progname)
 
 	if *fLoadTestRunId < 0 {
 		// No Loadtest specified. Use Max RunId.
@@ -99,14 +128,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	thismachine, _ := os.Hostname()
-	for _, machine := range machines.Rows {
+	for i, machine := range machines.Rows {
 		machineName := machine.MustGet("MachineName").(string)
-		if machineName != thismachine {
-			savePerfmonAsCsv(conn, machineName, *fLoadTestRunId, ResultFilePre)
-		} else {
-			log.Printf("[%s]   (local host %s skipped)\n", progname, machineName)
+		if i == 0 {
+			log.Printf("[%s]   (Collecting host %s skipped)\n",
+				progname, machineName)
+			continue
 		}
+		savePerfmonAsCsv(conn, machineName, *fLoadTestRunId, ResultFilePre)
+
 	}
 
 	log.Printf("[%s] Exporting finished correctly.\n", progname)
@@ -186,6 +216,6 @@ func usage() {
 	fmt.Fprintf(os.Stderr, "\nUsage:\n %s [flags] ResultFilePre\n\nFlags:\n\n",
 		progname)
 	flag.PrintDefaults()
-	fmt.Fprintf(os.Stderr, "\nResultFilePre: The prefix for the export files, including the path.\n\tThe machine names will be appended to it.\n\tE.g. C:\\Temp\\LoadTest-0822\n")
+	fmt.Fprintf(os.Stderr, "\nResultFilePre: \n\tThe prefix for the export files, including the path.\n\tThe machine names will be appended to it.\n\n\tE.g. C:\\Temp\\LoadTest-0822\n")
 	os.Exit(0)
 }
