@@ -18,7 +18,7 @@ import (
 var progname string = "sin-gen" // os.Args[0]
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "Usage: %s [SIN_Str]\n", progname)
+	fmt.Fprintf(os.Stderr, "Usage: %s SIN_Str\n", progname)
 	os.Exit(0)
 }
 
@@ -172,7 +172,19 @@ func validate(da []int) int {
 	for i, d := range da {
 		sum += (d * multiply[i]) % 9
 	}
-	return 10 - sum%10
+	return (10 - sum%10) % 10
+}
+
+func pow10(e int) int {
+	if e == 0 {
+		return 1
+	}
+
+	ret := 10
+	for ii := 1; ii < e; ii++ {
+		ret *= 10
+	}
+	return ret
 }
 
 func main() {
@@ -181,14 +193,21 @@ func main() {
 		usage()
 	}
 
-	// the first command line argument is SIN#
+	// the first command line argument is SIN# prefix
 	sinStr := os.Args[1]
 
-	digits := toDigits(sinStr)
-	//fmt.Printf("%v\n", digits)
+	padlen := 8 - len(sinStr)
+	for ii := 0; ii < pow10(padlen); ii++ {
+		// Pad leading zero with the length from a varible
+		fmtstr := fmt.Sprintf("%%s%%0%dd", padlen)
+		// in case the SIN# is 8 digits already, use those 8 digits
+		fullstr := fmt.Sprintf(fmtstr, sinStr, ii)[:8]
+		digits := toDigits(fullstr)
 
-	d9 := validate(digits)
-	fmt.Printf("%s%d\n", sinStr, d9)
+		d9 := validate(digits)
+		fmt.Printf("%s%d\n", fullstr, d9)
+	}
+
 }
 
 /*
