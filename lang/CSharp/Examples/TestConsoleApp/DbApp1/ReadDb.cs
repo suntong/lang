@@ -99,7 +99,7 @@ public class ReadDb
         string DAM = "[ReadSqlDb]";
 
         string myConnectionString =
-                    "Data Source=(local);Initial Catalog=Backfill;Integrated Security=True";
+                    "Data Source=(local);Initial Catalog=tempdb;Integrated Security=True";
 
         Console.WriteLine("\n\n== Test SqlDB\n");
 
@@ -108,7 +108,7 @@ public class ReadDb
             new SqlConnection(myConnectionString);
 
         // Prepare SQL query
-        string query = "SELECT svr_name, commnt FROM db_db_svr;";
+        string query = "select top 5 database_id, name from sys.databases WHERE database_id >= 5";
         SqlCommand cmd = new SqlCommand(query, cn);
 
         try
@@ -158,19 +158,12 @@ public class ReadDb
     static void TestSqlDB2()
     {
 
-        string department = "DP3-WEB";
+        int id_min = 5;
         string msConnectionString =
-                    "Data Source=(local);Initial Catalog=Demo1;Integrated Security=True";
+                    "Data Source=(local);Initial Catalog=tempdb;Integrated Security=True";
         
         const string sql =
-        @"SELECT
-              emp_name,
-              department
-          FROM
-              employee
-          WHERE
-              department = @department
-        ";
+        @"select top 5 database_id, name from sys.databases WHERE database_id >= @id_min";
 
         using (SqlConnection con = new SqlConnection(msConnectionString))
         using (SqlCommand cmd = con.CreateCommand())
@@ -178,7 +171,7 @@ public class ReadDb
             con.Open();
             cmd.CommandText = sql;
 
-            cmd.Parameters.AddWithValue("@department", department);
+            cmd.Parameters.AddWithValue("@id_min", id_min);
 
             using (SqlDataReader dr = cmd.ExecuteReader())
             {
@@ -263,7 +256,7 @@ public class ReadDb
         string DAM = "[ReadOleDb]";
 
         string myConnectionString =
-                            "Provider=SQLOLEDB;Data Source=(local);Initial Catalog=Backfill;Integrated Security=SSPI";
+                            "Provider=SQLOLEDB;Data Source=(local);Initial Catalog=tempdb;Integrated Security=SSPI";
 
         Console.WriteLine("\n\n== Test Sql as OleDB\n");
 
@@ -272,7 +265,7 @@ public class ReadDb
             new OleDbConnection(myConnectionString);
 
         // Prepare SQL query
-        string query = "SELECT svr_name, commnt FROM db_db_svr;";
+        string query = "select top 5 database_id, name from sys.databases WHERE database_id >= 5";
         OleDbCommand cmd = new OleDbCommand(query, cn);
 
         try
