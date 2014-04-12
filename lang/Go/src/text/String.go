@@ -232,4 +232,8 @@ func main() {
     // Hello, world!
   }
 
+  sql := fmt.Sprintf("Simon says the parameters are \"" +
+    "@Id = %d, @Name=N'%s\\%%'\"", 3, "test")
+  fmt.Printf("%q\n", sql)
+
 }

@@ -62,6 +62,27 @@ Set-SqlData "(local)" "tempdb" $cmd
 
 ##-----------------------------------------------
 
+Write-Host "`n== Import-Csv and pipe into SQL Server table`n"
+
+#import-module sqlserver -force
+
+# Define table structure
+Set-SqlData "(local)" "tempdb" "IF OBJECT_ID ('TmpPipe', 'U') IS NOT NULL DROP TABLE TmpPipe"
+Set-SqlData "(local)" "tempdb" "CREATE TABLE TmpPipe (Name varchar(36), Department varchar(12),  Title varchar(36) )"
+# Define a pipeline function
+function Csv2Sql {
+    begin { $cmd = ''; }
+    process {
+        $cmd += "INSERT INTO TmpPipe VALUES ('$($_.Name)', '$($_.Department)', '$($_.Title)');`n";
+    }
+    end { $cmd; Set-SqlData "(local)" "tempdb" $cmd }
+}
+# Import-Csv and pipe into SQL Server table
+
+Import-Csv .\Csv-Test.csv | Csv2Sql
+
+##-----------------------------------------------
+
 # http://www.computerperformance.co.uk/powershell/powershell_import_csv.htm
 
 # PowerShell Export-CSV Example 

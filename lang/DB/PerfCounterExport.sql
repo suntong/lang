@@ -66,7 +66,7 @@ AS
         ) PivotTable
         ORDER BY IntervalStartTime ASC
         '
-        print @SQL
+       -- print @SQL
        -- Execute the generated query
        exec sp_executesql @SQL
 GO
@@ -100,3 +100,31 @@ CREATE VIEW MTSL_View_PerfmonInstanceNamesAndIds AS
               ON counter.CounterId = instance.CounterId
               AND counter.LoadTestRunId = instance.LoadTestRunId
 GO
+
+/*===============================================================================
+LoadTestRuns
+Describe: Returns LoadTestRuns stored in the database
+Example: SELECT * FROM LoadTestRuns ORDER BY LoadTestRunId DESC
+===============================================================================*/
+
+IF OBJECT_ID ('LoadTestRuns', 'V') IS NOT NULL
+DROP VIEW LoadTestRuns
+GO
+
+CREATE VIEW LoadTestRuns
+AS
+SELECT  LoadTestRunId,
+        LoadTestName
+        ,StartTime
+        ,EndTime
+        ,RunDuration
+        ,Outcome
+  FROM  LoadTestRun LTR
+ GROUP  BY LoadTestRunId,
+        LoadTestName
+        ,StartTime
+        ,EndTime
+        ,RunDuration
+        ,Outcome
+ --ORDER  BY StartTime DESC
+ 
