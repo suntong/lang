@@ -69,6 +69,12 @@ func main() {
     os.Exit(1)
   }
 
+  reverse := false
+  if os.Args[2] == "-r" {
+    reverse = true
+  }
+  //fmt.Printf("r: %v\n", reverse)
+
   //fmt.Printf("sm: %v\n", sm)
   sb = tBoundary{0, n - 1, 0, n - 1}
   //fmt.Printf("sb: %v\n", sb)
@@ -80,7 +86,7 @@ func main() {
   }
 
   draw(n, values)
-  show(n, values)
+  show(n, values, reverse)
 
 }
 
@@ -127,12 +133,16 @@ func turn(d, x, y int) (od, ox, oy int) {
 }
 
 // Print out the snail
-func show(n int, values [][]int) {
+func show(n int, values [][]int, reverse bool) {
   format := fmt.Sprintf("%%%dd ", int(math.Log(float64(n*n))/math.Ln10)+1)
 
   for i := 0; i < n; i++ {
     for j := 0; j < n; j++ {
-      fmt.Printf(format, values[i][j])
+      if reverse {
+        fmt.Printf(format, n*n-values[j][i]+1)
+      } else {
+        fmt.Printf(format, values[i][j])
+	}
     }
     fmt.Println("")
   }
