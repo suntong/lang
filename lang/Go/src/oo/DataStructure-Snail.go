@@ -24,6 +24,7 @@ const (
 	dDown
 	dLeft
 	dUp
+	dNumbers // total number of directions
 )
 
 // Snail-moving Boundary
@@ -123,7 +124,7 @@ func draw(n int, values [][]int) {
 // Turn the snail-moving direction each time when hitting the boundary
 func turn(d, x, y int) (od, ox, oy int) {
 	ox, oy = x, y
-	od = (d + 1) % 4
+	od = (d + 1) % dNumbers
 
 	switch d {
 	case dRight:
