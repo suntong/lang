@@ -48,5 +48,16 @@ const (
 func main() {
 	var x weekday = Friday
 	y := weekday(Friday)
-	fmt.Println(Friday, x, y)
+	xx := Tuesday
+	xx++
+
+	fmt.Println(Friday, x, xx, y)
+
+	// cannot use Wednesday (type weekday) as type int in assignment
+	//var yy int = Wednesday
+
+	// invalid operation: (mismatched types int and weekday)
+	//var yy int = 3
+	//fmt.Println(yy == Wednesday)
+	
 }
