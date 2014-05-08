@@ -6,6 +6,67 @@
 
 import-module sqlserver -force
 
+#region RunTimeSupport
+
+	<#
+		.SYNOPSIS
+			Temp name generator.
+
+		.DESCRIPTION
+			Generate a temp name based on the given name skeleton and current date & time.
+
+		.PARAMETER Name
+			The name skeleton used for generating the temp name.
+
+		.PARAMETER TimeFormat
+			The time format string used for generating the temp name (default: 'MMdd_HHmm').
+		
+		.PARAMETER AddTemp
+			Add system temp path to the front of the return.
+		
+
+		.EXAMPLE
+			PS C:\> Get-TempName 'abc.txt'
+            abc_0211_1559.txt
+
+		.EXAMPLE
+			PS C:\> Get-TempName -AddTemp 'abc.txt'
+            C:\Users\...\Temp\abc_0211_1600.txt
+
+		.EXAMPLE
+			PS C:\> $fn = Get-TempName -TimeFormat "yyyy-MM-dd_hhmmss" 'test.log'
+            PS C:\> $fn 
+            test_2013-02-12_090523.log
+
+		.INPUTS
+			System.String
+
+		.OUTPUTS
+			System.String.
+			
+	#>
+
+function Get-TempName {
+    param(
+        [Parameter(ValueFromPipeline=$true,Mandatory=$true)] [ValidateNotNullOrEmpty()]
+		[string] $Name,
+
+		[Parameter()]
+		[String] $TimeFormat='MMdd_HHmm',
+
+		[Parameter()]
+		[Switch] $AddTemp
+    )
+
+    $dateStr = get-date -format $TimeFormat
+    $fileName = $Name -replace '(.*)\.(.*)', "`$1_$dateStr.`$2"
+
+    if ($AddTemp) { $fileName = "$env:temp\$fileName" }
+    return $fileName
+}
+
+#endregion
+
 ##--------------------------------------------------------
 ## SYNOPSIS: Database Level Backup & Restore
 ## DESCRIPTION: Backup & Restore a single DB in MS SQL Server
@@ -21,10 +82,10 @@ import-module sqlserver -force
 		Backup the given MS SQL Server database (as given file).
 
 	.PARAMETER sqlserver 
-		The name of the MS SQL Server to backup from.
+		[Mandatory] The name of the MS SQL Server to backup from.
 
 	.PARAMETER dbname
-		Database within the given server to backup.
+		[Mandatory] Database within the given server to backup.
 		
 	.PARAMETER bakname
 		backup name. If empty, default to $dbname.bak.
@@ -33,12 +94,26 @@ import-module sqlserver -force
 		Directory name underneath the MS SQL Server default backup directory used for backup.
         CAUTION: The directory must pre-exist. default: empty, i.e., not sub directory used.
 		
+	.PARAMETER Location
+		The Location where the backup is stored. Will overide the "-Directory" setting. 
+        No default setting. Must be a pre-existing directory on the DB server.
+		
+	.PARAMETER Tag
+		Tag the DB backup with timestamp.
+
 	.EXAMPLE
 		Do-SqlBackup MySvr001 MyDB
+		Do-SqlBackup MySvr001 MyDB -Tag
+
+	.EXAMPLE
 		Do-SqlBackup MySvr001 MyDB MyDB_20130212.bak
+		Do-SqlBackup -sqlserver MySvr001 -dbname MyDB -bakname MyDB_20130212.bak
 
 	.EXAMPLE
 		Do-SqlBackup MySvr001 MyDB -Directory '20130212'
+
+	.EXAMPLE
+		Do-SqlBackup MySvr001 MyDB -Location 'F:\OtherDir'
 			
 #>
 
@@ -46,18 +121,34 @@ function Do-SqlBackup {
     param($sqlserver=$(throw 'sqlserver required.'), 
         $dbname=$(throw 'dbname required.'), 
         $bakname='',
-        $Directory='')
+        $Directory='',
+        $Location='',
+		
+		[Parameter()]
+		[Switch] $Tag
+)
 
     if ($bakname -eq "") {
         $bakname = "$dbname.bak";
     }
 
-    if (-not ($Directory -eq "")) {
-        $Directory += "\";
-    }
-    
+    if ($Tag) { 
+		$bakname = Get-TempName $bakname;
+	}
+
     $server = Get-SqlServer $sqlserver
-    $bakname = $($server.BackupDirectory+ "\"+ $Directory+ $bakname)
+
+    if (-not ($Directory -eq "")) {
+        $Directory = $server.BackupDirectory+ "\"+ $Directory+ "\";
+    } else {
+		$Directory = $server.BackupDirectory+ "\";
+	}
+    
+    if (-not ($Location -eq "")) {
+        $Directory = $Location+ "\";
+    }
+
+    $bakname = $($Directory+ $bakname)
     Invoke-SqlBackup $sqlserver $dbname $bakname
     return $bakname
 }
@@ -70,10 +161,10 @@ function Do-SqlBackup {
 		Restore the given db-backup file to the given MS SQL Server
 
 	.PARAMETER sqlserver 
-		The name of the MS SQL Server to restore to.
+		[Mandatory] The name of the MS SQL Server to restore to.
 
 	.PARAMETER filepath
-		The db-backup file to restore.
+		[Mandatory] The db-backup file to restore.
 		
 	.PARAMETER dbname
 		The actual database name if it contains '_'s or extra '.'s.
@@ -104,15 +195,67 @@ function Do-SqlRestore {
     $relocateFiles = @{}
     Invoke-SqlRestore -sqlserver $server  -filepath $filepath -fileListOnly | foreach { `
         if ($_.Type -eq 'L')
-        { $physicalName = "$logPath\{0}" -f [system.io.path]::GetFileName("$($_.PhysicalName)") }
+        { 
+			# $physicalName = "$logPath\{0}" -f [system.io.path]::GetFileName("$($_.PhysicalName)") 
+			$physicalName = "$logPath\$dbname.ldf"
+		}
         else
-        { $physicalName = "$dataPath\{0}" -f [system.io.path]::GetFileName("$($_.PhysicalName)") }
+        { 
+			# $physicalName = "$dataPath\{0}" -f [system.io.path]::GetFileName("$($_.PhysicalName)") 
+			$physicalName = "$logPath\$dbname.mdf"
+		}
         $relocateFiles.Add("$($_.LogicalName)", "$physicalName")
     }
 
     $server.KillAllProcesses($dbname)
 
     Invoke-SqlRestore -sqlserver $server -dbname $dbname -filepath $filepath -relocatefiles $relocateFiles -Verbose -force
+}
+
+<#
+	.SYNOPSIS
+		Zap the Log file
+
+	.DESCRIPTION
+		Clean up the Log file by empty it first then pregrow to a given size.
+
+	.PARAMETER ServerName 
+		[Mandatory] The name of the MS SQL Server to work with.
+
+	.PARAMETER DbName
+		[Mandatory] DB within the given server to work on.
+		
+	.PARAMETER Size
+		The size to pregrow the Log file to, default to 4GB. 
+
+	.EXAMPLE
+		Do-LogZap 'MySvr001' MyDB
+
+	.EXAMPLE
+		Do-LogZap 'MySvr001' MyDB 8GB
+		Do-LogZap -ServerName 'MySvr001' -DbName MyDB -Size 8GB
+			
+#>
+
+function Do-LogZap {
+    param(
+        [Parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]
+		[string] $ServerName ,
+
+		[Parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]
+		[String] $DbName,
+    
+		[Parameter()]
+		[String] $Size='4GB'
+
+    )
+
+	#Set-SqlData -sqlserver $ServerName -dbname $DbName -qry 'dbcc loginfo'
+	Set-SqlData -sqlserver $ServerName -dbname $DbName -qry 'DBCC SHRINKFILE(2, TRUNCATEONLY )'
+    $logFile = Get-SqlDatabase $ServerName $DbName | Get-SqlLogFile
+	Set-SqlData -sqlserver $ServerName -dbname $DbName -qry `
+		"ALTER DATABASE $DbName MODIFY FILE (NAME = `"$($logFile.Name)`", SIZE = $Size)" 
+
 }
 
 #endregion
@@ -132,7 +275,7 @@ function Do-SqlRestore {
 		Backup the given MS SQL Server of the given DBs.
 
 	.PARAMETER ServerName 
-		The name of the MS SQL Server to backup.
+		[Mandatory] The name of the MS SQL Server to backup.
 
 	.PARAMETER DBs
 		DBs within the given server to backup (regexp). If empty, all dbs are to be backup.
@@ -141,6 +284,10 @@ function Do-SqlRestore {
 		Directory name underneath the MS SQL Server default backup directory used for backup.
         CAUTION: The directory must pre-exist.
 
+	.PARAMETER Location
+		The Location where the backup is stored. Will overide the "-Directory" setting. 
+        No default setting. Must be a pre-existing directory on the DB server.
+		
 	.PARAMETER Check
 		Check the DB selection of the given DBs.
 		
@@ -150,6 +297,10 @@ function Do-SqlRestore {
 
 	.EXAMPLE
 		Do-SvrBackup 'MySvr001' 'this|that|th[eo]se' '20130212'
+		Do-SvrBackup -ServerName 'MySvr001' -DBs 'this|that|th[eo]se' -Directory '20130212'
+
+	.EXAMPLE
+		Do-SvrBackup 'MySvr001' 'this|that|th[eo]se' -Location 'F:\OtherDir'
 			
 #>
 
@@ -165,6 +316,9 @@ function Do-SvrBackup {
 		[String] $Directory='',
 
 		[Parameter()]
+		[String] $Location='',
+
+		[Parameter()]
 		[Switch] $Check
     )
 
@@ -177,6 +331,10 @@ function Do-SvrBackup {
          Select-Object Name | foreach {
          if ($Check) { 
             Write-Host "$($_.Name)"
+         } elseif (-not ($Location -eq "")) {
+             Write-Host -NoNewline "Backing up '$($_.Name)' under '$Location'... "
+             Do-SqlBackup -Location $Location $ServerName $($_.Name)
+             Write-Host "Done."
          } else {
              Write-Host -NoNewline "Backing up '$($_.Name)' under '$Directory'... "
              Do-SqlBackup -Directory $Directory $ServerName $($_.Name)
