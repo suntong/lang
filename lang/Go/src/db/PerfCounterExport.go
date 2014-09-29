@@ -158,7 +158,7 @@ func savePerfmonAsCsv(conn *sql.DB, machine string, _runId int, resultFilePre st
 	log.Printf("[%s]   Collecting data for %s...\n", progname, machine)
 
 	sql := fmt.Sprintf("exec TSL_prc_PerfCounterCollectionInCsvFormat"+
-		" @RunId = %d, @InstanceName=N'\\\\%s\\%%'", _runId, machine)
+		" @RunId = %d, @InstanceName=N'\\\\%%%s\\%%'", _runId, machine)
 	table, err := table.Get(conn, sql)
 	if err != nil {
 		log.Fatal(err)
