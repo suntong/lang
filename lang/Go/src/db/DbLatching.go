@@ -33,6 +33,9 @@ var (
 	// Duration flags accept any input valid for time.ParseDuration
 	fInterval = flag.Duration("i", 150*time.Second,
 		"Interval to query for DB latching info\n\tDefault: 2.5m (2.5 minutes)\n")
+
+	fLast = flag.Duration("l", 7200*time.Second,
+		"Last, how long the recording will last\n\tDefault: 2hrs\n")
 )
 
 func usage() {
@@ -78,7 +81,11 @@ func main() {
 	}
 	defer conn.Close()
 
-	log.Println(progname+": Program starts with checking interval of", *fInterval)
+	log.Printf(progname+": Program starts with\n\t checking interval of %v\n"+
+		"\t run-time duration of %v", *fInterval, *fLast)
+
+
+	startTime := time.Now()
 
 	for {
 
@@ -179,6 +186,13 @@ func main() {
 		if err != nil {
 			log.Println(progname+" Cleanup Exec Error", err)
 			return
+		}
+
+		//break out of the for loop when due time passed
+		elapsed := time.Since(startTime)
+		if elapsed >= *fLast { 
+			log.Println(progname+": Run-time duration reached, exiting")
+			break
 		}
 
 		// delay the given interval
