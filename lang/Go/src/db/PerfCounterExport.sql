@@ -67,7 +67,7 @@ CREATE VIEW MTSL_View_PerfmonInstanceNamesAndIds AS
               instance.LoadTestRunId
               ,instance.InstanceId
               ,(
-                     '\\' + category.MachineName
+                     '\\' + RIGHT(category.MachineName,6)
                      + '\' + category.CategoryName
                      +      case instance.InstanceName when 'systemdiagnosticsperfcounterlibsingleinstance'
                                    then ''
