@@ -19,6 +19,7 @@ import (
     "fmt"
     "log"
     "os"
+    "path/filepath"
     "time"
 )
 
@@ -43,9 +44,19 @@ var (
 
     fNoClobber = flag.Bool("nc", false, "no clobber, do not overwrite existing files\n\tDefault: overwrite them\n")
 
+    fPathOnly = flag.Bool("po", false, "path only in ResultFilePre, no file prefix part.\n\tThe file prefix will therefore be the same as the folder name\n\tDefault: file prefix provided\n")
+
     fStep = flag.Int("s", 50,
         "Progress step\n\tDefault: Progress indicator every 50 loadtest record output\n")
 )
+
+func usage() {
+    fmt.Fprintf(os.Stderr, "\nUsage:\n %s [flags] ResultFilePre\n\nFlags:\n\n",
+        progname)
+    flag.PrintDefaults()
+    fmt.Fprintf(os.Stderr, "\nResultFilePre: \n\tThe prefix for the export files, including the path.\n\tThe machine names will be appended to it.\n\n\tE.g. C:\\Temp\\LoadTest-0822\n")
+    os.Exit(0)
+}
 
 func main() {
     flag.Usage = usage
@@ -56,6 +67,13 @@ func main() {
         usage()
     }
     resultFilePre := flag.Args()[0]
+    // if path only, append folder name as file prefix
+    if *fPathOnly {
+        resultFilePre += string(os.PathSeparator)
+        resultFilePre = filepath.Dir(resultFilePre) +
+            string(os.PathSeparator) + filepath.Base(resultFilePre)
+        //log.Println("] resultFilePre=" + resultFilePre)
+    }
 
     // Construct the Go MSSQL odbc SqlConnectionString
     // https://code.google.com/p/odbc/source/browse/mssql_test.go
@@ -97,7 +115,7 @@ func main() {
         maxRunId := runId.MustGetScaler(0, "RunId")
         *fLoadTestRunId = int(maxRunId.(int32))
     }
-    log.Printf("[%s] Exporting LoadTest %d\n  to %s\n  with progress step of %d\n",
+    log.Printf("[%s] Exporting LoadTest %d\n  to %s-...\n  with progress step of %d\n",
         progname, *fLoadTestRunId, resultFilePre, *fStep)
 
     if *fMachineNameFilter != "" {
@@ -223,12 +241,4 @@ func savePerfmonAsCsv(fNoClobber *bool, conn *sql.DB, machineName string, _runId
     }
     fmt.Fprintf(os.Stderr, "\n")
 
-}
-
-func usage() {
-    fmt.Fprintf(os.Stderr, "\nUsage:\n %s [flags] ResultFilePre\n\nFlags:\n\n",
-        progname)
-    flag.PrintDefaults()
-    fmt.Fprintf(os.Stderr, "\nResultFilePre: \n\tThe prefix for the export files, including the path.\n\tThe machine names will be appended to it.\n\n\tE.g. C:\\Temp\\LoadTest-0822\n")
-    os.Exit(0)
 }
