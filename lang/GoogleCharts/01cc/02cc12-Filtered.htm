@@ -1,0 +1,74 @@
+<html>
+  <!--
+      - each value having its own tooltip
+      - change data/chart when the pulldown select option changes
+      - pre-define data in the html page instead of pulling from external source each time
+    -->
+  <head>
+    <!--Load the Visualization AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
+    <script type="text/javascript">
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawStuff);
+
+      function populateSelect(data, column) {
+	  var select = document.getElementById('galaxy-dropdown');
+	  var values = data.getDistinctValues(column);
+	  for (var i = 0; i < values.length; i++) {
+	      var option = document.createElement('option');
+	      option.value = values[i];
+	      option.textContent = values[i];
+	      select.appendChild(option);
+	  }
+      }
+
+      // Callback that creates and populates a data table,
+      // instantiates the chart, passes in the data and draws it.
+      function drawStuff() {
+
+	  var data = new google.visualization.arrayToDataTable([
+	      ['Category', 'Galaxy', 'V1', {
+		  label: 'T1',
+		  role: 'tooltip'
+	      }, 'V2', {
+		  label: 'T2',
+		  role: 'tooltip'
+	      }],
+	      ['G1', 'Ursa Major II Dwarf', 30000, 14.3, 30000, 14.3],
+	      ['G2', 'Lg. Magellanic Cloud', 50000, 0.9, 50000, 0.9],
+	      ['G2', 'Bootes I', 60000, 13.1, 60000, 13.1],
+	      ['G2', 'Canis Major Dwarf', 8000, 23.3, 8000, 23.3],
+	      ['G3', 'Sagittarius Dwarf', 24000, 4.5, 24000, 4.5]
+	  ]);
+
+	  var options = {
+	      width: 900
+	  };
+
+	  var chart = new google.visualization.ColumnChart(document.getElementById('tooltip_div'));
+
+	  var selectValueChanged = function () {
+	      var selected = document.getElementById('galaxy-dropdown').value;
+	      var dview = new google.visualization.DataView(data);
+	      dview.setColumns([1, 2, 3, 4, 5]);
+	      dview.setRows(data.getFilteredRows([{
+		  column: 0,
+		  value: selected
+	      }]));
+	      chart.draw(dview, options);
+	  };
+
+
+	  populateSelect(data, 0);
+	  document.getElementById('galaxy-dropdown').onchange = selectValueChanged;
+	  selectValueChanged(); // Also draws the chart.
+      };
+			      
+    </script>
+  </head>
+  <body>
+    <select id="galaxy-dropdown"></select>
+    <!--Div that hold the chart-->
+    <div id="tooltip_div" style="width: 900px; height: 500px;"></div>
+  </body>
+</html>
