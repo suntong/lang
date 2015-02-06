@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+    // Load the Visualization API
+    google.load("visualization", '1.1', {packages:['corechart']});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ['Element', 'Density', { role: 'style' }, { role: 'annotation' } ],
+        ['Copper', 8.94, '#b87333', 'Cu'],
+        ['Silver', 10.49, 'silver', 'Ag',],
+        ['Gold', 19.30, 'gold', 'Au', ],
+        ['Platinum', 21.45, 'color: #e5e4e2', 'Pt' ]
+      ]);
+      var options = {
+        title: "Density of Precious Metals, in g/cm^3",
+        width: 600,
+        height: 400,
+        bar: {groupWidth: '95%'},
+        legend: { position: 'none' },
+      };
+
+    var chart = new google.visualization.ColumnChart(
+    document.getElementById('ex0'));
+    chart.draw(data, options);
+
+      }
+    </script>
+  </head>
+
+  <body>
+    <!--Div that will hold the pie chart-->
+    <div id="ex0"></div>
+  </body>
+</html>
+

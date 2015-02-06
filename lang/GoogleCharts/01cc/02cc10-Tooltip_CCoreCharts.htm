@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+    // Load the Visualization API
+    google.load("visualization", '1.1', {packages:['corechart']});
+      google.setOnLoadCallback(drawStuff);
+
+      function drawStuff() {
+        var data = new google.visualization.arrayToDataTable([
+          ['Galaxy', 'V1', {label: 'T1', role: 'tooltip'}, 'V2', {label: 'T2', role: 'tooltip'}],
+          ['Canis Major Dwarf', 8000, 'Canis \nMajor Dwarf\n23.3', 8000, '<b>Canis<b/> \nMajor Dwarf\n23.3'],
+          ['Sagittarius Dwarf', 24000, 4.5, 24000, 4.5],
+          ['Ursa Major II Dwarf', 30000, 14.3, 30000, 14.3],
+          ['Lg. Magellanic Cloud', 50000, 0.9, 50000, 0.9],
+          ['Bootes I', 60000, 13.1, 60000, 13.1]
+        ]);
+
+        var options = {
+          width: 900,
+          chart: {
+            title: 'Tooltip Demo',
+            subtitle: 'every data column having a tooltip of its own'
+          }
+        };
+
+      var chart = new google.visualization.ColumnChart(document.getElementById('tooltip_div'));
+      chart.draw(data, options);
+    };
+    </script>
+  </head>
+  <body>
+    <div id="tooltip_div" style="width: 900px; height: 500px;"></div>
+  </body>
+</html>

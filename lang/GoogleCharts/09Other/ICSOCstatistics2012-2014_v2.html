@@ -1,0 +1,63 @@
+<html>
+<head>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+google.load("visualization", "1.1", {packages:["corechart"]});
+google.setOnLoadCallback(drawChart);
+
+var dataCap ="2014";
+
+function changeDataCap(){
+    dataCap = document.getElementById("selectedYear").value;
+    // alert('dataCap: ' + dataCap);
+    drawChart();
+}
+
+function drawChart() {
+	if (dataCap == "2012") {
+        var query = new google.visualization.Query(
+  		'https://docs.google.com/spreadsheets/d/1kBZYgsclc4QNvwIKhVWzLbVcXQMaGRS1cYNib3wQ_jM/edit?usp=sharing');  
+  		query.send(handleQueryResponse);
+  	};
+  	if (dataCap == "2013") {
+  		var query = new google.visualization.Query(
+  		'https://docs.google.com/spreadsheets/d/19ffnmpK2yWdr09szg65OiL_a3pXVCcDoTbiZ7gOU8uk/edit?usp=sharing');
+  		query.send(handleQueryResponse);
+  	};
+  	if (dataCap == "2014") {
+  		var query = new google.visualization.Query(
+  		'https://docs.google.com/spreadsheets/d/17mPmD7pFJ386xRerGIQcAUT0uVYRC57KnPgk40pQedw/edit?pli=1#gid=0');  
+  		query.send(handleQueryResponse);
+    };    
+}
+
+function handleQueryResponse(response) {
+  if (response.isError()) {
+    alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+    return;
+  }       
+  var data = response.getDataTable();
+  var chart = new google.visualization.ColumnChart(document.getElementById('columnchart'));
+  var options = {
+       width:1400,
+        height:500,
+        hAxis: {
+        	slantedText:true,
+        	slantedTextAngle:70
+    	},     
+	};
+  chart.draw(data,  options)
+}
+</script>
+<title>ICSOC Statistics</title>
+</head>
+
+<body>
+<select id="selectedYear" onchange="changeDataCap()">
+      <option value="2014">ICSOC 2014, Paris</option>
+      <option value="2013">ICSOC 2013, Berlin</option>
+      <option value="2012">ICSOC 2012, Shanghai</option>
+</select>
+<div id="columnchart"></div>
+</body>
+</html>
