@@ -39,6 +39,7 @@ namespace TstString
             TestDictionary();
             TestDictionaryClass();
             TestTuple();
+            TestSSN();
 
             // Keep the console window open in debug mode.
             Console.WriteLine("\nPress any key to exit.");
@@ -399,5 +400,41 @@ namespace TstString
 
         }
 
+        //==========================================================================
+
+                
+        static void TestSSN()
+        {
+            Console.WriteLine("\n== Test SSN");
+             for (int x = 1; x <= 3; x++)
+                Console.WriteLine(RandomSSN("9"));
+            for (int x = 1; x <= 3; x++)
+                Console.WriteLine(RandomSSN("98"));
+            for (int x = 1; x <= 3; x++)
+                Console.WriteLine(RandomSSN("987"));
+            Console.WriteLine(RandomSSN("77","-"));
+            Console.WriteLine(GenerateSSN("-"));
+        }
+
+        public static string RandomSSN(string thePrefix, string delimiter = "")
+        {
+            string generatedSSN = GenerateSSN(delimiter);
+            return thePrefix + generatedSSN.Substring(thePrefix.Length);
+        }
+
+        public static string GenerateSSN(string delimiter)
+        {
+            int iThree = GetRandomNumber(132, 921);
+            int iTwo = GetRandomNumber(12, 83);
+            int iFour = GetRandomNumber(1423, 9211);
+            return iThree.ToString() + delimiter + iTwo.ToString() + delimiter + iFour.ToString();
+        }
+
+        //Function to get random number
+        private static readonly Random getrandom = new Random();
+        public static int GetRandomNumber(int min, int max)
+        {
+            return getrandom.Next(min, max);
+        }
     }
 }
