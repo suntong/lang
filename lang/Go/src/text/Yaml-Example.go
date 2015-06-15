@@ -12,17 +12,26 @@ type Config struct {
 	Bar []string
 }
 
+type Configs struct {
+	Cfgs []Config
+}
+
 var data = `
-foo: 1
-bar:
-  - one
-  - two
-  - three
+- foo: first1
+  bar:
+    - one
+    - two
+    - three
+- foo: second2
+  bar:
+    - one1
+    - two2
+    - three3
 `
 
 func main() {
 
-  var config Config
+  var config []Config
   
 	/*
 	   filename := os.Args[1]
@@ -39,7 +48,7 @@ func main() {
 		log.Fatalf("error: %v", err)
 	}
 
-	fmt.Printf("Value: %#v\n", config.Bar[0])
+	//fmt.Printf("Value: %#v\n", config.Bar[0])
 	
 	fmt.Printf("--- config:\n%v\n\n", config)
 }
