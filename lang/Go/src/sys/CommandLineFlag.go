@@ -35,6 +35,10 @@ func usage() {
 }
 
 func main() {
+	fmt.Printf("Before parsing the flags\n")
+	fmt.Printf("T: %d\nW: %s\nC: '%s'\n",
+		*tabWidth, strconv.FormatBool(*write), *cpuprofile)
+
 	flag.Usage = usage
 	flag.Parse()
 
@@ -51,6 +55,15 @@ func main() {
 		fmt.Printf("I: %d C: '%s'\n", index, element)
 	}
 }
+
+/*
+
+To Test:
+
+  go run CommandLineFlag.go 
+  go run CommandLineFlag.go -tabwidth=6 aa
+
+*/
 
 /*
 Ref:
