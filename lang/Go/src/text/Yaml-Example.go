@@ -13,17 +13,19 @@ type Config struct {
 }
 
 type Configs struct {
-	Cfgs []Config
+	Cfgs []Config `foobars`
 }
 
 var data = `
-- foo: first1
-  bar:
+foobars:
+ - foo: 1
+   bar:
     - one
     - two
     - three
-- foo: second2
-  bar:
+
+ - foo: 2
+   bar:
     - one1
     - two2
     - three3
@@ -31,7 +33,7 @@ var data = `
 
 func main() {
 
-  var config []Config
+  var config Configs
   
 	/*
 	   filename := os.Args[1]
