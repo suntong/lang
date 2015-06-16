@@ -25,20 +25,19 @@ const version = "0.1.0"
 ////////////////////////////////////////////////////////////////////////////
 // Global variables definitions
 
-
 ////////////////////////////////////////////////////////////////////////////
 // Commandline definitions
 
 /*
 
-$ CommandLineCV help 
+$ CommandLineCV help
 HTTP service that consumes events and dispatches them to subscribers.
 
-Usage: 
+Usage:
   dispatch [flags]
   dispatch [command]
 
-Available Commands: 
+Available Commands:
   version     Print the version.
   help        Help about any command
 
@@ -61,7 +60,7 @@ Use "dispatch help [command]" for more information about a command.
 var mainCmd = &cobra.Command{
 	Use:   "dispatch",
 	Short: "Event dispatch service.",
-	Long: `HTTP service that consumes events and dispatches them to subscribers.`,
+	Long:  `HTTP service that consumes events and dispatches them to subscribers.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		serve()
 	},
@@ -77,12 +76,21 @@ var versionCmd = &cobra.Command{
 	},
 }
 
-// Go special automatically executed init function 
+// Go special automatically executed init function
 func init() {
 	mainCmd.AddCommand(versionCmd)
 
 	viper.SetEnvPrefix("DISPATCH")
 	viper.AutomaticEnv()
+
+	/*
+
+	  When AutomaticEnv called, Viper will check for an environment variable any
+	  time a viper.Get request is made. It will apply the following rules. It
+	  will check for a environment variable with a name matching the key
+	  uppercased and prefixed with the EnvPrefix if set.
+
+	*/
 
 	flags := mainCmd.Flags()
 
@@ -122,3 +130,23 @@ func serve() {
 	}
 
 }
+
+/*
+
+$ go run CommandLineCV.go
+* Serving on http://localhost:5002
+
+$ go run CommandLineCV.go --addr="localhost:5005"
+* Serving on http://localhost:5005
+
+$ DISPATCH_ADDR="localhost:6006" go run CommandLineCV.go
+* Serving on http://localhost:6006
+
+$ DISPATCH_ADDR="localhost:6006" go run CommandLineCV.go --addr="localhost:5005"
+* Serving on http://localhost:5005
+
+$ DISPATCH_DEBUG=True DISPATCH_ADDR="localhost:6006" go run CommandLineCV.go --addr="localhost:5005"
+* Serving on http://localhost:5005
+* Debugging enabled
+
+*/
