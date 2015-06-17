@@ -107,6 +107,20 @@ func init() {
 	viper.BindPFlag("smtp_user", flags.Lookup("smtp-user"))
 	viper.BindPFlag("smtp_password", flags.Lookup("smtp-password"))
 	viper.BindPFlag("email_from", flags.Lookup("email-from"))
+
+  // Viper supports reading from yaml, toml and/or json files. Viper can
+  // search multiple paths. Paths will be searched in the order they are
+  // provided. Searches stopped once Config File found.
+  
+	viper.SetConfigName("CommandLineCV") // name of config file (without extension)
+	viper.AddConfigPath("/tmp")          // path to look for the config file in
+	viper.AddConfigPath(".")             // more path to look for the config files
+
+	err := viper.ReadInConfig()
+	if err != nil {
+		println("No config file found. Using built-in defaults.")
+	}
+
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -133,20 +147,58 @@ func serve() {
 
 /*
 
-$ go run CommandLineCV.go
-* Serving on http://localhost:5002
+Before using Config Files:
 
-$ go run CommandLineCV.go --addr="localhost:5005"
-* Serving on http://localhost:5005
+  $ go run CommandLineCV.go
+  * Serving on http://localhost:5002
 
-$ DISPATCH_ADDR="localhost:6006" go run CommandLineCV.go
-* Serving on http://localhost:6006
+  $ go run CommandLineCV.go --addr="localhost:5005"
+  * Serving on http://localhost:5005
 
-$ DISPATCH_ADDR="localhost:6006" go run CommandLineCV.go --addr="localhost:5005"
-* Serving on http://localhost:5005
+  $ DISPATCH_ADDR="localhost:6006" go run CommandLineCV.go
+  * Serving on http://localhost:6006
 
-$ DISPATCH_DEBUG=True DISPATCH_ADDR="localhost:6006" go run CommandLineCV.go --addr="localhost:5005"
-* Serving on http://localhost:5005
-* Debugging enabled
+  $ DISPATCH_ADDR="localhost:6006" go run CommandLineCV.go --addr="localhost:5005"
+  * Serving on http://localhost:5005
+
+  $ DISPATCH_DEBUG=True DISPATCH_ADDR="localhost:6006" go run CommandLineCV.go --addr="localhost:5005"
+  * Serving on http://localhost:5005
+  * Debugging enabled
+
+After adding reading-Config-File feature:
+
+  $ go run CommandLineCV.go
+  No config file found. Using built-in defaults.
+  * Serving on http://localhost:5002
+
+  $ echo 'addr: remote1:5002' | tee CommandLineCV.yaml 
+  addr: remote1:5002
+
+  $ go run CommandLineCV.go
+  * Serving on http://remote1:5002
+
+  $ echo 'addr: remote2:5002' | tee /tmp/CommandLineCV.yaml 
+  addr: remote2:5002
+
+  $ go run CommandLineCV.go
+  * Serving on http://remote2:5002
+
+  $ DISPATCH_ADDR="localhost:6006" go run CommandLineCV.go
+  * Serving on http://localhost:6006
+
+  $ echo 'debug: True' | tee -a CommandLineCV.yaml
+  debug: True
+
+  $ DISPATCH_ADDR="localhost:6006" go run CommandLineCV.go
+  * Serving on http://localhost:6006
+
+  $ echo 'debug: true' | tee -a /tmp/CommandLineCV.yaml 
+  debug: true
+
+  $ DISPATCH_ADDR="localhost:6006" go run CommandLineCV.go
+  * Serving on http://localhost:6006
+  * Debugging enabled
+
+  rm CommandLineCV.yaml
 
 */
