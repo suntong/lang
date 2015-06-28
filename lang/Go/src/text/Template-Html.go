@@ -31,10 +31,10 @@ func main() {
 	// unnecessary. The following one looks straightforward to me.
 
 	t = template.New("Test template")
-	t, err = t.ParseFiles("Template-Html.tmpl")
-	// not working!
 	t, err = t.Parse("<title>{{ .Title }}</title>")
 	// working
+	t, err = template.ParseFiles("Template-Html.tmpl")
+	// working now! Note the difference!!
 	checkError(err)
 
 	err = t.Execute(os.Stdout, data)
