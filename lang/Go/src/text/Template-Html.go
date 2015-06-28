@@ -21,8 +21,11 @@ func main() {
 
 	t := template.New("HELLO")
 
+	err := t.ExecuteTemplate(os.Stdout, "Template-Html.tmpl", data)
+	// not working, empty output.
+	// So the template file MUST be specified twice!
 	var templates = template.Must(t.ParseFiles("Template-Html.tmpl"))
-	err := templates.ExecuteTemplate(os.Stdout, "Template-Html.tmpl", data)
+	err = templates.ExecuteTemplate(os.Stdout, "Template-Html.tmpl", data)
 	// working
 	fmt.Println("\n\n")
 
