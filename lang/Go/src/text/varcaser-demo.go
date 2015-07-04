@@ -24,7 +24,9 @@ func main() {
 }
 
 func ExampleVaribleNames() {
-	fmt.Printf("%s %s %s %s",
+	fmt.Printf("%v\n", Ck2lc_.String("some-init-method"))
+	fmt.Printf("%v\n", Ck2lc("some-init-method"))
+	fmt.Printf("%s %s %s %s %s",
 		varcaser.Caser{From: varcaser.LowerCamelCase, To: varcaser.KebabCase}.
 			String("someInitMethod"),
 		varcaser.Caser{From: varcaser.LowerCamelCase,
@@ -34,6 +36,8 @@ func ExampleVaribleNames() {
 		Ck2lc("some-init-method"),
 		Ck2uc_.String("some-init-method"))
 	// Output:
+	// someInitMethod
+	// someInitMethod
 	// some-init-method MY_CONSTANT_VARIABLE someInitMethod someInitMethod SomeInitMethod
 }
 
