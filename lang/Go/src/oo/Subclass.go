@@ -6,6 +6,12 @@ type Vehicle struct {
 	wheelCount int
 }
 
+// Vehicler is an interface and has a single function numberOfWheels that returns an int.
+// In Go, the convention is to "er" a type to indicate that it is an interface.
+type Vehicler interface {
+	numberOfWheels() int
+}
+
 // define a behavior for Vehicle
 func (vehicle Vehicle) numberOfWheels() int {
 	return vehicle.wheelCount
@@ -58,5 +64,17 @@ func main() {
 		// or
 		c = Car{Vehicle: v}
 		fmt.Println("A Car has this many wheels: ", c.wheelCount) //not directly defined in Car, but use as the same.
+
+		// From http://golangtutorials.blogspot.ca/2011/06/interfaces-in-go.html
+		v2 := Vehicler(c)
+		fmt.Println("A Vehicle has this many wheels: ", v2.numberOfWheels())
 	}
 }
+
+/*
+
+A Car has this many wheels:  4
+A Car has this many wheels:  3
+A Vehicle has this many wheels:  3
+
+*/
