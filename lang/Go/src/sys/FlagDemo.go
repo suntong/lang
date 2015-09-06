@@ -1,5 +1,6 @@
 // These examples demonstrate more intricate uses of the flag package.
 // From https://golang.org/pkg/flag/#example_
+//  and https://golang.org/doc/go1.5#flag
 
 package main
 
@@ -11,8 +12,8 @@ import (
 	"time"
 )
 
-// Example 1: A single string flag called "species" with default value "gopher".
-var species = flag.String("species", "gopher", "the species we are studying")
+// Example 1: A single string flag called "specie" with default value "gopher".
+var species = flag.String("specie", "gopher", "the specie `type` we are studying")
 
 // Example 2: Two flags sharing a variable, so we can have a shorthand.
 // The order of initialization is undefined, so make sure both use the
@@ -65,10 +66,13 @@ func (i *interval) Set(value string) error {
 
 var intervalFlag interval
 
+// go1.5+, the default is listed only when it is not the zero value for the type
+var write = flag.Bool("w", false, "write result back instead of stdout")
+
 func init() {
 	// Tie the command-line flag to the intervalFlag variable and
 	// set a usage message.
-	flag.Var(&intervalFlag, "deltaT", "comma-separated list of intervals to use between events")
+	flag.Var(&intervalFlag, "deltaT", "comma-separated list of `intervals` to use between events")
 }
 
 func main() {
@@ -85,13 +89,14 @@ func main() {
 
 Output:
 
-  -deltaT value
+  -deltaT intervals
         comma-separated list of intervals to use between events (default [])
   -g string
         the variety of gopher (shorthand) (default "pocket")
   -gopher_type string
         the variety of gopher (default "pocket")
-  -species string
-        the species we are studying (default "gopher")
+  -specie type
+        the specie type we are studying (default "gopher")
+  -w    write result back instead of stdout
 
 */
