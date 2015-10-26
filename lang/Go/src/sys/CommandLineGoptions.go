@@ -37,9 +37,9 @@ type Options struct {
 	} `goptions:"delete"`
 }
 
-var options = Options{} /* { // Default values goes here
+var options = Options{ // Default values goes here
 	Timeout: 10 * time.Second,
-} */
+}
 
 type Command func(Options) error
 
@@ -92,7 +92,7 @@ Usage: CommandLineGoptions [global options] <verb> [verb options]
 Global options:
         -s, --server   Server to connect to
         -p, --password Don't prompt for password
-        -t, --timeout  Connection timeout in seconds
+        -t, --timeout  Connection timeout in seconds (default: 10s)
         -v, --verbose  Be verbose
         -q, --quiet    Do not print anything, even errors (except if --verbose is specified)
         -h, --help     Show this help
