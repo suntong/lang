@@ -4,6 +4,7 @@
 // authors: Tong Sun (c) 2015, All rights reserved
 // Credits: https://github.com/voxelbrain/goptions/tree/master/examples
 //          https://github.com/jwilder/github-release/blob/master/github-release.go
+//          https://github.com/daaku/summon/blob/master/summon.go
 ////////////////////////////////////////////////////////////////////////////
 
 package main
@@ -57,7 +58,7 @@ func main() {
 
 	if len(options.Verbs) == 0 {
 		goptions.PrintHelp()
-		return
+		os.Exit(2)
 	}
 
 	VERBOSITY = len(options.Verbosity)
@@ -123,6 +124,10 @@ Execute.Command: test
 
 $ go run CommandLineGoptions.go execute -c 'test' --script CommandLineGoptions.go
 Error: Exactly one of --command, --script must be specified
+Usage: CommandLineGoptions ...
+
+$ go run CommandLineGoptions.go cmd_verb
+Error: Invalid trailing arguments: [cmd_verb]
 Usage: CommandLineGoptions ...
 
 */
