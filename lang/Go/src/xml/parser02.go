@@ -14,20 +14,38 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 )
 
 func main() {
-	if len(os.Args) != 2 {
-		fmt.Println("Usage: ", os.Args[0], "file")
-		os.Exit(1)
-	}
-	file := os.Args[1]
-	bytes, err := ioutil.ReadFile(file)
-	checkError(err)
-	r := strings.NewReader(string(bytes))
+	input := `
+<person>
+  <name>
+    <family> Newmarch </family>
+    <personal> Jan </personal>
+  </name>
+  <email type="personal">
+    jan@newmarch.name
+  </email>
+  <email type="work">
+    j.newmarch@boxhill.edu.au
+  </email>
+</person>
+`
+
+	/*
+		if len(os.Args) != 2 {
+			fmt.Println("Usage: ", os.Args[0], "file")
+			os.Exit(1)
+		}
+		file := os.Args[1]
+		bytes, err := ioutil.ReadFile(file)
+		checkError(err)
+		r := strings.NewReader(string(bytes))
+	*/
+
+	r := strings.NewReader(input)
 
 	parser := xml.NewDecoder(r)
 	depth := 0
