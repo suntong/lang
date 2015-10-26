@@ -3,6 +3,7 @@
 // Purpose: Go xml parsing demo
 // Authors: Tong Sun (c) 2015, All rights reserved
 // Credits: https://github.com/dps/go-xml-parse/blob/master/go-xml-parse.go
+//          https://en.wikipedia.org/wiki/Help:Export
 ////////////////////////////////////////////////////////////////////////////
 
 package main
@@ -10,18 +11,12 @@ package main
 // An example streaming XML parser.
 
 import (
-	"bufio"
 	"encoding/xml"
-	"flag"
 	"fmt"
 	"net/url"
-	"os"
 	"regexp"
 	"strings"
 )
-
-var inputFile = flag.String("infile", "enwiki-latest-pages-articles.xml", "Input file path")
-var indexFile = flag.String("indexfile", "out/article_list.txt", "article list output file")
 
 var filter, _ = regexp.Compile("^file:.*|^talk:.*|^special:.*|^wikipedia:.*|^wiktionary:.*|^user:.*|^user_talk:.*")
 
@@ -44,6 +39,36 @@ var filter, _ = regexp.Compile("^file:.*|^talk:.*|^special:.*|^wikipedia:.*|^wik
 //
 // Note how the tags on the fields of Page and Redirect below
 // describe the XML schema structure.
+var input = `
+<mediawiki xml:lang="en">
+  <page>
+    <title>Page title</title>
+    <restrictions>edit=sysop:move=sysop</restrictions>
+    <revision>
+      <timestamp>2001-01-15T13:15:00Z</timestamp>
+      <contributor><username>Foobar</username></contributor>
+      <comment>I have just one thing to say!</comment>
+      <text>A bunch of [[text]] here.</text>
+      <minor />
+    </revision>
+    <revision>
+      <timestamp>2001-01-15T13:10:27Z</timestamp>
+      <contributor><ip>10.0.0.2</ip></contributor>
+      <comment>new!</comment>
+      <text>An earlier [[revision]].</text>
+    </revision>
+  </page>
+  
+  <page>
+    <title>Talk:Page title</title>
+    <revision>
+      <timestamp>2001-01-15T14:03:00Z</timestamp>
+      <contributor><ip>10.0.0.2</ip></contributor>
+      <comment>hey</comment>
+      <text>WHYD YOU LOCK PAGE??!!! i was editing that jerk</text>
+    </revision>
+  </page>
+</mediawiki>`
 
 type Redirect struct {
 	Title string `xml:"title,attr"`
@@ -63,26 +88,13 @@ func CanonicalizeTitle(title string) string {
 }
 
 func WritePage(title string, text string) {
-	outFile, err := os.Create("out/docs/" + title)
-	if err == nil {
-		writer := bufio.NewWriter(outFile)
-		defer outFile.Close()
-		writer.WriteString(text)
-		writer.Flush()
-	}
+	fmt.Printf("Title: %s\nText: %s\n\n", title, text)
 }
 
 func main() {
-	flag.Parse()
+	inputReader := strings.NewReader(input)
 
-	xmlFile, err := os.Open(*inputFile)
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
-	}
-	defer xmlFile.Close()
-
-	decoder := xml.NewDecoder(xmlFile)
+	decoder := xml.NewDecoder(inputReader)
 	total := 0
 	var inElement string
 	for {
