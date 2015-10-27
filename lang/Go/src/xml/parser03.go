@@ -77,7 +77,7 @@ type Redirect struct {
 type Page struct {
 	Title string   `xml:"title"`
 	Redir Redirect `xml:"redirect"`
-	Text  string   `xml:"revision>text"`
+	Text  []string `xml:"revision>text"`
 }
 
 func CanonicalizeTitle(title string) string {
@@ -87,8 +87,8 @@ func CanonicalizeTitle(title string) string {
 	return can
 }
 
-func WritePage(title string, text string) {
-	fmt.Printf("Title: %s\nText: %s\n\n", title, text)
+func WritePage(title string, text []string) {
+	fmt.Printf("Title: %s\nText: %v\n\n", title, text)
 }
 
 func main() {
