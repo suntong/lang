@@ -23,10 +23,12 @@ func main() {
 	type Result struct {
 		XMLName xml.Name `xml:"Person"`
 		Name    string   `xml:"FullName"`
-		Company string   `xml:"Company"`
-		Phone   string
-		Email   []Email
-		Groups  []string `xml:"Group>Value"`
+		Company struct {
+			Text string `xml:",innerxml"`
+		}
+		Phone  string
+		Email  []Email
+		Groups []string `xml:"Group>Value"`
 		Address
 	}
 	v := Result{Name: "none", Phone: "none"}
@@ -62,10 +64,10 @@ func main() {
 	printXML("Name As XML:", v.Name)
 	printXML("Email As XML:", v.Email)
 	printXML("Groups As XML:", v.Groups)
-	printXML("Company As XML:", v.Company)
 
 	fmt.Printf("XMLName: %#v\n", v.XMLName)
 	fmt.Printf("Name: %q\n", v.Name)
+	fmt.Printf("Company: %q\n", v.Company)
 	fmt.Printf("Phone: %q\n", v.Phone)
 	fmt.Printf("Email: %v\n", v.Email)
 	fmt.Printf("Groups: %v\n", v.Groups)
