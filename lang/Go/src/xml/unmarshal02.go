@@ -14,6 +14,10 @@ import (
 	"log"
 )
 
+type Xml struct {
+	Xml string `xml:",innerxml"`
+}
+
 const content = `
 <Person>
 	<Name>Lucie</Name>
@@ -34,15 +38,11 @@ const content = `
 `
 
 type Person struct {
-	Name    string
-	Company struct {
-		Text string `xml:",innerxml"`
-	}
+	Name      string
+	Company   Xml
 	Condition struct {
 		ConditionalRule struct {
-			RuleParameters struct {
-				Text string `xml:",innerxml"`
-			}
+			RuleParameters Xml
 		}
 	}
 }
@@ -55,7 +55,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%s's company is %q\n", person.Name, person.Company.Text)
+	fmt.Printf("%s's company is %q\n", person.Name, person.Company.Xml)
 
-	fmt.Printf("Condition is %q\n", person.Condition.ConditionalRule.RuleParameters.Text)
+	fmt.Printf("Condition is %q\n", person.Condition.ConditionalRule.RuleParameters.Xml)
 }
