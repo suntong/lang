@@ -1,12 +1,3 @@
-////////////////////////////////////////////////////////////////////////////
-// Porgram: CommandLineGoptions
-// Purpose: Go goptions command line options handling template
-// authors: Tong Sun (c) 2015, All rights reserved
-// Credits: https://github.com/voxelbrain/goptions/tree/master/examples
-//          https://github.com/jwilder/github-release/blob/master/github-release.go
-//          https://github.com/daaku/summon/blob/master/summon.go
-////////////////////////////////////////////////////////////////////////////
-
 package main
 
 import (
@@ -84,6 +75,8 @@ func executecmd(options Options) error {
 	if options.Execute.Fo != nil {
 		fmt.Fprintf(options.Execute.Fo, "To output, Check str: '%s'\n",
 			options.Execute.Check)
+		fmt.Fprintf(os.Stdout, "To os.Stdout, Check str: '%s'\n",
+			options.Execute.Check)
 	}
 	return nil
 }
@@ -91,50 +84,3 @@ func executecmd(options Options) error {
 func deletecmd(opt Options) error {
 	return nil
 }
-
-/*
-
-$ go run CommandLineGoptions.go
-Usage: CommandLineGoptions [global options] <verb> [verb options]
-
-Global options:
-        -s, --server   Server to connect to
-        -p, --password Don't prompt for password
-        -t, --timeout  Connection timeout in seconds (default: 10s)
-        -v, --verbose  Be verbose
-        -q, --quiet    Do not print anything, even errors (except if --verbose is specified)
-        -h, --help     Show this help
-
-Verbs:
-    delete:
-        -n, --name     Name of the entity to be deleted (*)
-        -f, --force    Force removal
-    execute:
-        -c, --command  Command to exectute (*)
-            --script   Script to exectute
-
-$ go run CommandLineGoptions.go execute -c 'test'
-Selected verb: execute
-Execute.Command: test
- with verbosity: 0
-
-$ go run CommandLineGoptions.go -v execute -c 'test'
-Selected verb: execute
-Execute.Command: test
- with verbosity: 1
-
-$ go run CommandLineGoptions.go -v -v execute -c 'test'
-command-line-arguments
-Selected verb: execute
-Execute.Command: test
- with verbosity: 2
-
-$ go run CommandLineGoptions.go execute -c 'test' --script CommandLineGoptions.go
-Error: Exactly one of --command, --script must be specified
-Usage: CommandLineGoptions ...
-
-$ go run CommandLineGoptions.go cmd_verb
-Error: Invalid trailing arguments: [cmd_verb]
-Usage: CommandLineGoptions ...
-
-*/
