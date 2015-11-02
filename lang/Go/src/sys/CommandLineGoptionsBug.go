@@ -33,7 +33,9 @@ type Options struct {
 
 var options = Options{ // Default values goes here
 	Timeout: 10 * time.Second,
-	//	Execute.Check: "something",
+	// Execute{
+	// 	Check: "something",
+	// },
 }
 
 type Command func(Options) error
@@ -72,6 +74,7 @@ func executecmd(options Options) error {
 	fmt.Printf("Selected verb: %s\n", options.Verbs)
 	fmt.Printf("Execute.Command: %s\n", options.Execute.Command)
 	fmt.Printf(" with verbosity: %d\n", VERBOSITY)
+	options.Execute.Check = "something else"
 	if options.Execute.Fo != nil {
 		fmt.Fprintf(options.Execute.Fo, "To output, Check str: '%s'\n",
 			options.Execute.Check)
