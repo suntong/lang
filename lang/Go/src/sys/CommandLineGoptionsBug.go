@@ -10,6 +10,13 @@ import (
 	"github.com/voxelbrain/goptions"
 )
 
+type Execute struct {
+	Command string   `goptions:"-c, --command, mutexgroup='input', description='Command to exectute', obligatory"`
+	Script  *os.File `goptions:"--script, mutexgroup='input', description='Script to exectute', rdonly"`
+	Fo      *os.File `goptions:"-o, --output, description='The output', wronly"`
+	Check   string   `goptions:"--check, description='Check str'"`
+}
+
 type Options struct {
 	Server    string        `goptions:"-s, --server, description='Server to connect to'"`
 	Password  string        `goptions:"-p, --password, description='Don\\'t prompt for password'"`
@@ -19,13 +26,8 @@ type Options struct {
 	Help      goptions.Help `goptions:"-h, --help, description='Show this help'"`
 
 	goptions.Verbs
-	Execute struct {
-		Command string   `goptions:"-c, --command, mutexgroup='input', description='Command to exectute', obligatory"`
-		Script  *os.File `goptions:"--script, mutexgroup='input', description='Script to exectute', rdonly"`
-		Fo      *os.File `goptions:"-o, --output, description='The output', wronly"`
-		Check   string   `goptions:"--check, description='Check str'"`
-	} `goptions:"execute"`
-	Delete struct {
+	Execute `goptions:"execute"` // Embedding!
+	Delete  struct {
 		Path  string `goptions:"-n, --name, obligatory, description='Name of the entity to be deleted'"`
 		Force bool   `goptions:"-f, --force, description='Force removal'"`
 	} `goptions:"delete"`
@@ -33,9 +35,9 @@ type Options struct {
 
 var options = Options{ // Default values goes here
 	Timeout: 10 * time.Second,
-	// Execute{
-	// 	Check: "something",
-	// },
+	Execute: Execute{
+		Check: "something",
+	},
 }
 
 type Command func(Options) error
@@ -74,7 +76,7 @@ func executecmd(options Options) error {
 	fmt.Printf("Selected verb: %s\n", options.Verbs)
 	fmt.Printf("Execute.Command: %s\n", options.Execute.Command)
 	fmt.Printf(" with verbosity: %d\n", VERBOSITY)
-	options.Execute.Check = "something else"
+	//options.Execute.Check = "something else"
 	if options.Execute.Fo != nil {
 		fmt.Fprintf(options.Execute.Fo, "To output, Check str: '%s'\n",
 			options.Execute.Check)
