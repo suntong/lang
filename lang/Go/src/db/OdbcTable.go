@@ -32,12 +32,25 @@ func main() {
 	}
 	defer conn.Close()
 
-	table, err := table.Get(conn, "select top 5 database_id, name, create_date from sys.databases WHERE database_id >= ?", 1)
+	r, err := table.Get(conn, "select top 5 database_id, name, create_date from sys.databases WHERE database_id >= ?", 1)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	dumpTable(table)
+	dumpTable(r)
+
+	r, err = table.Get(conn, "select top 5 database_id, name, create_date from sys.databases WHERE database_id = ?", 1)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	Id := r.MustGetScaler(0, "database_id")
+	theId := int(Id.(int32))
+	fmt.Printf("Id : %#v, %d\n", Id, theId)
+
+	n0 := r.MustGetScaler(0, "name").(string)
+	n := string(n0)
+	fmt.Printf("Id : %#v, %s, %s\n", n0, n0, n)
 
 	os.Exit(0)
 
