@@ -1,23 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////
 // Porgram: OdbcTable
 // Purpose: Go MSSQL odbc demo, from SQL to table
-// Authors: Tong Sun (c) 2013, All rights reserved
+// Authors: Tong Sun (c) 2013-2015, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
 // http://godoc.org/bitbucket.org/kardianos/table
 
-// Style: gofmt -tabs=false -tabwidth=4 -w
-
 package main
 
 import (
-	"bitbucket.org/kardianos/table"
-	_ "code.google.com/p/odbc"
 	"database/sql"
 	"fmt"
 	"log"
 	"os"
 	"time"
+
+	"bitbucket.org/kardianos/table"
+	_ "code.google.com/p/odbc"
 )
 
 func main() {
