@@ -20,7 +20,7 @@ import (
 )
 
 func main() {
-	connStr := "driver=sql server;server=localhost;database=tempdb;trusted_connection=yes;"
+	connStr := "driver=sql server;server=(local);database=tempdb;trusted_connection=yes;"
 	if len(os.Args) > 1 {
 		connStr = os.Args[1]
 	}
@@ -38,7 +38,8 @@ func main() {
 	}
 
 	dumpTable(table)
-	//os.Exit(0)
+
+	os.Exit(0)
 
 	testTVF(conn)
 	testExec(conn)
