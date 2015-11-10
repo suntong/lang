@@ -32,6 +32,11 @@ func main() {
 	defer conn.Close()
 	fmt.Println("Sql Server Connected")
 
+	test1(conn)
+	test2(conn)
+}
+
+func test1(conn *sql.DB) {
 	stmt, err := conn.Prepare("select top 5 database_id, name from sys.databases WHERE database_id >= 5")
 	if err != nil {
 		fmt.Println("Query Preparation Error", err)
@@ -66,7 +71,9 @@ func main() {
 	if err != nil {
 		fmt.Printf("\nFatal: %s\n", err)
 	}
+}
 
+func test2(conn *sql.DB) {
 	// Preparing Queries
 	/*
 		You should, in general, always prepare queries to be used multiple times.
@@ -75,12 +82,12 @@ func main() {
 		the statement. This is much better than concatenating strings.
 	*/
 
-	stmt, err = conn.Prepare("select top 5 database_id, name from sys.databases WHERE database_id >= ?")
+	stmt, err := conn.Prepare("select top 5 database_id, name from sys.databases WHERE database_id >= ?")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	row, err = stmt.Query(1)
+	row, err := stmt.Query(1)
 	if err != nil {
 		log.Fatal(err)
 	}
