@@ -1,18 +1,17 @@
 ////////////////////////////////////////////////////////////////////////////
 // Porgram: OdbcDemo
 // Purpose: Go MSSQL odbc demo, using the code.google.com/p/odbc driver
-// Authors: Tong Sun (c) 2013, All rights reserved
+// Authors: Tong Sun (c) 2013-2015, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
-
-// Style: gofmt -tabs=false -tabwidth=2 -w
 
 package main
 
 import (
-	_ "code.google.com/p/odbc"
 	"database/sql"
 	"fmt"
 	"log"
+
+	_ "github.com/alexbrainman/odbc"
 )
 
 /*
@@ -25,19 +24,21 @@ but in general nothing else happens.
 
 func main() {
 	conn, err := sql.Open("odbc",
-		"driver=sql server;server=localhost;database=tempdb;trusted_connection=yes;")
+		"driver=sql server;server=(local);database=tempdb;trusted_connection=yes;")
 	if err != nil {
 		fmt.Println("Connecting Error")
 		return
 	}
 	defer conn.Close()
+	fmt.Println("Sql Server Connected")
 
 	stmt, err := conn.Prepare("select top 5 database_id, name from sys.databases WHERE database_id >= 5")
 	if err != nil {
-		fmt.Println("Query Error", err)
+		fmt.Println("Query Preparation Error", err)
 		return
 	}
 	defer stmt.Close()
+	fmt.Println("Query Prepared")
 
 	// Use db.Query() to send the query to the database. Check errors as usual.
 	row, err := stmt.Query()
