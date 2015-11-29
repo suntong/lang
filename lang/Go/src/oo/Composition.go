@@ -13,7 +13,10 @@
 
 // For e.g., say I have a type User with some methods applicable to all Users:
 
-package user
+//package user
+package main
+
+import "fmt"
 
 type User struct {
 	Name  string
@@ -22,6 +25,7 @@ type User struct {
 
 func (u *User) SendEmail(subject, body string) bool {
 	// ... send an email
+	fmt.Printf("User %s sent an email with Subject: '%s'\n", u.Name, subject)
 	return true
 }
 
@@ -48,11 +52,35 @@ func (u *User) SendEmail(subject, body string) bool {
 //   adm.UnlockGate()
 
 type Admin struct {
-	*User
+	User
 	SecretPassword string
 }
 
 func (a *Admin) UnlockGate() bool {
 	// ... do admin stuff
+	fmt.Printf("Admin %s has unlocked the door to mystery with PW: '%s'\n",
+		a.Name, a.SecretPassword)
 	return true
+}
+
+func main() {
+	// User
+	usr := User{"Sam", "s@abc.ca"}
+	usr.SendEmail("hi", "there")
+
+	// Admin
+	adm := Admin{User{"Jack", "j@abc.ca"}, "confidential"}
+
+	// Call the User's Name property and methods explicitly
+	fmt.Printf("Admin's name: %s\n", adm.User.Name)
+	adm.User.SendEmail("Tick", "")
+
+	// Or take advantage of type promotion
+	fmt.Printf("Admin's name: %s\n", adm.Name)
+	adm.SendEmail("Tock", "")
+
+	// Likewise, you also have Admin's own properties that are not
+	// avaiable at all to type User
+	adm.UnlockGate()
+
 }
