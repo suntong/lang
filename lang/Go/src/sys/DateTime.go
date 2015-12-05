@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
-// Porgram: Composition.go
-// Purpose: Go composition & field promotion demo
+// Porgram: DateTime.go
+// Purpose: Go date & time demo
 // Authors: Tong Sun (c) 2015, All rights reserved
 // Credits: Go by Example
 //          https://gobyexample.com/
