@@ -6,8 +6,12 @@
 package main
 
 import (
-	"github.com/spakin/awk"
+	"fmt"
 	"os"
+)
+
+import (
+	"github.com/spakin/awk"
 )
 
 func main() {
@@ -17,8 +21,9 @@ func main() {
 	s.AppendStmt(func(s *awk.Script) bool { return !s.F(1).StrEqual(s.State) },
 		func(s *awk.Script) {
 			//s.Println()
+			fmt.Println(s.F(0))
 			s.State = s.F(1)
-			println(s.State)
+			fmt.Println(s.State)
 		})
 
 	if err := s.Run(os.Stdin); err != nil {
