@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"strings"
 	"time"
 )
 
@@ -40,7 +41,6 @@ Usage:
 
     Wp2Hugo < wordpress.md > path/to/hugo.md
 
-
 */
 
 func main() {
@@ -66,7 +66,7 @@ func main() {
 				"---\ntitle: \"$1\""))
 			fmt.Printf("date: \"%s\"\n", time.Now().Format(time.RFC3339))
 			fmt.Printf("categories: [\"%s\"]\n", s.F(3))
-			fmt.Printf("%s: [\"%s\"]\n", s.F(5), s.F(6))
+			fmt.Printf("%s: [%s]\n", s.F(5), quoteEach(s.F(6).String()))
 			fmt.Println("---\n")
 			//s.Exit()
 			s.Next()
@@ -78,4 +78,12 @@ func main() {
 	if err := s.Run(os.Stdin); err != nil {
 		panic(err)
 	}
+}
+
+func quoteEach(tags string) string {
+	t := strings.Split(tags, ",")
+	for i, tag := range t {
+		t[i] = "\"" + tag + "\""
+	}
+	return strings.Join(t, ",")
 }
