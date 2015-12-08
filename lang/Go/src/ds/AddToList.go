@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
-// Porgram: Composition.go
-// Purpose: Go composition & field promotion demo
+// Porgram: AddToList
+// Purpose: Adding elements to a slice
 // Authors: Tong Sun (c) 2015, All rights reserved
 // Credits: A Tour of Go
 //          https://tour.golang.org/moretypes/14
