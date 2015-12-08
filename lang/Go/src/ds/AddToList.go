@@ -14,6 +14,8 @@ func main() {
 	intSliceTest()
 	fmt.Println()
 	stringSliceTest()
+	fmt.Println()
+	stringArrayTest()
 }
 
 func intSliceTest() {
@@ -31,6 +33,17 @@ func intSliceTest() {
 	// we can add more than one element at a time.
 	a = append(a, 2, 3, 4)
 	printIntSlice("a", a)
+
+	// Slices can also be created with the make function.
+	b := make([]int, 5) // len(b)=5, cap(b)=5
+	printIntSlice("b", b)
+
+	// To specify a capacity, pass a third argument to make
+	c := make([]int, 0, 5) // len(c)=0, cap(c)=5
+	printIntSlice("c", c)
+
+	c = c[:cap(c)] // len(c)=5, cap(c)=5
+	printIntSlice("c", c)
 }
 
 func printIntSlice(s string, x []int) {
@@ -53,11 +66,41 @@ func stringSliceTest() {
 	// we can add more than one element at a time.
 	a = append(a, "222", "333", "444")
 	printStringSlice("a", a)
+
+	fmt.Println()
+
+	fmt.Println("a[1:3] ==", a[1:3])
+
+	// missing low index implies 0
+	fmt.Println("a[:3] ==", a[:3])
+
+	// missing high index implies len(a)
+	fmt.Println("a[2:] ==", a[2:])
+
+	fmt.Println()
+
+	// init slice with predetermined values
+	var b []string = []string{"333", "222"}
+	printStringSlice("b", b)
+
+	b = append(b, "111")
+	printStringSlice("b", b)
 }
 
 func printStringSlice(s string, x []string) {
 	fmt.Printf("%s len=%d cap=%d %v\n",
 		s, len(x), cap(x), x)
+}
+
+func stringArrayTest() {
+	var a [2]string
+	//a[0] = "Hello"
+	a[1] = "World"
+	fmt.Println(a[0], a[1])
+	fmt.Println(a)
+
+	//a = append(a, "Howdy")
+	//first argument to append must be slice
 }
 
 /*
