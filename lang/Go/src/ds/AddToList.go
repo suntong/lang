@@ -85,6 +85,12 @@ func stringSliceTest() {
 
 	b = append(b, "111")
 	printStringSlice("b", b)
+
+	// How to append slice to slice
+	// X: a = append(a, b) -- cannot use b (type []string) as type string in append
+	a = append(a, b...)
+	printStringSlice("a", a)
+
 }
 
 func printStringSlice(s string, x []string) {
