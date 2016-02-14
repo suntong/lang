@@ -10,6 +10,8 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -36,6 +38,12 @@ type Expr struct {
 var n_cards = 4
 var goal = 24
 var digit_range = 9
+
+func check(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
 
 func (x *Expr) String() string {
 	if x.op == op_num {
@@ -162,6 +170,28 @@ func solve(ex_in []*Expr) bool {
 
 func main() {
 	cards := make([]*Expr, n_cards)
+
+	// If there are command line arguments
+	if len(os.Args) > 1 {
+		if len(os.Args) != n_cards+1 {
+			fmt.Printf("Error: Needs exactly %d numbers from command line", n_cards)
+			os.Exit(1)
+		}
+
+		for i := 0; i < n_cards; i++ {
+			n, err := strconv.Atoi(os.Args[i+1])
+			check(err)
+			cards[i] = &Expr{op_num, nil, nil,
+				frac{n, 1}}
+			fmt.Printf(" %d", cards[i].value.num)
+		}
+		fmt.Print(":  ")
+		if !solve(cards) {
+			fmt.Println("No solution")
+		}
+		os.Exit(0)
+	}
+
 	rand.Seed(time.Now().Unix())
 
 	for k := 0; k < 10; k++ {
@@ -176,3 +206,26 @@ func main() {
 		}
 	}
 }
+
+/*
+
+To run, either with no command line arguments:
+
+    $ go run 24game-1.go
+     3 5 3 6:  (3 + 5) * (6 - 3)
+     5 7 2 2:  5 * 2 + 7 * 2
+     2 4 8 7:  7 / (2 / 8) - 4
+     2 2 3 4:  (2 + 2 + 4) * 3
+     1 7 3 5:  (3 - 1) * (7 + 5)
+     1 6 3 3:  (1 + 6) * 3 + 3
+     2 1 4 1:  No solution
+     5 3 8 2:  (5 + 3) * 2 + 8
+     8 2 8 4:  (8 - 2) * (8 - 4)
+     7 5 2 6:  7 + 5 + 2 * 6
+
+Or, with exactly 4 numbers from command line
+
+    $ go run 24game-1.go 1 3 4 6
+     1 3 4 6:  6 / (1 - 3 / 4)
+
+*/
