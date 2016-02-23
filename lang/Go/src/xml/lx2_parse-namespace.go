@@ -30,3 +30,15 @@ func main() {
 		fmt.Println(i, group.Content())
 	}
 }
+
+/*
+
+https://github.com/moovweb/gokogiri/issues/77#issuecomment-66941278
+
+Do not ue SetNamespace, because the SetNamespace call is for when you're building documents, not for querying.
+
+Try using doc.EvalXPath(x, nil) instead of Search. I think that EvalXPath automatically registers any namespaces that occur in the document.
+
+Alternatively you can get the XPath context directly (via doc.DocXPathCtx) and call RegisterNamespace followed by EvaluateAsNodeset on the context object ( this is what EvalXPath does in the background, see https://github.com/moovweb/gokogiri/blob/master/xml/node.go#L650 )
+
+*/
