@@ -34,6 +34,14 @@ func main() {
 	fmt.Println()
 	PathQueries()
 	fmt.Println()
+
+	DemoRemoveElement()
+}
+
+func readXml(xml string) *etree.Document {
+	doc := etree.NewDocument()
+	doc.ReadFromString(xml)
+	return doc
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -74,11 +82,11 @@ func ExampleDocument_reading() {
 	}
 }
 
-func ExamplePath() {
-	xml := `<bookstore><book><title>Great Expectations</title>
+var xml = `<bookstore><book><title>Great Expectations</title>
       <author>Charles Dickens</author></book><book><title>Ulysses</title>
       <author>James Joyce</author></book></bookstore>`
 
+func ExamplePath() {
 	doc := etree.NewDocument()
 	doc.ReadFromString(xml)
 	for _, e := range doc.FindElements(".//book[author='Charles Dickens']") {
@@ -134,16 +142,10 @@ var bookstore = `
 </bookstore>
 `
 
-func readXml() *etree.Document {
-	doc := etree.NewDocument()
-	doc.ReadFromString(bookstore)
-	return doc
-}
-
 // Processing elements and attributes
 // Illustrates some ways to access elements and attributes using simple etree queries
 func ProcessingEA() {
-	doc := readXml()
+	doc := readXml(bookstore)
 
 	root := doc.SelectElement("bookstore")
 	fmt.Println("ROOT element:", root.Tag)
@@ -182,7 +184,7 @@ CHILD element: book
 
 // Path queries
 func PathQueries() {
-	doc := readXml()
+	doc := readXml(bookstore)
 
 	// select all book titles that fall into the category of 'WEB'
 	for _, t := range doc.FindElements("//book[@category='WEB']/title") {
@@ -224,6 +226,78 @@ XQuery Kick Start
 
 */
 
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// More examples, according to https://godoc.org/github.com/beevik/etree
+
+func DemoRemoveElement() {
+	// doc := readXml(xml)
+	// for _, e := range doc.FindElements(".//book") {
+
+	doc := readXml(bookstore)
+	for _, e := range doc.FindElements(".//book[@category='WEB']") {
+
+		// FindElement returns the first element matched by the XPath string
+		a := e.FindElement(".//author")
+
+		// RemoveElement removes the given child element
+		e.RemoveElement(a)
+
+		an := e.CreateElement("author")
+		an.CreateComment("removed")
+
+		book := etree.CreateDocument(e)
+		book.Indent(2)
+		book.WriteTo(os.Stdout)
+	}
+}
+
+/*
+
+Output:
+
+<book category="WEB">
+  <title lang="en">XQuery Kick Start</title>
+  <author>Per Bothner</author>
+  <author>Kurt Cagle</author>
+  <author>James Linn</author>
+  <author>Vaidyanathan Nagarajan</author>
+  <year>2003</year>
+  <p:price>49.99</p:price>
+  <author>
+    <!--removed-->
+  </author>
+</book>
+<book category="WEB">
+  <title lang="en">Learning XML</title>
+  <year>2003</year>
+  <p:price>39.95</p:price>
+  <author>
+    <!--removed-->
+  </author>
+</book>
+
+With,
+
+	doc := readXml(xml)
+	for _, e := range doc.FindElements(".//book") {
+
+Output:
+
+<book>
+  <title>Great Expectations</title>
+  <author>
+    <!--removed-->
+  </author>
+</book>
+<book>
+  <title>Ulysses</title>
+  <author>
+    <!--removed-->
+  </author>
+</book>
+
+*/
+
 /*
 
 //
@@ -236,8 +310,6 @@ func () {
 /*
 
 Output:
-
-* /
 
 
 */
