@@ -10,6 +10,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 )
 
@@ -17,11 +18,26 @@ import (
 	"github.com/beevik/etree"
 )
 
+////////////////////////////////////////////////////////////////////////////
+// Function definitions
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// Function main
+
 func main() {
 	ExampleDocument_creating()
-	print("\n")
+	fmt.Println()
 	ExamplePath()
+	fmt.Println()
+
+	ProcessingEA()
+	fmt.Println()
+	PathQueries()
+	fmt.Println()
 }
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// From https://github.com/beevik/etree/blob/master/example_test.go
 
 // Create an etree Document, add XML entities to it, and serialize it
 // to stdout.
@@ -76,3 +92,152 @@ func ExamplePath() {
 	//   <author>Charles Dickens</author>
 	// </book>
 }
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// From https://github.com/beevik/etree/
+
+var bookstore = `
+<bookstore xmlns:p="urn:schemas-books-com:prices">
+
+  <book category="COOKING">
+    <title lang="en">Everyday Italian</title>
+    <author>Giada De Laurentiis</author>
+    <year>2005</year>
+    <p:price>30.00</p:price>
+  </book>
+
+  <book category="CHILDREN">
+    <title lang="en">Harry Potter</title>
+    <author>J K. Rowling</author>
+    <year>2005</year>
+    <p:price>29.99</p:price>
+  </book>
+
+  <book category="WEB">
+    <title lang="en">XQuery Kick Start</title>
+    <author>James McGovern</author>
+    <author>Per Bothner</author>
+    <author>Kurt Cagle</author>
+    <author>James Linn</author>
+    <author>Vaidyanathan Nagarajan</author>
+    <year>2003</year>
+    <p:price>49.99</p:price>
+  </book>
+
+  <book category="WEB">
+    <title lang="en">Learning XML</title>
+    <author>Erik T. Ray</author>
+    <year>2003</year>
+    <p:price>39.95</p:price>
+  </book>
+
+</bookstore>
+`
+
+func readXml() *etree.Document {
+	doc := etree.NewDocument()
+	doc.ReadFromString(bookstore)
+	return doc
+}
+
+// Processing elements and attributes
+// Illustrates some ways to access elements and attributes using simple etree queries
+func ProcessingEA() {
+	doc := readXml()
+
+	root := doc.SelectElement("bookstore")
+	fmt.Println("ROOT element:", root.Tag)
+
+	for _, book := range root.SelectElements("book") {
+		fmt.Println("CHILD element:", book.Tag)
+		if title := book.SelectElement("title"); title != nil {
+			lang := title.SelectAttrValue("lang", "unknown")
+			fmt.Printf("  TITLE: %s (%s)\n", title.Text(), lang)
+		}
+		for _, attr := range book.Attr {
+			fmt.Printf("  ATTR: %s=%s\n", attr.Key, attr.Value)
+		}
+	}
+}
+
+/*
+
+Output:
+
+ROOT element: bookstore
+CHILD element: book
+  TITLE: Everyday Italian (en)
+  ATTR: category=COOKING
+CHILD element: book
+  TITLE: Harry Potter (en)
+  ATTR: category=CHILDREN
+CHILD element: book
+  TITLE: XQuery Kick Start (en)
+  ATTR: category=WEB
+CHILD element: book
+  TITLE: Learning XML (en)
+  ATTR: category=WEB
+
+*/
+
+// Path queries
+func PathQueries() {
+	doc := readXml()
+
+	// select all book titles that fall into the category of 'WEB'
+	for _, t := range doc.FindElements("//book[@category='WEB']/title") {
+		fmt.Println("Title:", t.Text())
+	}
+	fmt.Println()
+
+	// finds the first book element under the bookstore element
+	// and outputs the tag and text of all of its child elements
+	{
+		for _, e := range doc.FindElements("./bookstore/book[1]/*") {
+			fmt.Printf("%s: %s\n", e.Tag, e.Text())
+		}
+	}
+	fmt.Println()
+
+	// finds all books with a price of 49.99 and outputs their titles.
+	{
+		path := etree.MustCompilePath("./bookstore/book[p:price='49.99']/title")
+		for _, e := range doc.FindElementsPath(path) {
+			fmt.Println(e.Text())
+		}
+	}
+}
+
+/*
+
+Output:
+
+Title: XQuery Kick Start
+Title: Learning XML
+
+title: Everyday Italian
+author: Giada De Laurentiis
+year: 2005
+price: 30.00
+
+XQuery Kick Start
+
+*/
+
+/*
+
+//
+//
+func () {
+	doc := readXml()
+
+}
+
+/*
+
+Output:
+
+* /
+
+
+*/
