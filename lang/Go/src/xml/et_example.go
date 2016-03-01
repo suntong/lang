@@ -320,9 +320,14 @@ func DemoFindElements() {
 			t.CreateAttr("bk:version", "released")
 			// If an attribute with the key already exists, its value is replaced
 			t.CreateAttr("lang", "en_US")
+
 			// SetText replaces an element's subsidiary CharData text with a new string
-			t.SetText(" " + t.Text() + " ")
+			t.SetText(t.FindElement("..//[@category]").
+				SelectAttrValue("category", "unknown") + ": " + t.Text())
 		}
+		// he tag may be prefixed by a namespace and a colon.
+		pub := e.CreateElement("bk:publisher")
+		pub.SetText("Unspecified")
 	}
 	doc.WriteTo(os.Stdout)
 }
@@ -364,19 +369,19 @@ Output:
 
 <bookstore xmlns:p="urn:schemas-books-com:prices">
   <book category="COOKING">
-    <title lang="en_US" bk:version="released"> Everyday Italian </title>
+    <title lang="en_US" bk:version="released">COOKING: Everyday Italian</title>
 
     <year>2005</year>
 
-  </book>
+  <bk:publisher>Unspecified</bk:publisher></book>
   <book category="CHILDREN">
-    <title lang="en_US" bk:version="released"> Harry Potter </title>
+    <title lang="en_US" bk:version="released">CHILDREN: Harry Potter</title>
 
     <year>2005</year>
 
-  </book>
+  <bk:publisher>Unspecified</bk:publisher></book>
   <book category="WEB">
-    <title lang="en_US" bk:version="released"> XQuery Kick Start </title>
+    <title lang="en_US" bk:version="released">WEB: XQuery Kick Start</title>
 
 
 
@@ -384,14 +389,15 @@ Output:
 
     <year>2003</year>
 
-  </book>
+  <bk:publisher>Unspecified</bk:publisher></book>
   <book category="WEB">
-    <title lang="en_US" bk:version="released"> Learning XML </title>
+    <title lang="en_US" bk:version="released">WEB: Learning XML</title>
 
     <year>2003</year>
 
-  </book>
+  <bk:publisher>Unspecified</bk:publisher></book>
 </bookstore>
+
 
 */
 
