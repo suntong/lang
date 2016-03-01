@@ -36,6 +36,9 @@ func main() {
 	fmt.Println()
 
 	DemoRemoveElement()
+	fmt.Println()
+	DemoFindElements()
+	fmt.Println()
 }
 
 func readXml(xml string) *etree.Document {
@@ -295,6 +298,100 @@ Output:
     <!--removed-->
   </author>
 </book>
+
+*/
+
+func DemoFindElements() {
+
+	doc := readXml(bookstore)
+	doc.Indent(2)
+	doc.WriteTo(os.Stdout)
+	fmt.Println()
+
+	for _, e := range doc.FindElements(".//book") {
+		p := e.FindElement(".//p:price")
+		e.RemoveElement(p)
+		for _, a := range e.FindElements(".//author") {
+			e.RemoveElement(a)
+		}
+		for _, t := range e.FindElements(".//title") {
+			// creates an attribute and adds it to the receiving element
+			// may be prefixed by a namespace and a colon.
+			t.CreateAttr("bk:version", "released")
+			// If an attribute with the key already exists, its value is replaced
+			t.CreateAttr("lang", "en_US")
+			// SetText replaces an element's subsidiary CharData text with a new string
+			t.SetText(" " + t.Text() + " ")
+		}
+	}
+	doc.WriteTo(os.Stdout)
+}
+
+/*
+
+Output:
+
+<bookstore xmlns:p="urn:schemas-books-com:prices">
+  <book category="COOKING">
+    <title lang="en">Everyday Italian</title>
+    <author>Giada De Laurentiis</author>
+    <year>2005</year>
+    <p:price>30.00</p:price>
+  </book>
+  <book category="CHILDREN">
+    <title lang="en">Harry Potter</title>
+    <author>J K. Rowling</author>
+    <year>2005</year>
+    <p:price>29.99</p:price>
+  </book>
+  <book category="WEB">
+    <title lang="en">XQuery Kick Start</title>
+    <author>James McGovern</author>
+    <author>Per Bothner</author>
+    <author>Kurt Cagle</author>
+    <author>James Linn</author>
+    <author>Vaidyanathan Nagarajan</author>
+    <year>2003</year>
+    <p:price>49.99</p:price>
+  </book>
+  <book category="WEB">
+    <title lang="en">Learning XML</title>
+    <author>Erik T. Ray</author>
+    <year>2003</year>
+    <p:price>39.95</p:price>
+  </book>
+</bookstore>
+
+<bookstore xmlns:p="urn:schemas-books-com:prices">
+  <book category="COOKING">
+    <title lang="en_US" bk:version="released"> Everyday Italian </title>
+
+    <year>2005</year>
+
+  </book>
+  <book category="CHILDREN">
+    <title lang="en_US" bk:version="released"> Harry Potter </title>
+
+    <year>2005</year>
+
+  </book>
+  <book category="WEB">
+    <title lang="en_US" bk:version="released"> XQuery Kick Start </title>
+
+
+
+
+
+    <year>2003</year>
+
+  </book>
+  <book category="WEB">
+    <title lang="en_US" bk:version="released"> Learning XML </title>
+
+    <year>2003</year>
+
+  </book>
+</bookstore>
 
 */
 
