@@ -13,7 +13,7 @@ import (
 func main() {
 	s := awk.NewScript()
 	s.AppendStmt(func(s *awk.Script) bool {
-		return s.F(2).Match("6:") && !s.F(4).Match("6:")
+		return s.F(2).Match("6:") && !s.F(1).Match("6:")
 	}, nil)
 	if err := s.Run(os.Stdin); err != nil {
 		panic(err)

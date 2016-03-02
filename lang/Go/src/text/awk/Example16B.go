@@ -39,11 +39,16 @@ https://godoc.org/github.com/spakin/awk
 Write all lines whose first field is different from the previous line's
 (AWK: $1 != prev {print; prev = $1}).
 
-$ seq 5 | go run Example16A.go
+$ seq 5 | go run Example16B.go
+1
 1
 2
+2
+3
 3
 4
+4
+5
 5
 
 */
