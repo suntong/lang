@@ -1,10 +1,36 @@
 ////////////////////////////////////////////////////////////////////////////
-// Porgram: unmarshal01.go
+// Porgram: unmarshal02B.go
 // Purpose: Go xml unmarshal demo, Unmarshal and retaining sub xml elements
 // Authors: Tong Sun (c) 2015, All rights reserved
 // Credits: https://golang.org/pkg/encoding/xml/
 //          Mark Crook, https://play.golang.org/p/rSj5cs8yvR
 ////////////////////////////////////////////////////////////////////////////
+
+/*
+
+encoding/xml, how to get full xml string
+https://groups.google.com/d/msg/golang-nuts/v9SDlW3kDeo/hR_YbON1DQAJ
+
+Q: When parsing XML, say at the level of
+
+   <QueryStringParameter Name="v" Value="SoftwareVersion" ... />
+
+How I can get the full xml string ("<QueryStringParameter Name= ... />") at this level?
+
+A:
+
+That element is empty, it has no inner xml. If you want the raw xml, you have to go up one level.
+
+You can create a type to get whatever attributes you need: https://play.golang.org/p/AyzmoUmVYS
+
+If you want the raw data, or attribute that you don't know about ahead of time, you need to implement an xml.Unmarshaler
+
+James Bardin
+
+This demo shows how to go one level up.
+To deal at the QueryStringParameter level, create a type with only attributes.
+
+*/
 
 package main
 
