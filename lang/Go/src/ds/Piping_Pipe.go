@@ -123,3 +123,33 @@ Received: test this bit
 Finished.
 
 */
+
+/*
+
+NB, FTA, another way to architect this is,
+
+    func chain(f0 func(io.Reader, io.Writer), fs func(io.Reader, io.Writer)...) func(io.Reader, io.Writer) {
+        f := f0
+        return func(r io.Reader, w io.Writer) {
+            for _, fn := range fs {
+                pr, pw := io.Pipe()
+                go f(r, pw)
+                r = pr
+                f = fn
+            }
+            f(r, w)
+        }
+    }
+
+Then you can do:
+
+    chain(doThis, doThat, doMore, doFurtherMore)(os.Stdin, os.Stdout)
+
+This by the way is very similar to http://labix.org/pipe, which works for
+more than just commands; you can implement your steps in Go functions as
+well.
+
+Matt Harden
+https://groups.google.com/d/msg/golang-nuts/snoIyANd-8c/6DKWnh4tAwAJ
+
+*/
