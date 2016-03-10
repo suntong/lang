@@ -14,6 +14,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// Note: there can be more data than in struct (last_action)
 var data = `
 hostname: 127.0.0.1
 username: vagrant
@@ -36,6 +37,7 @@ func (c *instanceConfig) Parse(data []byte) error {
 func main() {
 	test1()
 	test2([]byte(data2))
+	test2([]byte(data3))
 }
 
 func test1() {
@@ -68,6 +70,11 @@ m:
   last_action: create
 `
 
+// Note: there can be less data than in struct too (m)
+var data3 = `
+hostname: 127.0.0.1
+`
+
 type mapConfig struct {
 	Hostname string
 	M        map[string]string
@@ -83,3 +90,18 @@ func test2(source []byte) {
 
 	fmt.Printf("--- config:\n%+v\n\n", config)
 }
+
+/*
+
+Output:
+
+--- config:
+{Hostname:127.0.0.1 Username:vagrant SSHKey:/long/path/to/private_key Port:2222}
+
+--- config:
+{Hostname:127.0.0.1 M:map[username:vagrant ssh_key:/long/path/to/private_key port:2222 last_action:create]}
+
+--- config:
+{Hostname:127.0.0.1 M:map[]}
+
+*/
