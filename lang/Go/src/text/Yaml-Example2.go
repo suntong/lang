@@ -35,7 +35,7 @@ func (c *instanceConfig) Parse(data []byte) error {
 
 func main() {
 	test1()
-	test2()
+	test2([]byte(data2))
 }
 
 func test1() {
@@ -60,8 +60,8 @@ func test1() {
 }
 
 var data2 = `
+hostname: 127.0.0.1
 m:
-  hostname: 127.0.0.1
   username: vagrant
   ssh_key: "/long/path/to/private_key"
   port: '2222'
@@ -69,13 +69,13 @@ m:
 `
 
 type mapConfig struct {
-	m map[string]string
+	Hostname string
+	M        map[string]string
 }
 
-func test2() {
+func test2(source []byte) {
 	var config mapConfig
 
-	source := []byte(data2)
 	err := yaml.Unmarshal(source, &config)
 	if err != nil {
 		log.Fatalf("error: %v", err)
