@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
-// Porgram: Piping_Pipe.go
-// Purpose: Go Internal piping with io.Pipe
+// Porgram: Yaml-Example2
+// Purpose: Go Yaml Unmarshal Example
 // Authors: Tong Sun (c) 2016, All rights reserved
 // Credits: https://mlafeldt.github.io/blog/decoding-yaml-in-go/
 ////////////////////////////////////////////////////////////////////////////
@@ -14,6 +14,9 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+////////////////////////////////////////////////////////////////////////////
+// Global variables definitions
+
 // Note: there can be more data than in struct (last_action)
 var data = `
 hostname: 127.0.0.1
@@ -23,6 +26,9 @@ port: '2222'
 last_action: create
 `
 
+////////////////////////////////////////////////////////////////////////////
+// Constant and data type/structure definitions
+
 type instanceConfig struct {
 	Hostname string
 	Username string
@@ -30,18 +36,27 @@ type instanceConfig struct {
 	Port     string
 }
 
+////////////////////////////////////////////////////////////////////////////
+// Function definitions
+
 func (c *instanceConfig) Parse(data []byte) error {
 	return yaml.Unmarshal(data, c)
 }
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// Function main
 
 func main() {
 	test1()
 
 	test2([]byte(data2))
-	test2([]byte(data3))
+	test2([]byte(data22))
 
 	test3([]byte(data2))
 }
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// test1
 
 func test1() {
 
@@ -64,6 +79,9 @@ func test1() {
 	fmt.Printf("--- config:\n%+v\n\n", config)
 }
 
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// test2
+
 var data2 = `
 hostname: 127.0.0.1
 m:
@@ -74,7 +92,7 @@ m:
 `
 
 // Note: there can be less data than in struct too (m)
-var data3 = `
+var data22 = `
 hostname: 127.0.0.1
 `
 
@@ -93,6 +111,9 @@ func test2(source []byte) {
 
 	fmt.Printf("--- config:\n%+v\n\n", config)
 }
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// test3
 
 /*
 
