@@ -36,8 +36,11 @@ func (c *instanceConfig) Parse(data []byte) error {
 
 func main() {
 	test1()
+
 	test2([]byte(data2))
 	test2([]byte(data3))
+
+	test3([]byte(data2))
 }
 
 func test1() {
@@ -93,6 +96,35 @@ func test2(source []byte) {
 
 /*
 
+The problem with type mapConfig is that,
+the order within the M map cannot guarantee to be as the original order.
+
+The solution -- type yaml.MapSlice in next example
+
+MapSlice encodes and decodes as a YAML map.
+The order of keys is preserved when encoding and decoding.
+
+
+*/
+
+type mapSlice struct {
+	Hostname string
+	M        yaml.MapSlice
+}
+
+func test3(source []byte) {
+	var config mapSlice
+
+	err := yaml.Unmarshal(source, &config)
+	if err != nil {
+		log.Fatalf("error: %v", err)
+	}
+
+	fmt.Printf("--- config:\n%+v\n\n", config)
+}
+
+/*
+
 Output:
 
 --- config:
@@ -103,5 +135,8 @@ Output:
 
 --- config:
 {Hostname:127.0.0.1 M:map[]}
+
+--- config:
+{Hostname:127.0.0.1 M:[{Key:username Value:vagrant} {Key:ssh_key Value:/long/path/to/private_key} {Key:port Value:2222} {Key:last_action Value:create}]}
 
 */
