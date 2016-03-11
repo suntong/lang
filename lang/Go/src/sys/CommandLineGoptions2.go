@@ -14,6 +14,7 @@ type Execute struct {
 	Command string   `goptions:"-c, --command, mutexgroup='input', description='Command to exectute', obligatory"`
 	Script  *os.File `goptions:"--script, mutexgroup='input', description='Script to exectute', rdonly"`
 	Fo      *os.File `goptions:"-o, --output, description='The output', wronly"`
+	Force   bool     `goptions:"-f, --force, description='Force removal'"`
 	Check   string   `goptions:"--check, description='Check str'"`
 }
 
@@ -83,9 +84,16 @@ func executecmd(options Options) error {
 		fmt.Fprintf(os.Stdout, "To os.Stdout, Check str: '%s'\n",
 			options.Execute.Check)
 	}
+	options.Execute.Force = true
+	fmt.Printf("Force: %v\n", options.Execute.Force)
+	testMore()
 	return nil
 }
 
 func deletecmd(opt Options) error {
 	return nil
+}
+
+func testMore() {
+	fmt.Printf("Force: %v\n", options.Execute.Force)
 }
