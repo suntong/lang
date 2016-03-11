@@ -41,7 +41,7 @@ var options = Options{ // Default values goes here
 	},
 }
 
-type Command func() error
+type Command func(Options) error
 
 var commands = map[goptions.Verbs]Command{
 	"execute": executecmd,
@@ -63,7 +63,7 @@ func main() {
 	VERBOSITY = len(options.Verbosity)
 
 	if cmd, found := commands[options.Verbs]; found {
-		err := cmd()
+		err := cmd(options)
 		if err != nil {
 			if !options.Quiet {
 				fmt.Println("error:", err)
@@ -73,7 +73,7 @@ func main() {
 	}
 }
 
-func executecmd() error {
+func executecmd(options Options) error {
 	fmt.Printf("Selected verb: %s\n", options.Verbs)
 	fmt.Printf("Execute.Command: %s\n", options.Execute.Command)
 	fmt.Printf(" with verbosity: %d\n", VERBOSITY)
@@ -90,7 +90,7 @@ func executecmd() error {
 	return nil
 }
 
-func deletecmd() error {
+func deletecmd(opt Options) error {
 	return nil
 }
 
