@@ -33,14 +33,20 @@ func main() {
 // http://blog.kamilkisiel.net/blog/2012/07/05/using-the-go-regexp-package/
 
 func ugrp_Basic_Matching() {
-	digitsRegexp := regexp.MustCompile(`(\d+)\D+(\d+)`)
+	digitsRegexp := regexp.MustCompile(`\d+`)
 
 	someString := "1000abcd123"
-	fmt.Printf("%v\n", digitsRegexp.FindStringSubmatch(someString))
+
+	// Find just the leftmost
+	fmt.Println(digitsRegexp.FindString(someString))
+
+	// Find all (-1) the matches
+	fmt.Println(digitsRegexp.FindAllString(someString, -1))
 
 	/*
 
-		[1000abcd123 1000 123]
+		1000
+		[1000 123]
 
 		Notes:
 
