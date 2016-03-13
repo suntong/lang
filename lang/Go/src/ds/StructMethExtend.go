@@ -1,7 +1,11 @@
 ////////////////////////////////////////////////////////////////////////////
 // Porgram: MethExtend.go
 // Purpose: Extend Methord to Go Struct
-// Authors: Tong Sun (c) 2013, All rights reserved
+// Authors: Tong Sun (c) 2016, All rights reserved
+// Credits: Howard C. Shaw III
+//          https://groups.google.com/d/msg/golang-nuts/snoIyANd-8c/V_IC57y4AwAJ
+//          https://groups.google.com/d/msg/golang-nuts/snoIyANd-8c/hhOnu-lFAgAJ
+//          https://groups.google.com/d/msg/golang-nuts/snoIyANd-8c/ZiC1wxhZAgAJ
 ////////////////////////////////////////////////////////////////////////////
 
 package main
@@ -16,6 +20,8 @@ import (
 
 func main() {
 	test1()
+	fmt.Print("\n")
+	test2()
 }
 
 func test1() {
@@ -49,10 +55,23 @@ func (sp *Shaper) Dummy() *Shaper {
 
 // Make a new Shaper filter and start adding bits
 func NewFilter() *Shaper {
-	return &Shaper{ShaperStack: PassThrough}
+	return &Shaper{Shaper: shaper.NewFilter()}
 }
 
 func test2() {
-	Replace := Shaper.NewFilter().ApplyReplace("test", "biscuit", -1)
+	Replace := NewFilter()
+	Replace.ApplyReplace("test", "biscuit", -1)
 	fmt.Printf("%s\n", Replace.Process("This is also a test. Testificate."))
+	Replace.Dummy()
+	fmt.Printf("%s\n", Replace.Process("This is also a test. Testificate."))
+
+	// Note that this does NOT work,
+	// because all the child functions return *shaper.Shaper, which does not have Dummy()
+	//	Replace := NewFilter().ApplyReplace("test", "biscuit", -1)
+	//	fmt.Printf("%s\n", Replace.Process("This is also a test. Testificate."))
+	//	Replace.Dummy()
+	//	fmt.Printf("%s\n", Replace.Process("This is also a test. Testificate."))
+	// would give
+	// ./StructMethExtend.go:52: Replace.Dummy undefined (type *shaper.Shaper has no field or method Dummy)
+	// because the ApplyReplace returned a shaper.Shaper.
 }
