@@ -53,10 +53,13 @@ func main() {
 	test2([]byte(data22))
 
 	test3([]byte(data2))
+
+	test4([]byte(data))
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // test1
+// Parse to explicit struct mapping definition
 
 func test1() {
 
@@ -81,6 +84,7 @@ func test1() {
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // test2
+// Parse to map[string]string
 
 var data2 = `
 hostname: 127.0.0.1
@@ -114,6 +118,7 @@ func test2(source []byte) {
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // test3
+// keep the original order
 
 /*
 
@@ -142,6 +147,39 @@ func test3(source []byte) {
 	}
 
 	fmt.Printf("--- config:\n%+v\n\n", config)
+
+	for _, av := range config.M {
+		fmt.Printf("    %s: %s\n", av.Key, av.Value)
+	}
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// test4
+// Parse the Yaml without root level node
+
+func test4(source []byte) {
+	// to make(map[string]string)
+	{
+		config := make(map[string]string)
+
+		err := yaml.Unmarshal(source, &config)
+		if err != nil {
+			log.Fatalf("error: %v", err)
+		}
+
+		fmt.Printf("--- config:\n%+v\n\n", config)
+	}
+	// to MapSlice (keep the original order)
+	{
+		var config yaml.MapSlice
+
+		err := yaml.Unmarshal(source, &config)
+		if err != nil {
+			log.Fatalf("error: %v", err)
+		}
+
+		fmt.Printf("--- config:\n%+v\n\n", config)
+	}
 }
 
 /*
@@ -159,5 +197,15 @@ Output:
 
 --- config:
 {Hostname:127.0.0.1 M:[{Key:username Value:vagrant} {Key:ssh_key Value:/long/path/to/private_key} {Key:port Value:2222} {Key:last_action Value:create}]}
+
+    username: vagrant
+    ssh_key: /long/path/to/private_key
+    port: 2222
+    last_action: create
+--- config:
+map[hostname:127.0.0.1 username:vagrant ssh_key:/long/path/to/private_key port:2222 last_action:create]
+
+--- config:
+[{Key:hostname Value:127.0.0.1} {Key:username Value:vagrant} {Key:ssh_key Value:/long/path/to/private_key} {Key:port Value:2222} {Key:last_action Value:create}]
 
 */
