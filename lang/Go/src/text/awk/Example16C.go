@@ -29,6 +29,14 @@ func main() {
 			fmt.Println(sa.Get("prev").String())
 		})
 
+	s.End = func(s *awk.Script) {
+		fmt.Println(sa.Get("no-exist").String())
+		fmt.Println(sa.Get("no-exist").Int())
+		sa.Set("no-exist", 3)
+		fmt.Println(sa.Get("no-exist").String())
+		fmt.Println(sa.Get("prev").String())
+	}
+
 	if err := s.Run(os.Stdin); err != nil {
 		panic(err)
 	}
