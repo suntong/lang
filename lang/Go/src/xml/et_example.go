@@ -15,6 +15,7 @@ import (
 )
 
 import (
+	//"gopkg.in/beevik/etree.v0"
 	"github.com/beevik/etree"
 )
 
@@ -28,6 +29,8 @@ func main() {
 	ExampleDocument_creating()
 	fmt.Println()
 	ExamplePath()
+	fmt.Println()
+	ExampleAddElement()
 	fmt.Println()
 
 	ProcessingEA()
@@ -93,7 +96,8 @@ func ExamplePath() {
 	doc := etree.NewDocument()
 	doc.ReadFromString(xml)
 	for _, e := range doc.FindElements(".//book[author='Charles Dickens']") {
-		book := etree.CreateDocument(e)
+		book := etree.NewDocument()
+		book.SetRoot(e.Copy())
 		book.Indent(2)
 		book.WriteTo(os.Stdout)
 	}
@@ -102,6 +106,33 @@ func ExamplePath() {
 	//   <title>Great Expectations</title>
 	//   <author>Charles Dickens</author>
 	// </book>
+}
+
+func ExampleAddElement() {
+	docR := readXml(bookstore)
+	root := docR.SelectElement("bookstore")
+
+	docA := etree.NewDocument()
+	docA.ReadFromString(xml)
+	docA.Indent(2)
+	docA.WriteTo(os.Stdout)
+
+	// To directly add docA under root
+	//root.AddElement(docA.Root())
+
+	// To add all book nodes under docA to root
+	for _, e := range docA.FindElements(".//book") {
+		// add (e) under root
+		root.AddElement(e)
+	}
+
+	fmt.Println()
+	docR.Indent(2)
+	docR.WriteTo(os.Stdout)
+
+	fmt.Println()
+	docA.Indent(2)
+	docA.WriteTo(os.Stdout)
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -248,7 +279,8 @@ func DemoRemoveElement() {
 		an := e.CreateElement("author")
 		an.CreateComment("removed")
 
-		book := etree.CreateDocument(e)
+		book := etree.NewDocument()
+		book.SetRoot(e.Copy())
 		book.Indent(2)
 		book.WriteTo(os.Stdout)
 	}
