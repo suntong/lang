@@ -84,9 +84,6 @@ go build -o gogo
       -o, --out
           output filename
     
-    $ 024-gogo build -dir=.. -o out
-    ERR! undefined flag -d
-    
     $ 024-gogo build --dir=.. -o out
     build: {
         "Help": false,
@@ -115,7 +112,6 @@ go build -o gogo
       -o, --out
           output filename
     
-    $ 
     
     $ 024-gogo install
     install: {
