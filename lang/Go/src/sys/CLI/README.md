@@ -58,7 +58,7 @@
 ## [004-default-flag.go](004-default-flag.go)
 
     $ go run 004-default-flag.go 
-    2, /export/home/u, 1000, /export/home/u/dev
+    2, /home/user, 1000, /home/user/dev
     
     $ go run 004-default-flag.go -h
     Options:
@@ -70,7 +70,7 @@
           --devdir[=$HOME/dev]         directory of developer
     
     $ BASE_PORT=8000 go run 004-default-flag.go --basic=3
-    3, /export/home/u, 9000, /export/home/u/dev
+    3, /home/user, 9000, /home/user/dev
 
 ## [005-slice.go](005-slice.go)
 
@@ -186,18 +186,18 @@
 ## [014-time-and-duration.go](014-time-and-duration.go)
     
     $ go run 014-time-and-duration.go 
-    /export/home/u/l/ws/Go/src/github.com/mkideal/cli/ext/decoders.go:12:2: cannot find package "github.com/jinzhu/now" in any of:
+    .../github.com/mkideal/cli/ext/decoders.go:12:2: cannot find package "github.com/jinzhu/now" in any of:
             /usr/lib/go-1.6/src/github.com/jinzhu/now (from $GOROOT)
-            /export/home/u/l/ws/Go/src/github.com/jinzhu/now (from $GOPATH)
+            .../github.com/jinzhu/now (from $GOPATH)
     
     $ go get -v github.com/jinzhu/now
 
 ## [015-file.go](015-file.go)
 
     $ go run 015-file.go 
-    /export/home/u/l/ws/Go/src/github.com/mkideal/cli/ext/decoders.go:12:2: cannot find package "github.com/jinzhu/now" in any of:
+    .../github.com/mkideal/cli/ext/decoders.go:12:2: cannot find package "github.com/jinzhu/now" in any of:
             /usr/lib/go-1.6/src/github.com/jinzhu/now (from $GOROOT)
-            /export/home/u/l/ws/Go/src/github.com/jinzhu/now (from $GOPATH)
+            .../github.com/jinzhu/now (from $GOPATH)
 
 ## [016-parser.go](016-parser.go)
 
