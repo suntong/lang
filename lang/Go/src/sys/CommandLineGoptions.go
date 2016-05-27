@@ -25,7 +25,7 @@ type Options struct {
 	Timeout   time.Duration `goptions:"-t, --timeout, description='Connection timeout in seconds'"`
 	Verbosity []bool        `goptions:"-v, --verbose, description='Be verbose'"`
 	Quiet     bool          `goptions:"-q, --quiet, description='Do not print anything, even errors (except if --verbose is specified)'"`
-	Help      goptions.Help `goptions:"-h, --help, description='Show this help'"`
+	Help      goptions.Help `goptions:"-h, --help, description='Show this help\n\nSub-commands (Verbs):\n\n\texecute\t\tExecute it\n\t\t\tExecute the given command\n\n\tdelete\t\tDelete it'"`
 
 	goptions.Verbs
 	Execute struct {
