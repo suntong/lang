@@ -6,7 +6,8 @@ import (
 
 var _ = app.Register(&cli.Command{
 	Name:     "build",
-	Desc:     "Build golang application\n\nUsage:\n  gogo build [Options] Arch(i386|amd64)",
+	Desc:     "Build golang application",
+	Text:     "Usage:\n  gogo build [Options] Arch(i386|amd64)",
 	NeedArgs: true,
 	Argv:     func() interface{} { return new(buildT) },
 	Fn:       build,
