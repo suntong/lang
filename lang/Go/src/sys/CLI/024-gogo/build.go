@@ -5,10 +5,11 @@ import (
 )
 
 var _ = app.Register(&cli.Command{
-	Name: "build",
-	Desc: "Build golang application",
-	Argv: func() interface{} { return new(buildT) },
-	Fn:   build,
+	Name:     "build",
+	Desc:     "Build golang application\n\nUsage:\n  gogo build [Options] Arch(i386|amd64)",
+	NeedArgs: true,
+	Argv:     func() interface{} { return new(buildT) },
+	Fn:       build,
 })
 
 type buildT struct {
@@ -21,5 +22,7 @@ type buildT struct {
 func build(ctx *cli.Context) error {
 	argv := ctx.Argv().(*buildT)
 	ctx.String("%s: %v", ctx.Path(), jsonIndent(argv))
+	ctx.String("Arch: %s", ctx.Args()[0])
+
 	return nil
 }
