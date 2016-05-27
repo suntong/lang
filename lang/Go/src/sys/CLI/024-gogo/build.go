@@ -5,12 +5,13 @@ import (
 )
 
 var _ = app.Register(&cli.Command{
-	Name:     "build",
-	Desc:     "Build golang application",
-	Text:     "Usage:\n  gogo build [Options] Arch(i386|amd64)",
+	Name: "build",
+	Desc: "Build golang application",
+	Text: "Usage:\n  gogo build [Options] Arch(i386|amd64)",
+	Argv: func() interface{} { return new(buildT) },
+	Fn:   build,
+
 	NeedArgs: true,
-	Argv:     func() interface{} { return new(buildT) },
-	Fn:       build,
 })
 
 type buildT struct {

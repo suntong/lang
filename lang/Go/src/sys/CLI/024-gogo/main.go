@@ -11,12 +11,13 @@ import (
 const version = "v1.0.0"
 
 var app = &cli.Command{
-	Name:     os.Args[0],
-	Desc:     "Golang package manager",
-	Text:     "  gogo is a new golang package manager\n  very very good",
+	Name: os.Args[0],
+	Desc: "Golang package manager",
+	Text: "  gogo is a new golang package manager\n  very very good",
+	Argv: func() interface{} { return new(gogoT) },
+	Fn:   gogo,
+
 	NeedArgs: true,
-	Argv:     func() interface{} { return new(gogoT) },
-	Fn:       gogo,
 }
 
 type gogoT struct {
