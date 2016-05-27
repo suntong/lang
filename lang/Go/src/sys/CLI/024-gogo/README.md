@@ -1,5 +1,4 @@
-Multi command application
-=========================
+# Multi command application
 
 Try type these commands in terminal
 
@@ -17,6 +16,8 @@ go build -o gogo
 ./gogo install --help
 ...
 ```
+
+## 2016-05-26
 
     $ go build 
 
@@ -137,3 +138,60 @@ go build -o gogo
     
       -o, --out
           output filename
+
+## 2016-05-27
+
+    $ 024-gogo
+    Golang package manager
+    
+      gogo is a new golang package manager
+      very very good
+    
+    Options:
+    
+      -h, --help
+          display help information
+    
+      -v, --version
+          display version
+    
+      -l, --list[=false]
+          list all sub commands or not
+    
+    Commands:
+      build     Build golang application
+      clean     Clean build data
+      doc       Generate documents
+      install   Install golang application
+      publish   Publish golang application
+      test      Test golang application
+    
+    $ 024-gogo build
+    Build golang application
+    
+    Usage:
+      gogo build [Options] Arch(i386|amd64)
+    
+    Options:
+    
+      -h, --help
+          display help information
+    
+      --dir[=./]
+          source code root dir
+    
+      --suffix[=.go,.c,.s]
+          source file suffix
+    
+      -o, --out
+          output filename
+    
+    $ 024-gogo build --dir=.. -o out i386
+    build: {
+        "Help": false,
+        "Dir": "..",
+        "Suffix": ".go,.c,.s",
+        "Out": "out"
+    }
+    Arch: i386
+
