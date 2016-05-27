@@ -11,12 +11,12 @@ import (
 const version = "v1.0.0"
 
 var app = &cli.Command{
-	Name: os.Args[0],
-	Desc: "Golang package manager",
-	Text: `gogo is a new golang package manager
-very very good`,
-	Argv: func() interface{} { return new(gogoT) },
-	Fn:   gogo,
+	Name:     os.Args[0],
+	Desc:     "Golang package manager",
+	Text:     "  gogo is a new golang package manager\n  very very good",
+	NeedArgs: true,
+	Argv:     func() interface{} { return new(gogoT) },
+	Fn:       gogo,
 }
 
 type gogoT struct {
@@ -50,7 +50,7 @@ func jsonIndent(i interface{}) string {
 }
 
 func main() {
-	cli.SetUsageStyle(cli.ManualStyle)
+	cli.SetUsageStyle(cli.ManualStyle) // up-down, for left-right, use NormalStyle
 	//NOTE: You can set any writer implements io.Writer
 	// default writer is os.Stdout
 	if err := app.RunWith(os.Args[1:], os.Stderr, nil); err != nil {
