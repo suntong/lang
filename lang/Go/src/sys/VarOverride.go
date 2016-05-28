@@ -73,4 +73,18 @@ the following don't:
     go run -ldflags="-X main.name=John\ Doe" VarOverride.go
     go run -ldflags="-X main.name=\"John Doe\"" VarOverride.go
 
+Thanks to Caleb Spare, https://groups.google.com/d/msg/golang-nuts/FkzKgsoiCqM/68hcEPRDBgAJ,
+the correct way is,
+
+    $ go run -ldflags "-X 'main.name=John Doe'" VarOverride.go
+    John Doe {Bob 20}
+    2016-05-26
+
+    $ go run -ldflags "-X 'main.name=John Doe' -X main.theTime=`date -I`" VarOverride.go
+    John Doe {Bob 20}
+    2016-05-28
+
+I.e., according to the -X documentation, "it takes one argument split on the
+first = sign".
+
 */
