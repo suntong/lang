@@ -9,6 +9,14 @@ import (
 	"strings"
 )
 
+var (
+	smtpServer = "smtp.163.com"
+	smtpPort   = ":25"
+	smtpUser   = "fledna@163.com"
+	smtpPass   = "password*******"
+	mesgTo     = "name@139.com"
+)
+
 func encodeRFC2047(String string) string {
 	// use mail's rfc2047 to encode any string
 	addr := mail.Address{String, ""}
@@ -16,18 +24,18 @@ func encodeRFC2047(String string) string {
 }
 
 func main() {
-	// Set up authentication information.
+	//log.Fatal(smtpUser, smtpPass, smtpServer, mesgTo)
 
-	smtpServer := "smtp.163.com"
+	// Set up authentication information.
 	auth := smtp.PlainAuth(
 		"",
-		"fledna@163.com",
-		"password*******",
+		smtpUser,
+		smtpPass,
 		smtpServer,
 	)
 
-	from := mail.Address{"监控中心", "fledna@163.com"}
-	to := mail.Address{"收件人", "name@139.com"}
+	from := mail.Address{"监控中心", smtpUser}
+	to := mail.Address{"收件人", mesgTo}
 	title := "当前时段统计报表"
 
 	body := "报表内容一切正常"
@@ -49,7 +57,7 @@ func main() {
 	// Connect to the server, authenticate, set the sender and recipient,
 	// and send the email all in one step.
 	err := smtp.SendMail(
-		smtpServer+":25",
+		smtpServer+smtpPort,
 		auth,
 		from.Address,
 		[]string{to.Address},
