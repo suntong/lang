@@ -11,7 +11,8 @@ var _ = app.Register(&cli.Command{
 	Argv: func() interface{} { return new(installT) },
 	Fn:   install,
 
-	NumArg: cli.AtLeast(1),
+	NumArg:      cli.AtLeast(1),
+	CanSubRoute: true,
 })
 
 type installT struct {

@@ -11,7 +11,8 @@ var _ = app.Register(&cli.Command{
 	Argv: func() interface{} { return new(buildT) },
 	Fn:   build,
 
-	NumArg: cli.ExactN(1),
+	NumArg:      cli.ExactN(1),
+	CanSubRoute: true,
 })
 
 type buildT struct {
