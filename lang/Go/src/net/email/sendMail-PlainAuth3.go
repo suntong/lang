@@ -69,6 +69,9 @@ func (r *Request) ParseTemplate(templateFileName string, data interface{}) error
 
 /*
 
+How to send an email using Go with an HTML formatted body
+http://stackoverflow.com/questions/9950098/how-to-send-an-email-using-go-with-an-html-formatted-body
+
 From
 https://medium.com/@dhanushgopinath/sending-html-emails-using-templates-in-golang-9e953ca32f3d#.ua4ydv9vj
 
