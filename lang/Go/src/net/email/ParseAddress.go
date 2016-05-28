@@ -22,7 +22,7 @@ func ParseAddress() {
 }
 
 func ParseAddressList() {
-	const list = `Alice <alice@example.com>, "Bob Uncle" <bob@example.com>, "Yang-Tan, Eve" <eve@example.com>`
+	const list = `bg@example.com, Alice <alice@example.com>, "Bob Uncle" <bob@example.com>, "Yang-Tan, Eve" <eve@example.com>`
 	emails, err := mail.ParseAddressList(list)
 	if err != nil {
 		log.Fatal(err)
@@ -33,3 +33,15 @@ func ParseAddressList() {
 	}
 
 }
+
+/*
+
+Output:
+
+Alice alice@example.com
+ => bg@example.com
+Alice => alice@example.com
+Bob Uncle => bob@example.com
+Yang-Tan, Eve => eve@example.com
+
+*/
