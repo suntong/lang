@@ -7,8 +7,11 @@ import (
 var _ = app.Register(&cli.Command{
 	Name: "install",
 	Desc: "Install golang application",
+	Text: "Usage:\n  gogo install [Options] package [package...]",
 	Argv: func() interface{} { return new(installT) },
 	Fn:   install,
+
+	NumArg: cli.AtLeast(1),
 })
 
 type installT struct {
@@ -21,5 +24,6 @@ type installT struct {
 func install(ctx *cli.Context) error {
 	argv := ctx.Argv().(*installT)
 	ctx.String("%s: %v", ctx.Path(), jsonIndent(argv))
+	ctx.String("Installing: %v\n", ctx.Args())
 	return nil
 }
