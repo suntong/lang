@@ -11,10 +11,17 @@ import (
 
 // SSL/TLS Email Example
 
+var (
+	smtpServer = "smtp.example.tld:465"
+	smtpUser   = "username@example.tld"
+	smtpPass   = "password*******"
+	mesgTo     = "username@anotherexample.tld"
+)
+
 func main() {
 
-	from := mail.Address{"", "username@example.tld"}
-	to := mail.Address{"", "username@anotherexample.tld"}
+	from := mail.Address{"", smtpUser}
+	to := mail.Address{"", mesgTo}
 	subj := "This is the email subject"
 	body := "This is an example body.\n With two lines."
 
@@ -32,11 +39,11 @@ func main() {
 	message += "\r\n" + body
 
 	// Connect to the SMTP Server
-	servername := "smtp.example.tld:465"
+	servername := smtpServer
 
 	host, _, _ := net.SplitHostPort(servername)
 
-	auth := smtp.PlainAuth("", "username@example.tld", "password", host)
+	auth := smtp.PlainAuth("", smtpUser, smtpPass, host)
 
 	// TLS config
 	tlsconfig := &tls.Config{
