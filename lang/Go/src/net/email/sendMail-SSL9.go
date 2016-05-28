@@ -15,20 +15,23 @@ import (
 var (
 	smtpServer = "smtp.example.tld:465"
 	smtpUser   = "username@example.tld"
+	smtpUName  = "Real User Name"
 	smtpPass   = "password*******"
 	mesgTo     = "username@anotherexample.tld"
 )
 
 func main() {
 
-	SendEmail(smtpServer, smtpUser, smtpPass,
-		[]string{mesgTo},
+	SendEmail([]string{mesgTo},
 		"This is the email subject",
 		"<html><body><h1>Hello World!</h1><p>This is an example body.<p>With two lines.</body></html>")
 
 }
 
-func SendEmail(servername string, userName string, password string, _to []string, _subject string, body string) (err error) {
+func SendEmail(_to []string, _subject string, body string) (err error) {
+	servername := smtpServer
+	userName := smtpUser
+	password := smtpPass
 
 	mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n"
 	parameters := struct {
@@ -43,7 +46,7 @@ func SendEmail(servername string, userName string, password string, _to []string
 		body,
 	}
 
-	from := mail.Address{"", parameters.From}
+	from := mail.Address{smtpUName, parameters.From}
 	to := mail.Address{"", parameters.To}
 	message := mime +
 		"From: " + from.String() + "\r\n" +
