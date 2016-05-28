@@ -8,12 +8,19 @@ import (
 	"net/smtp"
 )
 
+var (
+	smtpServer = "smtp.qq.com"
+	smtpUser   = "xxx@qq.com"
+	smtpPass   = "xxx"
+	mesgTo     = "xxx@qq.com"
+)
+
 func main() {
-	host := "smtp.qq.com"
+	host := smtpServer
 	port := 465
-	email := "xxx@qq.com"
-	password := "xxx"
-	toEmail := "xxx@qq.com"
+	email := smtpUser
+	password := smtpPass
+	toEmail := mesgTo
 
 	header := make(map[string]string)
 	header["From"] = "test" + "<" + email + ">"
