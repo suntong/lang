@@ -195,3 +195,43 @@ go build -o gogo
     }
     Arch: i386
 
+## 2016-05-28
+
+    $ 024-gogo install
+    Install golang application
+    
+    Usage:
+      gogo install [Options] package [package...]
+    
+    Options:
+    
+      -h, --help
+          display help information
+    
+      --dir[=./]
+          source code root dir
+    
+      --suffix[=.go,.c,.s]
+          source file suffix
+    
+      -o, --out
+          output filename
+    
+    $ 024-gogo install pkg1 pkg2 pkg3
+    install pkg1 pkg2 pkg3: {
+        "Help": false,
+        "Dir": "./",
+        "Suffix": ".go,.c,.s",
+        "Out": ""
+    }
+    Installing: [pkg1 pkg2 pkg3]
+    
+    $ 024-gogo build amd64
+    build amd64: {
+        "Help": false,
+        "Dir": "./",
+        "Suffix": ".go,.c,.s",
+        "Out": ""
+    }
+    Arch: amd64
+
