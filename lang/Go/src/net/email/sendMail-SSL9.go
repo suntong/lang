@@ -1,3 +1,10 @@
+////////////////////////////////////////////////////////////////////////////
+// Porgram: sendMail-SSL9.go
+// Purpose: SSL/TLS Email Example
+// Authors: Tong Sun (c) 2016, All rights reserved
+// Credits: https://gist.github.com/chrisgillis/10888032
+////////////////////////////////////////////////////////////////////////////
+
 package main
 
 import (
@@ -7,56 +14,50 @@ import (
 	"net"
 	"net/mail"
 	"net/smtp"
-	"strings"
+	//"strings"
 )
 
-// SSL/TLS Email Example
-
 var (
-	smtpServer = "smtp.example.tld:465"
-	smtpUser   = "username@example.tld"
-	smtpUName  = "Real User Name"
+	smtpServer = "smtp.example.com:465"
+	smtpUser   = "Barry Gibbs <bg@example.com>"
 	smtpPass   = "password*******"
-	mesgTo     = "username@anotherexample.tld"
+	mesgTo     = "Alice <alice@example.com>, Bob <bob@example.com>, Eve <eve@example.com>"
 )
 
 func main() {
 
-	SendEmail([]string{mesgTo},
+	SendEmail(mesgTo,
 		"This is the email subject",
 		"<html><body><h1>Hello World!</h1><p>This is an example body.<p>With two lines.</body></html>")
 
 }
 
-func SendEmail(_to []string, _subject string, body string) (err error) {
-	servername := smtpServer
-	userName := smtpUser
-	password := smtpPass
+func SendEmail(to string, subject string, body string) (err error) {
 
-	mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n"
+	mime := "MIME-version: 1.0;\r\nContent-Type: text/html; charset=\"UTF-8\";\r\n"
 	parameters := struct {
-		From    string
-		To      string
+		From    *mail.Address
+		To      []*mail.Address
 		Subject string
 		Body    string
 	}{
-		userName,
-		strings.Join([]string(_to), ","),
-		_subject,
+		&mail.Address{},
+		[]*mail.Address{},
+		subject,
 		body,
 	}
 
-	from := mail.Address{smtpUName, parameters.From}
-	to := mail.Address{"", parameters.To}
+	parameters.From, err = mail.ParseAddress(smtpUser)
+	parameters.To, err = mail.ParseAddressList(to)
 	message := mime +
-		"From: " + from.String() + "\r\n" +
-		"To: " + to.String() + "\r\n" +
+		"From: " + smtpUser + "\r\n" +
+		"To: " + to + "\r\n" +
 		"Subject: " + parameters.Subject + "\r\n" +
 		"\r\n" + parameters.Body
 
 	// Connect to the SMTP Server
-	host, _, _ := net.SplitHostPort(servername)
-	auth := smtp.PlainAuth("", userName, password, host)
+	host, _, _ := net.SplitHostPort(smtpServer)
+	auth := smtp.PlainAuth("", parameters.From.Address, smtpPass, host)
 
 	// TLS config
 	tlsconfig := &tls.Config{
@@ -67,7 +68,7 @@ func SendEmail(_to []string, _subject string, body string) (err error) {
 	// Here is the key, you need to call tls.Dial instead of smtp.Dial
 	// for smtp servers running on 465 that require an ssl connection
 	// from the very beginning (no starttls)
-	conn, err := tls.Dial("tcp", servername, tlsconfig)
+	conn, err := tls.Dial("tcp", smtpServer, tlsconfig)
 	checkError(err)
 
 	c, err := smtp.NewClient(conn, host)
@@ -78,18 +79,18 @@ func SendEmail(_to []string, _subject string, body string) (err error) {
 	checkError(err)
 
 	// To && From
-	err = c.Mail(from.Address)
+	err = c.Mail(parameters.From.Address)
 	checkError(err)
-	err = c.Rcpt(to.Address)
-	checkError(err)
+	for _, addr := range parameters.To {
+		err = c.Rcpt(addr.Address)
+		checkError(err)
+	}
 
 	// Data
 	w, err := c.Data()
 	checkError(err)
-
 	_, err = w.Write([]byte(message))
 	checkError(err)
-
 	err = w.Close()
 	checkError(err)
 
@@ -102,3 +103,18 @@ func checkError(err error) {
 		log.Panic(err)
 	}
 }
+
+/*
+
+Refs,
+
+- https://github.com/suntong/lang/blob/master/lang/Go/src/net/email/ParseAddress.go
+  for how to specify `mesgTo`
+
+- https://github.com/suntong/lang/blob/master/lang/Go/src/sys/VarOverride.go
+  for how to run/test this without modifying the code (for e.g.,
+  to use your own email address and smtp passwerod for the testing). I.e.,
+
+  go run -ldflags="-X main.smtpUser=me@myorg.com -X main.smtpPass=mysecret -X main.smtpServer=smtp.myorg.com:465 -X main.mesgTo=me2@myorg.com" sendMail-SSL9.go
+
+*/
