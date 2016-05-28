@@ -17,7 +17,7 @@ var app = &cli.Command{
 	Argv: func() interface{} { return new(gogoT) },
 	Fn:   gogo,
 
-	NeedArgs: true,
+	NumArg: cli.ExactN(1),
 }
 
 type gogoT struct {
