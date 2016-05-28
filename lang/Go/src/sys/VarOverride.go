@@ -64,4 +64,13 @@ However,
 The format is importpath.name string, so it's possible to set the value of
 any string anywhere in the Go program, not just in main.
 
+NB, haven't found a way to specify values with space yet.
+I.e., while `go run -ldflags="-X main.name=Fred" VarOverride.go` works,
+the following don't:
+
+    go run -ldflags="-X main.name='John Doe'" VarOverride.go
+    go run -ldflags="-X main.name='John\ Doe'" VarOverride.go
+    go run -ldflags="-X main.name=John\ Doe" VarOverride.go
+    go run -ldflags="-X main.name=\"John Doe\"" VarOverride.go
+
 */
