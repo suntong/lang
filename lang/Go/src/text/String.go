@@ -216,7 +216,13 @@ func main() {
 	fmt.Println(strings.ToUpper("Gopher"))
 	// GOPHER
 
-	//////
+	////// TrimSpace
+	fmt.Println("\nTrimSpace returns a slice of the string s, with all leading and trailing white space removed, as defined by Unicode.")
+
+	fmt.Println(strings.TrimSpace(" \t\n a lone gopher \n\t\r\n"))
+	// a lone gopher
+
+	////// Trim
 	fmt.Println("\nTrim returns a slice of the string s with all leading and trailing Unicode code points contained in cutset removed.")
 
 	fmt.Printf("[%q]\n", strings.Trim(" !!! Achtung !!! ", "! "))
@@ -225,26 +231,22 @@ func main() {
 	// TrimPrefix returns s without the provided leading prefix string. If s doesn't start with prefix, s is returned unchanged.
 
 	{
-		// var s = "Goodbye,, world!"
-		// s = strings.TrimPrefix(s, "Goodbye,")
-		// s = strings.TrimPrefix(s, "Howdy,")
-		// fmt.Print("Hello" + s)
+		var s = "Goodbye,, world!"
+		s = strings.TrimPrefix(s, "Goodbye,")
+		s = strings.TrimPrefix(s, "Howdy,")
+		fmt.Print("Hello" + s)
+		fmt.Println()
 		// Hello, world!
 	}
-
-	//////
-	fmt.Println("\nTrimSpace returns a slice of the string s, with all leading and trailing white space removed, as defined by Unicode.")
-
-	fmt.Println(strings.TrimSpace(" \t\n a lone gopher \n\t\r\n"))
-	// a lone gopher
 
 	// TrimSuffix returns s without the provided trailing suffix string. If s doesn't end with suffix, s is returned unchanged.
 
 	{
-		// var s = "Hello, goodbye, etc!"
-		// s = strings.TrimSuffix(s, "goodbye, etc!")
-		// s = strings.TrimSuffix(s, "planet")
-		// fmt.Print(s, "world!")
+		var s = "Hello, goodbye, etc!"
+		s = strings.TrimSuffix(s, "goodbye, etc!")
+		s = strings.TrimSuffix(s, "planet")
+		fmt.Print(s, "world!")
+		fmt.Println()
 		// Hello, world!
 	}
 
