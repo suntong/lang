@@ -301,3 +301,89 @@
     
     $ EDITOR=jed go run 022-custom-editor.go
     msg: from Custom Editor
+
+## [027-global-option.go](027-global-option.go)
+
+```sh
+$ 027-global-option.sh
++ cat
++ echo ===run root command
++ go run 027-global-option.go -h
+===run root command
+application
+
+Options:
+
+  -h, --help              display help information
+  -c, --config[=1.json]   config
+  -H, --host[=$HOST]      host addr
+  -p, --port              listening port
+
+Commands:
+  sub   subcommand
+
++ echo =case 1: read from file
++ go run 027-global-option.go
+=case 1: read from file
+root
+{"Help":false,"Host":"127.0.0.1","Port":8080}{"Help":false,"Host":"127.0.0.1","Port":8080}
+
++ echo =case 2: read from ENV variables
++ HOST=10.0.0.1
++ go run 027-global-option.go
+=case 2: read from ENV variables
+root
+{"Help":false,"Host":"10.0.0.1","Port":8080}{"Help":false,"Host":"10.0.0.1","Port":8080}
+
++ echo =case 3: read from command line
+=case 3: read from command line
++ HOST=10.0.0.1
++ go run 027-global-option.go -H 168.0.0.1
+root
+{"Help":false,"Host":"168.0.0.1","Port":8080}{"Help":false,"Host":"168.0.0.1","Port":8080}
+
++ echo ===run sub command
++ go run 027-global-option.go sub -h
+===run sub command
+subcommand
+
+Options:
+
+  -h, --help              display help information
+  -c, --config[=1.json]   config
+  -H, --host[=$HOST]      host addr
+  -p, --port              listening port
+  -w                      world is a sub flag
+
++ echo =case 1: read from file
++ go run 027-global-option.go sub
+=case 1: read from file
+{"Help":false,"Host":"127.0.0.1","Port":8080}{"World":""}
+sub
+{"Help":false,"Host":"127.0.0.1","Port":8080}{"World":""}
+
++ echo =case 2: read from ENV variables
++ HOST=10.0.0.1
+=case 2: read from ENV variables
++ go run 027-global-option.go sub
+{"Help":false,"Host":"10.0.0.1","Port":8080}{"World":""}
+sub
+{"Help":false,"Host":"10.0.0.1","Port":8080}{"World":""}
+
++ echo =case 3: read from command line
++ HOST=10.0.0.1
++ go run 027-global-option.go sub -H 168.0.0.1
+=case 3: read from command line
+{"Help":false,"Host":"168.0.0.1","Port":8080}{"World":""}
+sub
+{"Help":false,"Host":"168.0.0.1","Port":8080}{"World":""}
+
++ HOST=10.0.0.1
++ go run 027-global-option.go sub -H 168.0.0.2 -w something
+{"Help":false,"Host":"168.0.0.2","Port":8080}{"World":"something"}
+sub
+{"Help":false,"Host":"168.0.0.2","Port":8080}{"World":"something"}
+
++ rm 1.json
+
+```

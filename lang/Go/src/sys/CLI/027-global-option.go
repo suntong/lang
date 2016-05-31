@@ -35,6 +35,7 @@ var root = &cli.Command{
 		fmt.Println("root")
 		ctx.JSON(ctx.RootArgv())
 		ctx.JSON(ctx.Argv())
+		fmt.Println()
 		return nil
 	},
 }
@@ -61,6 +62,7 @@ var sub = &cli.Command{
 		fmt.Println("sub")
 		ctx.JSON(parentArgv)
 		ctx.JSON(argv)
+		fmt.Println()
 		return nil
 	},
 }
