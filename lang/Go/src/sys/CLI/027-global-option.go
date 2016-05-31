@@ -11,6 +11,7 @@ func main() {
 	if err := cli.Root(root, cli.Tree(sub)).Run(os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
+	fmt.Println("")
 }
 
 // root command
@@ -31,6 +32,7 @@ var root = &cli.Command{
 		return t
 	},
 	Fn: func(ctx *cli.Context) error {
+		fmt.Println("root")
 		ctx.JSON(ctx.RootArgv())
 		ctx.JSON(ctx.Argv())
 		return nil
@@ -56,6 +58,7 @@ var sub = &cli.Command{
 		if err := ctx.GetArgvList(argv, parentArgv); err != nil {
 			return err
 		}
+		fmt.Println("sub")
 		ctx.JSON(parentArgv)
 		ctx.JSON(argv)
 		return nil
