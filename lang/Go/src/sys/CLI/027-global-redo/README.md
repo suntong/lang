@@ -64,15 +64,6 @@ $ redo build i386
   [i386]
 
 
-$ HOST=10.0.0.1
-
-$ redo build i386
-[build]:
-  {"Help":false,"Host":"127.0.0.1","Port":8080}
-  {"Dir":"./","Suffix":".go,.c,.s","Out":""}
-  [i386]
-
-
 $ HOST=10.0.0.1 redo build i386
 [build]:
   {"Help":false,"Host":"10.0.0.1","Port":8080}
@@ -121,13 +112,6 @@ $ HOST=10.0.0.1 redo install -H 168.0.0.2 pkg{1,2,3}
 [install]:
   {"Help":false,"Host":"168.0.0.2","Port":8080}
   {"Dir":"./","Suffix":".go,.c,.s","Out":""}
-  [pkg1 pkg2 pkg3]
-
-
-$ HOST=10.0.0.1 redo install -H 168.0.0.2 --dir /tmp pkg{1,2,3}
-[install]:
-  {"Help":false,"Host":"168.0.0.2","Port":8080}
-  {"Dir":"/tmp","Suffix":".go,.c,.s","Out":""}
   [pkg1 pkg2 pkg3]
 
 
