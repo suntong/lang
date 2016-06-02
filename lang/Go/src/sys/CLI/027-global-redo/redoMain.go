@@ -17,7 +17,10 @@ func main() {
 	cli.SetUsageStyle(cli.ManualStyle) // up-down, for left-right, use NormalStyle
 	//NOTE: You can set any writer implements io.Writer
 	// default writer is os.Stdout
-	if err := cli.Root(root, cli.Tree(buildCmd)).Run(os.Args[1:]); err != nil {
+	if err := cli.Root(root,
+		cli.Tree(buildCmd),
+		cli.Tree(installCmd),
+		cli.Tree(publishCmd)).Run(os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
 	fmt.Println("")
