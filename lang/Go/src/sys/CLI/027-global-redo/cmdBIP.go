@@ -7,29 +7,34 @@
 package main
 
 import (
+	"encoding/json"
+
 	"github.com/mkideal/cli"
 )
 
 func build(ctx *cli.Context) error {
-	ctx.String("%s:", ctx.Path())
-	ctx.JSON(ctx.Argv())
-	ctx.String("[build]: %v\n", ctx.Args())
-
+	rootArgv := ctx.RootArgv().(*rootT)
+	argv := ctx.Argv().(*buildT)
+	jR, _ := json.Marshal(*rootArgv)
+	jC, _ := json.Marshal(*argv)
+	ctx.String("[build]:\n  %v\n  %v\n  %v\n", string(jR), string(jC), ctx.Args())
 	return nil
 }
 
 func install(ctx *cli.Context) error {
-	ctx.String("%s:", ctx.Path())
-	ctx.JSON(ctx.Argv())
-	ctx.String("[install]: %v\n", ctx.Args())
-
+	rootArgv := ctx.RootArgv().(*rootT)
+	argv := ctx.Argv().(*buildT)
+	jR, _ := json.Marshal(*rootArgv)
+	jC, _ := json.Marshal(*argv)
+	ctx.String("[install]:\n  %v\n  %v\n  %v\n", string(jR), string(jC), ctx.Args())
 	return nil
 }
 
 func publish(ctx *cli.Context) error {
-	ctx.String("%s:", ctx.Path())
-	ctx.JSON(ctx.Argv())
-	ctx.String("[publish]: %v\n", ctx.Args())
-
+	rootArgv := ctx.RootArgv().(*rootT)
+	argv := ctx.Argv().(*buildT)
+	jR, _ := json.Marshal(*rootArgv)
+	jC, _ := json.Marshal(*argv)
+	ctx.String("[publish]:\n  %v\n  %v\n  %v\n", string(jR), string(jC), ctx.Args())
 	return nil
 }
