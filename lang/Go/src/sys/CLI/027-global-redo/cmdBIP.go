@@ -23,7 +23,7 @@ func build(ctx *cli.Context) error {
 
 func install(ctx *cli.Context) error {
 	rootArgv := ctx.RootArgv().(*rootT)
-	argv := ctx.Argv().(*buildT)
+	argv := ctx.Argv().(*installT)
 	jR, _ := json.Marshal(*rootArgv)
 	jC, _ := json.Marshal(*argv)
 	ctx.String("[install]:\n  %v\n  %v\n  %v\n", string(jR), string(jC), ctx.Args())
@@ -32,7 +32,7 @@ func install(ctx *cli.Context) error {
 
 func publish(ctx *cli.Context) error {
 	rootArgv := ctx.RootArgv().(*rootT)
-	argv := ctx.Argv().(*buildT)
+	argv := ctx.Argv().(*publishT)
 	jR, _ := json.Marshal(*rootArgv)
 	jC, _ := json.Marshal(*argv)
 	ctx.String("[publish]:\n  %v\n  %v\n  %v\n", string(jR), string(jC), ctx.Args())
