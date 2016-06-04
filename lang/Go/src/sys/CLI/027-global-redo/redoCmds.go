@@ -17,7 +17,7 @@ type rootT struct {
 	cli.Helper
 	Self *rootT `cli:"c,config"usage:"config file" json:"-" parser:"jsonfile" dft:"redo.json"`
 	Host string `cli:"H,host"usage:"host address" dft:"$HOST"`
-	Port int    `cli:"p,port"usage:"listening port" dft:80`
+	Port int    `cli:"p,port"usage:"listening port" dft:"80"`
 }
 
 var root = &cli.Command{
@@ -30,6 +30,19 @@ var root = &cli.Command{
 
 	NumArg: cli.ExactN(1),
 }
+
+// func main() {
+// 	cli.SetUsageStyle(cli.ManualStyle) // up-down, for left-right, use NormalStyle
+// 	//NOTE: You can set any writer implements io.Writer
+// 	// default writer is os.Stdout
+// 	if err := cli.Root(root,
+// 		cli.Tree(buildCmd),
+// 		cli.Tree(installCmd),
+// 		cli.Tree(publishCmd)).Run(os.Args[1:]); err != nil {
+// 		fmt.Fprintln(os.Stderr, err)
+// 	}
+// 	fmt.Println("")
+// }
 
 // func redo(ctx *cli.Context) error {
 // 	ctx.JSON(ctx.RootArgv())
@@ -60,10 +73,9 @@ var buildCmd = &cli.Command{
 }
 
 // func build(ctx *cli.Context) error {
-// 	ctx.JSON(ctx.RootArgv())
-// 	ctx.JSON(ctx.Argv())
-// 	fmt.Println()
-
+// 	rootArgv := ctx.RootArgv().(*rootT)
+// 	argv := ctx.Argv().(*buildT)
+// 	fmt.Printf("[build]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
 // 	return nil
 // }
 
@@ -88,10 +100,9 @@ var installCmd = &cli.Command{
 }
 
 // func install(ctx *cli.Context) error {
-// 	ctx.JSON(ctx.RootArgv())
-// 	ctx.JSON(ctx.Argv())
-// 	fmt.Println()
-
+// 	rootArgv := ctx.RootArgv().(*rootT)
+// 	argv := ctx.Argv().(*installT)
+// 	fmt.Printf("[install]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
 // 	return nil
 // }
 
@@ -113,9 +124,8 @@ var publishCmd = &cli.Command{
 }
 
 // func publish(ctx *cli.Context) error {
-// 	ctx.JSON(ctx.RootArgv())
-// 	ctx.JSON(ctx.Argv())
-// 	fmt.Println()
-
+// 	rootArgv := ctx.RootArgv().(*rootT)
+// 	argv := ctx.Argv().(*publishT)
+// 	fmt.Printf("[publish]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
 // 	return nil
 // }
