@@ -1,3 +1,5 @@
+# 2016-05-31
+
 ## [001-hello.go](001-hello.go)
 
     $ go run 001-hello.go
@@ -386,4 +388,29 @@ sub
 
 + rm 1.json
 
+```
+
+# 2016-06-05
+
+After [issues#8](https://github.com/mkideal/cli/issues/8) is fixed.
+
+## [014-time-and-duration.go](014-time-and-duration.go)
+
+```sh
+$ go run 014-time-and-duration.go -t '2016-01-02 03:04:05' -d=10ms
+time=2016-01-02 03:04:05 +0000 UTC, duration=10ms
+```
+
+## [015-file.go](015-file.go)
+
+```sh
+$ echo hello | go run 015-file.go -f
+hello
+
+echo hello > /tmp/test.txt
+
+$ go run 015-file.go -f /tmp/test.txt
+hello
+
+rm /tmp/test.txt
 ```
