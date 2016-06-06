@@ -110,7 +110,7 @@ var installCmd = &cli.Command{
 // publish
 
 type publishT struct {
-	Dir    string `cli:"dir" usage:"source code root dir" dft:"./"`
+	Dir    string `cli:"*d,dir" usage:"publish dir"`
 	Suffix string `cli:"suffix" usage:"source file suffix" dft:".go,.c,.s"`
 	Out    string `cli:"o,out" usage:"output filename"`
 	List   bool   `cli:"l,list" usage:"list all sub commands"`
@@ -121,6 +121,8 @@ var publishCmd = &cli.Command{
 	Desc: "Publish the network application",
 	Argv: func() interface{} { return new(publishT) },
 	Fn:   publish,
+
+	NumOption: cli.AtLeast(1),
 }
 
 // func publish(ctx *cli.Context) error {
