@@ -414,3 +414,41 @@ hello
 
 rm /tmp/test.txt
 ```
+
+# 2016-06-09
+
+## [028-reader.go](028-reader.go)
+
+```sh
+$ echo hello | go run 028-reader.go -r
+read from file(or stdin): hello
+
+reade from reader: string reader
+
+$ echo hello A B C > /tmp/test.txt
+
+$ go run 028-reader.go -r /tmp/test.txt
+read from file(or stdin): hello A B C
+
+reade from reader: string reader
+```
+
+
+## [029-writer.go](029-writer.go)
+
+```sh
+$ go run 029-writer.go -w
+hello,writer
+writes 13 byte(s) to file or stdout
+writes 18 bytes to bytes.Writer: hello,bytes.Writer
+
+$ go run 029-writer.go -w /tmp/test.txt
+writes 13 byte(s) to file or stdout
+writes 18 bytes to bytes.Writer: hello,bytes.Writer
+
+$ cat /tmp/test.txt
+hello,writer
+
+rm /tmp/test.txt
+```
+
