@@ -425,14 +425,18 @@ After [issues#19](https://github.com/mkideal/cli/issues/19) is fixed.
 $ echo hello | go run 028-reader.go -r
 read from file(or stdin): hello
 
+filename: /dev/stdin, isStdin=true
 reade from reader: string reader
+filename: , isStdin=false
 
 $ echo hello A B C > /tmp/test.txt
 
 $ go run 028-reader.go -r /tmp/test.txt
 read from file(or stdin): hello A B C
 
+filename: /tmp/test.txt, isStdin=false
 reade from reader: string reader
+filename: , isStdin=false
 ```
 
 
@@ -442,11 +446,15 @@ reade from reader: string reader
 $ go run 029-writer.go -w
 hello,writer
 writes 13 byte(s) to file or stdout
+filename: /dev/stdout, isStdout: true
 writes 18 bytes to bytes.Writer: hello,bytes.Writer
+filename: , isStdout: false
 
 $ go run 029-writer.go -w /tmp/test.txt
 writes 13 byte(s) to file or stdout
+filename: /tmp/test.txt, isStdout: false
 writes 18 bytes to bytes.Writer: hello,bytes.Writer
+filename: , isStdout: false
 
 $ cat /tmp/test.txt
 hello,writer
