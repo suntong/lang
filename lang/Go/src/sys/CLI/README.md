@@ -417,6 +417,8 @@ rm /tmp/test.txt
 
 # 2016-06-09
 
+After [issues#19](https://github.com/mkideal/cli/issues/19) is fixed.
+
 ## [028-reader.go](028-reader.go)
 
 ```sh
