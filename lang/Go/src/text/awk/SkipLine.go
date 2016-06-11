@@ -21,13 +21,15 @@ func main() {
 				check((s.NR-1)*3+i, s.F(i).Int())
 			}
 		}
+		println(".", s.NR, s.F(0).String())
 
 		// Skip till ^7.
 		for line, err := s.GetLine(nil); !line.Match("^7"); {
 			if err != nil {
 				panic(err)
 			}
-			print(".")
+			println(">", s.NR, line.String())
+			s.Next()
 		}
 	})
 
