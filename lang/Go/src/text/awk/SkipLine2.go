@@ -24,12 +24,13 @@ func main() {
 		println(".", s.NR, s.F(0).String())
 
 		// Skip till ^7.
-		for line, err := s.GetLine(nil); !line.Match("^7"); {
+		for !s.F(0).Match("^7") {
+			v, err := s.GetLine(nil)
 			if err != nil {
-				panic(err)
+				return // panic(err)
 			}
-			println(">", s.NR, line.String())
-			s.Next()
+			s.SetF(0, v)
+			println(">", s.NR, v.String())
 		}
 	})
 
@@ -49,9 +50,11 @@ func check(a, b int) {
 
 /*
 
-$ seq 12 | xargs -n 3  | go run SkipLine.go
-.
-.
+$ seq 12 | xargs -n 3  | go run SkipLine2.go
+. 1 1 2 3
+> 2 4 5 6
+> 3 7 8 9
+. 4 10 11 12
 Passed.
 
 */
