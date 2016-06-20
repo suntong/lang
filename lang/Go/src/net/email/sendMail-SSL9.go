@@ -9,12 +9,14 @@ package main
 
 import (
 	"crypto/tls"
+	"os"
 	//"fmt"
 	"log"
 	"net"
 	"net/mail"
 	"net/smtp"
-	//"strings"
+	"strconv"
+	"strings"
 )
 
 var (
@@ -25,10 +27,20 @@ var (
 )
 
 func main() {
+	if len(os.Args) <= 1 {
+		println("Please provide one command line argument for string repeat (in 6k)")
+		os.Exit(0)
+	}
+
+	r, _ := strconv.Atoi(os.Args[1])
+	r *= 1024
 
 	SendEmail(mesgTo,
-		"This is the email subject",
-		"<html><body><h1>Hello World!</h1><p>This is an example body.<p>With two lines.</body></html>")
+		"Email subject "+os.Args[1],
+		"<html><body><h1>Hello World!</h1>"+
+			"<p>This is an example body.<p>With two lines.<p>\n"+
+			strings.Repeat(`&nbsp;`, r)+
+			"\n.\n</body></html>")
 
 }
 
