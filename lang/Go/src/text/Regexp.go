@@ -12,6 +12,8 @@ import (
 )
 
 func main() {
+	Summary()
+
 	// Using the Go Regexp Package
 	ugrp_Basic_Matching()
 	ugrp_Submatches()
@@ -26,6 +28,51 @@ func main() {
 
 	//
 	replaceSome()
+}
+
+func Summary() {
+	// -- ReplaceAllString
+	// https://golang.org/pkg/regexp/#Regexp.ReplaceAll
+	{
+		re := regexp.MustCompile("a(x*)b")
+		fmt.Println(re.ReplaceAllString("-ab-axxb-", "T"))
+		fmt.Println(re.ReplaceAllString("-ab-axxb-", "$1"))
+		fmt.Println(re.ReplaceAllString("-ab-axxb-", "$1W"))   // ! NOT working !!!
+		fmt.Println(re.ReplaceAllString("-ab-axxb-", "${1}W")) // This works!
+	}
+	// -T-T-
+	// --xx-
+	// ---
+	// -W-xxW-
+
+	// -- ReplaceAllLiteralString
+	// https://golang.org/pkg/regexp/#Regexp.ReplaceAllLiteralString
+	// The replacement is substituted directly, without using $ Expand
+	{
+		re := regexp.MustCompile("a(x*)b")
+		fmt.Println(re.ReplaceAllLiteralString("-ab-axxb-", "T"))
+		fmt.Println(re.ReplaceAllLiteralString("-ab-axxb-", "$1"))
+		fmt.Println(re.ReplaceAllLiteralString("-ab-axxb-", "${1}"))
+	}
+	// -T-T-
+	// -$1-$1-
+	// -${1}-${1}-
+
+	// -- "(?i)" Case insensitive string match/replace
+	fmt.Println(regexp.MustCompile(`(?i)html|uml`).
+		ReplaceAllLiteralString("html HTML Html aa uml bb Uml", "XML"))
+	// XML XML XML aa XML bb XML
+	fmt.Println(regexp.MustCompile(`(?i)(this|th[eo]se)`).
+		ReplaceAllString("This and these are for THOSE people", "<b>${1}</b>"))
+	// <b>This</b> and <b>these</b> are for <b>THOSE</b> people
+
+	// -- Just to check if a RE can be found
+	{
+		re := regexp.MustCompile("ab?")
+		fmt.Println(re.FindStringIndex("foo") == nil)
+		// true
+	}
+	fmt.Println()
 }
 
 ////////////////////////////////////////////////////////////////////////////
