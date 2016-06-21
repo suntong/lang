@@ -1,0 +1,19 @@
+<bookstore xmlns="urn:xmlns:25hoursaday-com:bookstore">
+  <book genre="autobiography">
+    <title>The Autobiography of Benjamin Franklin</title>
+    <author>
+      <first-name>Benjamin</first-name>
+      <last-name>Franklin</last-name>
+    </author>
+    <price>8.99</price>
+  </book>
+  <bk:book genre="novel" bk:genre="fiction" 
+xmlns:bk="urn:xmlns:25hoursaday-com:bookstore">
+    <bk:title>The Confidence Man</bk:title>
+    <bk:author>
+      <bk:first-name>Herman</bk:first-name>
+      <bk:last-name>Melville</bk:last-name>
+    </bk:author>
+    <bk:price>11.99</bk:price>
+  </bk:book>
+</bookstore>
