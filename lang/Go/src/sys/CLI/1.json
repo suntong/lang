@@ -1,0 +1,4 @@
+{
+        "host": "regexp\\s+test",
+        "port": 8080
+}

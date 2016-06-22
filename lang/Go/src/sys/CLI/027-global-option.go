@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"regexp"
 
 	"github.com/mkideal/cli"
 )
@@ -36,6 +37,11 @@ var root = &cli.Command{
 		ctx.JSON(ctx.RootArgv())
 		ctx.JSON(ctx.Argv())
 		fmt.Println()
+
+		// https://play.golang.org/p/GHg_i0vM4O
+		re := regexp.MustCompile(ctx.RootArgv().(*rootT).Host)
+		fmt.Println(re.FindStringIndex("A regexp \t test string"))
+
 		return nil
 	},
 }
