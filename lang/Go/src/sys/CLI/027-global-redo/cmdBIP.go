@@ -18,6 +18,8 @@ func build(ctx *cli.Context) error {
 	jR, _ := json.Marshal(*rootArgv)
 	jC, _ := json.Marshal(*argv)
 	ctx.String("[build]:\n  %v\n  %v\n  %v\n", string(jR), string(jC), ctx.Args())
+	cli.ReadJSONFromFile("redo2.json", rootArgv)
+	ctx.String("[%s]:\n  %+v\n", ctx.Path(), *rootArgv)
 	return nil
 }
 
