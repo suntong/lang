@@ -4,6 +4,7 @@
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-e','--example', nargs='?', const=1, type=int)
+parser.add_argument('-d','--default', default=1, type=int)
 args = parser.parse_args()
 print(args)
 
@@ -38,3 +39,33 @@ then
 Namespace(example=1)
 
 """
+
+
+
+"""
+
+Adding the --default
+
+With the `nargs='?',`
+
+    $ Cli_argparse_default.py
+    Namespace(default=1, example=None)
+
+    $ Cli_argparse_default.py -d
+    Namespace(default=None, example=None)
+
+Without the `nargs='?',`
+
+    $ Cli_argparse_default.py -d
+    usage: Cli_argparse_default.py [-h] [-e [EXAMPLE]] [-d DEFAULT]
+    Cli_argparse_default.py: error: argument -d/--default: expected one argument
+
+    $ Cli_argparse_default.py
+    Namespace(default=1, example=None)
+
+    $ Cli_argparse_default.py -d 5 
+    Namespace(default=5, example=None)
+
+"""
+
+
