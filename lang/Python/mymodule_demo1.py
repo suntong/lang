@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # http://www.ibiblio.org/g2swap/byteofpython/read/making-modules.html
 # Filename: mymodule_demo.py
 
@@ -10,7 +10,7 @@ import mymodule
 
 # use the same dotted notation to access members of the module. 
 mymodule.sayhi()
-print 'Version', mymodule.version
+print('Version', mymodule.version)
 
 
 """

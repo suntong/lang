@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # http://www.ibiblio.org/g2swap/byteofpython/read/making-modules.html
 # Filename: mymodule_demo2.py
 
@@ -9,7 +9,7 @@ from mymodule import sayhi, version
 # from mymodule import *
 
 sayhi()
-print 'Version', version
+print('Version', version)
 
 """
 
