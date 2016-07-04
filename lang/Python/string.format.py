@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 """
 The string .format() method
@@ -28,7 +28,7 @@ print("The {structure} sank {0} times in {1} years.".
 
 # to include actual "{" and "}" characters in the result, double them
 print("There are {0} members in set {{a}}.".format(15))
-print
+print("")
 
 
 # Formatted Output
@@ -42,7 +42,7 @@ print("various precions: {0:6.2f} or {0:6.3f}".format(1.4148))
 
 # keyword parameters
 print("Art: {a:5d},  Price: {p:8.2f}".format(a=453, p=59.058))
-print
+print("")
 
 # justify data with the format method: "<" (left justify) or ">" (right justify)
 print("{0:<20s} {1:6.2f}".format('Spam & Eggs:', 6.99))
@@ -53,14 +53,14 @@ print("{0:<20} {1:6.2f}".format('Spam & Ham:', 7.99))
 print("{0:>20} {1:6.2f}".format('Spam & Ham:', 7.99))
 # centered 
 print("{0:^20} {1:6.2f}".format('Spam & Ham:', 7.99))
-print
+print("")
 
 # padding 
 x = 378
 print("The value is {:06d}".format(x))
 x = -378
 print("The value is {:06d}".format(x))
-print
+print("")
 
 # thousands separator
 x = 5897653423
@@ -68,14 +68,14 @@ print("The value is {:,}".format(x))
 print("The value is {0:6,d}".format(x))
 x = 5897653423.89676
 print("The value is {0:12,.3f}".format(x))
-print
+print("")
 
 # Using dictionaries in "format"
 print("The capital of {0:s} is {1:s}".format("Ontario","Toronto"))
 print("The capital of {province} is {capital}".format(province="Ontario",capital="Toronto"))
 k = {"province":"Ontario","capital":"Toronto"}
 print("The capital of {province} is {capital}".format(**k))
-print
+print("")
 
 capital_country = {"United States" : "Washington", 
                    "US" : "Washington", 
@@ -91,13 +91,13 @@ capital_country = {"United States" : "Washington",
 print("Countries and their capitals:")
 for c in capital_country:
     print("{country}: {capital}".format(country=c, capital=capital_country[c]))
-print
+print("")
 
 # using the dictionary directly
 for c in capital_country:
     format_string = c + ": {" + c + "}" 
     print(format_string.format(**capital_country))
-print
+print("")
 
 #print()
 

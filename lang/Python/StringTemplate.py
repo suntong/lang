@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from string import Template
 #open the file
@@ -12,7 +12,7 @@ list = ['first', 'second', 'third']
 d={ 'title':title, 'subtitle':subtitle, 'list':'\n'.join(list) }
 #do the substitution
 result = src.substitute(d)
-print result
+print(result)
 
 """
 
