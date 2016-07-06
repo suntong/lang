@@ -28,6 +28,8 @@ print(s)
 s1 = s
 s2 = s
 
+print(s1.index.to_series().str.join(' ') + ' ' + s1.astype(str))
+
 s2.index = s2.index.to_series().str.join(' ')
 print(s2)
 
@@ -48,3 +50,21 @@ df = df.set_index(['A','B','C'])
 print(df.head())
 print(p)
 print(e)
+
+print(p.index.to_series().str.join(' ') )
+
+# X print(p.index.to_series().str.join(' ') + ' ' + p.astype(str))
+# cannot join with no level specified and no overlapping names
+
+x=p.reset_index()
+print(x)
+
+#print(x.['A'] + ' ' +x['B'])
+# SyntaxError: invalid syntax
+#print(x.[A] + ' ' +x[B])
+# SyntaxError: invalid syntax
+
+print(x.A + ' - ' + x.B)
+
+x.B = x.A + ' - ' + x.B
+print(x)
