@@ -13,6 +13,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 )
@@ -23,7 +24,22 @@ func main() {
 	// scanner gives us a convenient `Scan` method that
 	// advances the scanner to the next token; which is
 	// the next line in the default scanner.
-	scanner := bufio.NewScanner(os.Stdin)
+	//
+	//scanner := bufio.NewScanner(os.Stdin)
+
+	// https://www.rosettacode.org/wiki/Read_a_file_line_by_line
+	// Open an input file, exit on error.
+	inputFile, err := os.Open("line-filters.go")
+	if err != nil {
+		log.Fatal("Error opening input file:", err)
+	}
+
+	// Closes the file when we leave the scope of the current function,
+	// this makes sure we never forget to close the file if the
+	// function can exit in multiple places.
+	defer inputFile.Close()
+
+	scanner := bufio.NewScanner(inputFile)
 
 	for scanner.Scan() {
 		// `Text` returns the current token, here the next line,
@@ -43,6 +59,8 @@ func main() {
 }
 
 /*
+
+when scanner := bufio.NewScanner(os.Stdin)
 
 $ echo -e 'hello\nfilter' | go run line-filters.go
 HELLO
