@@ -5,8 +5,15 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-e','--example', nargs='?', const=1, type=int)
 parser.add_argument('-d','--default', default=1, type=int)
+parser.add_argument("--myArg", nargs='?', default=argparse.SUPPRESS)
+# http://stackoverflow.com/questions/30487767/check-if-argparse-optional-argument-is-set-or-not
 args = parser.parse_args()
 print(args)
+
+#if args.myArg is not None:
+if hasattr(args, 'myArg'):
+    print ("myArg has been set (value is %s)" % args.myArg)
+
 
 """
 
@@ -68,4 +75,31 @@ Without the `nargs='?',`
 
 """
 
+"""
 
+With the
+  parser.add_argument("--myArg", nargs='?')
+
+$ Cli_argparse_default.py
+Namespace(default=1, example=None, myArg=None)
+
+$ Cli_argparse_default.py --myArg
+Namespace(default=1, example=None, myArg=None)
+
+I.e., there is no way to check whether --myArg is specified or not!
+
+With the
+  parser.add_argument("--myArg", nargs='?', default=argparse.SUPPRESS)
+
+$ Cli_argparse_default.py
+Namespace(default=1, example=None)
+
+$ Cli_argparse_default.py --myArg
+Namespace(default=1, example=None, myArg=None)
+myArg has been set (value is None)
+
+$ Cli_argparse_default.py --myArg=abc
+Namespace(default=1, example=None, myArg='abc')
+myArg has been set (value is abc)
+
+"""
