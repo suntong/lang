@@ -6,11 +6,15 @@
 
 package main
 
-import _ "github.com/denisenkom/go-mssqldb"
-import "database/sql"
-import "log"
-import "fmt"
-import "flag"
+import (
+	"database/sql"
+	"flag"
+	"fmt"
+	"log"
+	"os"
+
+	_ "github.com/denisenkom/go-mssqldb"
+)
 
 var debug = flag.Bool("debug", false, "enable debugging")
 var password = flag.String("password", "", "the database password")
@@ -32,7 +36,22 @@ func main() {
 	if *debug {
 		fmt.Printf(" connString:%s\n", connString)
 	}
+
+	var params map[string]string
+	params = map[string]string{
+		"server":   os.Getenv("HOST"),
+		"user id":  os.Getenv("SQLUSER"),
+		"password": os.Getenv("SQLPASSWORD"),
+		"database": os.Getenv("DATABASE"),
+	}
+	var c string
+	for n, v := range params {
+		c += n + "=" + v + ";"
+	}
+	connString = c
+
 	conn, err := sql.Open("mssql", connString)
+
 	if err != nil {
 		log.Fatal("Open connection failed:", err.Error())
 	}
