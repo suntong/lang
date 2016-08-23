@@ -1,0 +1,37 @@
+# program name, name for the executable
+ProgramName: fi
+
+PackageName: main
+
+Name: fi
+Desc: "File input demo"
+Text: File input demo with mandatory options
+NumOption: cli.AtLeast(1)
+
+Options:
+  - Name: Self
+    Type: '*rootT'
+    Flag: c,config
+    Usage: config file
+    Value: fi.json
+
+  - Name: Name
+    Type: string
+    Flag: '*n,name'
+    Usage: Name (mandatory)
+
+  - Name: Tag
+    Type: string
+    Flag: '*t,tag'
+    Usage: Tag used for record saving (mandatory)
+
+  - Name: ID
+    Type: string
+    Flag: id
+    Usage: ID to use
+
+  - Name: Fi
+    Type: '*clix.Reader'
+    Flag: i,input
+    Usage: 'The source (or stdin if unspecified)'
+
