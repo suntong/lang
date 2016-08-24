@@ -8,9 +8,11 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
+
 	"github.com/mkideal/cli"
 	clix "github.com/mkideal/cli/ext"
-	"os"
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -48,6 +50,15 @@ func fi(ctx *cli.Context) error {
 	ctx.JSON(ctx.RootArgv())
 	ctx.JSON(ctx.Argv())
 	fmt.Println()
+
+	argv := ctx.Argv().(*rootT)
+	data, err := ioutil.ReadAll(argv.Fi)
+	argv.Fi.Close()
+	if err != nil {
+		return err
+	}
+	ctx.String("read from file(or stdin): %s\n", string(data))
+	ctx.String("filename: %s, isStdin=%v\n", argv.Fi.Name(), argv.Fi.IsStdin())
 
 	return nil
 }

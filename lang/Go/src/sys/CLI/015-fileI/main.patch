@@ -1,0 +1,32 @@
+diff --git a/lang/Go/src/sys/CLI/015-fileI/main.go b/lang/Go/src/sys/CLI/015-fileI/main.go
+index f8906a2..6939fb4 100644
+--- a/lang/Go/src/sys/CLI/015-fileI/main.go
++++ b/lang/Go/src/sys/CLI/015-fileI/main.go
+@@ -8,9 +8,11 @@ package main
+ 
+ import (
+ 	"fmt"
++	"io/ioutil"
++	"os"
++
+ 	"github.com/mkideal/cli"
+ 	clix "github.com/mkideal/cli/ext"
+-	"os"
+ )
+ 
+ ////////////////////////////////////////////////////////////////////////////
+@@ -49,5 +51,14 @@ func fi(ctx *cli.Context) error {
+ 	ctx.JSON(ctx.Argv())
+ 	fmt.Println()
+ 
++	argv := ctx.Argv().(*rootT)
++	data, err := ioutil.ReadAll(argv.Fi)
++	argv.Fi.Close()
++	if err != nil {
++		return err
++	}
++	ctx.String("read from file(or stdin): %s\n", string(data))
++	ctx.String("filename: %s, isStdin=%v\n", argv.Fi.Name(), argv.Fi.IsStdin())
++
+ 	return nil
+ }
