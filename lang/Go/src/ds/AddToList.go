@@ -91,6 +91,46 @@ func stringSliceTest() {
 	a = append(a, b...)
 	printStringSlice("a", a)
 
+	a = appendString(a, "some", "more", "string")
+	printStringSlice("a", a)
+
+}
+
+/*
+
+a len=0 cap=0 []
+a len=1 cap=1 [0]
+a len=2 cap=2 [0 1]
+a len=5 cap=6 [0 1 2 3 4]
+b len=5 cap=5 [0 0 0 0 0]
+c len=0 cap=5 []
+c len=5 cap=5 [0 0 0 0 0]
+
+a len=0 cap=0 []
+a len=1 cap=1 [000]
+a len=2 cap=2 [000 111]
+a len=5 cap=5 [000 111 222 333 444]
+
+a[1:3] == [111 222]
+a[:3] == [000 111 222]
+a[2:] == [222 333 444]
+
+b len=2 cap=2 [333 222]
+b len=3 cap=4 [333 222 111]
+a len=8 cap=10 [000 111 222 333 444 333 222 111]
+a len=11 cap=11 [000 111 222 333 444 333 222 111 some more string]
+
+*/
+
+func appendString(x []string, y ...string) []string {
+	var z []string
+	zlen := len(x) + len(y)
+	// var z [zlen]string X: non-constant array bound zlen
+	// expand z to at least zlen
+	z = make([]string, zlen)
+	copy(z, x)
+	copy(z[len(x):], y)
+	return z
 }
 
 func printStringSlice(s string, x []string) {
