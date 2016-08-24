@@ -6,6 +6,7 @@ PackageName: main
 Name: fi
 Desc: "File input demo"
 Text: File input demo with mandatory options
+Self: true
 NumOption: cli.AtLeast(1)
 
 Options:
