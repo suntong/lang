@@ -462,3 +462,18 @@ hello,writer
 rm /tmp/test.txt
 ```
 
+## [030-counter.go](030-counter.go)
+
+```sh
+$ go run 030-counter.go
+v=0
+
+$ go run 030-counter.go -v
+v=1
+
+$ go run 030-counter.go -v -v
+v=2
+
+$ go run 030-counter.go -vvv
+v=3
+```
