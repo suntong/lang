@@ -462,6 +462,10 @@ hello,writer
 rm /tmp/test.txt
 ```
 
+# 2016-09-01
+
+After new feature in [issues#26](https://github.com/mkideal/cli/issues/26) is implemented.
+
 ## [030-counter.go](030-counter.go)
 
 ```sh
