@@ -26,18 +26,26 @@ import (
 )
 
 func main() {
-  test0()
-  test1()
-  test2()
+	test0()
+	test22()
+	test1()
+	test2()
+	test22()
+	test22C()
 }
 
 /*
 
 $ go run PersistentData-GOB.go
-"Pythagoras": {3,4}
-&main.Data{ID:"113131", Payload:[]uint8{0x73, 0x74, 0x75, 0x66, 0x66}, Created:1476543890}
+&main.Data{ID:"226622", Payload:[]uint8{0x66, 0x6f, 0x6f, 0x62, 0x61, 0x72}, Created:1476556831}
+Save it!
+&main.Data{ID:"113131", Payload:[]uint8{0x73, 0x74, 0x75, 0x66, 0x66}, Created:1476556861}
 {123 1.6777216e+07}
 {123 1.6777216e+07}
+&main.Data{ID:"113131", Payload:[]uint8{0x73, 0x74, 0x75, 0x66, 0x66}, Created:1476556861}
+Save it!
+&main.Data{ID:"113131", Payload:[]uint8{0x73, 0x74, 0x75, 0x66, 0x66}, Created:1476556861}
+Save it!
 
 $ rm -v *.gob
 removed 'data.gob'
@@ -92,8 +100,6 @@ having to use a buffer - os.File implements io.Writer/io.Reader -
 here's a naive example:
 
 */
-
-
 
 type Data struct {
 	ID      string
@@ -155,12 +161,12 @@ func test2() {
 	// print the state
 	fmt.Printf("%v\n", state)
 
-	if err := SaveState(state); err != nil {
+	if err := SaveState(persistName, state); err != nil {
 		log.Fatal("SaveState failed:", err)
 	}
 
 	restored := example{} // empty state
-	err := RestoreState(&restored)
+	err := RestoreState(persistName, &restored)
 	if err != nil {
 		log.Fatal("RestoreState failed:", err)
 	}
@@ -171,7 +177,7 @@ func test2() {
 
 const persistName = "persist.gob"
 
-func SaveState(state interface{}) error {
+func SaveState(persistName string, state interface{}) error {
 	// create persistence file
 	f, err := os.Create(persistName)
 	if err != nil {
@@ -187,7 +193,7 @@ func SaveState(state interface{}) error {
 	return nil
 }
 
-func RestoreState(state interface{}) error {
+func RestoreState(persistName string, state interface{}) error {
 	// open persistence file
 	f, err := os.Open(persistName)
 	if err != nil {
@@ -201,4 +207,39 @@ func RestoreState(state interface{}) error {
 		return err
 	}
 	return nil
+}
+
+////////////////////////////////////////////////////////////////////////////
+// Test restore before save
+
+func test22() {
+	data := &Data{}
+	RestoreState("data.gob", &data)
+	// WRONG! data is passed as value at define stage
+	defer SaveState("data.gob", data)
+	fmt.Printf("%#v\nSave it!\n", data)
+	//time.Sleep(5 * time.Second)
+
+	data = &Data{
+		ID:      "226622",
+		Payload: []byte("foobar"),
+		Created: time.Now().Unix(),
+	}
+
+}
+
+func test22C() {
+	data := &Data{}
+	RestoreState("data.gob", &data)
+	// Correct! only pointer passed at define stage, so
+	// correct value can be saved at triggering time
+	defer SaveState("data.gob", &data)
+	fmt.Printf("%#v\nSave it!\n", data)
+	//time.Sleep(5 * time.Second)
+
+	data = &Data{
+		ID:      "226622",
+		Payload: []byte("foobar"),
+		Created: time.Now().Unix(),
+	}
 }
