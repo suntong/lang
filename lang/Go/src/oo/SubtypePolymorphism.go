@@ -55,8 +55,8 @@ func (this *B) str() string {
 
 func main() {
 	b := new(B)
-	b.bstring = "this is a B string"
 	b.A.astring = "this is an A string"
+	b.bstring = "this is a B string"
 
 	b.strange()
 	// Output: my string is "this is an A string"
