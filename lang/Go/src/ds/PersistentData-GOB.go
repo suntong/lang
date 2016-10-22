@@ -32,19 +32,23 @@ func main() {
 	test2()
 	test22()
 	test22C()
+	test22P()
 }
 
 /*
 
 $ go run PersistentData-GOB.go
-&main.Data{ID:"226622", Payload:[]uint8{0x66, 0x6f, 0x6f, 0x62, 0x61, 0x72}, Created:1476556831}
+"Pythagoras": {3,4}
+&main.Data{ID:"707269", Payload:[]uint8{0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65}, Created:1477150078, private:0}
 Save it!
-&main.Data{ID:"113131", Payload:[]uint8{0x73, 0x74, 0x75, 0x66, 0x66}, Created:1476556861}
+&main.Data{ID:"113131", Payload:[]uint8{0x73, 0x74, 0x75, 0x66, 0x66}, Created:1477150126, private:0}
 {123 1.6777216e+07}
 {123 1.6777216e+07}
-&main.Data{ID:"113131", Payload:[]uint8{0x73, 0x74, 0x75, 0x66, 0x66}, Created:1476556861}
+&main.Data{ID:"113131", Payload:[]uint8{0x73, 0x74, 0x75, 0x66, 0x66}, Created:1477150126, private:0}
 Save it!
-&main.Data{ID:"113131", Payload:[]uint8{0x73, 0x74, 0x75, 0x66, 0x66}, Created:1476556861}
+&main.Data{ID:"113131", Payload:[]uint8{0x73, 0x74, 0x75, 0x66, 0x66}, Created:1477150126, private:0}
+Save it!
+&main.Data{ID:"666f6f", Payload:[]uint8{0x66, 0x6f, 0x6f, 0x62, 0x61, 0x72}, Created:1477150126, private:77}
 Save it!
 
 $ rm -v *.gob
@@ -105,6 +109,7 @@ type Data struct {
 	ID      string
 	Payload []byte
 	Created int64
+	private int64
 }
 
 func test1() {
@@ -238,8 +243,30 @@ func test22C() {
 	//time.Sleep(5 * time.Second)
 
 	data = &Data{
-		ID:      "226622",
+		ID:      "666f6f",
 		Payload: []byte("foobar"),
 		Created: time.Now().Unix(),
+	}
+}
+
+func test22P() {
+	data := &Data{
+		ID:      "707269",
+		Payload: []byte("private"),
+		Created: time.Now().Unix(),
+		private: 77,
+	}
+	RestoreState("data.gob", &data)
+	// Correct! only pointer passed at define stage, so
+	// correct value can be saved at triggering time
+	defer SaveState("data.gob", &data)
+	fmt.Printf("%#v\nSave it!\n", data)
+	//time.Sleep(5 * time.Second)
+
+	data = &Data{
+		ID:      "707269",
+		Payload: []byte("private"),
+		Created: time.Now().Unix(),
+		private: 77,
 	}
 }
