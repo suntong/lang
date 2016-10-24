@@ -8,7 +8,8 @@ package main
 
 import (
 	"encoding/gob"
-	"log"
+	"encoding/json"
+	"fmt"
 	"os"
 
 	set "github.com/deckarep/golang-set"
@@ -23,8 +24,37 @@ func main() {
 	requiredClasses.Add("Math")
 	requiredClasses.Add("Biology")
 
-	if err := SaveState(persistName, requiredClasses); err != nil {
-		log.Fatal("SaveState failed:", err)
+	// SaveState failed:gob: type sync.RWMutex has no exported fields
+	// if err := SaveState(persistName, requiredClasses); err != nil {
+	// 	log.Fatal("SaveState failed:", err)
+	// }
+
+	{
+		// Create JSON from the set.
+		// ... Ignore errors.
+		b, _ := json.Marshal(requiredClasses)
+		// Convert bytes to string.
+		s := string(b)
+		fmt.Println(s)
+
+		actual := set.NewSet()
+		json.Unmarshal(b, actual)
+		//fmt.Printf("%#v\n", actual)
+		fmt.Println(actual)
+	}
+
+	X := []interface{}{10, 12, 12, 12, 13}
+	Sx := set.NewSetFromSlice(X)
+	{
+		//fmt.Println(Sx)
+		b, _ := json.Marshal(Sx)
+		s := string(b)
+		fmt.Println(s)
+
+		actual := set.NewSet()
+		json.Unmarshal(b, actual)
+		//fmt.Println(actual)
+		fmt.Printf("%v\n", actual)
 	}
 
 }
