@@ -9,6 +9,14 @@ package main
 
 import "fmt"
 
+// Animal contains all the base fields for animals.
+type Animal struct {
+	Name     string
+	Age      int
+	IsMale   bool
+	IsMammal bool
+}
+
 // Speaker provide a common behavior for all concrete types
 // to follow if they want to be a part of this group. This
 // is a contract for these concrete types to follow.
@@ -16,10 +24,10 @@ type Speaker interface {
 	Speak()
 }
 
-// Dog contains everything a Dog needs.
+// Dog contains everything an Animal is but specific
+// attributes that only a Dog has.
 type Dog struct {
-	Name       string
-	IsMammal   bool
+	Animal
 	PackFactor int
 }
 
@@ -29,14 +37,16 @@ type Dog struct {
 func (d Dog) Speak() {
 	fmt.Println("Woof!",
 		"My name is", d.Name,
+		", aged", d.Age,
 		", it is", d.IsMammal,
-		"I am a mammal with a pack factor of", d.PackFactor)
+		"I am a mammal.\n  it is", d.IsMale,
+		"I am male. I have a a pack factor of", d.PackFactor)
 }
 
-// Cat contains everything a Cat needs.
+// Cat contains everything an Animal is but specific
+// attributes that only a Cat has.
 type Cat struct {
-	Name        string
-	IsMammal    bool
+	Animal
 	ClimbFactor int
 }
 
@@ -46,8 +56,10 @@ type Cat struct {
 func (c Cat) Speak() {
 	fmt.Println("Meow!",
 		"My name is", c.Name,
+		", aged", c.Age,
 		", it is", c.IsMammal,
-		"I am a mammal with a climb factor of", c.ClimbFactor)
+		"I am a mammal.\n  it is", c.IsMale,
+		"I am male. I have a climb factor of", c.ClimbFactor)
 }
 
 func main() {
@@ -58,16 +70,24 @@ func main() {
 		// Create a Dog by initializing its Animal parts
 		// and then its specific Dog attributes.
 		Dog{
-			Name:       "Fido",
-			IsMammal:   true,
+			Animal: Animal{
+				Name:     "Fido",
+				Age:      8,
+				IsMale:   true,
+				IsMammal: true,
+			},
 			PackFactor: 5,
 		},
 
 		// Create a Cat by initializing its Animal parts
 		// and then its specific Cat attributes.
 		Cat{
-			Name:        "Milo",
-			IsMammal:    true,
+			Animal: Animal{
+				Name:     "Milo",
+				Age:      5,
+				IsMale:   false,
+				IsMammal: true,
+			},
 			ClimbFactor: 4,
 		},
 	}
