@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
-// Porgram: CommandLineFlag
-// Purpose: Go command line flags/switches/arguments demo
+// Porgram: HttpClientGetJson.go
+// Purpose: Go Unmarshal JSON from http example
 // Authors: Tong Sun (c) 2016, All rights reserved
 // Credits: https://www.socketloop.com/tutorials/golang-unmarshal-json-from-http-response
 ////////////////////////////////////////////////////////////////////////////
