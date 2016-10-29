@@ -80,7 +80,7 @@ func main() {
 	if errdb != nil {
 		fmt.Println("  Error Exec db: insert table 1 - ", errdb.Error())
 	}
-	_, errdb = condb.Exec("insert into junky (one, two) values (102, 202)")
+	_, errdb = condb.Exec("insert into junky (one, two) values ($1, $2)", 102, 202)
 	if errdb != nil {
 		fmt.Println("  Error Exec db: insert table 2 - ", errdb.Error())
 	}
@@ -117,6 +117,22 @@ func main() {
 		fmt.Println("  Error Query db: processing rows - ", errdb.Error())
 	}
 
+	fmt.Println("  Query our table for first rows we inserted.")
+	stmt, err := condb.Prepare("SELECT two FROM junky WHERE one = $1")
+	if err != nil {
+		panic(err)
+	}
+	defer stmt.Close()
+
+	row := stmt.QueryRow(101)
+	value := 0
+	err = row.Scan(&value)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("    - get %d\n", value)
+
 	fmt.Println("ending app")
 }
 
@@ -129,6 +145,8 @@ starting app
     - one 101 and two 201
     - one 102 and two 202
     - one 103 and two 203
+  Query our table for first rows we inserted.
+    - get 201
 ending app
 
 */
