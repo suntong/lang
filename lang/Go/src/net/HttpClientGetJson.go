@@ -8,6 +8,8 @@
 package main
 
 import (
+	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -24,7 +26,12 @@ func main() {
 
 	fmt.Printf("Get '%s'\n", *url)
 
-	resp, err := http.Get(*url)
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
+	resp, err := client.Get(*url)
+	//resp, err := http.Get(*url)
 
 	defer resp.Body.Close()
 
@@ -33,15 +40,15 @@ func main() {
 	}
 
 	// read json http response
-	jsonDataFromHttp, err := ioutil.ReadAll(resp.Body)
-
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		panic(err)
 	}
+	body = bytes.TrimPrefix(body, []byte("\xef\xbb\xbf"))
 
 	var jsonData interface{}
 
-	err = json.Unmarshal([]byte(jsonDataFromHttp), &jsonData) // here!
+	err = json.Unmarshal(body, &jsonData) // here!
 
 	if err != nil {
 		panic(err)
@@ -57,6 +64,19 @@ $ go run HttpClientGetJson.go
 Get 'https://api.bitfinex.com/v1/ticker/btcusd'
 map[mid:715.165 bid:715.15 ask:715.18 last_price:715.15 timestamp:1477750218.066481764]
 
+Without the bytes.TrimPrefix fix:
+
+  $ go run HttpClientGetJson.go --url 'http://www.totoagriculture.org/weather/weather?longitude=0.2167&latitude=5.55&format=JSON&days=2&language=Portuguese'
+  Get 'http://www.totoagriculture.org/weather/weather?longitude=0.2167&latitude=5.55&format=JSON&days=2&language=Portuguese'
+  panic: invalid character 'i' looking for beginning of value
+
+With the bytes.TrimPrefix fix:
+
+  $ go run HttpClientGetJson.go --url 'http://www.totoagriculture.org/weather/weather?longitude=0.2167&latitude=5.55&format=JSON&days=2&language=Portuguese'
+  Get 'http://www.totoagriculture.org/weather/weather?longitude=0.2167&latitude=5.55&format=JSON&days=2&language=Portuguese'
+  map[date:2016-10-29 current-conditions:map[time:2016-10-29 summary:Quente, ...
+
+
 */
 
 /*
@@ -71,5 +91,11 @@ https://eager.io/blog/go-and-json/
 
 Getting x509: certificate signed by unknown authority
 https://groups.google.com/forum/#!topic/golang-nuts/v5ShM8R7Tdc
+
+UTF8 BOM Character Confuses JSON Decoder
+http://grokbase.com/t/gg/golang-nuts/137a49jmqe/go-nuts-utf8-bom-character-confuses-json-decoder
+
+Got error "invalid character looking for beginning of value" from json.Unmarshal
+http://qaoverflow.com/question/got-error-invalid-character-i-looking-for-beginning-of-value-from-json-unmarshal/
 
 */
