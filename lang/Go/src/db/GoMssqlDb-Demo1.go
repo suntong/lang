@@ -47,6 +47,7 @@ func main() {
 	}
 
 	defer condb.Close()
+	fmt.Printf("%#v\n", condb)
 
 	errdb = condb.Ping()
 	if errdb != nil {
@@ -123,6 +124,7 @@ func main() {
 		panic(err)
 	}
 	defer stmt.Close()
+	fmt.Printf("%#v\n", stmt)
 
 	row := stmt.QueryRow(101)
 	value := 0
@@ -140,12 +142,14 @@ func main() {
 
 $ HOST=localhost SQLUSER=sa SQLPASSWORD=sa DATABASE=test go run GoMssqlDb-Demo1.go
 starting app
+&sql.DB{driver:(*mssql.MssqlDriver)(...)}
   Error Exec db: drop db -  mssql: Cannot drop the database 'mydbthing', because it does not exist or you do not have permission.
   Query our table for the three rows we inserted.
     - one 101 and two 201
     - one 102 and two 202
     - one 103 and two 203
   Query our table for first rows we inserted.
+&sql.Stmt{db:(*sql.DB)(0xc8..), query:"SELECT two FROM junky WHERE one = $1"...}
     - get 201
 ending app
 
