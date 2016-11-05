@@ -7,12 +7,14 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"regexp"
 )
 
 func main() {
 	Summary()
+	FromDoc()
 
 	// Using the Go Regexp Package
 	ugrp_Basic_Matching()
@@ -30,7 +32,48 @@ func main() {
 	replaceSome()
 }
 
+var p = fmt.Println
+
 func Summary() {
+	// https://ruk.si/notes/go/regex
+	// Basic regular expression match does not require compiling.
+	match, _ := regexp.MatchString("p([a-z]+)ch", "peach")
+	p(match) // => true
+
+	// Normally you need to compile the regular expression.
+	pchRegex, err := regexp.Compile("p([a-z]+)ch")
+	if err != nil {
+		panic(err)
+	}
+
+	p(pchRegex.MatchString("peach"))   // => true
+	p(pchRegex.Match([]byte("peach"))) // => true
+
+	p(pchRegex.FindString("peach punch"))        // => peach
+	p(pchRegex.FindAllString("peach punch", -1)) // => []string{peach, punch}
+	p(pchRegex.FindAllString("peach punch", 1))  // => []string{peach}
+
+	p(pchRegex.FindStringIndex("peach punch")) // => []int{0, 5}
+	p(pchRegex.FindStringIndex("plum fump"))   // => []int{}
+
+	p(pchRegex.FindStringSubmatch("peach punch"))      // => []string{peach, ea}
+	p(pchRegex.FindStringSubmatchIndex("peach punch")) // => []int{0, 5, 1, 3}
+
+	p(pchRegex.FindAllStringSubmatchIndex("peach punch pinch", -1))
+	// => [][]int{[0 5 1 3], [6 11 7 9], [12 17 13 15]}
+
+	p(pchRegex.ReplaceAllString("a peach", "<fruit>")) // => a <fruit>
+
+	in := []byte("a peach")
+	out := pchRegex.ReplaceAllFunc(in, bytes.ToUpper)
+	p(string(out)) // => a PEACH
+
+	// MustCompile automatically panics if it fails.
+	mustPchRegex := regexp.MustCompile("p([a-z]+)ch")
+	p(mustPchRegex) // => p([a-z]+)ch
+}
+
+func FromDoc() {
 	// -- ReplaceAllString
 	// https://golang.org/pkg/regexp/#Regexp.ReplaceAll
 	{
