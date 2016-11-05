@@ -15,6 +15,7 @@ import (
 func main() {
 	Summary()
 	FromDoc()
+	reDemystified()
 
 	// Using the Go Regexp Package
 	ugrp_Basic_Matching()
@@ -116,6 +117,98 @@ func FromDoc() {
 		// true
 	}
 	fmt.Println()
+}
+
+////////////////////////////////////////////////////////////////////////////
+// red: Regular Expressions demystified
+// https://appliedgo.net/regexp/
+
+var (
+	exps = []string{"b.*tter", "b(i|u)tter", `batter (\w+)`}
+
+	text = `Betty Botter bought some butter 
+But she said the butter?s bitter 
+If I put it in my batter, it will make my batter bitter 
+But a bit of better butter will make my batter better 
+So ?twas better Betty Botter bought a bit of better butter`
+)
+
+func reDemystified() {
+	for _, e := range exps {
+		re := regexp.MustCompile(e)
+		fmt.Println(e + ":")
+		fmt.Println("1. FindString: ", re.FindString(text))
+		fmt.Println("2. FindStringIndex: ", re.FindStringIndex(text))
+		fmt.Println("3. FindStringSubmatch: ", re.FindStringSubmatch(text))
+		fmt.Printf("4. FindAllString: %v\n", prettyMatches(re.FindAllString(text, -1)))
+		fmt.Printf("5. FindAllStringIndex: %v\n", re.FindAllStringIndex(text, -1))
+		fmt.Printf("6. FindAllStringSubmatch: %v\n\n", prettySubmatches(re.FindAllStringSubmatch(text, -1)))
+	}
+}
+
+/*
+
+b.*tter:
+1. FindString:  bought some butter
+2. FindStringIndex:  [13 31]
+3. FindStringSubmatch:  [bought some butter]
+4. FindAllString: [bought some butter|butter?s bitter|batter, it will make my batter bitter|bit of better butter will make my batter better|better Betty Botter bought a bit of better butter]
+5. FindAllStringIndex: [[13 31] [50 65] [85 122] [130 177] [188 237]]
+6. FindAllStringSubmatch: [
+    [bought some butter]
+    [butter?s bitter]
+    [batter, it will make my batter bitter]
+    [bit of better butter will make my batter better]
+    [better Betty Botter bought a bit of better butter]
+]
+
+b(i|u)tter:
+1. FindString:  butter
+2. FindStringIndex:  [25 31]
+3. FindStringSubmatch:  [butter u]
+4. FindAllString: [butter|butter|bitter|bitter|butter|butter]
+5. FindAllStringIndex: [[25 31] [50 56] [59 65] [116 122] [144 150] [231 237]]
+6. FindAllStringSubmatch: [
+    [butter|u]
+    [butter|u]
+    [bitter|i]
+    [bitter|i]
+    [butter|u]
+    [butter|u]
+]
+
+batter (\w+):
+1. FindString:  batter bitter
+2. FindStringIndex:  [109 122]
+3. FindStringSubmatch:  [batter bitter bitter]
+4. FindAllString: [batter bitter|batter better]
+5. FindAllStringIndex: [[109 122] [164 177]]
+6. FindAllStringSubmatch: [
+    [batter bitter|bitter]
+    [batter better|better]
+]
+
+*/
+
+func prettySubmatches(m [][]string) string {
+	s := "[\n"
+	for _, e := range m {
+		s += "    " + prettyMatches(e) + "\n"
+	}
+	s += "]"
+	return s
+}
+
+func prettyMatches(m []string) string {
+	s := "["
+	for i, e := range m {
+		s += e
+		if i < len(m)-1 {
+			s += "|"
+		}
+	}
+	s += "]"
+	return s
 }
 
 ////////////////////////////////////////////////////////////////////////////
