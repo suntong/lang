@@ -33,7 +33,7 @@ func main() {
 			return
 		}
 
-		print(string(out))
+		print(string(out), ".")
 	}
 
 	// Based on http://golang.org/pkg/os/exec/#example_Command
