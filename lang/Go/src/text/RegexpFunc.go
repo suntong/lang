@@ -28,7 +28,9 @@ func main() {
 	rsMethod1()
 	rsMethod2()
 
+	// Regexp.Expand
 	ExExpand()
+	ExExpand2()
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -239,6 +241,7 @@ How can I replace the submatch ?
 */
 
 func rsMethod1() {
+	fmt.Println()
 	input := `bla bla b:foo="hop" blablabla b:bar="hu?"`
 	r := regexp.MustCompile(`(\bb:\w+=")([^"]+)`)
 	fmt.Println(r.ReplaceAllStringFunc(input, func(m string) string {
@@ -268,6 +271,7 @@ func complexFunc(s string) string {
 // http://www.cnblogs.com/golove/p/3270918.html
 
 func ExExpand() {
+	fmt.Println()
 	pat := `(((abc.)def.)ghi)`
 	reg := regexp.MustCompile(pat)
 
@@ -288,8 +292,34 @@ func ExExpand() {
 		dst := reg.Expand(nil, template, src, match)
 		fmt.Printf("%s\n", dst)
 	}
+	fmt.Println()
 	// [0 11 0 11 0 8 0 4]
 	// abc-def-ghi   abc-def-ghi   abc-def-   abc-
 	// [12 23 12 23 12 20 12 16]
 	// abc+def+ghi   abc+def+ghi   abc+def+   abc+
 }
+
+////////////////////////////////////////////////////////////////////////////
+// Regexp.Expand
+// DisposaBoy https://groups.google.com/forum/#!topic/golang-nuts/URJfdhjR0AA
+
+func ExExpand2() {
+	src := []byte(`
+		call hello alice
+		hello bob
+		call hello eve
+	`)
+	pat := regexp.MustCompile(`(?m)(call)\s+(?P<cmd>\w+)\s+(?P<arg>.+)\s*$`)
+	res := []byte{}
+	for _, s := range pat.FindAllSubmatchIndex(src, -1) {
+		res = pat.Expand(res, []byte("$cmd('$arg')\n"), src, s)
+	}
+	fmt.Println(string(res))
+}
+
+/*
+
+hello('alice')
+hello('eve')
+
+*/
