@@ -3,6 +3,7 @@
 // Purpose: Demo the Go polymorphism & virtual function feature with Animals
 // Authors: Tong Sun (c) 2016, All rights reserved
 // Credits: Nick Patavalis https://play.golang.org/p/FsorWRaLKk
+//    Tahir Hashmi https://tech.t9i.in/2014/01/22/inheritance-semantics-in-go/
 ////////////////////////////////////////////////////////////////////////////
 
 package main
@@ -13,7 +14,10 @@ import "fmt"
 
 Another way to implement virtual function:
 
-Every specific animal type implements it's own Output() method, which does the trivial IsA() part, and calls Animal's Output() for the common complicated parts.
+This is the easiest way to make virtual function works, that satisfies the following restrains:
+
+- Consider the "func Output()" as a very complicated function that I only want to define once at the base level, not to duplicate into each sub classes.
+- Changing it from a member function to a pure function is problematic as I have a huge list of common variables that I defined in my "base class", such change will cause almost every single variable now undefined.
 
 Note that the signature (API) of Output() of based & sub class can be different.
 
