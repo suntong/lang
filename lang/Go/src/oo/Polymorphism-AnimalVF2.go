@@ -14,10 +14,14 @@ import "fmt"
 
 Another way to implement virtual function:
 
-This is the easiest way to make virtual function works, that satisfies the following restrains:
+This is the easiest way to make virtual function works, that satisfies the
+following restrains:
 
-- Consider the "func Output()" as a very complicated function that I only want to define once at the base level, not to duplicate into each sub classes.
-- Changing it from a member function to a pure function is problematic as I have a huge list of common variables that I defined in my "base class", such change will cause almost every single variable now undefined.
+- Consider the "func Output()" as a very complicated function that I only
+  want to define once at the base level, not to duplicate into each sub classes.
+- Changing it from a member function to a pure function is problematic as I
+  have a huge list of common variables that I defined in my "base class",
+  such change will cause almost every single variable now undefined.
 
 Note that the signature (API) of Output() of based & sub class can be different.
 
