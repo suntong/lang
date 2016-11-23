@@ -36,14 +36,14 @@ type Speaker interface {
 	Output()
 }
 
-func (a Animal) Output(isa string) {
+func (a Animal) Output(s Speaker) {
 	// Complicated stuff that must not be re-implemented
-	fmt.Println("I am a", isa,
-		"My name is", a.Name,
-		", aged", a.Age,
-		", it is", a.IsMammal,
-		"I am a mammal.\n  it is", a.IsMale,
-		"I am male.")
+	fmt.Print("I am a ", s.IsA(),
+		". My name is ", a.Name,
+		", aged ", a.Age,
+		", it is ", a.IsMale,
+		" I am male.\n  ")
+	s.Speak()
 }
 
 // Dog contains everything an Animal is but specific
@@ -67,7 +67,7 @@ func (d Dog) Speak() {
 
 func (d Dog) Output() {
 	// Presumably complicated stuff, not reimplemented
-	d.Animal.Output(d.IsA())
+	d.Animal.Output(d)
 }
 
 // Cat contains everything an Animal is but specific
@@ -91,7 +91,7 @@ func (c Cat) Speak() {
 
 func (c Cat) Output() {
 	// Presumably complicated stuff, not reimplemented
-	c.Animal.Output(c.IsA())
+	c.Animal.Output(c)
 }
 
 func main() {
