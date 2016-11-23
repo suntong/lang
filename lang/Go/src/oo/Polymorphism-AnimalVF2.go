@@ -141,9 +141,9 @@ func main() {
 
 /*
 
-I am a Dog My name is Fido , aged 8 , it is true I am a mammal.
-  it is true I am male.
-I am a Cat My name is Milo , aged 5 , it is true I am a mammal.
-  it is false I am male.
+I am a Dog. My name is Fido, aged 8, it is true I am male.
+  Woof! I have a a pack factor of 5
+I am a Cat. My name is Milo, aged 5, it is false I am male.
+  Meow! I have a climb factor of 4
 
 */
