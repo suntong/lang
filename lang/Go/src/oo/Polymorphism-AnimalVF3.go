@@ -30,6 +30,9 @@ package main
 
 import "fmt"
 
+////////////////////////////////////////////////////////////////////////////
+// Data type/structure definitions
+
 // AnimalBase contains all the base fields for animals.
 type AnimalBase struct {
 	Name     string
@@ -67,6 +70,7 @@ func Output(d Animal) {
 	}
 }
 
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // Dog contains everything an Animal is but specific
 // attributes that only a Dog has.
 type Dog struct {
@@ -89,6 +93,7 @@ func (d Dog) ExtraFacts() string {
 	return fmt.Sprintf("I have a a pack factor of %v", d.PackFactor)
 }
 
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // Cat contains everything an Animal is but specific
 // attributes that only a Cat has.
 type Cat struct {
@@ -111,10 +116,19 @@ func (c Cat) ExtraFacts() string {
 	return fmt.Sprintf("I have a climb factor of %v", c.ClimbFactor)
 }
 
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+type Sheep struct {
+	AnimalBase
+	PackFactor int
+}
+
 func main() {
 
 	// Create a list of Animals that know how to speak.
 	animals := []Animal{
+
+		// &Sheep{}, // cannot use Sheep literal (type *Sheep) as type Animal
+		// *Sheep does not implement Animal (missing IsA method)
 
 		// Create a Dog by initializing its AnimalBase parts
 		// and then its specific Dog attributes.
@@ -145,6 +159,10 @@ func main() {
 	for _, animal := range animals {
 		Output(animal)
 	}
+
+	aSheep := &Sheep{}
+	// Output(aSheep)
+	// cannot use aSheep (type *Sheep) as type Animal in argument to Output
 }
 
 /*
