@@ -57,6 +57,14 @@ type ExtraFactsor interface {
 	ExtraFacts() string
 }
 
+func (a AnimalBase) IsA() string {
+	return "Animal"
+}
+
+func (a AnimalBase) Speak() string {
+	return "Something"
+}
+
 func Output(d Animal) {
 	base := d.GetBase()
 	fmt.Println(d.Speak(),
@@ -122,13 +130,15 @@ type Sheep struct {
 	PackFactor int
 }
 
+////////////////////////////////////////////////////////////////////////////
+// Function definitions
+
 func main() {
 
 	// Create a list of Animals that know how to speak.
 	animals := []Animal{
 
-		// &Sheep{}, // cannot use Sheep literal (type *Sheep) as type Animal
-		// *Sheep does not implement Animal (missing IsA method)
+		&Sheep{}, // OK to use Sheep as type Animal now
 
 		// Create a Dog by initializing its AnimalBase parts
 		// and then its specific Dog attributes.
@@ -159,10 +169,6 @@ func main() {
 	for _, animal := range animals {
 		Output(animal)
 	}
-
-	aSheep := &Sheep{}
-	// Output(aSheep)
-	// cannot use aSheep (type *Sheep) as type Animal in argument to Output
 }
 
 /*
