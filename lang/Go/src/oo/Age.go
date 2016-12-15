@@ -32,6 +32,15 @@ implicitly.
 If a method is defined for type *T, there is not an implicit method with
 same name defined for type T.
 
+Although none methods explicitly defined on a pointer type *T are methods of
+T, receiver values of type T can also call methods of *T if the receivers
+are addressable. For callings of this case, Go compilers will automatically
+take the addresses of the non-pointer receivers. This is totally for sake of
+convenience. It doesn't mean the pointer methods are methods of T.
+
+(Methods defined for non-pointer types are called non-pointer
+methods. Methods defined for pointer types are called pointer methods.)
+
 */
 
 func main() {
