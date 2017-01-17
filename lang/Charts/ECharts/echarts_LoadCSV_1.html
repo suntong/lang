@@ -9,7 +9,8 @@
     <div id="main" style="height:400px"></div>
     <!-- ECharts单文件引入 -->
     <script src="echarts.min.js"></script>
-        <script src="http://gallery.echartsjs.com/dep/jquery/jquery.js"></script>
+    <script src="http://gallery.echartsjs.com/dep/jquery/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
     <script type="text/javascript">
         // 基于准备好的dom，初始化echarts图表
         var myChart = echarts.init(document.getElementById('main')); 
@@ -127,6 +128,6 @@ $.get(uploadedDataURL, function (csvStr) {
 <!-- !!! Code !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 
         // 为echarts对象加载数据 
-        myChart.setOption(option); 
+        //myChart.setOption(option); 
     </script>
 </body>
