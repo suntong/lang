@@ -19,6 +19,18 @@ func main() {
 	TestThem()
 }
 
+/*
+
+Hello World
+true
+--- PASS:  (0.00s)
+Say hi
+--- PASS:  (0.00s)
+        HelloTest.go:42: Say bye
+--- PASS:  (0.00s)
+
+*/
+
 // https://golang.org/src/testing/testing.go
 func TestThem() {
 	var t *testing.T = testing.NewT()
