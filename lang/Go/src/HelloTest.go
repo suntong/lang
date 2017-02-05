@@ -18,9 +18,24 @@ func main() {
 	TestThem()
 }
 
+// https://golang.org/src/testing/testing.go
 func TestThem() {
-	var t *testing.T
+	var t *testing.T = new(testing.T)
+	TestSomething(t)
+	TestPrintSomething(t)
 	TestSum(t)
+}
+
+// https://smartystreets.com/blog/2015/02/go-testing-part-1-vanillla
+func TestSomething(t *testing.T) {
+	t.Fail()
+}
+
+// http://stackoverflow.com/questions/23205419
+func TestPrintSomething(t *testing.T) {
+	fmt.Println("Say hi")
+	t.Log("Say bye")
+	t.Error("Error is equivalent to Log followed by Fail")
 }
 
 func TestSum(t *testing.T) {
