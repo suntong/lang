@@ -10,7 +10,8 @@ package main
 
 import (
 	"fmt"
-	"testing"
+
+	"github.com/suntong/testing"
 )
 
 func main() {
@@ -20,22 +21,26 @@ func main() {
 
 // https://golang.org/src/testing/testing.go
 func TestThem() {
-	var t *testing.T = new(testing.T)
+	var t *testing.T = testing.NewT()
+	fmt.Println(testing.Verbose())
 	TestSomething(t)
+	t.Report()
 	TestPrintSomething(t)
+	t.Report()
 	TestSum(t)
+	t.Report()
 }
 
 // https://smartystreets.com/blog/2015/02/go-testing-part-1-vanillla
 func TestSomething(t *testing.T) {
-	t.Fail()
+	//t.Fail()
 }
 
 // http://stackoverflow.com/questions/23205419
 func TestPrintSomething(t *testing.T) {
 	fmt.Println("Say hi")
 	t.Log("Say bye")
-	t.Error("Error is equivalent to Log followed by Fail")
+	//t.Error("Error is equivalent to Log followed by Fail")
 }
 
 func TestSum(t *testing.T) {
