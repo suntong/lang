@@ -12,10 +12,9 @@ package main
 import (
 	"fmt"
 	"os"
-)
 
-import (
 	"github.com/beevik/etree"
+	"github.com/suntong/testing"
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -35,10 +34,10 @@ func main() {
 	PathQueries()
 	fmt.Println()
 
-	DemoRemoveElement()
-	fmt.Println()
 	DemoFindElements()
 	fmt.Println()
+
+	TestOrgTests()
 }
 
 func readXml(xml string) *etree.Document {
@@ -92,11 +91,13 @@ var xml = `<bookstore><book><title>Great Expectations</title>
 func ExamplePath() {
 	doc := etree.NewDocument()
 	doc.ReadFromString(xml)
+
+	book := etree.NewDocument()
 	for _, e := range doc.FindElements(".//book[author='Charles Dickens']") {
-		book := etree.CreateDocument(e)
-		book.Indent(2)
-		book.WriteTo(os.Stdout)
+		book.AddChild(e)
 	}
+	book.Indent(2)
+	book.WriteTo(os.Stdout)
 	// Output:
 	// <book>
 	//   <title>Great Expectations</title>
@@ -229,78 +230,6 @@ XQuery Kick Start
 
 */
 
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-// More examples, according to https://godoc.org/github.com/beevik/etree
-
-func DemoRemoveElement() {
-	// doc := readXml(xml)
-	// for _, e := range doc.FindElements(".//book") {
-
-	doc := readXml(bookstore)
-	for _, e := range doc.FindElements(".//book[@category='WEB']") {
-
-		// FindElement returns the first element matched by the XPath string
-		a := e.FindElement(".//author")
-
-		// RemoveElement removes the given child element
-		e.RemoveElement(a)
-
-		an := e.CreateElement("author")
-		an.CreateComment("removed")
-
-		book := etree.CreateDocument(e)
-		book.Indent(2)
-		book.WriteTo(os.Stdout)
-	}
-}
-
-/*
-
-Output:
-
-<book category="WEB">
-  <title lang="en">XQuery Kick Start</title>
-  <author>Per Bothner</author>
-  <author>Kurt Cagle</author>
-  <author>James Linn</author>
-  <author>Vaidyanathan Nagarajan</author>
-  <year>2003</year>
-  <p:price>49.99</p:price>
-  <author>
-    <!--removed-->
-  </author>
-</book>
-<book category="WEB">
-  <title lang="en">Learning XML</title>
-  <year>2003</year>
-  <p:price>39.95</p:price>
-  <author>
-    <!--removed-->
-  </author>
-</book>
-
-With,
-
-	doc := readXml(xml)
-	for _, e := range doc.FindElements(".//book") {
-
-Output:
-
-<book>
-  <title>Great Expectations</title>
-  <author>
-    <!--removed-->
-  </author>
-</book>
-<book>
-  <title>Ulysses</title>
-  <author>
-    <!--removed-->
-  </author>
-</book>
-
-*/
-
 func DemoFindElements() {
 
 	doc := readXml(bookstore)
@@ -310,9 +239,9 @@ func DemoFindElements() {
 
 	for _, e := range doc.FindElements(".//book") {
 		p := e.FindElement(".//p:price")
-		e.RemoveElement(p)
+		e.RemoveChild(p)
 		for _, a := range e.FindElements(".//author") {
-			e.RemoveElement(a)
+			e.RemoveChild(a)
 		}
 		for _, t := range e.FindElements(".//title") {
 			// creates an attribute and adds it to the receiving element
@@ -397,6 +326,188 @@ Output:
 
   <bk:publisher>Unspecified</bk:publisher></book>
 </bookstore>
+
+
+*/
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//
+func TestOrgTests() {
+	var t *testing.T = testing.NewT()
+	TestCopy(t)
+	t.Report()
+	TestInsertChild(t)
+	t.Report()
+	TestAddChild(t)
+	t.Report()
+}
+
+func checkEq(t *testing.T, got, want string) {
+	if got == want {
+		return
+	}
+	t.Errorf(
+		"etree: unexpected result.\nGot:\n%s\nWanted:\n%s\n",
+		got, want)
+}
+
+//--------------------------------------------------------------------------
+func TestCopy(t *testing.T) {
+	s := `<store>
+	<book lang="en">
+		<title>Great Expectations</title>
+		<author>Charles Dickens</author>
+	</book>
+</store>`
+
+	doc := etree.NewDocument()
+	err := doc.ReadFromString(s)
+	if err != nil {
+		t.Fatal("etree: incorrect ReadFromString result")
+	}
+
+	s1, err := doc.WriteToString()
+	if err != nil {
+		t.Error("etree: incorrect WriteToString result")
+	}
+
+	doc2 := doc.Copy()
+	s2, err := doc2.WriteToString()
+	if err != nil {
+		t.Error("etree: incorrect Copy result")
+	}
+
+	if s1 != s2 {
+		t.Error("etree: mismatched Copy result")
+		t.Error("wanted:\n" + s1)
+		t.Error("got:\n" + s2)
+	}
+
+	e1 := doc.FindElement("./store/book/title")
+	e2 := doc2.FindElement("./store/book/title")
+	if e1 == nil || e2 == nil {
+		t.Error("etree: incorrect FindElement result")
+	}
+	if e1 == e2 {
+		t.Error("etree: incorrect FindElement result")
+	}
+
+	e1.Parent().RemoveChild(e1)
+	s1, _ = doc.WriteToString()
+	s2, _ = doc2.WriteToString()
+	if s1 == s2 {
+		t.Error("etree: incorrect result after RemoveElement")
+	}
+}
+
+//--------------------------------------------------------------------------
+func TestInsertChild(t *testing.T) {
+	testdoc := `<book lang="en">
+  <t:title>Great Expectations</t:title>
+  <author>Charles Dickens</author>
+</book>
+`
+
+	doc := etree.NewDocument()
+	err := doc.ReadFromString(testdoc)
+	if err != nil {
+		t.Fatal("etree ReadFromString: " + err.Error())
+	}
+
+	year := etree.NewElement("year")
+	year.SetText("1861")
+
+	book := doc.FindElement("//book")
+	book.InsertChild(book.SelectElement("t:title"), year)
+
+	expected1 := `<book lang="en">
+  <year>1861</year>
+  <t:title>Great Expectations</t:title>
+  <author>Charles Dickens</author>
+</book>
+`
+	doc.Indent(2)
+	s1, _ := doc.WriteToString()
+	checkEq(t, s1, expected1)
+
+	book.RemoveChild(year)
+	book.InsertChild(book.SelectElement("author"), year)
+
+	expected2 := `<book lang="en">
+  <t:title>Great Expectations</t:title>
+  <year>1861</year>
+  <author>Charles Dickens</author>
+</book>
+`
+	doc.Indent(2)
+	s2, _ := doc.WriteToString()
+	checkEq(t, s2, expected2)
+
+	book.RemoveChild(year)
+	book.InsertChild(book.SelectElement("UNKNOWN"), year)
+
+	expected3 := `<book lang="en">
+  <t:title>Great Expectations</t:title>
+  <author>Charles Dickens</author>
+  <year>1861</year>
+</book>
+`
+	doc.Indent(2)
+	s3, _ := doc.WriteToString()
+	checkEq(t, s3, expected3)
+
+	book.RemoveChild(year)
+	book.InsertChild(nil, year)
+
+	expected4 := `<book lang="en">
+  <t:title>Great Expectations</t:title>
+  <author>Charles Dickens</author>
+  <year>1861</year>
+</book>
+`
+	doc.Indent(2)
+	s4, _ := doc.WriteToString()
+	checkEq(t, s4, expected4)
+}
+
+//--------------------------------------------------------------------------
+func TestAddChild(t *testing.T) {
+	testdoc := `<book lang="en">
+  <t:title>Great Expectations</t:title>
+  <author>Charles Dickens</author>
+`
+	doc1 := etree.NewDocument()
+	err := doc1.ReadFromString(testdoc)
+	if err != nil {
+		t.Fatal("etree ReadFromString: " + err.Error())
+	}
+
+	doc2 := etree.NewDocument()
+	root := doc2.CreateElement("root")
+
+	for _, e := range doc1.FindElements("//book/*") {
+		root.AddChild(e)
+	}
+
+	expected1 := `<book lang="en"/>
+`
+	doc1.Indent(2)
+	s1, _ := doc1.WriteToString()
+	checkEq(t, s1, expected1)
+
+	expected2 := `<root>
+  <t:title>Great Expectations</t:title>
+  <author>Charles Dickens</author>
+</root>
+`
+	doc2.Indent(2)
+	s2, _ := doc2.WriteToString()
+	checkEq(t, s2, expected2)
+}
+
+/*
+
+Output:
 
 
 */
