@@ -475,6 +475,7 @@ func TestAddChild(t *testing.T) {
 	testdoc := `<book lang="en">
   <t:title>Great Expectations</t:title>
   <author>Charles Dickens</author>
+</book>
 `
 	doc1 := etree.NewDocument()
 	err := doc1.ReadFromString(testdoc)
