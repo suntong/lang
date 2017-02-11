@@ -340,6 +340,8 @@ func TestOrgTests() {
 	t.Report()
 	TestAddChild(t)
 	t.Report()
+	TestTrueAddChild(t)
+	t.Report()
 }
 
 func checkEq(t *testing.T, got, want string) {
@@ -490,7 +492,47 @@ func TestAddChild(t *testing.T) {
 		root.AddChild(e)
 	}
 
+	// It's empty because the adding of the children to doc2 removed them from doc1.
 	expected1 := `<book lang="en"/>
+`
+	doc1.Indent(2)
+	s1, _ := doc1.WriteToString()
+	checkEq(t, s1, expected1)
+
+	expected2 := `<root>
+  <t:title>Great Expectations</t:title>
+  <author>Charles Dickens</author>
+</root>
+`
+	doc2.Indent(2)
+	s2, _ := doc2.WriteToString()
+	checkEq(t, s2, expected2)
+}
+
+//--------------------------------------------------------------------------
+func TestTrueAddChild(t *testing.T) {
+	testdoc := `<book lang="en">
+  <t:title>Great Expectations</t:title>
+  <author>Charles Dickens</author>
+</book>
+`
+	doc1 := etree.NewDocument()
+	err := doc1.ReadFromString(testdoc)
+	if err != nil {
+		t.Fatal("etree ReadFromString: " + err.Error())
+	}
+
+	doc2 := etree.NewDocument()
+	root := doc2.CreateElement("root")
+
+	for _, e := range doc1.Copy().FindElements("//book/*") {
+		root.AddChild(e)
+	}
+
+	expected1 := `<book lang="en">
+  <t:title>Great Expectations</t:title>
+  <author>Charles Dickens</author>
+</book>
 `
 	doc1.Indent(2)
 	s1, _ := doc1.WriteToString()
