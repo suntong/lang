@@ -1,7 +1,6 @@
 # An Awk Primer/Awk Quick Reference Guide
 
-
-> **This is a reformated version** of 
+> **This is reformatted & amended** from 
 [An Awk Primer/Awk Quick Reference Guide](https://en.wikibooks.org/wiki/An_Awk_Primer/Awk_Quick_Reference_Guide)
 
 This final section provides a convenient lookup reference for Awk programming.
@@ -137,28 +136,6 @@ by listing two strings connected by a blank space.
    int()      Integer part of argument.
 ```
 
-*   String functions:
-
-*   length()
-
-    Length of string.
-
-*   substr(<string>,<start of substring>,<max length of substring>)
-
-    Get substring.
-
-*   split(<string>,<array>,[<field separator>])
-
-    Split string into array, with initial array index being 1.
-
-*   index(<target string>,<search string>)
-
-    Find index of search string in target string.
-
-*   sprintf()
-
-    Perform formatted print into string.
-
 *   Control structures:
 
 ```
@@ -183,14 +160,36 @@ Unconditional control statements:
    exit        Finish reading input and perform END statements.
 ```
 
-*   Print:
+*   String functions:
+
+*   `length()`
+
+    Length of string.
+
+*   `substr(<string>,<start of substring>,<max length of substring>)`
+
+    Get substring.
+
+*   `split(<string>,<array>,[<field separator>])`
+
+    Split string into array, with initial array index being 1.
+
+*   `index(<target string>,<search string>)`
+
+    Find index of search string in target string.
+
+*   `sprintf()`
+
+    Perform formatted print into string.
+
+*   `print`:
 
 ```
    print <i1>, <i2>, ...   Print items separated by OFS; end with newline.
    print <i1> <i2> ...     Print items concatenated; end with newline.
 ```
 
-*   Printf():
+*   `printf()`:
 
 ```
    printf(<string with format codes>,[<parameters>])
