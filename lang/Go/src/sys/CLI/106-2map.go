@@ -7,18 +7,24 @@ import (
 	"github.com/mkideal/cli"
 )
 
-type mapT map[string]int64
-
-type argT struct {
-	Macros mapT `cli:"D" usage:"define macros"`
+type MapStringToInt64 struct {
+	Keys   []string
+	Values map[string]int64
 }
 
-var keys = []string{}
+type argT struct {
+	Macros MapStringToInt64 `cli:"D" usage:"define macros"`
+}
+
+// DecodeSlice implements cli.SliceDecoder
+// NOTE: if SliceDecoder not implemented, the Decode method would be only invoked once
+func (MapStringToInt64) DecodeSlice() {}
 
 // Decode implements cli.Decoder interface
-func (maps *mapT) Decode(s string) error {
-	*maps = make(map[string]int64)
-	keys = []string{}
+func (m *MapStringToInt64) Decode(s string) error {
+	if (m.Values) == nil {
+		m.Values = make(map[string]int64)
+	}
 	i := strings.Index(s, "=")
 	if i >= 0 {
 		key := s[:i]
@@ -26,8 +32,8 @@ func (maps *mapT) Decode(s string) error {
 		if err != nil {
 			return err
 		}
-		keys = append(keys, key)
-		(*maps)[key] = val
+		m.Keys = append(m.Keys, key)
+		m.Values[key] = val
 	}
 	return nil
 }
