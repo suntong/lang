@@ -9,11 +9,34 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strconv"
 )
 
+var ca []rune
+
+func init() {
+	ca = make([]rune, 26)
+	for i, c := range "ABCDEFGHIJKLMNOPQRSTUVWXYZ" {
+		ca[i] = c
+	}
+}
+
 func main() {
-	comb(5, 3, func(c []int) {
-		fmt.Println(c)
+	if len(os.Args) <= 2 {
+		fmt.Println("Usage\n  Combinations n k\nto print combination of n pick k")
+		os.Exit(0)
+	}
+
+	n, err := strconv.Atoi(os.Args[1])
+	check(err)
+	k, err := strconv.Atoi(os.Args[2])
+	check(err)
+	comb(n, k, func(c []int) {
+		for _, v := range c {
+			fmt.Printf("%c ", ca[v])
+		}
+		fmt.Println()
 	})
 }
 
@@ -33,4 +56,10 @@ func comb(n, m int, emit func([]int)) {
 		return
 	}
 	rc(0, 0)
+}
+
+func check(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
