@@ -13,6 +13,22 @@ import (
 	"strconv"
 )
 
+/*
+
+$ go run Combinations.go 5 3
+A B C
+A B D
+A B E
+A C D
+A C E
+A D E
+B C D
+B C E
+B D E
+C D E
+
+*/
+
 var ca []rune
 
 func init() {
