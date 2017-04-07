@@ -17,6 +17,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 )
 
 type set map[string]struct{}
@@ -38,9 +39,24 @@ func NewSet(slice []string) set {
 
 func (s set) Has(a string) bool { _, ok := s[a]; return ok }
 
+func (s set) Get() []string {
+	var keys []string
+	for k := range s {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	return keys
+}
+
 func main() {
 	fmt.Println(validSub.Has("aa"))
 	fmt.Println(validSub.Has("dd"))
+
+	for k, _ := range validSub {
+		fmt.Println(k)
+	}
+	fmt.Println(validSub.Get())
 }
 
 /*
@@ -50,6 +66,10 @@ Output:
 map[aa:{} bb:{} cc:{}]
 true
 false
+aa
+bb
+cc
+[aa bb cc]
 
 */
 
