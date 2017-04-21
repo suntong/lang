@@ -1,6 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
-// Purpose:
-// Authors: Tong Sun (c) 2017, All rights reserved
+// Purpose: Turn the OpenCC STCharacters.txt file to dictionary
+// Authors: Tong Sun (c) 2017
+// Sources: https://github.com/go-cc/opencc-dict/blob/master/data/dictionary/STCharacters.txt
 ////////////////////////////////////////////////////////////////////////////
 
 package main
@@ -25,14 +26,17 @@ func main() {
 	// == Match & Process
 	s.AppendStmt(nil, func(s *awk.Script) {
 		c1 := s.F(1).String()
-		c2 := s.F(2).String()
-		if c1 == c2 {
-			c2 = s.F(3).String()
+		for ii := 2; ii <= s.NF; ii++ {
+			c2 := s.F(ii).String()
+			if c1 == c2 {
+				continue
+			}
+			c2 = s.F(ii).String()
+			fmt.Printf("%v:%v\n", c1, c2)
+			// fmt.Printf("%+q:%+q\n", c1, c2)
+			sa.Set("cS", fmt.Sprintf("%s%+q", sa.Get("cS"), c1))
+			sa.Set("cT", fmt.Sprintf("%s%+q", sa.Get("cT"), c2))
 		}
-		fmt.Printf("%v:%v\n", c1, c2)
-		fmt.Printf("%+q:%+q\n", c1, c2)
-		sa.Set("cS", fmt.Sprintf("%s%+q", sa.Get("cS"), c1))
-		sa.Set("cT", fmt.Sprintf("%s%+q", sa.Get("cT"), c2))
 	})
 
 	// == END
@@ -50,6 +54,4 @@ func main() {
 }
 
 /*
-
-
  */
