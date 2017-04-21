@@ -25,6 +25,7 @@ func main() {
 
 	// == Match & Process
 	s.AppendStmt(nil, func(s *awk.Script) {
+		print(s.NR)
 		c1 := s.F(1).String()
 		for ii := 2; ii <= s.NF; ii++ {
 			c2 := s.F(ii).String()
@@ -37,6 +38,7 @@ func main() {
 			sa.Set("cS", fmt.Sprintf("%s%+q", sa.Get("cS"), c1))
 			sa.Set("cT", fmt.Sprintf("%s%+q", sa.Get("cT"), c2))
 		}
+		print(" ")
 	})
 
 	// == END
