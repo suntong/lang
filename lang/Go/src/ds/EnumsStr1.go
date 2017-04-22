@@ -17,28 +17,57 @@ func (e Enum) String() string {
 	return enums[int(e)]
 }
 
-func ciota(s string) Enum {
+func Ciota(s string) Enum {
 	enums = append(enums, s)
 	return Enum(len(enums) - 1)
 }
 
+func Get(s string) (Enum, bool) {
+	for ii, vv := range enums {
+		if vv == s {
+			return Enum(ii), true
+		}
+	}
+	return -1, false
+}
+
 var (
-	Alpha = ciota("A")
-	Beta  = ciota("B")
+	Alpha = Ciota("Alpha")
+	Beta  = Ciota("Beta")
 )
 
 type Example struct {
-	X Enum
+	Enum
 }
 
 func main() {
 	fmt.Printf("%+v\n", Example{Alpha})
 	fmt.Printf("%+v\n", Example{Beta})
+	fmt.Println("=======")
+	fmt.Printf("%d\t%d\n", Alpha, Alpha+1)
+	fmt.Printf("%+v\t%+v\n", Example{Beta - 1}, Example{Alpha + 1})
+	fmt.Println("=======")
+	fmt.Printf("%+v\n", enums)
+	fmt.Println("=======")
+	if a, ok := Get("Alpha"); ok {
+		fmt.Printf("%d\n", a)
+	}
+	if b, ok := Get("Beta"); ok {
+		fmt.Printf("%d: %+v\n", b, Example{b})
+	}
 }
 
 /*
 
-{X:A}
-{X:B}
+Alpha
+Beta
+=======
+0	1
+Alpha	Beta
+=======
+[Alpha Beta]
+=======
+0
+1: Beta
 
 */
