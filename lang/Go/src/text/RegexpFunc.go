@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+	ExFindAllStringSubmatchIndex()
 	ExReplaceAllFunc()
 
 	// Using the Go Regexp Package
@@ -32,6 +33,26 @@ func main() {
 	ExExpand()
 	ExExpand2()
 }
+
+// How to get $0, $1, $2 etc sub matches?
+func ExFindAllStringSubmatchIndex() {
+	v := "pinch punch peach plum"
+	for _, h := range regexp.MustCompile(`(p)([a-z]+)(ch)`).
+		FindAllStringSubmatchIndex(v, -1) {
+		// get $2
+		m := v[h[4]:h[5]]
+		fmt.Println(m)
+	}
+	fmt.Println()
+}
+
+/*
+
+in
+un
+ea
+
+*/
 
 ////////////////////////////////////////////////////////////////////////////
 // Go Regexp
