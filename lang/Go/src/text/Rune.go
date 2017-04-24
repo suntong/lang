@@ -32,5 +32,5 @@ func main() {
 	//code12 := "u4e16"
 	// hex to int
 	c1, _ := strconv.ParseInt(code10, 16, 16)
-	fmt.Printf("Hello %c\u754c %v\n", c1, c1 == '世')
+	fmt.Printf("Hello %c\u754c %v %v\n", c1, c1 == '世', "\u4e16"=="世")
 }
