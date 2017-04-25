@@ -10,16 +10,24 @@ package main
 import (
 	"fmt"
 
-	"github.com/suntong/enum"
+	enum "github.com/suntong/enum"
+	enum2 "github.com/suntong/enum"
 )
 
 var (
 	Alpha = enum.Ciota("Alpha")
 	Beta  = enum.Ciota("Beta")
+
+	Sunday = enum2.Ciota("Sunday")
+	Monday = enum2.Ciota("Monday")
 )
 
 type Example struct {
 	enum.Enum
+}
+
+type Weekday struct {
+	enum2.Enum
 }
 
 func main() {
@@ -35,4 +43,5 @@ func main() {
 	if b, ok := enum.Get("Beta"); ok {
 		fmt.Printf("%d: %+v\n", b, Example{b})
 	}
+	fmt.Printf("%d:%+v\n", Sunday, Weekday{Sunday})
 }
