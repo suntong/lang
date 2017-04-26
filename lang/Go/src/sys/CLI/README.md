@@ -170,6 +170,23 @@
     $ go run 010-validator.go --age 88 --gender female
     {"Help":false,"Age":88,"Gender":"female"}
     
+## [010-validatorEnum.go](010-validatorEnum.go)
+
+
+	$ go run 010-validatorEnum.go
+	{"Help":false,"Age":0,"Gender":"male"}
+	0:male
+
+	$ go run 010-validatorEnum.go -g male
+	{"Help":false,"Age":0,"Gender":"male"}
+	0:male
+
+	$ go run 010-validatorEnum.go -g female
+	{"Help":false,"Age":0,"Gender":"female"}
+
+	$ go run 010-validatorEnum.go -g unknown
+	ERR! invalid gender unknown
+
 ## [011-prompt-and-password.go](011-prompt-and-password.go)
     
     $ go run 011-prompt-and-password.go 
