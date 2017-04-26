@@ -183,6 +183,7 @@
 
 	$ go run 010-validatorEnum.go -g female
 	{"Help":false,"Age":0,"Gender":"female"}
+	1:female
 
 	$ go run 010-validatorEnum.go -g unknown
 	ERR! invalid gender unknown
