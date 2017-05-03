@@ -79,4 +79,33 @@ func main() {
 	fmt.Println(a, b, c, d, e, f, g)
 	// X: fmt.Printf("%v, %v\n", a == fNormal, b == fFlip)
 	// invalid operation: a == fNormal (mismatched types int and tOptFmt)
+
+	iota_with_gaps()
+}
+
+/*
+
+> D = iota + 3 // for skip 3
+
+I think this is slightly misleading - this idiom doesn't
+skip three - it adds 3 to the current value of iota
+
+roger peppe
+https://groups.google.com/d/msg/golang-nuts/R813n17CS58/NIDM-qEOAQAJ
+
+*/
+
+const (
+	A = iota + 1
+	B
+	C
+	D = iota + 20
+	E
+	F = iota + 2
+	G
+)
+
+func iota_with_gaps() {
+	fmt.Println(C, D, E, F, G)
+	// 3 23 24 7 8
 }
