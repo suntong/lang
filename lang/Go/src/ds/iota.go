@@ -85,6 +85,11 @@ func main() {
 
 /*
 
+> > How to use `iota` to define consts that have gap(s) in them?
+> > E.g., If my consts are,
+> > 1, 2, 3, 7, 8, 9
+> > How to use iota to define them?
+
 > D = iota + 3 // for skip 3
 
 I think this is slightly misleading - this idiom doesn't
