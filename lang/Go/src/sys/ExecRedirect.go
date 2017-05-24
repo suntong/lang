@@ -20,6 +20,7 @@ func main() {
 
 	var t *testing.T = testing.NewT()
 	redirect2(t)
+	t.Report()
 }
 
 /*
@@ -76,7 +77,7 @@ func redirect2(t *testing.T) {
 		t.Errorf("start error %s [%s]", err, out.String())
 	}
 	err = cmd.Wait()
-	if err == nil {
+	if err != nil {
 		t.Errorf("exit error %s [%s]", err, out.String())
 	}
 
