@@ -31,6 +31,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"time"
 )
 
 type ByModTime []os.FileInfo
@@ -53,7 +54,9 @@ func main() {
 	f.Close()
 	sort.Sort(ByModTime(fis))
 
+	// https://godoc.org/os#FileInfo
+	// https://godoc.org/time#pkg-constants
 	for _, fi := range fis {
-		fmt.Println(fi.Name())
+		fmt.Println(fi.ModTime().Format(time.RFC3339), fi.Name())
 	}
 }
