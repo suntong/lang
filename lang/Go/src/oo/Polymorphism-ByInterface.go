@@ -41,6 +41,14 @@ type Animal interface {
 	Type() string
 	Swim() string
 }
+
+type animal struct {
+}
+
+type Cat struct {
+	animal
+}
+
 type Dog struct {
 	Name  string
 	Breed string
@@ -53,10 +61,20 @@ type Frog struct {
 func main() {
 	f := new(Frog)
 	d := new(Dog)
-	zoo := [...]Animal{f, d}
+	c := new(Cat)
+	zoo := [...]Animal{f, d, c}
+
 	for _, a := range zoo {
 		fmt.Println(a.Type(), " can ", a.Swim())
 	}
+}
+
+// func (a *Animal) Type() string { // X: invalid receiver type *Animal (Animal is an interface type)
+func (a *animal) Type() string {
+	return "Animal"
+}
+func (a *animal) Swim() string {
+	return "Swim"
 }
 
 func (f *Frog) Type() string {
