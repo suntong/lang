@@ -17,6 +17,9 @@ func main() {
 	}
 	fmt.Println("Name: ", t.Name())
 	fmt.Printf("Deck: %#v\n", t.Templates())
+	for _, ti := range t.Templates() {
+		fmt.Println("  Name: ", ti.Name())
+	}
 	if err := t.Execute(os.Stdout, nil); err != nil {
 		panic(err)
 	}
