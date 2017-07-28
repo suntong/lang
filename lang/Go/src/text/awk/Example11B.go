@@ -18,7 +18,9 @@ func main() {
 		s.SetFS(",")
 	}
 
-	s.AppendStmt(nil, func(s *awk.Script) { s.Println(s.F(3), s.F(4)) })
+	s.AppendStmt(nil, func(s *awk.Script) {
+		s.Println(s.F(1), s.F(2), s.F(3), s.F(4))
+	})
 
 	if err := s.Run(os.Stdin); err != nil {
 		panic(err)
