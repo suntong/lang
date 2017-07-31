@@ -14,6 +14,7 @@ import (
 
 func main() {
 	Summary()
+	RegexNotes()
 	FromDoc()
 	reDemystified()
 
@@ -36,6 +37,21 @@ func main() {
 var p = fmt.Println
 
 func Summary() {
+	r := regexp.MustCompile(`(?i)^http`)
+	p(r.MatchString("http://site/"))  // => true
+	p(r.MatchString("https://site/")) // => true
+	p(r.MatchString("HTTPS://site/")) // => true
+
+	// -- "(?i)" Case insensitive string match/replace
+	fmt.Println(regexp.MustCompile(`(?i)html|uml`).
+		ReplaceAllLiteralString("html HTML Html aa uml bb Uml", "XML"))
+	// XML XML XML aa XML bb XML
+	fmt.Println(regexp.MustCompile(`(?i)(this|th[eo]se)`).
+		ReplaceAllString("This and these are for THOSE people", "<b>${1}</b>"))
+	// <b>This</b> and <b>these</b> are for <b>THOSE</b> people
+}
+
+func RegexNotes() {
 	// https://ruk.si/notes/go/regex
 	// Basic regular expression match does not require compiling.
 	match, _ := regexp.MatchString("p([a-z]+)ch", "peach")
