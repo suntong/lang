@@ -2,12 +2,8 @@
 // Porgram: DateTime.go
 // Purpose: Go date & time demo
 // Authors: Tong Sun (c) 2015, All rights reserved
-// Credits: Go by Example
-//          https://gobyexample.com/
+// Credits: As listed below
 ////////////////////////////////////////////////////////////////////////////
-
-// Go's offers extensive support for times and durations;
-// here are some examples.
 
 package main
 
@@ -16,8 +12,8 @@ import (
 	"time"
 )
 
+////////////////////////////////////////////////////////////////////////////
 /*
-
 Parsing and formatting date/time in Go
 https://pauladamsmith.com/blog/2011/05/go_time.html
 
@@ -32,7 +28,6 @@ Or put another way:
 Instead of having to remember or lookup the traditional formatting codes for functions like strftime, you just count one-two-three-four and each place in the standard time corresponds to a component of a date/time object (the Time type in Go): one for day of the month, two for the month, three for the hour (in 12-hour time), four for the minutes, etc.
 
 */
-
 func test_now() {
 
 	// You can use commas to separate multiple expressions
@@ -67,6 +62,12 @@ func test_now() {
 
 }
 
+////////////////////////////////////////////////////////////////////////////
+// Credits: Go by Example
+//          https://gobyexample.com/time
+
+// Go's offers extensive support for times and durations;
+// here are some examples.
 func test_parts() {
 	p := fmt.Println
 
@@ -147,6 +148,9 @@ func test_parts() {
 	// 2003-11-01 13:07:05.361596839 +0000 UTC
 }
 
+////////////////////////////////////////////////////////////////////////////
+// https://godoc.org/time
+
 func test_parse() {
 	p := fmt.Println
 
@@ -209,10 +213,25 @@ func test_parse() {
 	// 11:02PM
 }
 
+////////////////////////////////////////////////////////////////////////////
+// https://www.dotnetperls.com/time-go
+
+func test_duration() {
+	// Duration
+	d := time.Duration(1 * time.Second)
+	for i := 0; i < 4; i++ {
+		fmt.Println(time.Now())
+		time.Sleep(d)
+		d *= 2
+	}
+	fmt.Println(time.Now())
+}
+
 func main() {
 	test_now()
 	time.Sleep(time.Second)
 	test_parts()
 	time.Sleep(time.Second * 1)
 	test_parse()
+	test_duration()
 }
