@@ -29,19 +29,17 @@ func main() {
 
 /*
 
-Example (11)
-https://godoc.org/github.com/spakin/awk
 
-Write the first two fields in opposite order (AWK: {print $2, $1}).
+Write all four fields.
 
-$ seq 8 | cat -n | sed 's/$/:/' | go run Example11.go
-1: 1
-2: 2
-3: 3
-4: 4
-5: 5
-6: 6
-7: 7
-8: 8
+$ seq 12 | xargs -n 4 | sed 's/ /,/g'
+1,2,3,4
+5,6,7,8
+9,10,11,12
+
+!! | go run Example11B.go
+1 2 3 4
+5 6 7 8
+9 10 11 12
 
 */
