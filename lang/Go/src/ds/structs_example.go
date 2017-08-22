@@ -11,6 +11,7 @@ func main() {
 	ExampleMap()
 	ExampleMaps()
 	ExampleMaps2()
+	ExampleMaps3()
 }
 
 func ExampleNew() {
@@ -115,6 +116,8 @@ func ExampleMaps() {
 
 	m := structs.Map(s)
 	fmt.Printf("%#v\n", m)
+	// Output:
+	// map[string]interface {}{"Servers":[]main.Server{main.Server{Name:"Arslan", ID:123456, Enabled:true}, main.Server{Name:"Arslan", ID:123456, Enabled:true}}}
 }
 
 // Map of slice
@@ -145,4 +148,35 @@ func ExampleMaps2() {
 
 	m := structs.Map(s)
 	fmt.Printf("%#v\n", m)
+}
+
+// Map of slice
+func ExampleMaps3() {
+	type Server struct {
+		Name    string
+		ID      int32
+		Enabled bool
+	}
+
+	s := []Server{
+		{
+			Name:    "Arslan",
+			ID:      123456,
+			Enabled: true,
+		},
+		{
+			Name:    "Arslan",
+			ID:      123456,
+			Enabled: true,
+		},
+	}
+
+	st := struct {
+		Servers []Server
+	}{s}
+
+	m := structs.Map(st)
+	fmt.Printf("%#v\n", m)
+	// Output:
+	// map[string]interface {}{"Servers":[]main.Server{main.Server{Name:"Arslan", ID:123456, Enabled:true}, main.Server{Name:"Arslan", ID:123456, Enabled:true}}}
 }
