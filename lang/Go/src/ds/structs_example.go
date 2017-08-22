@@ -10,6 +10,7 @@ func main() {
 	ExampleNew()
 	ExampleMap()
 	ExampleMaps()
+	ExampleMaps2()
 }
 
 func ExampleNew() {
@@ -110,6 +111,36 @@ func ExampleMaps() {
 			Enabled: true,
 		},
 	},
+	}
+
+	m := structs.Map(s)
+	fmt.Printf("%#v\n", m)
+}
+
+// Map of slice
+func ExampleMaps2() {
+	type Server struct {
+		Name    string
+		ID      int32
+		Enabled bool
+	}
+	type Servers struct {
+		servers []Server
+	}
+
+	s := Servers{
+		servers: []Server{
+			{
+				Name:    "Arslan",
+				ID:      123456,
+				Enabled: true,
+			},
+			{
+				Name:    "Arslan",
+				ID:      123456,
+				Enabled: true,
+			},
+		},
 	}
 
 	m := structs.Map(s)
