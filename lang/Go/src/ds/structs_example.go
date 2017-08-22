@@ -84,7 +84,8 @@ func ExampleMaps0() {
 	}
 
 	// XX: m := structs.Map(s)
-  // panic: not struct
+	// panic: not struct
+	fmt.Printf("%#v\n", s)
 }
 
 // Map of slice
@@ -96,20 +97,20 @@ func ExampleMaps() {
 	}
 
 	s := struct {
-    Servers     []Server{
-      {[]Server{
-        Name:    "Arslan",
-        ID:      123456,
-        Enabled: true,
-      },
-        {
-          Name:    "Arslan",
-          ID:      123456,
-          Enabled: true,
-        },
-      }
-    }
-  }
+		Servers []Server
+	}{[]Server{
+		{
+			Name:    "Arslan",
+			ID:      123456,
+			Enabled: true,
+		},
+		{
+			Name:    "Arslan",
+			ID:      123456,
+			Enabled: true,
+		},
+	},
+	}
 
 	m := structs.Map(s)
 	fmt.Printf("%#v\n", m)
