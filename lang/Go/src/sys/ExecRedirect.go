@@ -17,6 +17,7 @@ import (
 
 func main() {
 	redirect1()
+	redirect12()
 
 	var t *testing.T = testing.NewT()
 	redirect2(t)
@@ -34,6 +35,24 @@ run a shell command, capture stdout and write that output to a file
 func redirect1() {
 
 	cmd := exec.Command("echo", "'WHAT THE HECK IS UP'", "Huh?")
+
+	// open the out file for writing
+	outfile, err := os.Create("./out.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer outfile.Close()
+	cmd.Stdout = outfile
+
+	err = cmd.Start()
+	if err != nil {
+		panic(err)
+	}
+	cmd.Wait()
+}
+
+func redirect12() {
+	cmd := exec.Command("bash", "-c", "ls /etc/fstab /var/no-such-file"+" 2>&1")
 
 	// open the out file for writing
 	outfile, err := os.Create("./out.txt")
