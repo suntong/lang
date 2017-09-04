@@ -18,7 +18,7 @@ func main() {
 // root command
 type rootT struct {
 	cli.Helper
-	Self *rootT `json:"-" cli:"c,config" usage:"config" parser:"jsonfile" dft:"1.json"`
+	Self *rootT `json:"-" cli:"c,config" usage:"config" parser:"jsonfile" dft:"027-global-option.json"`
 	Host string `cli:"H,host" usage:"host addr" dft:"$HOST"`
 	Port int    `cli:"p,port" usage:"listening port"`
 }
