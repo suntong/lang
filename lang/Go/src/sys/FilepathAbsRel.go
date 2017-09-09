@@ -27,9 +27,16 @@ func testRel() {
 		"/b/c",
 		"./b/c",
 	}
-	base := "/a"
 
-	fmt.Println("On Unix:")
+	base := "/a"
+	fmt.Println("\nRelative to:", base)
+	for _, p := range paths {
+		rel, err := filepath.Rel(base, p)
+		fmt.Printf("%q: %q %v\n", p, rel, err)
+	}
+
+	base = "/a/d/e.f"
+	fmt.Println("\nRelative to:", base)
 	for _, p := range paths {
 		rel, err := filepath.Rel(base, p)
 		fmt.Printf("%q: %q %v\n", p, rel, err)
@@ -41,9 +48,15 @@ func testRel() {
 
 $ go run FilepathAbsRel.go
 Absolute: /home/.../lang/Go/src/sys/FilepathAbsRel.ext
-On Unix:
+
+Relative to: /a
 "/a/b/c": "b/c" <nil>
 "/b/c": "../b/c" <nil>
 "./b/c": "" Rel: can't make ./b/c relative to /a
+
+Relative to: /a/d/e.f
+"/a/b/c": "../../b/c" <nil>
+"/b/c": "../../../b/c" <nil>
+"./b/c": "" Rel: can't make ./b/c relative to /a/d/e.f
 
 */
