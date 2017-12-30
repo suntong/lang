@@ -70,4 +70,6 @@ func test3() {
 		color.Cyan("cyan"),
 		color.White("white"),
 		color.Grey("grey"))
+	fmt.Fprintf(os.Stderr, "%s %s %s\n",
+		color.Red("red"), color.Yellow("yellow"), color.Green("green"))
 }
