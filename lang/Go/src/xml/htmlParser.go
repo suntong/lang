@@ -16,7 +16,14 @@ import (
 )
 
 func main() {
-	s := `<p>Links:</p><ul><li><a href="foo">Foo</a><li><a href="/bar/baz">BarBaz</a></ul>`
+	s := `<p>Links:</p><ul>
+<!-- foo:Foo -->
+<li><a href="foo">Foo</a>
+<!-- bar:Bar -->
+<li><a href="bar">Bar</a>
+<!-- bar/baz:BarBaz -->
+<li><a href="/bar/baz">BarBaz</a>
+</ul>`
 	doc, err := html.Parse(strings.NewReader(s))
 	if err != nil {
 		log.Fatal(err)
@@ -26,10 +33,13 @@ func main() {
 		if n.Type == html.ElementNode && n.Data == "a" {
 			for _, a := range n.Attr {
 				if a.Key == "href" {
-					fmt.Println(a.Val)
+					fmt.Println("Url:", a.Val)
 					break
 				}
 			}
+		} else if n.Type == html.CommentNode {
+			// fmt.Printf("%#v\n", n)
+			fmt.Printf("Comment: '%s'\n", n.Data)
 		}
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
 			f(c)
