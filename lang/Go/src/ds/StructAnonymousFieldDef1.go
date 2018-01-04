@@ -12,6 +12,11 @@ type Car struct {
 	Vehicle //anonymous field Vehicle
 }
 
+type Truck struct {
+	Vehicle //anonymous field Vehicle
+	Payload string
+}
+
 func main() {
 	{
 		v := Vehicle{4}
@@ -31,5 +36,13 @@ func main() {
 		c = &Car{*v}
 		fmt.Printf("Hello, %#v\n", c)
 		fmt.Printf("Wheels: %d\n", c.wheelCount)
+	}
+	{
+		t1 := Truck{Vehicle{4}, "1.5T"}
+		fmt.Printf("Hello, %#v\n", t1)
+
+		v := Vehicle{6}
+		t2 := Truck{v, "2.5T"}
+		fmt.Printf("Hello, %#v\n", t2)
 	}
 }
