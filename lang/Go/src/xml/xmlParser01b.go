@@ -31,6 +31,7 @@ func main() {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <table cellpadding="1" cellspacing="1" border="1">
+<tr><td rowspan="1" colspan="3">wordpress</td></tr>
 <tr>
 	<td>open</td>
 	<td>/</td>
@@ -56,7 +57,9 @@ func main() {
 				decoder.DecodeElement(&item, &se)
 				tr := item
 				fmt.Printf("%#v %#v\n", tr, tr.Td)
-				fmt.Printf("%#v %#v\n", tr.Td[1], tr.Td[2])
+				if len(tr.Td) == 3 {
+					fmt.Printf("%#v %#v\n", tr.Td[1], tr.Td[2])
+				}
 			}
 		}
 	}
