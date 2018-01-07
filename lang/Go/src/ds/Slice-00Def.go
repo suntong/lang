@@ -37,9 +37,11 @@ func gobyexample0() {
 	// slice assignment
 	var N []int
 	N = nums
+
 	// slice append
-	N = append(N, nums...)
-	fmt.Printf("N: %v\n", N)
+	M := make([]int, 1)
+	M = append(M, nums...)
+	fmt.Printf("N: %v, M: %v\n", N, M)
 }
 
 func gobyexample1() {
