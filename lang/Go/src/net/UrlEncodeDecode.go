@@ -39,6 +39,9 @@ func main() {
 	fmt.Printf("\nHtml Decode:\n")
 	fmt.Println(html.UnescapeString("http&#x3a;&#x2f;&#x2f;www.test.com/potato%2B%2Btomato"))
 	fmt.Println(html.UnescapeString(es))
+
+	Url, _ = url.Parse("http://www.example.com/some/path/with%2B%2B/%E4%B8%AD%E6%96%87%E6%B5%8B%E8%AF%95/")
+	fmt.Printf("\nDecoded: %s", Url.Path)
 }
 
 /*
@@ -50,5 +53,7 @@ Decoded URL: http://www.example.com/some/path/with/funny_characters?_or_not/中�
 Html Decode:
 http://www.test.com/potato%2B%2Btomato
 http://www.example.com/some/path/with/funny_characters%3F_or_not/%E4%B8%AD%E6%96%87%E6%B5%8B%E8%AF%95/?hello=42&hello=54&vegetable=potato%2B%2Btomato
+
+Decoded: /some/path/with++/中文测试/
 
 */
