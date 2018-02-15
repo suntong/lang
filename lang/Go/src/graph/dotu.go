@@ -10,7 +10,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/mewspring/dot"
+	"github.com/graphism/dot"
 )
 
 func main() {
