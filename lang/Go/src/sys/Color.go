@@ -15,6 +15,7 @@ import (
 )
 
 func main() {
+	color.Enable()
 	test0()
 	fmt.Println("======")
 	test1()
