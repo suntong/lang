@@ -19,7 +19,9 @@ func build(ctx *cli.Context) error {
 	jC, _ := json.Marshal(*argv)
 	ctx.String("[build]:\n  %v\n  %v\n  %v\n", string(jR), string(jC), ctx.Args())
 	cli.ReadJSONFromFile("redo2.json", rootArgv)
-	ctx.String("[%s]:\n  %+v\n", ctx.Path(), *rootArgv)
+	ctx.String("[%s-rootArgv]:\n  %+v\n", ctx.Path(), *rootArgv)
+	cli.ReadJSONFromFile("redo2.json", argv)
+	ctx.String("[%s-argv]:\n  %+v\n", ctx.Path(), *argv)
 	return nil
 }
 

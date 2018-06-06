@@ -15,7 +15,6 @@ import (
 
 type rootT struct {
 	cli.Helper
-	Self *rootT `cli:"c,config"usage:"config file" json:"-" parser:"jsonfile" dft:"redo.json"`
 	Host string `cli:"H,host"usage:"host address" dft:"$HOST"`
 	Port int    `cli:"p,port"usage:"listening port" dft:"80"`
 }
@@ -25,7 +24,7 @@ var root = &cli.Command{
 	Desc:   "global option redo",
 	Text:   "  redo global option via automatic code-gen",
 	Global: true,
-	Argv:   func() interface{} { t := new(rootT); t.Self = t; return t },
+	Argv:   func() interface{} { return new(rootT) },
 	Fn:     redo,
 
 	NumArg: cli.ExactN(1),
@@ -56,16 +55,17 @@ var root = &cli.Command{
 // build
 
 type buildT struct {
-	Dir    string `cli:"dir" usage:"source code root dir" dft:"./"`
-	Suffix string `cli:"suffix" usage:"source file suffix" dft:".go,.c,.s"`
-	Out    string `cli:"o,out" usage:"output filename"`
+	Self   *buildT `cli:"c,config"usage:"config file" json:"-" parser:"jsonfile" dft:"redo.json"`
+	Dir    string  `cli:"dir" usage:"source code root dir" dft:"./"`
+	Suffix string  `cli:"suffix" usage:"source file suffix" dft:".go,.c,.s"`
+	Out    string  `cli:"o,out" usage:"output filename"`
 }
 
 var buildCmd = &cli.Command{
 	Name: "build",
 	Desc: "Build the network application",
 	Text: "Usage:\n  redo build [Options] Arch(i386|amd64)",
-	Argv: func() interface{} { return new(buildT) },
+	Argv: func() interface{} { t := new(buildT); t.Self = t; return t },
 	Fn:   build,
 
 	NumArg:      cli.ExactN(1),
