@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/mkideal/cli"
+	"github.com/go-easygen/cli"
 	"github.com/suntong/enum"
 )
 

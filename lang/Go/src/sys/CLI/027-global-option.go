@@ -5,7 +5,7 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/mkideal/cli"
+	"github.com/go-easygen/cli"
 )
 
 func main() {

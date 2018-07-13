@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/mkideal/cli"
+	"github.com/go-easygen/cli"
 )
 
 type argT struct {

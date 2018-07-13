@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/mkideal/cli"
+	"github.com/go-easygen/cli"
 )
 
 var _ = publishCmd.Register(&cli.Command{

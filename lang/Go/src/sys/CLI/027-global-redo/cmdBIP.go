@@ -9,7 +9,7 @@ package main
 import (
 	"encoding/json"
 
-	"github.com/mkideal/cli"
+	"github.com/go-easygen/cli"
 )
 
 func build(ctx *cli.Context) error {

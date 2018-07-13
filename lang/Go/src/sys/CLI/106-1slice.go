@@ -8,19 +8,19 @@
 /*
 
 How to obtain/preserver output orders to that given on command line?
-https://github.com/mkideal/cli/issues/29
+https://github.com/go-easygen/cli/issues/29
 
 Q: The go map is known to not preserver map orders. I.e., if we run 006-map.go
 a couple of times, the output might not always be the same.
 How to obtain/preserver output orders to that given on command line?
 
-mkideal: You can replace map with slice. Here is an example
+go-easygen: You can replace map with slice. Here is an example
 
 */
 
 package main
 
-import "github.com/mkideal/cli"
+import "github.com/go-easygen/cli"
 import "strings"
 import "strconv"
 
