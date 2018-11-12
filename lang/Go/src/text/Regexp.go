@@ -54,6 +54,8 @@ func Summary() {
 	
 	re := regexp.MustCompile(`(?i)t(his|h[eo]se)`)
 	sourceStr := "This and these are for THOSE people"
+	fmt.Println(re.FindStringSubmatch("Nothing match"))
+	// []
 	fmt.Println(re.FindStringSubmatch(sourceStr))
 	// [This his]
 	fmt.Println(re.FindAllStringSubmatch(sourceStr,-1))
