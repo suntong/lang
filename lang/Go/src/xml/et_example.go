@@ -24,6 +24,8 @@ import (
 // Function main
 
 func main() {
+	DumpByFn()
+
 	ExampleDocument_creating()
 	fmt.Println()
 	ExamplePath()
@@ -44,6 +46,16 @@ func readXml(xml string) *etree.Document {
 	doc := etree.NewDocument()
 	doc.ReadFromString(xml)
 	return doc
+}
+
+func DumpByFn() {
+	doc := etree.NewDocument()
+	if err := doc.ReadFromFile("et_example.xml"); err != nil {
+		panic(err)
+	}
+
+	doc.Indent(2)
+	doc.WriteTo(os.Stdout)
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

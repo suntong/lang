@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<bookstore>
+<book><title>Great Expectations</title>
+     <author>Charles Dickens</author></book><book><title>Ulysses</title>
+     <author>James Joyce</author></book>
+</bookstore>
