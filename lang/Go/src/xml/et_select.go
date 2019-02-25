@@ -41,7 +41,7 @@ func PathQuery(xmlFile, xmlSelStr string) {
 	fmt.Printf("-----------------------------------\n\n")
 
 	for _, e := range doc.FindElements(xmlSelStr) {
-		fmt.Printf("%s (%s): %s\n", e.Tag, e.GetPath(), e.Text())
+		fmt.Printf("%s (%s): %s: %s\n", e.Tag, e.FullTag(), e.GetPath(), e.Text())
 	}
 
 }
@@ -52,8 +52,9 @@ $ go run et_select.go et_example.xml '//book'
 ---------- Original Doc -----------
 -----------------------------------
 
-book (/bookstore/book):
+book (book): /bookstore/book
 
-book (/bookstore/book):
+book (book): /bookstore/book
+
 
 */

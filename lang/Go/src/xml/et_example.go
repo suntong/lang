@@ -48,6 +48,10 @@ func readXml(xml string) *etree.Document {
 	return doc
 }
 
+func newDocumentFromString(t *testing.T, s string) *etree.Document {
+	return readXml(s)
+}
+
 func DumpByFn() {
 	doc := etree.NewDocument()
 	if err := doc.ReadFromFile("et_example.xml"); err != nil {
@@ -356,13 +360,10 @@ func TestOrgTests() {
 	t.Report()
 }
 
-func checkEq(t *testing.T, got, want string) {
-	if got == want {
-		return
+func checkStrEq(t *testing.T, got, want string) {
+	if got != want {
+		t.Errorf("etree: unexpected result.\nGot:\n%s\nWanted:\n%s\n", got, want)
 	}
-	t.Errorf(
-		"etree: unexpected result.\nGot:\n%s\nWanted:\n%s\n",
-		got, want)
 }
 
 //--------------------------------------------------------------------------
@@ -416,23 +417,19 @@ func TestCopy(t *testing.T) {
 
 //--------------------------------------------------------------------------
 func TestInsertChild(t *testing.T) {
-	testdoc := `<book lang="en">
+	s := `<book lang="en">
   <t:title>Great Expectations</t:title>
   <author>Charles Dickens</author>
 </book>
 `
 
-	doc := etree.NewDocument()
-	err := doc.ReadFromString(testdoc)
-	if err != nil {
-		t.Fatal("etree ReadFromString: " + err.Error())
-	}
+	doc := newDocumentFromString(t, s)
 
 	year := etree.NewElement("year")
 	year.SetText("1861")
 
 	book := doc.FindElement("//book")
-	book.InsertChild(book.SelectElement("t:title"), year)
+	book.InsertChildAt(book.SelectElement("t:title").Index(), year)
 
 	expected1 := `<book lang="en">
   <year>1861</year>
@@ -442,10 +439,10 @@ func TestInsertChild(t *testing.T) {
 `
 	doc.Indent(2)
 	s1, _ := doc.WriteToString()
-	checkEq(t, s1, expected1)
+	checkStrEq(t, s1, expected1)
 
-	book.RemoveChild(year)
-	book.InsertChild(book.SelectElement("author"), year)
+	book.RemoveChildAt(year.Index())
+	book.InsertChildAt(book.SelectElement("author").Index(), year)
 
 	expected2 := `<book lang="en">
   <t:title>Great Expectations</t:title>
@@ -455,10 +452,10 @@ func TestInsertChild(t *testing.T) {
 `
 	doc.Indent(2)
 	s2, _ := doc.WriteToString()
-	checkEq(t, s2, expected2)
+	checkStrEq(t, s2, expected2)
 
-	book.RemoveChild(year)
-	book.InsertChild(book.SelectElement("UNKNOWN"), year)
+	book.RemoveChildAt(year.Index())
+	book.InsertChildAt(len(book.Child), year)
 
 	expected3 := `<book lang="en">
   <t:title>Great Expectations</t:title>
@@ -468,10 +465,10 @@ func TestInsertChild(t *testing.T) {
 `
 	doc.Indent(2)
 	s3, _ := doc.WriteToString()
-	checkEq(t, s3, expected3)
+	checkStrEq(t, s3, expected3)
 
-	book.RemoveChild(year)
-	book.InsertChild(nil, year)
+	book.RemoveChildAt(year.Index())
+	book.InsertChildAt(999, year)
 
 	expected4 := `<book lang="en">
   <t:title>Great Expectations</t:title>
@@ -481,21 +478,17 @@ func TestInsertChild(t *testing.T) {
 `
 	doc.Indent(2)
 	s4, _ := doc.WriteToString()
-	checkEq(t, s4, expected4)
+	checkStrEq(t, s4, expected4)
 }
 
 //--------------------------------------------------------------------------
 func TestAddChild(t *testing.T) {
-	testdoc := `<book lang="en">
+	s := `<book lang="en">
   <t:title>Great Expectations</t:title>
   <author>Charles Dickens</author>
 </book>
 `
-	doc1 := etree.NewDocument()
-	err := doc1.ReadFromString(testdoc)
-	if err != nil {
-		t.Fatal("etree ReadFromString: " + err.Error())
-	}
+	doc1 := newDocumentFromString(t, s)
 
 	doc2 := etree.NewDocument()
 	root := doc2.CreateElement("root")
@@ -504,12 +497,11 @@ func TestAddChild(t *testing.T) {
 		root.AddChild(e)
 	}
 
-	// It's empty because the adding of the children to doc2 removed them from doc1.
 	expected1 := `<book lang="en"/>
 `
 	doc1.Indent(2)
 	s1, _ := doc1.WriteToString()
-	checkEq(t, s1, expected1)
+	checkStrEq(t, s1, expected1)
 
 	expected2 := `<root>
   <t:title>Great Expectations</t:title>
@@ -518,7 +510,7 @@ func TestAddChild(t *testing.T) {
 `
 	doc2.Indent(2)
 	s2, _ := doc2.WriteToString()
-	checkEq(t, s2, expected2)
+	checkStrEq(t, s2, expected2)
 }
 
 //--------------------------------------------------------------------------
@@ -548,7 +540,7 @@ func TestTrueAddChild(t *testing.T) {
 `
 	doc1.Indent(2)
 	s1, _ := doc1.WriteToString()
-	checkEq(t, s1, expected1)
+	checkStrEq(t, s1, expected1)
 
 	expected2 := `<root>
   <t:title>Great Expectations</t:title>
@@ -557,7 +549,7 @@ func TestTrueAddChild(t *testing.T) {
 `
 	doc2.Indent(2)
 	s2, _ := doc2.WriteToString()
-	checkEq(t, s2, expected2)
+	checkStrEq(t, s2, expected2)
 }
 
 /*
