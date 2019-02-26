@@ -38,6 +38,8 @@ func main() {
 
 	DemoFindElements()
 	fmt.Println()
+	DemoRemoveChild()
+	fmt.Println()
 
 	TestOrgTests()
 }
@@ -345,6 +347,15 @@ Output:
 
 
 */
+
+func DemoRemoveChild() {
+	doc := readXml(bookstore)
+	for _, e := range doc.FindElements(".//year") {
+		doc.RemoveChild(e)
+	}
+	doc.Indent(2)
+	doc.WriteTo(os.Stdout)
+}
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //
