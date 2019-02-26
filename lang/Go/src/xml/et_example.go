@@ -351,7 +351,8 @@ Output:
 func DemoRemoveChild() {
 	doc := readXml(bookstore)
 	for _, e := range doc.FindElements(".//year") {
-		doc.RemoveChild(e)
+		//doc.RemoveChild(e)
+		e.Parent().RemoveChild(e)
 	}
 	doc.Indent(2)
 	doc.WriteTo(os.Stdout)
