@@ -7,11 +7,16 @@ import (
 	"fmt"
 )
 
+type boxItems struct {
+	SeqNo int
+}
+
 type Box struct {
 	Width  int
 	Height int
 	Color  string
 	Open   bool
+	Items  []boxItems
 }
 
 func main() {
@@ -21,6 +26,7 @@ func main() {
 		Height: 20,
 		Color:  "blue",
 		Open:   false,
+		Items:  []boxItems{boxItems{1}, boxItems{2}, boxItems{3}},
 	}
 	// Create JSON from the instance data.
 	// ... Ignore errors.
@@ -33,6 +39,6 @@ func main() {
 /*
 
 $ go run json.Marshal.go
-{"Width":10,"Height":20,"Color":"blue","Open":false}
+{"Width":10,"Height":20,"Color":"blue","Open":false,"Items":[{"SeqNo":1},{"SeqNo":2},{"SeqNo":3}]}
 
 */
