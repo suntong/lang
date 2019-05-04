@@ -1,17 +1,31 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 
 	"github.com/fatih/structs"
 )
 
 func main() {
+	ExampleDef()
 	ExampleNew()
 	ExampleMap()
 	ExampleMaps()
 	ExampleMaps2()
 	ExampleMaps3()
+}
+
+func ExampleDef() {
+	var buf bytes.Buffer
+	p := struct {
+		Name string `json:"name"`
+	}{
+		Name: "Mat Ryer",
+	}
+	e := json.NewEncoder(&buf).Encode(p)
+	fmt.Printf("%s (e:%v)\n", string(buf.Bytes()), e)
 }
 
 func ExampleNew() {
