@@ -34,11 +34,32 @@ func main() {
 	// Convert bytes to string.
 	s := string(b)
 	fmt.Println(s)
+
+	// https://godoc.org/encoding/json#MarshalIndent
+	b, _ = json.MarshalIndent(box, "\t", "  ")
+	fmt.Println(string(b))
 }
 
 /*
 
 $ go run json.Marshal.go
 {"Width":10,"Height":20,"Color":"blue","Open":false,"Items":[{"SeqNo":1},{"SeqNo":2},{"SeqNo":3}]}
+{
+          "Width": 10,
+          "Height": 20,
+          "Color": "blue",
+          "Open": false,
+          "Items": [
+            {
+              "SeqNo": 1
+            },
+            {
+              "SeqNo": 2
+            },
+            {
+              "SeqNo": 3
+            }
+          ]
+        }
 
 */
