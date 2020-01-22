@@ -1,0 +1,55 @@
+# easygen data driven file for pocketweb commandline handling
+#
+# easygen -tf $GOPATH/src/github.com/go-easygen/easygen/test/commandlineFlag pocketweb_cli | sed '/\tAES\t\tstring/{ N; N; N; N; N; s|^.*$|\tEncoding\t// anonymous field to hold encoding values|; }; /\tExt\t\tstring/d; ' | gofmt > config.go
+
+# program name, name for the executable
+ProgramName: PocketWeb
+
+# package name
+PackageName: main
+
+# Name of the structure to hold the values for/from commandline
+StructName: Options
+# The actual variable that hold the commandline paramter values
+StructVar: Opts
+
+Options:
+  
+  - Name: Directory
+    Type: string
+    Flag: d
+    Value: '"."'
+    Usage: "directory holding web files"
+
+  - Name: Port
+    Type: string
+    Flag: p
+    Value: '"8800"'
+    Usage: "port used by the pocketweb server"
+
+  - Name: Debug
+    Type: int
+    Flag: dbg
+    Value: 0
+    Usage: debugging level
+    
+  - Name: Help
+    Type: bool
+    Flag: "h"
+    Value: false
+    Usage: "print help then exit"
+
+  - Name: PrintV
+    Type: bool
+    Flag: "ver"
+    Value: false
+    Usage: "print version then exit"
+
+
+# Use the USAGE_SUMMARY in Usage help
+UsageSummary: "TRUE"
+
+UsageLead: "\\nUsage:\\n %s [flags]\\n\\nFlags:\\n\\n"
+
+UsageEnd: "\\nE.g.:\\n\\n  PocketWeb &\\n  PocketWeb -p 8088 -d /some/where/else\\n  POCKETWEB_D=/some/where/else POCKETWEB_P=8088 PocketWeb\\n  PocketWeb -ver\\n"
+
