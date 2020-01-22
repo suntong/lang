@@ -44,7 +44,8 @@ func main() {
 		} else {
 			p, n := filepath.Split(f)
 			fmt.Printf("F: %v='%v'+'%v'\n", f, p, n)
-			fmt.Printf("  name='%v', ext='%v'\n", Basename(filepath.Base(f)), filepath.Ext(f))
+			fmt.Printf("  base='%v', name='%v', ext='%v'\n",
+				filepath.Base(f), Basename(filepath.Base(f)), filepath.Ext(f))
 		}
 	}
 }
@@ -54,7 +55,7 @@ func main() {
 $ go run FilepathDir.go /etc/ssl/
 D: /etc/ssl/certs/ /etc/ssl/certs certs certs
 F: /etc/ssl/openssl.cnf='/etc/ssl/'+'openssl.cnf'
-  name='openssl', ext='.cnf'
+  base='openssl.cnf', name='openssl', ext='.cnf'
 D: /etc/ssl/private/ /etc/ssl/private private private
 
 */
