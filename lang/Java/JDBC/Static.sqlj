@@ -1,0 +1,86 @@
+// -*- Java -*-
+//
+//   Source File Name: [1]Static.sqlj  1.2
+//
+//   Licensed Materials -- Property of IBM
+//
+//   (c) Copyright International Business Machines Corporation, 1998.
+//       All Rights Reserved.
+//
+//   US Government Users Restricted Rights -
+//   Use, duplication or disclosure restricted by
+//   GSA ADP Schedule Contract with IBM Corp.
+
+//  PURPOSE:
+//   This sample program shows how to write a basic SQLJ application.
+
+//  For more information about this sample, refer to the [2]README file.
+
+//  For more information on [3]Programming in Java, refer to the
+//  "[4]Programming in Java" section of the [5]Application Development Guide.
+
+
+//  For more information on building and running Java programs for DB2,
+//  refer to the "[6]Building Java Applets and Applications" section of the
+//  [7]Application Building Guide.
+
+//  For more information on the SQL language, refer to the [8]SQL Reference.
+
+import java.sql.*;
+import sqlj.runtime.*;
+import sqlj.runtime.ref.*;
+
+class Static
+{   static
+    {   try
+        {   Class.forName ("COM.ibm.db2.jdbc.app.DB2Driver").newInstance ();
+        }
+        catch (Exception e)
+        {   System.out.println ("\n  Error loading DB2 Driver...\n");
+            System.out.println (e);
+            System.exit(1);
+        }
+    }
+
+    public static void main(String argv[])
+    {   try
+        {   System.out.println ("  Java Static Sample");
+
+            String url = "jdbc:db2:sample";       //  URL is jdbc:db2:dbname
+            Connection con = null;
+
+            //  Set the connection                 /* :rk.3:erk. */
+            if (argv.length == 0)
+            {   //  connect with default id/password
+                con = DriverManager.getConnection(url);
+            }
+            else if (argv.length == 2)
+            {   String userid = argv[0];
+                String passwd = argv[1];
+
+                //  connect with user-provided username and password
+                con = DriverManager.getConnection(url, userid, passwd);
+            }
+            else
+            {throw new Exception("\nUsage: java Static [username password]\n");
+            }
+
+            //  Set the default context
+            DefaultContext ctx = new DefaultContext(con);
+            DefaultContext.setDefaultContext(ctx);
+
+
+            String firstname = null;
+
+            #sql { SELECT FIRSTNME INTO :firstname
+                   FROM employee
+                   WHERE LASTNAME = 'JOHNSON' } ;   /* :rk.4:erk. */
+
+
+            System.out.println ("First name = " + firstname);
+        }
+        catch( Exception e )
+        {   System.out.println (e);
+        }
+    }
+}
