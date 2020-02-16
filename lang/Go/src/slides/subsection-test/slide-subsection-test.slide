@@ -9,6 +9,33 @@ joe@example.com
 http://url/
 @twitter_name
 
+* Notes
+
+The slides are available on [[https://talks.golang.org/2017/state-of-go.slide]]
+
+.image https://media.giphy.com/media/dQkcf8GANR0ps57oBH/giphy.gif
+
+* Agenda
+
+Changes since Go 1.7:
+
+- The Language
+- The Standard Library
+- The Runtime
+- The Tooling
+- The Community
+
+* Changes to the language
+
+https://media.giphy.com/media/JG2q7LjND6dH2/giphy.gif
+
+How many times have you found yourself with two types that were *almost* equal?
+
+Let's say you define `Person`:
+
+.image https://media.giphy.com/media/JG2q7LjND6dH2/giphy.gif
+
+
 * Title of slide or section (must have asterisk)
 
 Some Text
@@ -29,6 +56,8 @@ Some More text
 * Title two
 
 ** Subsection
+
+Subsection with bullets
 
 - bullets `code`
 - more bullets
