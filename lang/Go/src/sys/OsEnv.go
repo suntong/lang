@@ -26,8 +26,8 @@ func main() {
 	// an empty string if the key isn't present in the
 	// environment.
 	os.Setenv("FOO", "1")
-	fmt.Println("FOO:", os.Getenv("FOO"))
-	fmt.Println("BAR:", os.Getenv("BAR"))
+	fmt.Println("FOO:", os.Getenv("FOO"), os.Getenv("FOO") == "1")
+	fmt.Println("BAR:", os.Getenv("BAR"), os.Getenv("BAR") == "")
 
 	// Use `os.Environ` to list all key/value pairs in the
 	// environment. This returns a slice of strings in the
