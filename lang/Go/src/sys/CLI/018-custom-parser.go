@@ -3,7 +3,7 @@ package main
 import (
 	"reflect"
 
-	"github.com/go-easygen/cli"
+	"github.com/mkideal/cli"
 )
 
 type myParser struct {

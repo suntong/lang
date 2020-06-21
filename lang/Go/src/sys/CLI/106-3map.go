@@ -3,7 +3,7 @@ package main
 import (
 	"regexp"
 
-	"github.com/go-easygen/cli"
+	"github.com/mkideal/cli"
 )
 
 type MapStringString struct {

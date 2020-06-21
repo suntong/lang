@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/go-easygen/cli"
+	"github.com/mkideal/cli"
 )
 
 func main() {

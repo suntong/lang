@@ -3,7 +3,7 @@ package main
 import (
 	"strings"
 
-	"github.com/go-easygen/cli"
+	"github.com/mkideal/cli"
 )
 
 type exampleDecoder struct {

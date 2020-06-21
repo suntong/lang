@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/go-easygen/cli"
+	"github.com/mkideal/cli"
 )
 
 type argT struct {

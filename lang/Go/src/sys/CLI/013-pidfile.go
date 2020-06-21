@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/go-easygen/cli"
-	clix "github.com/go-easygen/cli/ext"
+	"github.com/mkideal/cli"
+	clix "github.com/mkideal/cli/ext"
 )
 
 type argT struct {

@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/go-easygen/cli"
+	"github.com/mkideal/cli"
 )
 
 type MapStringToInt64 struct {
