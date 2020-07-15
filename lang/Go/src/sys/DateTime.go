@@ -150,6 +150,7 @@ func test_parts() {
 
 ////////////////////////////////////////////////////////////////////////////
 // https://godoc.org/time
+// https://play.golang.org/p/zBMsRc4Pb3F
 
 func test_parse() {
 	p := fmt.Println
@@ -186,6 +187,10 @@ func test_parse() {
 		t.Hour(), t.Minute(), t.Second())
 	// 2015-12-04T23:02:52-00:00
 
+	t, e := time.Parse(time.RFC3339, "2015-12-04T23:02:52-05:00")
+	p(t.Format(time.RFC3339))
+	// 2015-12-04T23:02:52-05:00 -- https://play.golang.org/p/pzURdlRrsEd
+	
 	// Time parsing uses the same example-based approach
 	// as `Format`ing. These examples parse times rendered
 	// with some of the layouts used above.
