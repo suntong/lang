@@ -220,9 +220,11 @@ func test_duration() {
 	// Duration
 	d := time.Duration(1 * time.Second)
 	for i := 0; i < 4; i++ {
-		fmt.Printf("%s\n", time.Now())
+		fmt.Printf("%v\n", d)
 		time.Sleep(d)
 		d *= 2
+		d += time.Duration(i) * time.Millisecond
+		// https://stackoverflow.com/a/17573390/2125837
 	}
 	fmt.Println(time.Now())
 }
