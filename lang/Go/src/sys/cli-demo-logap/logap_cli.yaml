@@ -1,0 +1,38 @@
+# program name, name for the executable
+ProgramName: logap
+Authors: Tong Sun
+
+PackageName: main
+
+Name: logap
+Desc: "log gap finder"
+Text: Tool to find gaps in log file entries that are over the given limit
+NumOption: cli.AtLeast(1)
+Style: cli.DenseNormalStyle
+#NumArg: cli.AtLeast(1)
+
+#UsageLead: "Usage:\\n  logap [Options] dir [dirs...]"
+
+Options:
+  - Name: Reader
+    Type: clix.Reader
+    Flag: '*i,input'
+    Usage: log file to check
+
+  - Name: Gap
+    Type: int
+    Flag: '*g,Gap'                 # 
+    Usage: minimum gap between log entries to report (in minutes)
+    Value: '$LG_GAP'
+
+  - Name: Keyword
+    Type: string
+    Flag: '*k,kw'
+    Usage: keyword for the log entries to concentrate on
+    Value: '$LG_KW'
+
+  - Name: Verbose
+    Type: cli.Counter
+    Flag: v,verbose
+    Usage: Verbose mode (Multiple -v options increase the verbosity)\n
+
