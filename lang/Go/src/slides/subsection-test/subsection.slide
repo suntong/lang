@@ -1,0 +1,41 @@
+# Title of Talk
+Subtitle of document
+15:04 2 Jan 2006
+Tags: foo, bar, baz
+Summary: This is a great document you want to read.
+OldURL: former-path-for-this-doc
+
+
+## Title of Slide or Section (must begin with ##)
+
+Some Text
+
+### Subsection {#anchor}
+
+- bullets
+- more bullets
+- a bullet continued
+  on the next line
+
+#### Sub-subsection
+
+Some More text
+
+	Preformatted text (code block)
+	is indented (by one tab, or four spaces)
+
+Further Text, including command invocations.
+
+## Section 2: Example formatting {#fmt}
+
+Formatting:
+
+_italic_
+// A comment that is completely ignored.
+: Speaker notes.
+**bold**
+`program`
+Markup—_especially italic text_—can easily be overused.
+_Why use scoped\_ptr_? Use plain **\*ptr** instead.
+
+Visit [the Go home page](https://golang.org/).
