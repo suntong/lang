@@ -20,8 +20,8 @@ func main() {
 		if err != nil {
 			return err
 		}
-		ctx.String("read from file(or stdin): %s\n", string(data))
 		ctx.String("filename: %s, isStdin=%v\n", argv.Reader.Name(), argv.Reader.IsStdin())
+		ctx.String("read from file(or stdin): %s\n", string(data))
 
 		// Replace the reader
 		argv.Reader.SetReader(strings.NewReader("string reader"))
