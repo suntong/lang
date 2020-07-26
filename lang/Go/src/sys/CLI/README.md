@@ -455,6 +455,13 @@ read from file(or stdin): hello A B C
 filename: /tmp/test.txt, isStdin=false
 reade from reader: string reader
 filename: , isStdin=false
+
+$ go run 028-reader.go -r https://raw.githubusercontent.com/suntong/lang/master/README.md
+filename: https://raw.githubusercontent.com/suntong/lang/master/README.md, isStdin=false
+read from file(or stdin): # lang -- programming languages demos
+
+reade from reader: string reader
+filename: , isStdin=false
 ```
 
 
