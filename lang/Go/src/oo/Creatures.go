@@ -4,6 +4,10 @@ package main
 
 import "fmt"
 
+////////////////////////////////////////////////////////////////////////////
+// Constant and data type/structure definitions
+
+// Creature type is the base for all the following types
 type Creature struct {
 	Name string
 	Real bool
@@ -17,9 +21,23 @@ func (c Creature) Dump() {
 	fmt.Printf("Name: '%s', Real: %t\n", c.Name, c.Real)
 }
 
+//==========================================================================
+// FlyingCreature type
+
 type FlyingCreature struct {
 	Creature
 	WingSpan int
+}
+
+func NewFlyingCreature(wingSpan int) *FlyingCreature {
+	r := &FlyingCreature{
+		Creature{
+			"FlyingCreature",
+			true,
+		},
+		wingSpan,
+	}
+	return r
 }
 
 func (fc FlyingCreature) Dump() {
@@ -40,6 +58,9 @@ type Unicorn struct {
 type Dragon struct {
 	FlyingCreature
 }
+
+//==========================================================================
+// Pterodactyl type
 
 type Pterodactyl struct {
 	FlyingCreature
@@ -62,6 +83,9 @@ type Dumper interface {
 	Dump()
 }
 
+//==========================================================================
+// Door type
+
 type Door struct {
 	Thickness int
 	Color     string
@@ -71,6 +95,13 @@ func (d Door) Dump() {
 	fmt.Printf("Door => Thickness: %d, Color: %s", d.Thickness, d.Color)
 }
 
+////////////////////////////////////////////////////////////////////////////
+// Global variables definitions
+
+////////////////////////////////////////////////////////////////////////////
+// Function definitions
+
+// Function main
 func main() {
 	creature := &Creature{
 		"some creature",
@@ -125,6 +156,9 @@ func main() {
 	pet2.Dump()
 
 }
+
+//==========================================================================
+// support functions
 
 /*
 
