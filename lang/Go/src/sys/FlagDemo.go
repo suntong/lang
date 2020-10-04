@@ -68,27 +68,30 @@ var intervalFlag interval
 
 // go1.5+, the default is listed only when it is not the zero value for the type
 var write = flag.Bool("w", false, "write result back instead of stdout")
+var Help bool
 
 func init() {
 	// Tie the command-line flag to the intervalFlag variable and
 	// set a usage message.
 	flag.Var(&intervalFlag, "deltaT", "comma-separated list of `intervals` to use between events")
+	flag.BoolVar(&Help, "help", false, "show usage help")
 }
 
 func main() {
 	// All the interesting pieces are with the variables declared above, but
 	// to enable the flag package to see the flags defined there, one must
 	// execute, typically at the start of main (not init!):
-	//	flag.Parse()
-	// We don't run it here because this is not a main function and
-	// the testing suite has already parsed the flags.
+	flag.Parse()
+
 	flag.PrintDefaults()
+	fmt.Println(*write, Help)
 }
 
 /*
 
 Output:
 
+$ go run FlagDemo.go -help
   -deltaT intervals
         comma-separated list of intervals to use between events (default [])
   -g string
@@ -98,5 +101,6 @@ Output:
   -specie type
         the specie type we are studying (default "gopher")
   -w    write result back instead of stdout
+false true
 
 */
