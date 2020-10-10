@@ -29,6 +29,14 @@ func main() {
 	fmt.Println("FOO:", os.Getenv("FOO"), os.Getenv("FOO") == "1")
 	fmt.Println("BAR:", os.Getenv("BAR"), os.Getenv("BAR") == "")
 
+	bar, exists := os.LookupEnv("BAR")
+	if exists {
+		// Print the value of the environment variable
+		fmt.Println(bar)
+	} else {
+		fmt.Println("BAR not defined in system environment variable")
+	}
+
 	// Use `os.Environ` to list all key/value pairs in the
 	// environment. This returns a slice of strings in the
 	// form `KEY=value`. You can `strings.Split` them to
