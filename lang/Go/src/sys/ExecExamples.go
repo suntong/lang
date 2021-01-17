@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -20,6 +21,7 @@ func main() {
 	fmt.Println("Testing started")
 	ExampleLookPath()
 	ExampleCommand()
+	ExampleCommand_Direct()
 	ExampleCmd_Output()
 	ExampleCmd_Start()
 	ExampleCmd_StdoutPipe()
@@ -50,6 +52,17 @@ func ExampleCommand() {
 		log.Fatal(err)
 	}
 	fmt.Printf("in all caps: %q\n", out.String())
+}
+
+func ExampleCommand_Direct() {
+	cmd := exec.Command("ls", "-l", "ExecExamples.go", "not-exist")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Done")
 }
 
 func ExampleCmd_Output() {
