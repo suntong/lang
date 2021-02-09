@@ -14,7 +14,10 @@ import (
 
 func main() {
 	runeFromCode()
+	fmt.Println("======")
 	runeAndString()
+	fmt.Println("======")
+	runeAndLen()
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -76,4 +79,12 @@ func runeAndString() {
 	ok := syntax.IsWordChar(str[0]) // won't work without [0]
 
 	fmt.Printf("%v is a word ? : %v \n", string(str), ok)
+}
+
+func runeAndLen() {
+	tests := []string{"1", "beta", "", "", "世", "世界"}
+	for _, str := range tests {
+		r := []rune(str)
+		fmt.Printf("'%s' length %d vs %d \n", str, len(r), len(str))
+	}
 }
