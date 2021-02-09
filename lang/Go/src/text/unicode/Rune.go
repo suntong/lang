@@ -82,7 +82,7 @@ func runeAndString() {
 }
 
 func runeAndLen() {
-	tests := []string{"1", "beta", "", "", "世", "世界"}
+	tests := []string{"1", "beta", "😀", "😀😁", "世", "世界"}
 	for _, str := range tests {
 		r := []rune(str)
 		fmt.Printf("'%s' length %d vs %d \n", str, len(r), len(str))
