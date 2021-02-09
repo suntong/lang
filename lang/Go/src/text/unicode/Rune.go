@@ -37,13 +37,14 @@ Ivan Kurnosov
 */
 
 func runeFromCode() {
-	fmt.Printf("Hello \u4e16\u754c (%c%c): %+q\n", 0x4e16, 0x754c, "世界")
+	fmt.Printf("Hello \u4e16\u754c (%c%c) \U0001F601😁: %+q\n", 0x4e16, 0x754c, "世界")
 	code10 := "4e16"
 	//code11 := "0x4e16"
 	//code12 := "u4e16"
 	// hex to int
 	c1, _ := strconv.ParseInt(code10, 16, 16)
-	fmt.Printf("Hello %c\u754c %v %v\n", c1, c1 == '世', "\u4e16" == "世")
+	fmt.Printf("Hello %c\u754c %v %v %v\n", c1, '\U0001F601' == '😁',
+		c1 == '世', "\u4e16" == "世")
 }
 
 ////////////////////////////////////////////////////////////////////////////
