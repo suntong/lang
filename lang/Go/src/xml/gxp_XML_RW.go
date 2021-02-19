@@ -24,7 +24,7 @@ func main() {
 
 /*
 
-echo "<root><this><is>a</is><test /></this></root>" | go run gxp_XMLBeautify.go
+echo "<root><this><is>a</is><test /></this></root>" | go run gxp_XML_RW.go
 <root><this><is>a</is><test></test></this></root>
 
 */
