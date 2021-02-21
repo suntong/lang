@@ -8,16 +8,21 @@
 package main
 
 import (
+	"flag"
 	"os"
 
 	"github.com/ChrisTrenkamp/goxpath"
 	"github.com/ChrisTrenkamp/goxpath/tree/xmltree"
 )
 
+var strict = flag.Bool("s", false, "strict with xmltree parse")
+
 func main() {
 
+	flag.Parse()
+
 	parseTree := xmltree.MustParseXML(os.Stdin, func(s *xmltree.ParseOptions) {
-		s.Strict = false
+		s.Strict = *strict
 	})
 	goxpath.Marshal(parseTree, os.Stdout)
 }
