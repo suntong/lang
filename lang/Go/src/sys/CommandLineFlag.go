@@ -24,6 +24,8 @@ var (
 
 	// debugging
 	cpuprofile = flag.String("cpuprofile", "", "write cpu profile to this file\n\t\tDefault: no default")
+
+	svar string
 )
 
 func usage() {
@@ -36,8 +38,10 @@ func usage() {
 
 func main() {
 	fmt.Printf("Before parsing the flags\n")
-	fmt.Printf("T: %d\nW: %s\nC: '%s'\n",
-		*tabWidth, strconv.FormatBool(*write), *cpuprofile)
+	fmt.Printf("T: %d\nW: %s\nC: '%s'\nS: '%s'\n",
+		*tabWidth, strconv.FormatBool(*write), *cpuprofile, svar)
+
+	flag.StringVar(&svar, "svar", "bar", "a string var")
 
 	flag.Usage = usage
 	flag.Parse()
@@ -47,10 +51,11 @@ func main() {
 		usage()
 	}
 
-	fmt.Printf("Testing the flag package\n")
-	fmt.Printf("T: %d\nW: %s\nC: '%s'\n",
-		*tabWidth, strconv.FormatBool(*write), *cpuprofile)
+	fmt.Printf("\nAfter parsing the flags\n")
+	fmt.Printf("T: %d\nW: %s\nC: '%s'\nS: '%s'\n",
+		*tabWidth, strconv.FormatBool(*write), *cpuprofile, svar)
 
+	fmt.Println()
 	for index, element := range flag.Args() {
 		fmt.Printf("I: %d C: '%s'\n", index, element)
 	}
@@ -60,8 +65,8 @@ func main() {
 
 To Test:
 
-  go run CommandLineFlag.go 
-  go run CommandLineFlag.go -tabwidth=6 aa
+  go run CommandLineFlag.go
+  go run CommandLineFlag.go -tabwidth=6 aa bb
 
 */
 
