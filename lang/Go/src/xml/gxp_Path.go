@@ -32,6 +32,12 @@ func main() {
 	t.Report()
 	TestFollowingSibling2(t)
 	t.Report()
+	TestFollowingSiblingA1(t)
+	t.Report()
+	TestFollowingSiblingA2(t)
+	t.Report()
+	TestFollowingSiblingA3(t)
+	t.Report()
 }
 
 //==========================================================================
@@ -46,8 +52,52 @@ func TestFollowingSibling(t *testing.T) {
 
 func TestFollowingSibling2(t *testing.T) {
 	p := `/following-sibling::node()`
-	x := `<?xml version="1.0" encoding="UTF-8"?><p1></p1>`
+	x := `<?xml version="1.0" encoding="UTF-8"?><p1></p1><p2 />`
 	exp := []string{}
+	execPath(p, x, exp, nil, t)
+}
+
+// https://www.w3schools.com/xml/xpath_axes.asp
+// following-sibling - Selects *all* siblings after the current node
+func TestFollowingSiblingA1(t *testing.T) {
+	p := `/AAA/BBB/following-sibling::node()`
+	x := `<?xml version="1.0" encoding="UTF-8"?><AAA><BBB><CCC /><DDD /></BBB><XXX><DDD><EEE /><FFF><GGG /></FFF><XXX /></DDD></XXX><CCC><DDD /></CCC></AAA>`
+	exp := []string{`<XXX><DDD><EEE></EEE><FFF><GGG></GGG></FFF><XXX></XXX></DDD></XXX>`,
+		`<CCC><DDD></DDD></CCC>`}
+	execPath(p, x, exp, nil, t)
+}
+
+func TestFollowingSiblingA2(t *testing.T) {
+	p := `//EEE/following-sibling::node()`
+	x := `<?xml version="1.0" encoding="UTF-8"?><AAA><BBB><CCC /><DDD /></BBB><XXX><DDD><EEE /><FFF /><FFF><GGG /></FFF><XXX /></DDD></XXX><CCC><DDD /></CCC></AAA>`
+	exp := []string{`<FFF></FFF>`,
+		`<FFF><GGG></GGG></FFF>`, `<XXX></XXX>`}
+	execPath(p, x, exp, nil, t)
+}
+
+func TestFollowingSiblingA3(t *testing.T) {
+	// https://stackoverflow.com/questions/10246371/
+	p := `//project[title = 'Project X']/following-sibling::project[1]`
+	x := `<?xml version="1.0" encoding="UTF-8"?>
+<projects>
+    <project>
+        <number>1</number>
+        <title>Project X</title>
+    </project>
+    <project>
+        <number>2</number>
+        <title>Project Y</title>
+    </project>
+    <project>
+        <number>3</number>
+        <title>Project Z</title>
+    </project>
+</projects>
+`
+	exp := []string{`<project>
+        <number>2</number>
+        <title>Project Y</title>
+    </project>`}
 	execPath(p, x, exp, nil, t)
 }
 
