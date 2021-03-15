@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 
 	"github.com/ChrisTrenkamp/goxpath"
 	"github.com/ChrisTrenkamp/goxpath/tree"
@@ -123,6 +124,7 @@ func execPath(xp, x string, exp []string, ns map[string]string, t *testing.T) {
 	}
 
 	for i := range res {
+		fmt.Printf("%#v\n", res[i].(tree.Node))
 		r, err := goxpath.MarshalStr(res[i].(tree.Node))
 		if err != nil {
 			t.Error(err.Error())
