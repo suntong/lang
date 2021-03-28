@@ -13,6 +13,7 @@ func main() {
 	test2()
 	test3()
 	test4()
+	test5()
 }
 
 func test1() {
@@ -80,6 +81,26 @@ func test4() {
 	d2, _ := time.Parse(time.RFC3339, "2016-05-18T15:07:40Z")
 	fmt.Println(d2)
 	fmt.Println(daysDiff(d2, d1))
+
+}
+
+func test5() {
+	var passTime time.Duration
+	passTime, _ = time.ParseDuration("00:15:13.58")
+	fmt.Printf("Duration: %v\n", passTime)
+
+	d1, _ := time.Parse("15:04:05", "00:15:13.58")
+	fmt.Println(d1)
+
+	d0, _ := time.Parse("15:04:05", "00:00:00")
+	passTime = d1.Sub(d0)
+	fmt.Printf("Duration: %v\n", passTime)
+	fmt.Printf("in seconds: %d", int(passTime.Seconds()))
+
+	// Duration: 0s
+	// 0000-01-01 00:15:13.58 +0000 UTC
+	// Duration: 15m13.58s
+	// in seconds: 913
 
 }
 
