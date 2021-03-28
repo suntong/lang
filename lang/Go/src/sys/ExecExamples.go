@@ -20,10 +20,17 @@ import (
 func main() {
 	fmt.Println("Testing started")
 	ExampleLookPath()
+	fmt.Println("------")
 	ExampleCommand()
-	ExampleCommand_Direct()
+	fmt.Println("------")
+	// ExampleCommand_Direct()
+	// fmt.Println("------")
 	ExampleCmd_Output()
+	fmt.Println("------")
+	ExampleCmd_Pipes()
+	fmt.Println("------")
 	ExampleCmd_Start()
+	fmt.Println("------")
 	ExampleCmd_StdoutPipe()
 	fmt.Println("Testing done")
 }
@@ -73,8 +80,18 @@ func ExampleCmd_Output() {
 	fmt.Printf("The date is %s\n", out)
 }
 
+func ExampleCmd_Pipes() {
+	// https://stackoverflow.com/a/30329351/2125837
+	cmd := "cat /proc/cpuinfo | egrep '^model name' | uniq | awk '{print substr($0, index($0,$4))}'"
+	out, err := exec.Command("sh", "-c", cmd).Output()
+	if err != nil {
+		fmt.Printf("Failed to execute command: %s", cmd)
+	}
+	fmt.Println(string(out))
+}
+
 func ExampleCmd_Start() {
-	cmd := exec.Command("sleep", "5")
+	cmd := exec.Command("sleep", "2")
 	err := cmd.Start()
 	if err != nil {
 		log.Fatal(err)
