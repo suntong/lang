@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>
+        </d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Membership.GetAuthenticationInfo</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <CoreServiceGenericParameters xmlns="http://Dayforce/Data/CoreService">
+              <Parameters xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <a:anyType i:type="b:string" xmlns:b="http://www.w3.org/2001/XMLSchema">https://qapayrollcontrol.dayforce.com/mydayforce</a:anyType>
+              </Parameters>
+            </CoreServiceGenericParameters>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>
+        </d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Membership.AuthenticateUser</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <CoreServiceGenericParameters xmlns="http://Dayforce/Data/CoreService">
+              <Parameters xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <a:anyType i:type="b:AuthenticationRequest" xmlns:b="http://SharpTop.Net/Services/Platform">
+                  <b:Details>
+                    <b:ClientSoftwareVersion>32.0.12073.1</b:ClientSoftwareVersion>
+                    <b:ClientTimeRequested>2012-03-13T08:50:39.2130623</b:ClientTimeRequested>
+                    <b:CultureCode>en-US</b:CultureCode>
+                    <b:IpAddress>000.000.0.0</b:IpAddress>
+                    <b:LogoutRedirectUrlClaim i:nil="true">
+                    </b:LogoutRedirectUrlClaim>
+                    <b:MacAddress>Not Available</b:MacAddress>
+                    <b:RequestUri>https://qapayrollcontrol.dayforce.com/mydayforce/qapayroll5</b:RequestUri>
+                    <b:UserIdentity i:nil="true">
+                    </b:UserIdentity>
+                    <b:UserIdentityIsAuthenticated>false</b:UserIdentityIsAuthenticated>
+                  </b:Details>
+                  <b:UserInfo>
+                    <b:ClaimsIssuer i:nil="true">
+                    </b:ClaimsIssuer>
+                    <b:ClaimsOriginalIssuer i:nil="true">
+                    </b:ClaimsOriginalIssuer>
+                    <b:IsEncrypted>false</b:IsEncrypted>
+                    <b:LoginId>cadmin</b:LoginId>
+                    <b:NamespaceClaim i:nil="true">
+                    </b:NamespaceClaim>
+                    <b:Password>1</b:Password>
+                  </b:UserInfo>
+                </a:anyType>
+              </Parameters>
+            </CoreServiceGenericParameters>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <GetAccessPermissionsCompressed xmlns="http://tempuri.org/">
+      <sessionId>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</sessionId>
+      <roleId>1001</roleId>
+    </GetAccessPermissionsCompressed>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Get</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <GeneralGetRequest xmlns="http://SharpTop.Net/Services/Platform">
+              <MethodName>GetHelpLinkDefinition</MethodName>
+              <SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</SessionTicket>
+            </GeneralGetRequest>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Get</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <GeneralGetRequest xmlns="http://SharpTop.Net/Services/Platform">
+              <MethodName>GetAllPayGroupBusinessDayInfo</MethodName>
+              <SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</SessionTicket>
+            </GeneralGetRequest>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Get</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <GeneralGetRequest xmlns="http://SharpTop.Net/Services/Platform">
+              <MethodName>GetClientPropertyValue</MethodName>
+              <SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</SessionTicket>
+            </GeneralGetRequest>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <GetAccessPermissionsCompressed xmlns="http://tempuri.org/">
+      <sessionId>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</sessionId>
+      <roleId>1001</roleId>
+    </GetAccessPermissionsCompressed>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Get</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <GeneralGetRequest xmlns="http://SharpTop.Net/Services/Platform">
+              <MethodName>GetKPIs</MethodName>
+              <SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</SessionTicket>
+            </GeneralGetRequest>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Get</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <GeneralGetRequest xmlns="http://SharpTop.Net/Services/Platform">
+              <MethodName>GetDfWorkflowFormFeature</MethodName>
+              <SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</SessionTicket>
+              <Parameters>
+                <GeneralGetParameter>
+                  <Name>UserId</Name>
+                  <Value i:type="a:int" xmlns:a="http://www.w3.org/2001/XMLSchema">1001</Value>
+                </GeneralGetParameter>
+              </Parameters>
+              <PageNumber>-1</PageNumber>
+              <PageSize>80</PageSize>
+            </GeneralGetRequest>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Get</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <GeneralGetRequest xmlns="http://SharpTop.Net/Services/Platform">
+              <MethodName>GetFeatures</MethodName>
+              <SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</SessionTicket>
+              <Parameters>
+                <GeneralGetParameter>
+                  <Name>UserId</Name>
+                  <Value i:type="a:int" xmlns:a="http://www.w3.org/2001/XMLSchema">1001</Value>
+                </GeneralGetParameter>
+              </Parameters>
+              <Where>RoleId=1001</Where>
+              <OrderBy>Sequence,RoleSequence</OrderBy>
+              <PageNumber>-1</PageNumber>
+              <PageSize>80</PageSize>
+            </GeneralGetRequest>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Get</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <GeneralGetRequest xmlns="http://SharpTop.Net/Services/Platform">
+              <MethodName>GetReportDefinition</MethodName>
+              <SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</SessionTicket>
+              <Where>CreatedUserId=1001 AND FeatureId is null AND ParentFeatureID != 489</Where>
+              <PageNumber>-1</PageNumber>
+              <PageSize>80</PageSize>
+            </GeneralGetRequest>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>
+        </d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>DataProcessor.GeneralGetBundleCompressed</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <CoreServiceGenericParameters xmlns="http://Dayforce/Data/CoreService">
+              <Parameters xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <a:anyType i:type="b:GeneralGetBundleRequest" xmlns:b="http://SharpTop.Net/Services/Platform">
+                  <b:SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</b:SessionTicket>
+                  <b:Entries>
+                    <b:GeneralGetRequest>
+                      <b:MethodName>GetUserDFMessages</b:MethodName>
+                      <b:Parameters>
+                        <b:GeneralGetParameter>
+                          <b:Name>UserId</b:Name>
+                          <b:Value i:type="c:int" xmlns:c="http://www.w3.org/2001/XMLSchema">1001</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>OrgUnitId</b:Name>
+                          <b:Value i:type="c:int" xmlns:c="http://www.w3.org/2001/XMLSchema">1000</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>StartDate</b:Name>
+                          <b:Value i:type="c:dateTime" xmlns:c="http://www.w3.org/2001/XMLSchema">2012-01-13T08:50:40.9932403-05:00</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>EndDate</b:Name>
+                          <b:Value i:type="c:dateTime" xmlns:c="http://www.w3.org/2001/XMLSchema">2012-03-14T08:50:40.9932403-04:00</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>Top</b:Name>
+                          <b:Value i:type="c:int" xmlns:c="http://www.w3.org/2001/XMLSchema">4</b:Value>
+                        </b:GeneralGetParameter>
+                      </b:Parameters>
+                      <b:Columns>
+                      </b:Columns>
+                      <b:Where>
+                      </b:Where>
+                      <b:OrderBy>CreatedDate desc</b:OrderBy>
+                    </b:GeneralGetRequest>
+                    <b:GeneralGetRequest>
+                      <b:MethodName>GetUserSentDFMessages</b:MethodName>
+                      <b:Parameters>
+                        <b:GeneralGetParameter>
+                          <b:Name>UserId</b:Name>
+                          <b:Value i:type="c:int" xmlns:c="http://www.w3.org/2001/XMLSchema">1001</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>OrgUnitId</b:Name>
+                          <b:Value i:type="c:int" xmlns:c="http://www.w3.org/2001/XMLSchema">1000</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>StartDate</b:Name>
+                          <b:Value i:type="c:dateTime" xmlns:c="http://www.w3.org/2001/XMLSchema">2012-01-13T08:50:40.9932403-05:00</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>EndDate</b:Name>
+                          <b:Value i:type="c:dateTime" xmlns:c="http://www.w3.org/2001/XMLSchema">2012-03-14T08:50:40.9932403-04:00</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>Top</b:Name>
+                          <b:Value i:type="c:int" xmlns:c="http://www.w3.org/2001/XMLSchema">4</b:Value>
+                        </b:GeneralGetParameter>
+                      </b:Parameters>
+                      <b:Columns>
+                      </b:Columns>
+                      <b:Where>
+                      </b:Where>
+                      <b:OrderBy>CreatedDate desc</b:OrderBy>
+                    </b:GeneralGetRequest>
+                    <b:GeneralGetRequest>
+                      <b:MethodName>GetTopUserSentDFMessagesRecipients</b:MethodName>
+                      <b:Parameters>
+                        <b:GeneralGetParameter>
+                          <b:Name>UserId</b:Name>
+                          <b:Value i:type="c:int" xmlns:c="http://www.w3.org/2001/XMLSchema">1001</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>OrgUnitId</b:Name>
+                          <b:Value i:type="c:int" xmlns:c="http://www.w3.org/2001/XMLSchema">1000</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>StartDate</b:Name>
+                          <b:Value i:type="c:dateTime" xmlns:c="http://www.w3.org/2001/XMLSchema">2012-01-13T08:50:40.9932403-05:00</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>EndDate</b:Name>
+                          <b:Value i:type="c:dateTime" xmlns:c="http://www.w3.org/2001/XMLSchema">2012-03-14T08:50:40.9932403-04:00</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>Top</b:Name>
+                          <b:Value i:type="c:int" xmlns:c="http://www.w3.org/2001/XMLSchema">4</b:Value>
+                        </b:GeneralGetParameter>
+                      </b:Parameters>
+                      <b:Columns>
+                      </b:Columns>
+                      <b:Where>
+                      </b:Where>
+                      <b:OrderBy>
+                      </b:OrderBy>
+                    </b:GeneralGetRequest>
+                    <b:GeneralGetRequest>
+                      <b:MethodName>GetUserSentMessagesRecipientCount</b:MethodName>
+                      <b:Parameters>
+                        <b:GeneralGetParameter>
+                          <b:Name>UserId</b:Name>
+                          <b:Value i:type="c:int" xmlns:c="http://www.w3.org/2001/XMLSchema">1001</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>OrgUnitId</b:Name>
+                          <b:Value i:type="c:int" xmlns:c="http://www.w3.org/2001/XMLSchema">1000</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>StartDate</b:Name>
+                          <b:Value i:type="c:dateTime" xmlns:c="http://www.w3.org/2001/XMLSchema">2012-01-13T08:50:40.9932403-05:00</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>EndDate</b:Name>
+                          <b:Value i:type="c:dateTime" xmlns:c="http://www.w3.org/2001/XMLSchema">2012-03-14T08:50:40.9932403-04:00</b:Value>
+                        </b:GeneralGetParameter>
+                        <b:GeneralGetParameter>
+                          <b:Name>Top</b:Name>
+                          <b:Value i:type="c:int" xmlns:c="http://www.w3.org/2001/XMLSchema">4</b:Value>
+                        </b:GeneralGetParameter>
+                      </b:Parameters>
+                      <b:Columns>
+                      </b:Columns>
+                      <b:Where>
+                      </b:Where>
+                      <b:OrderBy>
+                      </b:OrderBy>
+                    </b:GeneralGetRequest>
+                    <b:GeneralGetRequest>
+                      <b:MethodName>GetDFVersion</b:MethodName>
+                      <b:Parameters>
+                        <b:GeneralGetParameter>
+                          <b:Name>VersionNumber</b:Name>
+                          <b:Value i:type="c:int" xmlns:c="http://www.w3.org/2001/XMLSchema">2920</b:Value>
+                        </b:GeneralGetParameter>
+                      </b:Parameters>
+                      <b:Columns>
+                      </b:Columns>
+                      <b:Where>
+                      </b:Where>
+                      <b:OrderBy>
+                      </b:OrderBy>
+                    </b:GeneralGetRequest>
+                  </b:Entries>
+                </a:anyType>
+              </Parameters>
+            </CoreServiceGenericParameters>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Get</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <GeneralGetRequest xmlns="http://SharpTop.Net/Services/Platform">
+              <MethodName>GetPayGroupsForOrg</MethodName>
+              <SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</SessionTicket>
+              <Parameters>
+                <GeneralGetParameter>
+                  <Name>OrgUnitId</Name>
+                  <Value i:type="a:int" xmlns:a="http://www.w3.org/2001/XMLSchema">1000</Value>
+                </GeneralGetParameter>
+                <GeneralGetParameter>
+                  <Name>PeriodStart</Name>
+                  <Value i:type="a:dateTime" xmlns:a="http://www.w3.org/2001/XMLSchema">2010-08-29T00:00:00</Value>
+                </GeneralGetParameter>
+                <GeneralGetParameter>
+                  <Name>PeriodEnd</Name>
+                  <Value i:type="a:dateTime" xmlns:a="http://www.w3.org/2001/XMLSchema">2012-09-15T00:00:00</Value>
+                </GeneralGetParameter>
+              </Parameters>
+              <OrderBy>ShortName</OrderBy>
+            </GeneralGetRequest>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Get</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <GeneralGetRequest xmlns="http://SharpTop.Net/Services/Platform">
+              <MethodName>GetPayCalendarsForOrg</MethodName>
+              <SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</SessionTicket>
+              <Parameters>
+                <GeneralGetParameter>
+                  <Name>OrgUnitId</Name>
+                  <Value i:type="a:int" xmlns:a="http://www.w3.org/2001/XMLSchema">1000</Value>
+                </GeneralGetParameter>
+                <GeneralGetParameter>
+                  <Name>PeriodStart</Name>
+                  <Value i:type="a:dateTime" xmlns:a="http://www.w3.org/2001/XMLSchema">2010-08-29T00:00:00</Value>
+                </GeneralGetParameter>
+                <GeneralGetParameter>
+                  <Name>PeriodEnd</Name>
+                  <Value i:type="a:dateTime" xmlns:a="http://www.w3.org/2001/XMLSchema">2012-09-15T00:00:00</Value>
+                </GeneralGetParameter>
+              </Parameters>
+              <OrderBy>EffectiveStart</OrderBy>
+            </GeneralGetRequest>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <GetPayrollChecklistPayGroupCalendarsCompressed xmlns="http://tempuri.org/">
+      <sessionId>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</sessionId>
+      <userId>1001</userId>
+      <OrgUnitId i:nil="true" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" />
+      <periodStart>2012-03-06T00:00:00</periodStart>
+      <periodEnd>2012-03-20T00:00:00</periodEnd>
+    </GetPayrollChecklistPayGroupCalendarsCompressed>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <GetPayGroupCalendarOrgsCompressed xmlns="http://tempuri.org/">
+      <sessionId>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</sessionId>
+      <payGroupId>2</payGroupId>
+      <periodStart>2012-03-04T00:00:00</periodStart>
+      <periodEnd>2012-03-11T00:00:00</periodEnd>
+    </GetPayGroupCalendarOrgsCompressed>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <GetPayGroupProblemSummaryCompressed xmlns="http://tempuri.org/">
+      <sessionId>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</sessionId>
+      <payGroupId>2</payGroupId>
+      <periodStart>2012-03-04T00:00:00</periodStart>
+      <periodEnd>2012-03-11T00:00:00</periodEnd>
+    </GetPayGroupProblemSummaryCompressed>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <GetPayGroupUnauthorizedSummaryCompressed xmlns="http://tempuri.org/">
+      <sessionId>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</sessionId>
+      <payGroupId>2</payGroupId>
+      <periodStart>2012-03-04T00:00:00</periodStart>
+      <periodEnd>2012-03-11T00:00:00</periodEnd>
+    </GetPayGroupUnauthorizedSummaryCompressed>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Membership.Logout</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <CoreServiceGenericParameters xmlns="http://Dayforce/Data/CoreService">
+              <Parameters xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <a:anyType i:type="b:string" xmlns:b="http://www.w3.org/2001/XMLSchema">qapayroll5:f9f9b689-96e1-4ced-8859-1ffb4510bdb2</a:anyType>
+              </Parameters>
+            </CoreServiceGenericParameters>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+
+<?xml version="1.0" encoding="IBM437"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>
+        </d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Membership.GetAuthenticationInfo</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>
+            <CoreServiceGenericParameters xmlns="http://Dayforce/Data/CoreService">
+              <Parameters xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <a:anyType i:type="b:string" xmlns:b="http://www.w3.org/2001/XMLSchema">https://qapayrollcontrol.dayforce.com/mydayforce</a:anyType>
+              </Parameters>
+            </CoreServiceGenericParameters>
+          </d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>
+
+

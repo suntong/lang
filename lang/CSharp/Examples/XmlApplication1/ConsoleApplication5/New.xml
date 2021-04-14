@@ -1,0 +1,18 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <Execute xmlns="http://Dayforce/Services/CoreService">
+      <b xmlns:d4p1="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:SessionTicket>
+        </d4p1:SessionTicket>
+        <d4p1:Infos>
+          <d4p1:CoreServiceRequestInfo>
+            <d4p1:RequestName>Membership.AuthenticateUser</d4p1:RequestName>
+          </d4p1:CoreServiceRequestInfo>
+        </d4p1:Infos>
+        <d4p1:Payloads xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:base64Binary>AQJHAQAATZC9T8MwEMUHkAoFsfCxwMDCwEBcYIKtCghF4qOiLWI92df2JMcOdxei8Ndj0kh0sXzn9373zmd5ZJwif5PFJwzIZCfAUKIiy/lKtbo35gHaRWSL6aJgNhyXvaBpmqy5zSIvzc1odG0+X56ndoUlXFEQhWBx+E+9603SKSQryXKUuNDMxvLPf2uuRyZNIPD0A0oxmDEztDKA0M7aCrc1HcfjWlcYlGwnecevGkUvevh0BVzNYpW9opo+rZiJB02blIMHVCAvx7mnhJim4Q0wfqR0CXW47s6oxJ6Kbi+vvdaMeXS4W1Rj5xhFTp7jMtb6jo4Yrc7Z5x6o3Arkhy9ge9Wwp8yZ9ueCXLi/2NqebhaFbOyDbqd7C4u43xGlEKmRj9bFG9OSAvh1c6+Qx2C5rZJtkAJRKNzBa/psqcBi59iZgEgT2f0CRUzbCgFBGG7SOo1NWkISkiSZnbVJcWXz37qRB5g9yNbuDmtTey1eQfMunoFXoin56/9OfX0WKmYw8hUrhxErrHFVfaIyRnYFNKiJkjkllBhTOjeJAfVHP26A9n7loSkUL5rsttASmFJK5BMK7WrnjqAn1A1PuqsL8wNmBx70xfKQJMfzQtdP7MjSmAeBw6Pky8Rl6Z7HjkccHuph+rP/4gwGcnV4QzCCsdQTifoNDJF1mBv6EZgyml3R9z4=</d5p1:base64Binary>
+        </d4p1:Payloads>
+      </b>
+    </Execute>
+  </s:Body>
+</s:Envelope>

@@ -1,0 +1,9 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+<s:Body>
+<GeneralGetCompressedResponse xmlns="http://Corp/Services">
+<GeneralGetCompressedResult>
+QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+</GeneralGetCompressedResult>
+</GeneralGetCompressedResponse>
+</s:Body>
+</s:Envelope>

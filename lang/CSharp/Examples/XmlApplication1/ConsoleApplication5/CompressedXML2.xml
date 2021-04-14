@@ -1,0 +1,16 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <ExecuteResponse xmlns="http://Dayforce/Services/CoreService">
+      <ExecuteResult xmlns:a="http://Dayforce/Data/CoreService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <a:Infos>
+          <a:CoreServiceResponseInfo>
+            <a:RequestName>Get</a:RequestName>
+          </a:CoreServiceResponseInfo>
+        </a:Infos>
+        <a:Payloads xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <b:base64Binary>AQKPAAAAdY09C8IwFEVX0cXNzc3Bwabq5uYHSEBtIYJdH+2LDbZJeHk19N8LouDieLnncKZbIugznUN/JNf5XReMxRAO0Eur3axm9hshVA3kr84nF2ShkJ6mxCDyBlg7aucfKsaYxHXi6C5WaboUxfmkyhpbWBgbGGyJkz+d8c9WDMSDfWPQsqyGX0NWo/eT6Rvi4wVzYuRi5mbMZHVid+KcyRIQYhDsxN39gdmJt5PJib+REVOYGbswixN/MxZhVuzCbNiF2Z34O5mwiHOAlDMCAA==</b:base64Binary>
+        </a:Payloads>
+      </ExecuteResult>
+    </ExecuteResponse>
+  </s:Body>
+</s:Envelope>
