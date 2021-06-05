@@ -28,6 +28,17 @@ Or put another way:
 Instead of having to remember or lookup the traditional formatting codes for functions like strftime, you just count one-two-three-four and each place in the standard time corresponds to a component of a date/time object (the Time type in Go): one for day of the month, two for the month, three for the hour (in 12-hour time), four for the minutes, etc.
 
 */
+func test_format() {
+	p := fmt.Println
+	t := time.Now()
+	p(t.Format(time.RFC3339))
+	p(t.Format("2006-01-02T15:04:05Z07:00"))
+	p(t.Format("2006-01-02 15:04:05 -0700"))
+	// 2021-06-05T14:05:42-04:00
+	// 2021-06-05T14:05:42-04:00
+	// 2021-06-05 14:05:42 -0400
+}
+
 func test_now() {
 
 	// You can use commas to separate multiple expressions
@@ -190,7 +201,7 @@ func test_parse() {
 	t, e := time.Parse(time.RFC3339, "2015-12-04T23:02:52-05:00")
 	p(t.Format(time.RFC3339))
 	// 2015-12-04T23:02:52-05:00 -- https://play.golang.org/p/pzURdlRrsEd
-	
+
 	// Time parsing uses the same example-based approach
 	// as `Format`ing. These examples parse times rendered
 	// with some of the layouts used above.
@@ -235,6 +246,7 @@ func test_duration() {
 }
 
 func main() {
+	test_format()
 	test_now()
 	time.Sleep(time.Second)
 	test_parts()
