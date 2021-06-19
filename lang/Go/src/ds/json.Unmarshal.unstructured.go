@@ -15,6 +15,7 @@ func main() {
 
 func test1() {
 	// from https://blog.golang.org/json-and-go
+	// https://play.golang.org/p/1H1B87x3ppB
 	b := []byte(`{"Name":"Wednesday","Age":6,"Parents":["Gomez","Morticia"]}`)
 	var f interface{}
 	//err :=
