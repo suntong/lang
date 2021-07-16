@@ -10,32 +10,17 @@ import (
 	"os"
 
 	// drivers
-	_ "github.com/denisenkom/go-mssqldb"
-	_ "github.com/go-sql-driver/mysql"
-	_ "github.com/godror/godror"
-	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 
 	//_ "github.com/sijms/go-ora"
 
 	// models
-	"github.com/xo/xo/_examples/booktest/mysql"
-	"github.com/xo/xo/_examples/booktest/oracle"
-	"github.com/xo/xo/_examples/booktest/postgres"
 	"github.com/xo/xo/_examples/booktest/sqlite3"
-	"github.com/xo/xo/_examples/booktest/sqlserver"
 
 	"github.com/xo/dburl"
 	"github.com/xo/dburl/passfile"
 )
 
-func init() {
-	old := dburl.Unregister("oracle")
-	dburl.RegisterAlias("godror", "oracle")
-	for _, alias := range old.Aliases {
-		dburl.RegisterAlias("godror", alias)
-	}
-}
 
 func main() {
 	verbose := flag.Bool("v", false, "verbose")
@@ -52,11 +37,7 @@ func run(ctx context.Context, verbose bool, dsn string) error {
 		logger := func(s string, v ...interface{}) {
 			fmt.Printf("-------------------------------------\nQUERY: %s\n  VAL: %v\n\n", s, v)
 		}
-		mysql.SetLogger(logger)
-		oracle.SetLogger(logger)
-		postgres.SetLogger(logger)
 		sqlite3.SetLogger(logger)
-		sqlserver.SetLogger(logger)
 	}
 	// parse url
 	v, err := parse(dsn)
@@ -70,16 +51,8 @@ func run(ctx context.Context, verbose bool, dsn string) error {
 	}
 	var f func(context.Context, *sql.DB) error
 	switch v.Driver {
-	case "mysql":
-		f = runMysql
-	case "oracle", "godror":
-		f = runOracle
-	case "postgres":
-		f = runPostgres
 	case "sqlite3":
 		f = runSqlite3
-	case "sqlserver":
-		f = runSqlserver
 	}
 	return f(ctx, db)
 }
