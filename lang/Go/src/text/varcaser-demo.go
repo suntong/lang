@@ -14,6 +14,10 @@ import (
 var (
 	Ck2lc_ = varcaser.Caser{From: varcaser.KebabCase, To: varcaser.LowerCamelCase}
 	Ck2uc_ = varcaser.Caser{From: varcaser.KebabCase, To: varcaser.UpperCamelCase}
+
+	Css2uc = varcaser.Caser{
+		From: varcaser.ScreamingSnakeCase, To: varcaser.UpperCamelCaseKeepCaps}
+
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -35,10 +39,13 @@ func ExampleVaribleNames() {
 		Ck2lc_.String("some-init-method"),
 		Ck2lc("some-init-method"),
 		Ck2uc_.String("some-init-method"))
+
+	fmt.Printf("\n%v\n", Css2uc.String("MY_CONSTANT_VARIABLE"))
 	// Output:
 	// someInitMethod
 	// someInitMethod
 	// some-init-method MY_CONSTANT_VARIABLE someInitMethod someInitMethod SomeInitMethod
+	// MyConstantVariable
 }
 
 //==========================================================================
