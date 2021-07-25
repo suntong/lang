@@ -231,8 +231,10 @@ func test_parse() {
 
 ////////////////////////////////////////////////////////////////////////////
 // https://www.dotnetperls.com/time-go
+// https://stackoverflow.com/questions/40260599/difference-between-two-time
 
 func test_duration() {
+	t0 := time.Now()
 	// Duration
 	d := time.Duration(1 * time.Second)
 	for i := 0; i < 4; i++ {
@@ -242,7 +244,13 @@ func test_duration() {
 		d += time.Duration(i) * time.Millisecond
 		// https://stackoverflow.com/a/17573390/2125837
 	}
-	fmt.Println(time.Now())
+	t := time.Now()
+	// Time.Sub() will get the difference between 2 time values, as time.Duration
+	diff := t.Sub(t0)
+	fmt.Println(t0, "\n", t, "\n", diff)
+	// For the time format HH:mm:ss
+	out := time.Time{}.Add(diff)
+	fmt.Println(out.Format("15:04:05"))
 }
 
 func main() {
