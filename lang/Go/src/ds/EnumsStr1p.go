@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
 // Porgram: EnumsStr1p.go
 // Purpose: Go Enum and its string representation lib demo
-// Authors: Tong Sun (c) 2017, All rights reserved
+// Authors: Tong Sun (c) 2017-2021, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
 package main
@@ -9,7 +9,7 @@ package main
 import (
 	"fmt"
 
-	enum "github.com/suntong/enum"
+	enum "gopkg.in/suntong/enum.v1"
 )
 
 var (
