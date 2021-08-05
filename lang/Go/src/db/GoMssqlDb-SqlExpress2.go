@@ -30,7 +30,9 @@ func main() {
 	// connString := "server=localhost\\SQLExpress;database=master"
 	// connString := "server=localhost\\SQLExpress;user id=;password=;database=master"
 	// login error: mssql: Login failed for user ''
-	connString := fmt.Sprintf("server=localhost\\SQLExpress;user id=%s;password=%s;database=master", user, password)
+	// connString := fmt.Sprintf("server=localhost\\SQLExpress;user id=%s;password=%s;database=master", user, password)
+	// OK, but best to use instead:
+	connString := fmt.Sprintf("sqlserver://%s:%s@localhost/SQLExpress?database=master", user, password)
 	var err error
 	// Create connection pool
 	db, err := sql.Open("sqlserver", connString)
