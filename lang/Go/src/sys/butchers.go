@@ -13,22 +13,26 @@ import (
 // Number of butchers is simply the length of this list.
 var (
 	bn = []string{"A", "B", "C", "D", "E"}
-	//st = make([]string, len(bn))
-	st = []string{" ", " ", " ", " ", " "}
+	st = make([]string, len(bn))
 )
 
 const hunger = 3                // Number of times each butcher works
-const rest = time.Second / 100 // Mean rest time
-const work = time.Second / 100   // Mean work time
+const rest = time.Second / 10		// Mean rest time
+const work = time.Second / 10		// Mean work time
 
 var fmt = log.New(os.Stdout, "", 0)
 
 var chopping sync.WaitGroup
 
+func status(i int, status string) {
+	st[i] = status
+	fmt.Println(strings.Join(st, " "), "\t", bn[i], status)
+}
+
 func choppingProblem(i int, dominantHand, otherHand *sync.Mutex) {
 	bName := bn[i]
-	//fmt.Println(bName, "Positioned")
-	st[i] = "P"
+	//fmt.Println("\t\t", bName, "Positioned")
+	status(i, "P")
 	h := fnv.New64a()
 	h.Write([]byte(bName))
 	rg := rand.New(rand.NewSource(int64(h.Sum64())))
@@ -36,25 +40,32 @@ func choppingProblem(i int, dominantHand, otherHand *sync.Mutex) {
 		time.Sleep(t/2 + time.Duration(rg.Int63n(int64(t))))
 	}
 	for h := hunger; h > 0; h-- {
-		fmt.Println(bName, "Collecting")
+		//fmt.Println("\t\t", bName, "Collecting")
+		status(i, "C")
 		dominantHand.Lock() // pick up knifes
 		otherHand.Lock()
-		fmt.Println(bName, "Working")
+		//fmt.Println("\t\t", bName, "Working")
+		status(i, "W")
 		rSleep(work)
 		dominantHand.Unlock() // put down knifes
 		otherHand.Unlock()
-		fmt.Println(bName, "Resting")
+		//fmt.Println("\t\t", bName, "Resting")
+		status(i, "R")
 		rSleep(rest)
 	}
-	fmt.Println(bName, "Done")
+	//fmt.Println("\t\t", bName, "Done")
 	chopping.Done()
-	fmt.Println(bName, "Left")
+	//fmt.Println("\t\t", bName, "Left")
+	status(i, "-")
 }
 
 func main() {
 	fmt.Println(strings.Join(bn, " "))
 	fmt.Println(strings.Repeat("--", len(bn)))
-	fmt.Println(strings.Join(st, " "))
+	for i := 1; i < len(st); i++ {
+		st[i] = " "
+	}
+	//fmt.Println(strings.Join(st, " "))
 	chopping.Add(5)
 	knife0 := &sync.Mutex{}
 	knifeLeft := knife0
