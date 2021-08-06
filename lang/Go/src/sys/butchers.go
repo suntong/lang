@@ -14,6 +14,9 @@ import (
 var (
 	bn = []string{"A", "B", "C", "D", "E"}
 	st = make([]string, len(bn))
+
+	// global table sync
+	gt = &sync.Mutex{}
 )
 
 const hunger = 3                // Number of times each butcher works
@@ -25,8 +28,10 @@ var fmt = log.New(os.Stdout, "", 0)
 var chopping sync.WaitGroup
 
 func status(i int, status string) {
+	gt.Lock()
 	st[i] = status
 	fmt.Println(strings.Join(st, " "), "\t", bn[i], status)
+	gt.Unlock()
 }
 
 func choppingProblem(i int, dominantHand, otherHand *sync.Mutex) {
