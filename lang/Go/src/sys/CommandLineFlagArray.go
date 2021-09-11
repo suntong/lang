@@ -27,7 +27,7 @@ func main() {
 	flag.Parse()
 
 	fmt.Printf("\nAfter parsing the flags\n")
-	fmt.Println("list1:", myFlags)
+	fmt.Println("list1:", len(myFlags), myFlags)
 }
 
 /*
@@ -35,6 +35,12 @@ func main() {
 $ go run CommandLineFlagArray.go --list1 value1 --list1 value2
 
 After parsing the flags
-list1: [value1 value2]
+list1: 2 [value1 value2]
+
+$ go run CommandLineFlagArray.go --list1 value1 --list1 value2 --list1 value3
+
+After parsing the flags
+list1: 3 [value1 value2 value3]
+
 
 */
