@@ -28,6 +28,11 @@ func main() {
 
 	fmt.Printf("\nAfter parsing the flags\n")
 	fmt.Println("list1:", len(myFlags), myFlags)
+
+	for ii, val := range myFlags {
+		fmt.Println(ii, val)
+	}
+
 }
 
 /*
@@ -41,6 +46,9 @@ $ go run CommandLineFlagArray.go --list1 value1 --list1 value2 --list1 value3
 
 After parsing the flags
 list1: 3 [value1 value2 value3]
+0 value1
+1 value2
+2 value3
 
 
 */
