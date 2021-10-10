@@ -8,7 +8,7 @@
 package main
 
 import (
-	"embed"
+	_ "embed"
 	"flag"
 	"fmt"
 	"os"
@@ -46,8 +46,20 @@ func main() {
 
 /*
 
-To Test:
+$ go run embeding.go .
+Before parsing the flags
+CPU: 'Intel32'
 
+After parsing the flags
+CPU: 'AMD64'
+
+
+$ go run embeding.go -cpu AMD32 .
+Before parsing the flags
+CPU: 'Intel32'
+
+After parsing the flags
+CPU: 'AMD32'
 
 */
 
