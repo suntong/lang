@@ -8,4 +8,4 @@ id : 'a'-'z' {'a'-'z'} ;
 
 << import "github.com/suntong/lang/lang/Go/src/parsers/gocc/ex3-hello/ast" >>
 
-Hello:  "hello" id << ast.NewHello($1) >> ;
+Hello:  "hello" id << ast.NewID($1) >> ;

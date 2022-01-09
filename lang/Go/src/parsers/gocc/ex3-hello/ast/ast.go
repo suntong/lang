@@ -4,10 +4,13 @@ import (
 	"github.com/suntong/lang/lang/Go/src/parsers/gocc/ex3-hello/token"
 )
 
-type (
-	ID string
-)
+type Attrib interface{}
+type ID string
 
-func NewHello(id interface{}) (Hello, error) {
-	return ID{id.(ID)}, nil
+func NewID(id Attrib) (ID, error) {
+	if id == nil {
+		return ID(""), nil
+	}
+	id_lit := string(id.(*token.Token).Lit)
+	return ID(id_lit), nil
 }

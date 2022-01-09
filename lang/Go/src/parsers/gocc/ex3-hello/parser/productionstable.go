@@ -30,13 +30,13 @@ var productionsTable = ProdTab{
 		},
 	},
 	ProdTabEntry{
-		String: `Hello : "hello" id	<< ast.NewHello(X[1]) >>`,
+		String: `Hello : "hello" id	<< ast.NewID(X[1]) >>`,
 		Id:         "Hello",
 		NTType:     1,
 		Index:      1,
 		NumSymbols: 2,
 		ReduceFunc: func(X []Attrib, C interface{}) (Attrib, error) {
-			return ast.NewHello(X[1])
+			return ast.NewID(X[1])
 		},
 	},
 }

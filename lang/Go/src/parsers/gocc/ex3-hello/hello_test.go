@@ -26,13 +26,13 @@ func TestFail(t *testing.T) {
 	}
 }
 
-func test(src []byte) (astree ast.Hello, err error) {
+func test(src []byte) (astree ast.ID, err error) {
 	fmt.Printf("input: %s\n", src)
 	s := lexer.NewLexer(src)
 	p := parser.NewParser()
 	a, err := p.Parse(s)
 	if err == nil {
-		astree = a.(ast.Hello)
+		astree = a.(ast.ID)
 	}
 	return
 }
