@@ -1,0 +1,11 @@
+/* Lexical Part */
+!whitespace : ' ' | '\t' | '\n' | '\r' ;
+
+id : 'a'-'z' {'a'-'z'} ;
+
+
+/* Syntax Part */
+
+<< import "github.com/suntong/lang/lang/Go/src/parsers/gocc/ex3-hello/ast" >>
+
+Hello:  "hello" id << ast.NewHello($1) >> ;
