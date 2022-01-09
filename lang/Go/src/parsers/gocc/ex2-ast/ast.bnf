@@ -14,8 +14,8 @@ id : (_letter | '_') {_idchar} ;
 
 <<
 import (
-	"github.com/goccmack/gocc/example/astx/ast"
-	"github.com/goccmack/gocc/example/astx/token"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/ex2-ast/ast"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/ex2-ast/token"
 )
 >>
 

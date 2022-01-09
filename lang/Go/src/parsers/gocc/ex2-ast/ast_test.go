@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/goccmack/gocc/example/astx/ast"
-	"github.com/goccmack/gocc/example/astx/lexer"
-	"github.com/goccmack/gocc/example/astx/parser"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/ex2-ast/ast"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/ex2-ast/lexer"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/ex2-ast/parser"
 )
 
 func TestPass(t *testing.T) {
