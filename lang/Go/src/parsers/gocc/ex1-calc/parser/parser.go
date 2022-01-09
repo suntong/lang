@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	parseError "suntong/lang/lang/Go/src/parsers/gocc/ex1-calc/errors"
-	"suntong/lang/lang/Go/src/parsers/gocc/ex1-calc/token"
+	parseError "github.com/suntong/lang/lang/Go/src/parsers/gocc/ex1-calc/errors"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/ex1-calc/token"
 )
 
 const (

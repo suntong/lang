@@ -8,7 +8,7 @@ import (
 	"strings"
 	"unicode"
 
-	"suntong/lang/lang/Go/src/parsers/gocc/ex1-calc/token"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/ex1-calc/token"
 )
 
 type ErrorSymbol interface {

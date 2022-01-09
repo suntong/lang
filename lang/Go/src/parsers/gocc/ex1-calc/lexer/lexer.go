@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"unicode/utf8"
 
-	"suntong/lang/lang/Go/src/parsers/gocc/ex1-calc/token"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/ex1-calc/token"
 )
 
 const (
