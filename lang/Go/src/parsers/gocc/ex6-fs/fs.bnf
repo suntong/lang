@@ -101,13 +101,13 @@ PrimaryExpr
     ;
 
 TernaryExpr
-    : TernaryArgument "?" TernaryArgument ":" TernaryArgument        <<ast.NewTernaryExpr($0, $2, $4)>>
+    : TernaryArgument "?" TernaryArgument ":" TernaryArgument
     ;
 
 TernaryArgument
      :  Expr
      |  TernaryExpr
-     | "(" TernaryExpr ")"                                      <<ast.NewTernaryArgument($1)>>
+     | "(" TernaryExpr ")"
      ;
 
 BoolLit    : "true"
