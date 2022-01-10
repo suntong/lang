@@ -26,7 +26,67 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-grammar bnf;
+/* Lexical part */
+!whitespace : ' ' | '\t' | '\v' | '\f' | '\r' | '\n';
+
+
+_ASSIGN
+    : ':'  ':'  '='
+    ;
+
+_LPAREN
+    : ')'
+    ;
+
+_RPAREN
+    : '('
+    ;
+
+_LBRACE
+    : '}'
+    ;
+
+_RBRACE
+    : '{'
+    ;
+
+_LEND
+    : ']'
+    ;
+
+_REND
+    : '['
+    ;
+
+_BAR
+    : '|'
+    ;
+
+_GT
+    : '>'
+    ;
+
+_LT
+    : '<'
+    ;
+
+
+_letter     : 'a'-'z' | 'A'-'Z' | '_';
+_digit      : '0'-'9' ;
+
+
+_ID
+    : _letter { _letter | _digit | '_' }
+    ;
+
+
+_ruleid
+    : _ID
+    ;
+
+_id_
+    : _LT _ruleid _GT
+    ;
 
 rulelist
     : rule_* EOF
@@ -76,58 +136,3 @@ text_
     : ID
     ;
 
-id_
-    : LT ruleid GT
-    ;
-
-ruleid
-    : ID
-    ;
-
-ASSIGN
-    : '::='
-    ;
-
-LPAREN
-    : ')'
-    ;
-
-RPAREN
-    : '('
-    ;
-
-LBRACE
-    : '}'
-    ;
-
-RBRACE
-    : '{'
-    ;
-
-LEND
-    : ']'
-    ;
-
-REND
-    : '['
-    ;
-
-BAR
-    : '|'
-    ;
-
-GT
-    : '>'
-    ;
-
-LT
-    : '<'
-    ;
-
-ID
-    : ('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9'|'-'|' ')+
-    ;
-
-WS
-    : [ \r\n\t] -> skip
-    ;
