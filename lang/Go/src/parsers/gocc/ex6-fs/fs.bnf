@@ -41,7 +41,7 @@ selector : '.' _ident ;
 
 functionName : _ident { _ident | '.' } ;
 
-<< import "github.com/project-flogo/core/data/expression/script/gocc/ast" >>
+
 
 // --- [ Exprs ]
 
@@ -51,53 +51,53 @@ Fscript
     ;
 
 Expr
-    : Expr "||" Expr1  << ast.NewBoolExpr($0,$1,$2) >>
+    : Expr "||" Expr1  
     | Expr1
     ;
 
 Expr1
-    : Expr1 "&&" Expr2  << ast.NewBoolExpr($0,$1,$2) >>
+    : Expr1 "&&" Expr2  
     | Expr2
     ;
 
 Expr2
-    : Expr2 "==" Expr3  << ast.NewCmpExpr($0,$1,$2) >>
-    | Expr2 "!=" Expr3  << ast.NewCmpExpr($0,$1,$2) >>
-    | Expr2 "<"  Expr3  << ast.NewCmpExpr($0,$1,$2) >>
-    | Expr2 "<=" Expr3  << ast.NewCmpExpr($0,$1,$2) >>
-    | Expr2 ">"  Expr3  << ast.NewCmpExpr($0,$1,$2) >>
-    | Expr2 ">=" Expr3  << ast.NewCmpExpr($0,$1,$2) >>
+    : Expr2 "==" Expr3  
+    | Expr2 "!=" Expr3  
+    | Expr2 "<"  Expr3  
+    | Expr2 "<=" Expr3  
+    | Expr2 ">"  Expr3  
+    | Expr2 ">=" Expr3  
     | Expr3
     ;
 
 Expr3
-    : Expr3 "+" Expr4   << ast.NewArithExpr($0,$1,$2) >>
-    | Expr3 "-" Expr4   << ast.NewArithExpr($0,$1,$2) >>
+    : Expr3 "+" Expr4   
+    | Expr3 "-" Expr4   
     | Expr4
     ;
 
 Expr4
-    : Expr4 "*" Expr5  << ast.NewArithExpr($0,$1,$2) >>
-    | Expr4 "/" Expr5  << ast.NewArithExpr($0,$1,$2) >>
-    | Expr4 "%" Expr5  << ast.NewArithExpr($0,$1,$2) >>
+    : Expr4 "*" Expr5  
+    | Expr4 "/" Expr5  
+    | Expr4 "%" Expr5  
     | Expr5
     ;
 
 Expr5
 	: Expr6
-    | "-" Expr5     << ast.NewUnaryExpr($0, $1) >>
-	| "!" Expr5     << ast.NewUnaryExpr($0, $1) >>
+    | "-" Expr5     
+	| "!" Expr5     
     ;
 
 Expr6
 	: PrimaryExpr
-	| ident "(" Args ")"     << ast.NewFuncExpr($0, $2) >>
-    | functionName "(" Args ")"     << ast.NewFuncExpr($0, $2) >>
+	| ident "(" Args ")"     
+    | functionName "(" Args ")"     
 ;
 
 PrimaryExpr
     : Literal
-    | "(" Expr ")"  << $1, nil >>
+    | "(" Expr ")"  
     ;
 
 TernaryExpr
@@ -120,23 +120,23 @@ NilLit
     ;
 
 Literal
-    : intLit        << ast.NewLiteral("int",$0) >>
-    | floatLit      << ast.NewLiteral("float",$0) >>
-    | stringLit     << ast.NewLiteral("string",$0) >>
-    | BoolLit       << ast.NewLiteral("bool",$0) >>
-    | NilLit        << ast.NewLiteral("nil",$0) >>
-    | ref Ref       << ast.NewRefExpr($0, $1) >>
+    : intLit        
+    | floatLit      
+    | stringLit     
+    | BoolLit       
+    | NilLit        
+    | ref Ref       
     ;
 
 Ref
-    : selector       << ast.Concat($0) >>
-    | Indexer        << ast.Concat($0) >>
-    | Ref selector   << ast.Concat($0, $1) >>
-    | Ref Indexer    << ast.Concat($0, $1) >>
+    : selector       
+    | Indexer        
+    | Ref selector   
+    | Ref Indexer    
     ;
 Indexer
-    : "[" ident "]"     << ast.Concat($0, $1, $2)  >>
-    | "[" Fscript "]"   << ast.Key($1) >>
+    : "[" ident "]"     
+    | "[" Fscript "]"   
     ;
 
 Args
@@ -145,6 +145,6 @@ Args
   ;
 
 ExprList
-	: Expr                  << ast.NewExprList($0) >>
-	| ExprList "," Expr     << ast.AppendToExprList($0, $2) >>
+	: Expr                  
+	| ExprList "," Expr     
   ;
