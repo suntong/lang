@@ -6,10 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gtfierro/hoddb/lang/token"
-	"github.com/gtfierro/hoddb/turtle"
-
-	"github.com/kr/pretty"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/ex7-sparql/token"
 )
 
 type QueryType uint
@@ -91,7 +88,7 @@ func (q Query) Copy() *Query {
 
 func NewQuery(selectclause, whereclause, timeclause interface{}, count bool) (Query, error) {
 	if debug {
-		fmt.Printf("%# v", pretty.Formatter(whereclause.(WhereClause)))
+		fmt.Printf("%# v", whereclause.(WhereClause))
 	}
 	var err error
 	q := Query{
@@ -120,8 +117,8 @@ func NewQuery(selectclause, whereclause, timeclause interface{}, count bool) (Qu
 
 func NewInsertQuery(insertclause, whereclause interface{}, count bool) (Query, error) {
 	if debug {
-		fmt.Printf("%# v", pretty.Formatter(whereclause.(WhereClause)))
-		fmt.Printf("%# v", pretty.Formatter(insertclause.(InsertClause)))
+		fmt.Printf("%# v", (whereclause.(WhereClause)))
+		fmt.Printf("%# v", (insertclause.(InsertClause)))
 	}
 	q := Query{
 		Where:  whereclause.(WhereClause),
@@ -142,7 +139,7 @@ func NewInsertQuery(insertclause, whereclause interface{}, count bool) (Query, e
 
 func NewQueryMulti(selectclause, fromclause, whereclause, timeclause interface{}, count bool) (Query, error) {
 	if debug {
-		fmt.Printf("%# v", pretty.Formatter(whereclause.(WhereClause)))
+		fmt.Printf("%# v", (whereclause.(WhereClause)))
 	}
 	var err error
 	q := Query{
@@ -171,8 +168,8 @@ func NewQueryMulti(selectclause, fromclause, whereclause, timeclause interface{}
 
 func NewInsertQueryMulti(insertclause, fromclause, whereclause interface{}, count bool) (Query, error) {
 	if debug {
-		fmt.Printf("%# v", pretty.Formatter(whereclause.(WhereClause)))
-		fmt.Printf("%# v", pretty.Formatter(insertclause.(InsertClause)))
+		fmt.Printf("%# v", (whereclause.(WhereClause)))
+		fmt.Printf("%# v", (insertclause.(InsertClause)))
 	}
 	q := Query{
 		Where:  whereclause.(WhereClause),
@@ -195,20 +192,6 @@ func NewInsertQueryMulti(insertclause, fromclause, whereclause interface{}, coun
 func (q *Query) PopulateVars() {
 	vars := make(map[string]int)
 	// get all variables
-	for _, triple := range q.Where.Terms {
-		AddIfVar(triple.Subject, vars)
-		AddIfVar(triple.Object, vars)
-		for _, path := range triple.Predicates {
-			AddIfVar(path.Predicate, vars)
-		}
-	}
-	for _, triple := range q.Insert.Terms {
-		AddIfVar(triple.Subject, vars)
-		AddIfVar(triple.Object, vars)
-		for _, path := range triple.Predicates {
-			AddIfVar(path.Predicate, vars)
-		}
-	}
 	if q.Where.GraphGroup != nil {
 		VarsFromGroup(*q.Where.GraphGroup, vars)
 	}
@@ -230,20 +213,7 @@ func (q Query) IterTriples(f func(t Triple) Triple) {
 	}
 }
 
-func AddIfVar(uri turtle.URI, m map[string]int) {
-	if uri.IsVariable() {
-		m[uri.String()] = 1
-	}
-}
-
 func VarsFromGroup(group GraphGroup, m map[string]int) {
-	for _, triple := range group.Terms {
-		AddIfVar(triple.Subject, m)
-		AddIfVar(triple.Object, m)
-		for _, path := range triple.Predicates {
-			AddIfVar(path.Predicate, m)
-		}
-	}
 	for _, union := range group.Unions {
 		VarsFromGroup(union, m)
 	}
@@ -266,10 +236,8 @@ func (grp GraphGroup) Expand() [][]Triple {
 	return groups
 }
 
-func (grp GraphGroup) Iter(f func(t turtle.URI)) {
+func (grp GraphGroup) Iter(f func(t string)) {
 	for _, triple := range grp.Terms {
-		f(triple.Subject)
-		f(triple.Object)
 		for _, path := range triple.Predicates {
 			f(path.Predicate)
 		}
@@ -436,34 +404,28 @@ func MergeGraphGroups(left, right interface{}) (GraphGroup, error) {
 }
 
 type Triple struct {
-	Subject    turtle.URI
 	Predicates []PathPattern
-	Object     turtle.URI
 }
 
 func (t Triple) String() string {
-	s := "<" + t.Subject.String() + "|"
+	s := "<" + "|"
 	for _, pp := range t.Predicates {
 		s += " " + pp.String()
 	}
-	return s + " | " + t.Object.String() + ">"
+	return s + " | " + ">"
 }
 
 func (t Triple) Copy() Triple {
 	var p = make([]PathPattern, len(t.Predicates))
 	copy(p, t.Predicates)
 	return Triple{
-		Subject:    t.Subject,
-		Object:     t.Object,
 		Predicates: p,
 	}
 }
 
 func NewTriple(subject, predicates, object interface{}) (Triple, error) {
 	return Triple{
-		Subject:    subject.(turtle.URI),
 		Predicates: predicates.([]PathPattern),
-		Object:     object.(turtle.URI),
 	}, nil
 }
 
@@ -475,8 +437,8 @@ func AppendTripleBlock(block, triple interface{}) ([]Triple, error) {
 	return append(block.([]Triple), triple.(Triple)), nil
 }
 
-func NewURI(value interface{}) (turtle.URI, error) {
-	return turtle.ParseURI(value.(string)), nil
+func NewURI(value interface{}) (string, error) {
+	return value.(string), nil
 }
 
 func NewVarList(_var interface{}) ([]string, error) {
@@ -522,7 +484,7 @@ func NewPathPattern(_pred interface{}) (PathPattern, error) {
 		pred = "rdf:type"
 	}
 	return PathPattern{
-		Predicate: turtle.ParseURI(pred),
+		Predicate: pred,
 		Pattern:   PATTERN_SINGLE,
 	}, nil
 }
@@ -535,21 +497,21 @@ func AddPathMod(_pred, _mod interface{}) (PathPattern, error) {
 }
 
 type PathPattern struct {
-	Predicate turtle.URI
+	Predicate string
 	Pattern   Pattern
 }
 
 func PathFromVar(_var interface{}) ([]PathPattern, error) {
 	return []PathPattern{
 		PathPattern{
-			Predicate: turtle.ParseURI(_var.(string)),
+			Predicate: _var.(string),
 			Pattern:   PATTERN_SINGLE,
 		},
 	}, nil
 }
 
 func (pp PathPattern) String() string {
-	return pp.Predicate.String() + pp.Pattern.String()
+	return pp.Pattern.String()
 }
 
 type Pattern uint

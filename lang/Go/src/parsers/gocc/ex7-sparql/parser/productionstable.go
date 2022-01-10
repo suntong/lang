@@ -2,7 +2,7 @@
 
 package parser
 
-import "github.com/gtfierro/hoddb/lang/ast"
+import "github.com/suntong/lang/lang/Go/src/parsers/gocc/ex7-sparql/ast"
 
 type (
 	ProdTab      [numProductions]ProdTabEntry

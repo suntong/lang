@@ -16,7 +16,7 @@ url : '<' {.} '>' ;
 string : _varstring ;
 quotedstring : _charstring ;
 
-<< import "github.com/gtfierro/hoddb/lang/ast" >>
+<< import "github.com/suntong/lang/lang/Go/src/parsers/gocc/ex7-sparql/ast" >>
 
 /* syntax */
 QueryUnit
