@@ -1,0 +1,196 @@
+!whitespace : '\t' | '\n' | '\r' | ' ' ;
+_uppercase : 'A'-'Z' ;
+_lowercase : 'a'-'z' ;
+_digit : '0'-'9' ;
+_quote : '"' ;
+_varchar : (_uppercase | _lowercase | _digit | '_' | '-' ) ;
+_varstring : _varchar {_varchar} ;
+_number : _digit {_digit} ;
+_urichar : ( _uppercase | _lowercase | _digit | '_' | '\\' | '-' | '#' | '%' | '$' | '@' ) ;
+_uristring : _uristring {_uristring} ;
+_char : (_uppercase | _lowercase | _digit | '_' | '-' | ' ' | ':') ;
+_charstring : '"' {.} '"' ;
+var : '?' _varstring ;
+uri : _varstring ':' _varstring ;
+url : '<' {.} '>' ; 
+string : _varstring ;
+quotedstring : _charstring ;
+
+<< import "github.com/gtfierro/hoddb/lang/ast" >>
+
+/* syntax */
+QueryUnit
+    : SelectQuery << $0, nil >>
+    | CountQuery   << $0, nil >>
+    | UpdateQuery  << $0, nil >>
+    | VersionsQuery  << $0, nil >>
+    ;
+
+SelectQuery
+    : SelectClause DatasetClause WhereClause TimeClause << ast.NewQueryMulti($0, $1, $2, $3, false) >>
+    | SelectClause DatasetClause WhereClause << ast.NewQueryMulti($0, $1, $2, nil, false) >>
+    ;
+
+CountQuery
+    : CountClause DatasetClause WhereClause TimeClause << ast.NewQueryMulti($0, $1, $2, $3, true) >>
+    | CountClause DatasetClause WhereClause << ast.NewQueryMulti($0, $1, $2, nil, true) >>
+    ;
+
+UpdateQuery
+    : InsertClause DatasetClauseInsert WhereClause << ast.NewInsertQueryMulti($0, $1, $2, false) >>
+    ;
+
+VersionsQuery
+    : "LIST" "NAMES" << ast.NewVersionQueryNames() >>
+    | "LIST" "VERSIONS" TimeClause VersionGraphSelection LimitClause << ast.NewVersionQuery($2, $3, $4) >>
+    ;
+
+VersionGraphSelection
+    : "FOR" DBlist << ast.NewFromClause($1) >>
+    | "FOR" "*" << ast.NewAllFromClause() >>
+    | empty << ast.NewAllFromClause() >>
+    ;
+
+LimitClause
+    : "LIMIT" Number << $1, nil >>
+    | empty << -1, nil >>
+    ;
+
+SelectClause
+    : "SELECT" "*"      << ast.NewAllSelectClause() >>
+    | "SELECT" Varlist  << ast.NewSelectClause($1) >>
+    ;
+
+InsertClause
+    : "INSERT" "{" TriplesBlock "}"         << ast.NewInsertClause($2) >>
+    | "INSERT" "{" TriplesBlock "." "}"     << ast.NewInsertClause($2) >>
+    ;
+
+CountClause
+    : "COUNT" "*"      << ast.NewAllSelectClause() >>
+    | "COUNT" Varlist  << ast.NewSelectClause($1) >>
+    ;
+
+Varlist
+    : Var               << ast.NewVarList($0) >>
+    | Varlist Var       << ast.AppendVar($0, $1) >>
+    ;
+
+DBlist
+    : String            << ast.NewStringList($0) >>
+    | DBlist String     << ast.AppendString($0, $1) >>
+    ;
+
+String : string << ast.ParseString($0) >> ;
+Var : var << ast.ParseString($0) >> ;
+Number : string << ast.ParseNumber($0) >> ;
+
+DatasetClause
+    : "FROM" DBlist << ast.NewFromClause($1) >>
+    | "FROM" "*" << ast.NewAllFromClause() >>
+    | empty << ast.NewAllFromClause() >>
+    ;
+
+DatasetClauseInsert
+    : "TO" DBlist << ast.NewFromClause($1) >>
+    | "TO" "*" << ast.NewAllFromClause() >>
+    | empty << ast.NewAllFromClause() >>
+    ;
+
+TimeClause
+    : "AT" String << ast.NewTimeClause(ast.AT, $1) >>
+    | "BEFORE" String << ast.NewTimeClause(ast.BEFORE, $1) >>
+    | "AFTER" String << ast.NewTimeClause(ast.AFTER, $1) >>
+    | empty << ast.NewTimeClause(ast.AT, "now") >>
+    ;
+
+WhereClause
+    : "WHERE" "{"  "}"                  << ast.NewWhereClause([]ast.Triple{}) >>
+    | "WHERE" "{" TriplesBlock "}"                  << ast.NewWhereClause($2) >>
+    | "WHERE" "{" TriplesBlock "." "}"                  << ast.NewWhereClause($2) >>
+    | "WHERE" "{" TriplesBlock RestOfWhereList "}"  << ast.NewWhereClauseWithGraphGroup($2, $3) >>
+    | "WHERE" "{" TriplesBlock "." RestOfWhereList "}"  << ast.NewWhereClauseWithGraphGroup($2, $4) >>
+    | "WHERE" "{" RestOfWhereList "}"               << ast.NewWhereClauseGraphGroup($2) >>
+    | empty << ast.NewWhereClause([]ast.Triple{}) >>
+    ;
+
+TriplesBlock
+    : Triple                    << ast.NewTripleBlock($0) >>
+    | TriplesBlock "." Triple   << ast.AppendTripleBlock($0, $2) >>
+    ;
+
+Triple
+    : VarOrTerm Path VarOrTerm  << ast.NewTriple($0, $1, $2) >>
+    ;
+
+VarOrTerm
+    : Var         << ast.NewURI($0) >>
+    | GraphTerm   << ast.NewURI($0) >>
+    ;
+
+GraphTerm
+    : uri       << ast.ParseString($0) >>
+    | quotedstring    << ast.ParseQuotedString($0) >>
+    | url       << ast.ParseString($0) >>
+    /* TODO: numerical literal? */
+    ;
+
+Path
+    : PathSequence          << $0, nil >>
+    | Path "|" PathSequence /* TODO */
+    | Var                   << ast.PathFromVar($0) >>
+    ;
+
+PathSequence
+    : PathElt                   << ast.NewPathSequence($0) >>
+    | PathSequence "/" PathElt  << ast.AppendPathSequence($0, $2) >>
+    ;
+
+PathElt
+    : PathPrimary PathMod << ast.AddPathMod($0, $1) >>
+    | PathPrimary   << $0, nil >>
+    ;
+
+PathPrimary
+    : uri           << ast.NewPathPattern($0) >>
+    | "a"           << ast.NewPathPattern($0) >>
+    | url           << ast.NewPathPattern($0) >>
+    | "(" Path ")"  << $1, nil >>
+    ;
+
+PathMod
+    : "?"           << ast.Pattern(ast.PATTERN_ZERO_ONE), nil >>
+    | "*"           << ast.Pattern(ast.PATTERN_ZERO_PLUS), nil >>
+    | "+"           << ast.Pattern(ast.PATTERN_ONE_PLUS), nil >>
+    ;
+
+RestOfWhereList
+    : RestOfWhere           << $0, nil >>
+    | RestOfWhereList RestOfWhere << ast.MergeGraphGroups($0, $1) >>
+    ;
+
+RestOfWhere
+    : GraphPatternNotTriples Joiner TriplesBlock Joiner << ast.AddTriplesToGraphGroup($0, $2) >>
+    | GraphPatternNotTriples Joiner   << $0, nil >>
+    ;
+
+Joiner
+    : "."
+    | empty
+    ;
+
+
+GraphPatternNotTriples
+    : GroupGraphPattern             << $0, nil >>
+    | GraphPatternNotTriples "UNION" GroupGraphPattern << ast.GraphGroupUnion($0, $2) >>
+    ;
+
+GroupGraphPattern
+    : "{" GroupGraphPatternSub Joiner "}"      << $1, nil >>
+    ;
+
+GroupGraphPatternSub
+    : TriplesBlock                              << ast.GraphGroupFromTriples($0) >>
+    | GraphPatternNotTriples "." TriplesBlock   << ast.AddTriplesToGraphGroup($0, $2) >>
+    | GroupGraphPatternSub GraphPatternNotTriples "." TriplesBlock
+    ;
