@@ -80,12 +80,46 @@ _ID
     ;
 
 
+
 _ruleid
     : _ID
     ;
 
 _id_
     : _LT _ruleid _GT
+    ;
+
+
+_text_
+    : _ID
+    ;
+
+_element
+    : _optional_
+    | _zeroormore
+    | _oneormore
+    | _text_
+    | _id_
+    ;
+
+_alternative
+    : { _element }
+    ;
+
+_alternatives
+    : _alternative { _BAR _alternative }
+    ;
+
+_optional_
+    : _REND _alternatives _LEND
+    ;
+
+_zeroormore
+    : _RBRACE _alternatives _LBRACE
+    ;
+
+_oneormore
+    : _RPAREN _alternatives _LPAREN
     ;
 
 rulelist
@@ -103,36 +137,3 @@ lhs
 rhs
     : alternatives
     ;
-
-alternatives
-    : alternative (BAR alternative)*
-    ;
-
-alternative
-    : element*
-    ;
-
-element
-    : optional_
-    | zeroormore
-    | oneormore
-    | text_
-    | id_
-    ;
-
-optional_
-    : REND alternatives LEND
-    ;
-
-zeroormore
-    : RBRACE alternatives LBRACE
-    ;
-
-oneormore
-    : RPAREN alternatives LPAREN
-    ;
-
-text_
-    : ID
-    ;
-
