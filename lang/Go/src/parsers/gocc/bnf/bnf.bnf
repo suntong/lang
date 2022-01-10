@@ -1,5 +1,6 @@
 /*
  [The "BSD licence"]
+ Copyright (c) 2021 Tong Sun
  Copyright (c) 2013 Tom Everett
  All rights reserved.
 
@@ -122,18 +123,18 @@ _oneormore
     : _RPAREN _alternatives _LPAREN
     ;
 
+_lhs
+    : _id_
+    ;
+
+_rhs
+    : _alternatives
+    ;
+
+_rule_
+    : _lhs _ASSIGN _rhs
+    ;
+
 rulelist
-    : rule_* EOF
-;
-
-rule_
-    : lhs ASSIGN rhs
-    ;
-
-lhs
-    : id_
-    ;
-
-rhs
-    : alternatives
+    : { _rule_ }
     ;
