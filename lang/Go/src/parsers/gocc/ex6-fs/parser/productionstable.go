@@ -308,13 +308,13 @@ var productionsTable = ProdTab{
 		},
 	},
 	ProdTabEntry{
-		String: `TernaryExpr : TernaryArgument "?" TernaryArgument ":" TernaryArgument	<< ast.NewTernaryExpr(X[0], X[2], X[4]) >>`,
+		String: `TernaryExpr : TernaryArgument "?" TernaryArgument ":" TernaryArgument	<<  >>`,
 		Id:         "TernaryExpr",
 		NTType:     10,
 		Index:      29,
 		NumSymbols: 5,
 		ReduceFunc: func(X []Attrib, C interface{}) (Attrib, error) {
-			return ast.NewTernaryExpr(X[0], X[2], X[4])
+			return X[0], nil
 		},
 	},
 	ProdTabEntry{
@@ -338,13 +338,13 @@ var productionsTable = ProdTab{
 		},
 	},
 	ProdTabEntry{
-		String: `TernaryArgument : "(" TernaryExpr ")"	<< ast.NewTernaryArgument(X[1]) >>`,
+		String: `TernaryArgument : "(" TernaryExpr ")"	<<  >>`,
 		Id:         "TernaryArgument",
 		NTType:     11,
 		Index:      32,
 		NumSymbols: 3,
 		ReduceFunc: func(X []Attrib, C interface{}) (Attrib, error) {
-			return ast.NewTernaryArgument(X[1])
+			return X[0], nil
 		},
 	},
 	ProdTabEntry{
