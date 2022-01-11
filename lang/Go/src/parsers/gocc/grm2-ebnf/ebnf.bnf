@@ -1,0 +1,74 @@
+/*
+
+EBNF
+https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form#EBNF
+
+Copyright (c) 2021 Tong Sun
+
+*/
+
+/* Lexical part */
+!whitespace : ' ' | '\t' | '\v' | '\f' | '\r' | '\n';
+!lineComment  : '/' '/' { . } '\n' ;
+!blockComment : '/' '*' { . | '*' } '*' '/' ;
+
+_letter : 'A'-'Z' | 'a'-'z' | '_' ;
+_digit : '0'-'9' ;
+
+/* punctuation */
+
+_symbol
+  : '['  |  ']'  |  '{'  |  '}'  |  '('  |  ')'  |  '<'  |  '>'
+  |  '='  |  '|'  |  '.'  |  ','  |  ';'
+  ;
+
+
+_alpha : _letter | _digit ;
+
+_character
+  : _letter | _digit | _symbol
+  ;
+
+
+ident
+  : _letter { _alpha }
+  ;
+
+
+terminal
+  : '\''  _character   { _character }  '\'' 
+  | '"'   _character   { _character }   '"' 
+  ;
+
+
+/* Syntax part */
+
+<< 
+import (
+	// "github.com/suntong/gocc-grammars/bnf/token"
+	// "github.com/suntong/gocc-grammars/bnf/util"
+)
+>>
+
+Grammar
+  : Rule
+  | Grammar Rule
+  ;
+
+Rule
+  : Lhs ":" Rhs ";"
+  ;
+
+Lhs
+  : ident
+  ;
+
+Rhs
+  : ident
+  | terminal
+  | "["   Rhs   "]"
+  | "{"   Rhs   "}"
+  | "("   Rhs   ")"
+  | Rhs   "|"   Rhs
+  | Rhs   ","   Rhs
+  ;
