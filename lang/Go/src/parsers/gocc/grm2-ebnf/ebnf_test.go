@@ -12,9 +12,19 @@ import (
 )
 
 var testData = []string{
+	"a : b ;",
+	//	"id : (_letter | '_') {_idchar} ;",
 	"_letter : 'A'-'Z' | 'a'-'z' | '_' ;",
 	`_alpha : _letter | _digit ;`,
+	//	"!lineComment  : '/' '/' { . } '\n' ;",
+	"!whitespace : ' ' | '\t' | '\v' | '\f' | '\r' | '\n';",
+	"_whitespace : ' ' | '\t' | '\v' | '\f' | '\r' | '\n';",
+	"_whitespace : ' ' | '\t' | '\v' | '\f' | '\r' | '\n';\n",
 }
+
+/*
+
+ */
 
 func TestPass(t *testing.T) {
 	for _, ts := range testData {
