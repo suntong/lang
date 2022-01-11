@@ -1,140 +1,123 @@
 /*
- [The "BSD licence"]
  Copyright (c) 2021 Tong Sun
- Copyright (c) 2013 Tom Everett
- All rights reserved.
-
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions
- are met:
- 1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
- 2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
- 3. The name of the author may not be used to endorse or promote products
-    derived from this software without specific prior written permission.
-
- THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 /* Lexical part */
 !whitespace : ' ' | '\t' | '\v' | '\f' | '\r' | '\n';
+!lineComment  : '/' '/' { . } '\n' ;
+!blockComment : '/' '*' { . | '*' } '*' '/' ;
 
+_letter : 'A'-'Z' | 'a'-'z' | '_' ;
+_digit : '0'-'9' ;
+_alpha : _letter | _digit ;
+_any : ' '  |  '!'  | '#' - '~' ;
 
-_ASSIGN
-    : ':'  ':'  '='
+string_literal : '"' {_any}  '"' ;
+//int : '0' | '1'-'9' {_digit} ;
+
+ident
+    : _letter { _alpha }
     ;
 
-_LPAREN
-    : ')'
+/* punctuation */
+plus : '+' ;
+// minus : '-' ;
+mul : '*' ;
+// div : '/' ;
+
+bar : '|' ;
+lbrace : '{' ;
+rbrace : '}' ;
+lparen : '(' ;
+rparen : ')' ;
+
+lt : '<' ;
+gt : '>' ;
+
+lend : '[' ;
+rend : ']' ;
+
+//assign : '=' ;
+assign : ':'  ':'  '=' ;
+semicolon : ';' ;
+
+/*
+eq : '=' '=' ;
+neq : '!' '=' ;
+comma : ',' ;
+*/
+
+/* Syntax part */
+
+<< 
+import (
+	// "github.com/suntong/gocc-grammars/bnf/token"
+	// "github.com/suntong/gocc-grammars/bnf/util"
+)
+>>
+
+
+RuleList
+    : Rule
+    | RuleList Rule
     ;
 
-_RPAREN
-    : '('
+Rule
+    : Lhs assign Rhs semicolon
     ;
 
-_LBRACE
-    : '}'
+Lhs
+    : Id_
     ;
 
-_RBRACE
-    : '{'
+Rhs
+    : Alternatives
     ;
 
-_LEND
-    : ']'
+Alternatives
+    : Alternative
+    | Alternatives bar Alternative
     ;
 
-_REND
-    : '['
+Alternative
+    : Element
+    | Alternative Element
     ;
 
-_BAR
-    : '|'
+Element
+    : Optional_
+    | Zeroormore
+    | Oneormore
+    | Text_
+    | Id_
+    | Element mul
+    | Element plus
     ;
 
-_GT
-    : '>'
+Optional_
+    : lend Alternatives rend
     ;
 
-_LT
-    : '<'
+Zeroormore
+    : lbrace Alternatives rbrace
     ;
 
-
-_letter     : 'a'-'z' | 'A'-'Z' | '_';
-_digit      : '0'-'9' ;
-
-
-_ID
-    : _letter { _letter | _digit | '_' }
-    ;
-
-
-
-_ruleid
-    : _ID
-    ;
-
-_id_
-    : _LT _ruleid _GT
+Oneormore
+    : lparen Alternatives rparen
     ;
 
 
-_text_
-    : _ID
+Text_
+    : ident
+    | string_literal
     ;
 
-_element
-    : _optional_
-    | _zeroormore
-    | _oneormore
-    | _text_
-    | _id_
+
+Id_
+    : Ruleid
+    | lt Ruleid gt
     ;
 
-_alternative
-    : { _element }
-    ;
-
-_alternatives
-    : _alternative { _BAR _alternative }
-    ;
-
-_optional_
-    : _REND _alternatives _LEND
-    ;
-
-_zeroormore
-    : _RBRACE _alternatives _LBRACE
-    ;
-
-_oneormore
-    : _RPAREN _alternatives _LPAREN
-    ;
-
-_lhs
-    : _id_
-    ;
-
-_rhs
-    : _alternatives
-    ;
-
-_rule_
-    : _lhs _ASSIGN _rhs
-    ;
-
-rulelist
-    : { _rule_ }
+Ruleid
+    : ident
     ;
