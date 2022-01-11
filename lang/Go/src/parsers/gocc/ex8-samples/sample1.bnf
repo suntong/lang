@@ -1,0 +1,17 @@
+/* Lexical Parser */
+!whitespace : '\t' | '\n' | '\r' | ' ' ;
+
+_digit : '0'-'9' ;
+_letter : 'A'-'Z' | 'a'-'z' | '_' ;
+
+digits : _digit {_digit} ;
+_alpha : _letter | _digit ;
+
+ident : _letter {_alpha} ;
+
+Term
+  : digits
+  | ident
+//| empty
+  ;
+// without the "empty" keyword in Term is still OK

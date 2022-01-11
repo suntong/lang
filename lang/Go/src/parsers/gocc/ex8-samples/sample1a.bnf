@@ -1,0 +1,31 @@
+/* Lexical Parser */
+!whitespace : '\t' | '\n' | '\r' | ' ' ;
+
+_digit : '0'-'9' ;
+_letter : 'A'-'Z' | 'a'-'z' | '_' ;
+
+digits : _digit {_digit} ;
+_alpha : _letter | _digit ;
+
+ident : _letter {_alpha} ;
+
+Term
+  : _digit { _digit }
+  | ident
+  | empty
+  ;
+// empty production alternative: Maybe you are missing
+//   the "empty" keyword in "Term : \t<<  >>"
+
+/*
+
+$ diff -wU 1 sample1.bnf sample1a.bnf
+--- sample1.bnf 2022-01-10 22:26:20.366284419 -0500
++++ sample1a.bnf        2022-01-10 22:36:21.091048956 -0500
+@@ -12,3 +12,3 @@
+ Term
+-  : digits
++  : _digit { _digit }
+   | ident
+
+*/

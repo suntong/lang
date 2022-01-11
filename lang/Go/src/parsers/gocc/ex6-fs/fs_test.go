@@ -1,4 +1,4 @@
-package astx
+package fs
 
 //go:generate gocc -a -p github.com/suntong/lang/lang/Go/src/parsers/gocc/ex6-fs fs.bnf
 

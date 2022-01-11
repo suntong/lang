@@ -1,0 +1,77 @@
+/* Lexical Parser */
+!whitespace : '\t' | '\n' | '\r' | ' ' ;
+!lineComment  : '/' '/' { . } '\n' ;
+!blockComment : '/' '*' { . | '*' } '*' '/' ;
+
+_letter : 'A'-'Z' | 'a'-'z' | '_' ;
+_binary_digit : '0'-'1' ;
+_digit : '0'-'9' ;
+
+_alpha : _letter | _digit ;
+
+
+/* punctuation */
+_plus : '+' ;
+_minus : '-' ;
+semicolon : ';' ;
+
+
+/* keywords */
+//let : 'l' 'e' 't' ;
+if : 'i' 'f' ;
+else : 'e' 'l' 's' 'e' ;
+
+abc :  'a' | 'b' | 'c' ;
+// The | symbol indicates alternate choices for the rule’s definition.
+// It’s NOT a shorthand for multiple rules for the same nonterminal
+// as contrary to https://cs61.seas.harvard.edu/site/2020/BNFGrammars/
+def : 'd' ;
+//X/ def : 'e' ;
+//   panic: Production def already exists
+//X/ def : 'f' ;
+
+digits : _digit {_digit} ;
+ident : _letter {_alpha} ;
+
+plus_minus : (_plus|_minus) ;
+
+//X/ binary_seq :  { _binary_digit }+ ;
+// expected one of: regDefId [ { ( | ; . char_lit
+// change x+ to x {x}
+binary_seq : _binary_digit { _binary_digit } ;
+
+Stmt
+  : Expr semicolon
+  | If_stmt
+  ;
+
+// Options also involve alternatives.
+// The optional else after an if in C is handled in BNF by:
+// <if_stmt> ::= if <expr> <stmt> | if <expr> <stmt> else <stmt>
+If_stmt
+  : if Expr Stmt else Stmt semicolon
+  ;
+
+
+Expr
+// <expr> ::= <expr> + <term> | <expr> - <term>
+//X/ : Expr (plus|minus) Expr
+//           ^-- expected one of: | ; g_sdt_lit prodId tokId string_lit
+// because "(" LexPattern ")" is only for grouping **lexical** pattern
+//OK/  : Expr plus Term
+  : Expr plus_minus Term
+  | Term
+  ;
+
+
+Term
+//: _digit { _digit }
+// will cause at the end of the rule,
+//   empty production alternative: Maybe you are missing
+//   the "empty" keyword in "Term : \t<<  >>"
+  : digits
+  | binary_seq
+  | ident
+  | abc
+  | def
+  ;
