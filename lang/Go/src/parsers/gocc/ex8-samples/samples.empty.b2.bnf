@@ -1,0 +1,18 @@
+string_lit : 's' ;
+a : 'a' ;
+b : 'b' ;
+
+Item
+  : Primary
+  | Primary PrimaryMod
+  ;
+
+Primary
+  : NCName | string_lit
+  ;
+
+NCName : b ;
+
+PrimaryMod
+  : a
+  ;

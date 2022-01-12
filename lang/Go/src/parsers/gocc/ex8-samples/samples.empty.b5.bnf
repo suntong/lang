@@ -1,0 +1,5 @@
+a : 'a' ;
+
+PrimaryMod
+  : a  // a OK, but 'a' NOK -- empty production alternative
+  ;

@@ -1,0 +1,14 @@
+string_lit : 's' ;
+
+Item
+  : Primary
+  | Primary PrimaryMod
+  ;
+
+Primary
+  : NCName | string_lit
+  ;
+
+PrimaryMod
+  : '?'
+  ;
