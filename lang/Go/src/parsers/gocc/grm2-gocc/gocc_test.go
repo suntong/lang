@@ -1,4 +1,4 @@
-package ebnf
+package gocc
 
 import (
 	"fmt"
@@ -7,24 +7,16 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/suntong/lang/lang/Go/src/parsers/gocc/grm2-ebnf/lexer"
-	"github.com/suntong/lang/lang/Go/src/parsers/gocc/grm2-ebnf/parser"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/grm2-gocc/lexer"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/grm2-gocc/parser"
 )
 
 var testData = []string{
-	"a : b ;",
-	//	"id : (_letter | '_') {_idchar} ;",
+	"a : 'b' ;",
+	"id : (_letter | '_') {_idchar} ;",
 	"_letter : 'A'-'Z' | 'a'-'z' | '_' ;",
 	`_alpha : _letter | _digit ;`,
-	//	"!lineComment  : '/' '/' { . } '\n' ;",
-	"!whitespace : ' ' | '\t' | '\v' | '\f' | '\r' | '\n';",
-	"_whitespace : ' ' | '\t' | '\v' | '\f' | '\r' | '\n';",
-	"_whitespace : ' ' | '\t' | '\v' | '\f' | '\r' | '\n';\n",
 }
-
-/*
-
- */
 
 func TestPass(t *testing.T) {
 	for _, ts := range testData {
@@ -91,5 +83,28 @@ func test(src []byte) (astree interface{}, err error) {
 /*
 
 $ go test -v .
+=== RUN   TestPass
+  Testing: a : 'b' ;
+  Testing: id : (_letter | '_') {_idchar} ;
+  Testing: _letter : 'A'-'Z' | 'a'-'z' | '_' ;
+  Testing: _alpha : _letter | _digit ;
+--- PASS: TestPass (0.00s)
+=== RUN   TestFail
+  Testing: a ::= b
+  Parsing failed as expected: 1:4: error: expected one of regDefId, ".", char_lit, "[", "{", or "("; got: ":"
+--- PASS: TestFail (0.00s)
+=== RUN   TestFiles
+  Testing file: test/ast.bnf
+  Testing file: test/bnf.bnf
+  Testing file: test/bools.bnf
+  Testing file: test/calc.bnf
+  Testing file: test/ebnf.bnf
+  Testing file: test/fs.bnf
+  Testing file: test/hello.bnf
+  Testing file: test/sparql.bnf
+  Testing file: test/usercontext.bnf
+--- PASS: TestFiles (0.00s)
+PASS
+ok      github.com/suntong/lang/lang/Go/src/parsers/gocc/grm2-gocc      (cached)
 
 */

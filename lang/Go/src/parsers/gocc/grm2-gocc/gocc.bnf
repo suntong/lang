@@ -18,6 +18,10 @@
 Lexical items
 The basic unit of input to the lexical analyser is a UTF-8 encoded Unicode code point, defined as:
 **********/
+!whitespace : ' ' | '\t' | '\n' | '\r' ;
+!comment : _lineComment | _blockComment ;
+_lineComment : '/' '/' {.} '\n' ;
+_blockComment : '/' '*' {. | '*'} '*' '/' ;
 
 _unicode_char
   : .                   // Any UTF-8 character literal
