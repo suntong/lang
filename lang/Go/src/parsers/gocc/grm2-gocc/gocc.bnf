@@ -1,0 +1,164 @@
+// Copyright 2021 Tong Sun
+
+// Copyright 2013 Vastech SA (PTY) LTD
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+/********
+Lexical items
+The basic unit of input to the lexical analyser is a UTF-8 encoded Unicode code point, defined as:
+**********/
+
+_unicode_char
+  : .                   // Any UTF-8 character literal
+  ;
+
+_letter : 'A' ... 'Z' | 'a' ... 'z' | '_' ;
+
+//_digit : '0' ... '9' ;
+//char : '\'' ( _unicode_value | _byte_value ) '\'' ;
+
+_unicode_value    : _unicode_char | _little_u_value | _big_u_value | _escaped_char ;
+_byte_value       : _octal_byte_value | _hex_byte_value ;
+_octal_byte_value : '\\' _octal_digit _octal_digit _octal_digit ;
+_hex_byte_value   : '\\' 'x' _hex_digit _hex_digit ;
+_little_u_value   : '\\' 'u' _hex_digit _hex_digit _hex_digit _hex_digit ;
+_big_u_value      : '\\' 'U' _hex_digit _hex_digit _hex_digit _hex_digit
+                            _hex_digit _hex_digit _hex_digit _hex_digit ;
+_escaped_char     : '\\' ( 'a' | 'b' | 'f' | 'n' | 'r' | 't' | 'v' | '\\' | '\'' | '"' ) ;
+
+//id : _letter {_letter | _digit} ;
+
+string_lit : _raw_string | _interpreted_string ;
+_raw_string : '`' {_unicode_char} '`' ;
+_interpreted_string : '"' { _unicode_value | _byte_value } '"' ;
+
+g_sdt_lit
+  : '<' '<' {_unicode_char} '>' '>'
+  ;
+
+char_lit
+  : '\'' (_unicode_value | _byte_value) '\''
+  ;
+
+ignoredTokId : '!' _tokId ;
+
+regDefId : '_' {_id_char} ;
+
+prodId
+  : _upcase {_id_char}
+  ;
+
+tokId : _tokId ;
+_tokId : _lowcase {_id_char} ;
+_lowcase : 'a'-'z' ;
+_id_char : _upcase | _lowcase | '_' | _digit ;
+_upcase : 'A'-'Z' ;
+_digit : '0'-'9' ;
+
+_octal_digit : '0' - '7' ;
+_hex_digit
+  : '0' - '9'
+  | 'A' - 'F'
+  | 'a' - 'f'
+  ;
+
+//a : 'a' ;
+
+/*** Syntactic items ***/
+
+Grammar
+  : LexicalPart SyntaxPart
+  | LexicalPart
+  | SyntaxPart
+  ;
+
+LexicalPart
+  : LexProductions
+  ;
+
+
+LexProductions
+  : LexProduction
+  | LexProductions LexProduction
+  ;
+
+LexProduction 
+  : tokId ":" LexPattern ";"
+  | regDefId ":" LexPattern ";"
+  | ignoredTokId ":" LexPattern ";"
+  ;
+
+LexPattern 
+  : LexAlt
+  | LexPattern "|" LexAlt
+  ;
+
+LexAlt 
+  : LexTerm
+  | LexAlt LexTerm
+  ;
+
+LexTerm
+  : "."
+  | char_lit
+  | char_lit "-" char_lit
+  | regDefId
+  | "[" LexPattern "]"
+  | "{" LexPattern "}"
+  | "(" LexPattern ")"
+  ;
+
+SyntaxPart
+  : FileHeader SyntaxProdList
+  | SyntaxProdList
+  ;
+
+FileHeader 
+  : g_sdt_lit
+  ;
+
+SyntaxProdList
+  : SyntaxProduction
+  | SyntaxProdList SyntaxProduction
+  ;
+
+SyntaxProduction
+  : prodId ":" Alternatives ";"
+  ;
+
+Alternatives
+  :	SyntaxBody
+  |	Alternatives "|" SyntaxBody
+  ;
+
+SyntaxBody
+  : Symbols
+  | Symbols g_sdt_lit
+  | "error"
+  | "error" Symbols
+  | "error" Symbols g_sdt_lit
+  | "empty"
+  ;
+
+Symbols
+  : Symbol
+  | Symbols Symbol
+  ;
+
+Symbol
+  : prodId
+  | tokId
+  | string_lit
+  ;
+
