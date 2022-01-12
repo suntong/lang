@@ -12,28 +12,54 @@ Copyright (c) 2021 Tong Sun
 _lineComment : '/' '/' {.} '\n' ;
 _blockComment : '/' '*' {. | '*'} '*' '/' ;
 
+char_lit
+  : '"' (_unicode_value | _byte_value) '"'
+  ;
+
+string_lit
+  : '"' {_unicode_char} '"' ;
+
+_unicode_value    : _unicode_char | _little_u_value | _big_u_value | _escaped_char ;
+_byte_value       : _octal_byte_value | _hex_byte_value ;
+_octal_byte_value : '\\' _octal_digit _octal_digit _octal_digit ;
+_hex_byte_value   : '\\' 'x' _hex_digit _hex_digit ;
+_little_u_value   : '\\' 'u' _hex_digit _hex_digit _hex_digit _hex_digit ;
+_big_u_value      : '\\' 'U' _hex_digit _hex_digit _hex_digit _hex_digit
+                            _hex_digit _hex_digit _hex_digit _hex_digit ;
+
+/* Syntax part */
 
 Grammar
   : Production
   ;
 
 Production
-  : NCName '::=' Choice
+  : NCName '::=' LexPattern
   ;
 
 NCName
   : [http://www.w3.org/TR/xml-names/#NT-NCName]
   ;
 
-Choice
-// SequenceOrDifference ( '|' SequenceOrDifference )*
-  : SequenceOrDifference
-  | Choice '|' SequenceOrDifference
+LexPattern 
+  : LexAlt
+  | LexPattern "|" LexAlt
   ;
 
-SequenceOrDifference
-  : Items
+LexAlt 
+  : LexTerm
+  | LexAlt LexTerm
   ;
+
+LexTerm
+  : "."
+  | char_lit
+  | char_lit "-" char_lit
+  | "[" LexPattern "]"
+  | "{" LexPattern "}"
+  | "(" LexPattern ")"
+  ;
+
 
 Items
 // (Item ( '-' Item | Item* ))?
@@ -66,29 +92,5 @@ PrimaryMod
 
 StringLiteral
   : '"' [^"]* '"' | "'" [^']* "'"
-          /* ws: explicit */
-  ;
-
-CharCode
-  : '#x' [0-9a-fA-F]+
-          /* ws: explicit */
-  ;
-
-CharClass
-  : '[' '^'? ( Char | CharCode | CharRange | CharCodeRange )+ ']'
-          /* ws: explicit */
-  ;
-
-Char
-  : [http://www.w3.org/TR/xml#NT-Char]
-  ;
-
-CharRange
-  : Char '-' ( Char - ']' )
-          /* ws: explicit */
-  ;
-
-CharCodeRange
-  : CharCode '-' CharCode
           /* ws: explicit */
   ;
