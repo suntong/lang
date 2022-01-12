@@ -85,42 +85,42 @@ var gotoTab = gotoTable{
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		16, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S11
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		22, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S12
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		28, // Rhs
+		18, // Rhs
 	},
 	gotoRow{ // S13
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		-1, // Rhs
+		22, // Rhs
 	},
 	gotoRow{ // S14
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		34, // Rhs
+		26, // Rhs
 	},
 	gotoRow{ // S15
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		35, // Rhs
+		30, // Rhs
 	},
 	gotoRow{ // S16
 		-1, // S'
@@ -148,21 +148,21 @@ var gotoTab = gotoTable{
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		39, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S20
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		40, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S21
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		41, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S22
 		-1, // S'
@@ -190,21 +190,21 @@ var gotoTab = gotoTable{
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		45, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S26
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		46, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S27
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		47, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S28
 		-1, // S'
@@ -232,70 +232,70 @@ var gotoTab = gotoTable{
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		51, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S32
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		52, // Rhs
+		53, // Rhs
 	},
 	gotoRow{ // S33
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		53, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S34
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		-1, // Rhs
+		54, // Rhs
 	},
 	gotoRow{ // S35
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		-1, // Rhs
+		55, // Rhs
 	},
 	gotoRow{ // S36
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		-1, // Rhs
+		56, // Rhs
 	},
 	gotoRow{ // S37
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		54, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S38
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		55, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S39
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		-1, // Rhs
+		58, // Rhs
 	},
 	gotoRow{ // S40
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		-1, // Rhs
+		59, // Rhs
 	},
 	gotoRow{ // S41
 		-1, // S'
@@ -309,21 +309,21 @@ var gotoTab = gotoTable{
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		-1, // Rhs
+		60, // Rhs
 	},
 	gotoRow{ // S43
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		59, // Rhs
+		61, // Rhs
 	},
 	gotoRow{ // S44
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		60, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S45
 		-1, // S'
@@ -337,35 +337,35 @@ var gotoTab = gotoTable{
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		-1, // Rhs
+		63, // Rhs
 	},
 	gotoRow{ // S47
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		-1, // Rhs
+		64, // Rhs
 	},
 	gotoRow{ // S48
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		-1, // Rhs
+		65, // Rhs
 	},
 	gotoRow{ // S49
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		64, // Rhs
+		-1, // Rhs
 	},
 	gotoRow{ // S50
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule
 		-1, // Lhs
-		65, // Rhs
+		66, // Rhs
 	},
 	gotoRow{ // S51
 		-1, // S'
@@ -487,6 +487,62 @@ var gotoTab = gotoTable{
 		-1, // Rhs
 	},
 	gotoRow{ // S68
+		-1, // S'
+		-1, // Grammar
+		-1, // Rule
+		-1, // Lhs
+		-1, // Rhs
+	},
+	gotoRow{ // S69
+		-1, // S'
+		-1, // Grammar
+		-1, // Rule
+		-1, // Lhs
+		-1, // Rhs
+	},
+	gotoRow{ // S70
+		-1, // S'
+		-1, // Grammar
+		-1, // Rule
+		-1, // Lhs
+		-1, // Rhs
+	},
+	gotoRow{ // S71
+		-1, // S'
+		-1, // Grammar
+		-1, // Rule
+		-1, // Lhs
+		-1, // Rhs
+	},
+	gotoRow{ // S72
+		-1, // S'
+		-1, // Grammar
+		-1, // Rule
+		-1, // Lhs
+		-1, // Rhs
+	},
+	gotoRow{ // S73
+		-1, // S'
+		-1, // Grammar
+		-1, // Rule
+		-1, // Lhs
+		-1, // Rhs
+	},
+	gotoRow{ // S74
+		-1, // S'
+		-1, // Grammar
+		-1, // Rule
+		-1, // Lhs
+		-1, // Rhs
+	},
+	gotoRow{ // S75
+		-1, // S'
+		-1, // Grammar
+		-1, // Rule
+		-1, // Lhs
+		-1, // Rhs
+	},
+	gotoRow{ // S76
 		-1, // S'
 		-1, // Grammar
 		-1, // Rule

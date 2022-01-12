@@ -53,7 +53,7 @@ var productionsTable = ProdTab{
 		},
 	},
 	ProdTabEntry{
-		String: `Rule : Lhs ":" Rhs ";"	<<  >>`,
+		String: `Rule : Lhs colon Rhs semicolon	<<  >>`,
 		Id:         "Rule",
 		NTType:     2,
 		Index:      3,
@@ -93,53 +93,83 @@ var productionsTable = ProdTab{
 		},
 	},
 	ProdTabEntry{
-		String: `Rhs : "[" Rhs "]"	<<  >>`,
+		String: `Rhs : terminal character	<<  >>`,
 		Id:         "Rhs",
 		NTType:     4,
 		Index:      7,
-		NumSymbols: 3,
+		NumSymbols: 2,
 		ReduceFunc: func(X []Attrib, C interface{}) (Attrib, error) {
 			return X[0], nil
 		},
 	},
 	ProdTabEntry{
-		String: `Rhs : "{" Rhs "}"	<<  >>`,
+		String: `Rhs : Rhs lend Rhs rend	<<  >>`,
 		Id:         "Rhs",
 		NTType:     4,
 		Index:      8,
-		NumSymbols: 3,
+		NumSymbols: 4,
 		ReduceFunc: func(X []Attrib, C interface{}) (Attrib, error) {
 			return X[0], nil
 		},
 	},
 	ProdTabEntry{
-		String: `Rhs : "(" Rhs ")"	<<  >>`,
+		String: `Rhs : Rhs lbrace Rhs rbrace	<<  >>`,
 		Id:         "Rhs",
 		NTType:     4,
 		Index:      9,
-		NumSymbols: 3,
+		NumSymbols: 4,
 		ReduceFunc: func(X []Attrib, C interface{}) (Attrib, error) {
 			return X[0], nil
 		},
 	},
 	ProdTabEntry{
-		String: `Rhs : Rhs "|" Rhs	<<  >>`,
+		String: `Rhs : Rhs lparen Rhs rparen	<<  >>`,
 		Id:         "Rhs",
 		NTType:     4,
 		Index:      10,
-		NumSymbols: 3,
+		NumSymbols: 4,
 		ReduceFunc: func(X []Attrib, C interface{}) (Attrib, error) {
 			return X[0], nil
 		},
 	},
 	ProdTabEntry{
-		String: `Rhs : Rhs "," Rhs	<<  >>`,
+		String: `Rhs : Rhs bar Rhs	<<  >>`,
 		Id:         "Rhs",
 		NTType:     4,
 		Index:      11,
 		NumSymbols: 3,
 		ReduceFunc: func(X []Attrib, C interface{}) (Attrib, error) {
 			return X[0], nil
+		},
+	},
+	ProdTabEntry{
+		String: `Rhs : character minus character	<<  >>`,
+		Id:         "Rhs",
+		NTType:     4,
+		Index:      12,
+		NumSymbols: 3,
+		ReduceFunc: func(X []Attrib, C interface{}) (Attrib, error) {
+			return X[0], nil
+		},
+	},
+	ProdTabEntry{
+		String: `Rhs : character	<<  >>`,
+		Id:         "Rhs",
+		NTType:     4,
+		Index:      13,
+		NumSymbols: 1,
+		ReduceFunc: func(X []Attrib, C interface{}) (Attrib, error) {
+			return X[0], nil
+		},
+	},
+	ProdTabEntry{
+		String: `Rhs : empty	<<  >>`,
+		Id:         "Rhs",
+		NTType:     4,
+		Index:      14,
+		NumSymbols: 0,
+		ReduceFunc: func(X []Attrib, C interface{}) (Attrib, error) {
+			return nil, nil
 		},
 	},
 }
