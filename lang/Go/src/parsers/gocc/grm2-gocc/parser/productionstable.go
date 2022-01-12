@@ -128,7 +128,7 @@ var productionsTable = ProdTab{
 		},
 	},
 	ProdTabEntry{
-		String: `LexPattern : LexPattern "|" LexAlt	<<  >>`,
+		String: `LexPattern : LexAlt "|" LexPattern	<<  >>`,
 		Id:         "LexPattern",
 		NTType:     5,
 		Index:      11,

@@ -772,8 +772,8 @@ var gotoTab = gotoTable{
 		-1, // LexicalPart
 		-1, // LexProductions
 		-1, // LexProduction
-		-1, // LexPattern
-		79, // LexAlt
+		79, // LexPattern
+		24, // LexAlt
 		25, // LexTerm
 		-1, // SyntaxPart
 		-1, // FileHeader
@@ -1440,7 +1440,7 @@ var gotoTab = gotoTable{
 		-1, // LexProduction
 		-1, // LexPattern
 		-1, // LexAlt
-		43, // LexTerm
+		-1, // LexTerm
 		-1, // SyntaxPart
 		-1, // FileHeader
 		-1, // SyntaxProdList
@@ -1469,24 +1469,6 @@ var gotoTab = gotoTable{
 		-1, // Symbol
 	},
 	gotoRow{ // S81
-		-1,  // S'
-		-1,  // Grammar
-		-1,  // LexicalPart
-		-1,  // LexProductions
-		-1,  // LexProduction
-		-1,  // LexPattern
-		104, // LexAlt
-		48,  // LexTerm
-		-1,  // SyntaxPart
-		-1,  // FileHeader
-		-1,  // SyntaxProdList
-		-1,  // SyntaxProduction
-		-1,  // Alternatives
-		-1,  // SyntaxBody
-		-1,  // Symbols
-		-1,  // Symbol
-	},
-	gotoRow{ // S82
 		-1, // S'
 		-1, // Grammar
 		-1, // LexicalPart
@@ -1503,6 +1485,24 @@ var gotoTab = gotoTable{
 		-1, // SyntaxBody
 		-1, // Symbols
 		-1, // Symbol
+	},
+	gotoRow{ // S82
+		-1,  // S'
+		-1,  // Grammar
+		-1,  // LexicalPart
+		-1,  // LexProductions
+		-1,  // LexProduction
+		104, // LexPattern
+		47,  // LexAlt
+		48,  // LexTerm
+		-1,  // SyntaxPart
+		-1,  // FileHeader
+		-1,  // SyntaxProdList
+		-1,  // SyntaxProduction
+		-1,  // Alternatives
+		-1,  // SyntaxBody
+		-1,  // Symbols
+		-1,  // Symbol
 	},
 	gotoRow{ // S83
 		-1, // S'
@@ -1595,24 +1595,6 @@ var gotoTab = gotoTable{
 		-1, // Symbol
 	},
 	gotoRow{ // S88
-		-1,  // S'
-		-1,  // Grammar
-		-1,  // LexicalPart
-		-1,  // LexProductions
-		-1,  // LexProduction
-		-1,  // LexPattern
-		109, // LexAlt
-		57,  // LexTerm
-		-1,  // SyntaxPart
-		-1,  // FileHeader
-		-1,  // SyntaxProdList
-		-1,  // SyntaxProduction
-		-1,  // Alternatives
-		-1,  // SyntaxBody
-		-1,  // Symbols
-		-1,  // Symbol
-	},
-	gotoRow{ // S89
 		-1, // S'
 		-1, // Grammar
 		-1, // LexicalPart
@@ -1629,6 +1611,24 @@ var gotoTab = gotoTable{
 		-1, // SyntaxBody
 		-1, // Symbols
 		-1, // Symbol
+	},
+	gotoRow{ // S89
+		-1,  // S'
+		-1,  // Grammar
+		-1,  // LexicalPart
+		-1,  // LexProductions
+		-1,  // LexProduction
+		109, // LexPattern
+		56,  // LexAlt
+		57,  // LexTerm
+		-1,  // SyntaxPart
+		-1,  // FileHeader
+		-1,  // SyntaxProdList
+		-1,  // SyntaxProduction
+		-1,  // Alternatives
+		-1,  // SyntaxBody
+		-1,  // Symbols
+		-1,  // Symbol
 	},
 	gotoRow{ // S90
 		-1, // S'
@@ -1721,24 +1721,6 @@ var gotoTab = gotoTable{
 		-1, // Symbol
 	},
 	gotoRow{ // S95
-		-1,  // S'
-		-1,  // Grammar
-		-1,  // LexicalPart
-		-1,  // LexProductions
-		-1,  // LexProduction
-		-1,  // LexPattern
-		114, // LexAlt
-		66,  // LexTerm
-		-1,  // SyntaxPart
-		-1,  // FileHeader
-		-1,  // SyntaxProdList
-		-1,  // SyntaxProduction
-		-1,  // Alternatives
-		-1,  // SyntaxBody
-		-1,  // Symbols
-		-1,  // Symbol
-	},
-	gotoRow{ // S96
 		-1, // S'
 		-1, // Grammar
 		-1, // LexicalPart
@@ -1755,6 +1737,24 @@ var gotoTab = gotoTable{
 		-1, // SyntaxBody
 		-1, // Symbols
 		-1, // Symbol
+	},
+	gotoRow{ // S96
+		-1,  // S'
+		-1,  // Grammar
+		-1,  // LexicalPart
+		-1,  // LexProductions
+		-1,  // LexProduction
+		114, // LexPattern
+		65,  // LexAlt
+		66,  // LexTerm
+		-1,  // SyntaxPart
+		-1,  // FileHeader
+		-1,  // SyntaxProdList
+		-1,  // SyntaxProduction
+		-1,  // Alternatives
+		-1,  // SyntaxBody
+		-1,  // Symbols
+		-1,  // Symbol
 	},
 	gotoRow{ // S97
 		-1, // S'
@@ -1890,7 +1890,7 @@ var gotoTab = gotoTable{
 		-1, // LexProduction
 		-1, // LexPattern
 		-1, // LexAlt
-		83, // LexTerm
+		-1, // LexTerm
 		-1, // SyntaxPart
 		-1, // FileHeader
 		-1, // SyntaxProdList
@@ -1980,7 +1980,7 @@ var gotoTab = gotoTable{
 		-1, // LexProduction
 		-1, // LexPattern
 		-1, // LexAlt
-		90, // LexTerm
+		-1, // LexTerm
 		-1, // SyntaxPart
 		-1, // FileHeader
 		-1, // SyntaxProdList
@@ -2070,7 +2070,7 @@ var gotoTab = gotoTable{
 		-1, // LexProduction
 		-1, // LexPattern
 		-1, // LexAlt
-		97, // LexTerm
+		-1, // LexTerm
 		-1, // SyntaxPart
 		-1, // FileHeader
 		-1, // SyntaxProdList
