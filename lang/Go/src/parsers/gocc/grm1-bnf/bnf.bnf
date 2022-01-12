@@ -12,6 +12,11 @@ Copyright (c) 2021 Tong Sun
 _lineComment : '/' '/' {.} '\n' ;
 _blockComment : '/' '*' {. | '*'} '*' '/' ;
 
+id : _letter {_letter | _digit} ;
+
+_letter : 'A' ... 'Z' | 'a' ... 'z' | '_' ;
+_digit : '0' ... '9' ;
+
 char_lit
   : '"' (_unicode_value | _byte_value) '"'
   ;
@@ -20,12 +25,24 @@ string_lit
   : '"' {_unicode_char} '"' ;
 
 _unicode_value    : _unicode_char | _little_u_value | _big_u_value | _escaped_char ;
+_unicode_char
+  : .                   // Any UTF-8 character literal
+  ;
 _byte_value       : _octal_byte_value | _hex_byte_value ;
 _octal_byte_value : '\\' _octal_digit _octal_digit _octal_digit ;
 _hex_byte_value   : '\\' 'x' _hex_digit _hex_digit ;
 _little_u_value   : '\\' 'u' _hex_digit _hex_digit _hex_digit _hex_digit ;
 _big_u_value      : '\\' 'U' _hex_digit _hex_digit _hex_digit _hex_digit
                             _hex_digit _hex_digit _hex_digit _hex_digit ;
+
+_octal_digit : '0' - '7' ;
+_hex_digit
+  : '0' - '9'
+  | 'A' - 'F'
+  | 'a' - 'f'
+  ;
+
+_escaped_char     : '\\' ( 'a' | 'b' | 'f' | 'n' | 'r' | 't' | 'v' | '\\' | '\'' | '"' ) ;
 
 /* Syntax part */
 
@@ -34,11 +51,12 @@ Grammar
   ;
 
 Production
-  : NCName '::=' LexPattern
+  : NCName "::=" LexPattern
   ;
 
 NCName
-  : [http://www.w3.org/TR/xml-names/#NT-NCName]
+// [http://www.w3.org/TR/xml-names/#NT-NCName]
+  : id
   ;
 
 LexPattern 
@@ -78,19 +96,15 @@ ItemsApp
 Item
 // Primary ( '?' | '*' | '+' )*
   : Primary
-  | Primary PrimaryMod
+// | Primary PrimaryMod
   ;
 
 Primary
-  : NCName | StringLiteral | CharCode | CharClass | '(' Choice ')'
+// NCName | StringLiteral | CharCode | CharClass | '(' Choice ')'
+  : NCName | string_lit
   ;
 
-PrimaryMod
+//PrimaryMod
 // ( '?' | '*' | '+' )*
-  : ( '?' | '*' | '+' )*
-  ;
-
-StringLiteral
-  : '"' [^"]* '"' | "'" [^']* "'"
-          /* ws: explicit */
-  ;
+//  : '?'
+//  ;
