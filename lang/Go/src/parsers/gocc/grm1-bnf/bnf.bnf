@@ -2,7 +2,16 @@
 
 Extracted from https://www.bottlecaps.de/rr/ui on Tue Jan 11, 2022, 22:48 (UTC-05)
 
+Copyright (c) 2021 Tong Sun
+
 */
+
+/* Lexical part */
+!whitespace : ' ' | '\t' | '\n' | '\r' ;
+!comment : _lineComment | _blockComment ;
+_lineComment : '/' '/' {.} '\n' ;
+_blockComment : '/' '*' {. | '*'} '*' '/' ;
+
 
 Grammar
   : Production
@@ -83,11 +92,3 @@ CharCodeRange
   : CharCode '-' CharCode
           /* ws: explicit */
   ;
-
-Whitespace
-  : S | Comment
-S
-  : #x9 | #xA | #xD | #x20
-Comment
-  : '/*' ( [^*] | '*'+ [^*/] )* '*'* '*/'
-          /* ws: explicit */
