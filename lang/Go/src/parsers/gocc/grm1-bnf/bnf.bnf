@@ -1,0 +1,93 @@
+/*
+
+Extracted from https://www.bottlecaps.de/rr/ui on Tue Jan 11, 2022, 22:48 (UTC-05)
+
+*/
+
+Grammar
+  : Production
+  ;
+
+Production
+  : NCName '::=' Choice
+  ;
+
+NCName
+  : [http://www.w3.org/TR/xml-names/#NT-NCName]
+  ;
+
+Choice
+// SequenceOrDifference ( '|' SequenceOrDifference )*
+  : SequenceOrDifference
+  | Choice '|' SequenceOrDifference
+  ;
+
+SequenceOrDifference
+  : Items
+  ;
+
+Items
+// (Item ( '-' Item | Item* ))?
+  : Item
+  | Items ItemsApp
+  | empty
+  ;
+
+ItemsApp
+// ( '-' Item | Item* )
+  : '-' Item
+  | Item
+  | empty
+  ;
+
+Item
+// Primary ( '?' | '*' | '+' )*
+  : Primary
+  | Primary PrimaryMod
+  ;
+
+Primary
+  : NCName | StringLiteral | CharCode | CharClass | '(' Choice ')'
+  ;
+
+PrimaryMod
+// ( '?' | '*' | '+' )*
+  : ( '?' | '*' | '+' )*
+  ;
+
+StringLiteral
+  : '"' [^"]* '"' | "'" [^']* "'"
+          /* ws: explicit */
+  ;
+
+CharCode
+  : '#x' [0-9a-fA-F]+
+          /* ws: explicit */
+  ;
+
+CharClass
+  : '[' '^'? ( Char | CharCode | CharRange | CharCodeRange )+ ']'
+          /* ws: explicit */
+  ;
+
+Char
+  : [http://www.w3.org/TR/xml#NT-Char]
+  ;
+
+CharRange
+  : Char '-' ( Char - ']' )
+          /* ws: explicit */
+  ;
+
+CharCodeRange
+  : CharCode '-' CharCode
+          /* ws: explicit */
+  ;
+
+Whitespace
+  : S | Comment
+S
+  : #x9 | #xA | #xD | #x20
+Comment
+  : '/*' ( [^*] | '*'+ [^*/] )* '*'* '*/'
+          /* ws: explicit */
