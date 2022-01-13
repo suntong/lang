@@ -9,13 +9,15 @@ import (
 var opts struct {
 	// Slice of bool will append 'true' each time the option
 	// is encountered (can be set multiple times, like -vvv)
-	Verbose []bool `short:"v" long:"verbose" description:"Show verbose debug information"`
+	Verbflg func() `short:"v" long:"verbose" description:"Show verbose debug information"`
+	Verbose uint
 
 	// Example of automatic marshalling to desired type (uint)
 	Offset uint `long:"offset" description:"Offset"`
 
 	// Example of a callback, called each time the option is found.
-	Call func(string) `short:"c" description:"Call phone number"`
+	Call   func(string) `short:"c" description:"Call phone number"`
+	Called uint
 
 	// Example of a required flag
 	Name string `short:"n" long:"name" description:"A name" required:"true"`
@@ -53,6 +55,10 @@ func main() {
 		// cmd.Start()
 		// cmd.Process.Release()
 		fmt.Printf("Calling: %s\n", num)
+		opts.Called++
+	}
+	opts.Verbflg = func() {
+		opts.Verbose++
 	}
 
 	_, err := flags.Parse(&opts)
@@ -60,6 +66,7 @@ func main() {
 		panic(err)
 	}
 
+	fmt.Printf("Called: %d\n", opts.Called)
 	fmt.Printf("Verbosity: %v\n", opts.Verbose)
 	fmt.Printf("Offset: %d\n", opts.Offset)
 	fmt.Printf("Name: %s\n", opts.Name)
@@ -75,22 +82,11 @@ func main() {
 
 /*
 
-$ go run readme.go -vv --offset=5 -n Me -p 3 -s hello -s world --ptrslice hello --ptrslice world --intmap a:1 --intmap b:5 id 10 remaining1 remaining2
-Verbosity: [true true]
-Offset: 5
-Name: Me
-Ptr: 3
-StringSlice: [hello world]
-PtrSlice: [hello world]
-IntMap: [a:1 b:5]
-Args.ID: id
-Args.Num: 10
-Args.Rest: [remaining1 remaining2]
-
-$ go run readme.go -vv --offset=5 -n Me -p 3 -s hello -s world --ptrslice hello --ptrslice world --intmap a:1 --intmap b:5 -c 123 -c 678 id 10 remaining1 remaining2
+$ go run readme.go -vvv --offset=5 -n Me -p 3 -s hello -s world --ptrslice hello --ptrslice world --intmap a:1 --intmap b:5 -c 123 -c 678 id 10 remaining1 remaining2
 Calling: 123
 Calling: 678
-Verbosity: [true true]
+Called: 2
+Verbosity: 3
 Offset: 5
 Name: Me
 Ptr: 3
