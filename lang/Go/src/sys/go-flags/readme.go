@@ -35,9 +35,6 @@ var opts struct {
 	// Example of a map
 	IntMap map[string]int `long:"intmap" description:"A map from string to int"`
 
-	// Example of a filename (useful for completion)
-	//Filename Filename `long:"filename" description:"A filename"`
-
 	// Example of positional arguments
 	Args struct {
 		ID   string
@@ -48,33 +45,17 @@ var opts struct {
 
 func main() {
 
-	// Make some fake arguments to parse.
-	args := []string{
-		"-vv",
-		"--offset=5",
-		"-n", "Me",
-		"-p", "3",
-		"-s", "hello",
-		"-s", "world",
-		"--ptrslice", "hello",
-		"--ptrslice", "world",
-		"--intmap", "a:1",
-		"--intmap", "b:5",
-		//		"--filename", "hello.go",
-		"id",
-		"10",
-		"remaining1",
-		"remaining2",
+	// Callback which will invoke callto:<argument> to call a number.
+	// Note that this works just on OS X (and probably only with
+	// Skype) but it shows the idea.
+	opts.Call = func(num string) {
+		// cmd := exec.Command("open", "callto:"+num)
+		// cmd.Start()
+		// cmd.Process.Release()
+		fmt.Printf("Calling: %s\n", num)
 	}
 
-	//parser := flags.NewParser(nil, flags.Default)
-	//parser.Parse()
-
-	// Parse flags from `args'. Note that here we use flags.ParseArgs for
-	// the sake of making a working example. Normally, you would simply use
-	// flags.Parse(&opts) which uses os.Args
-	_, err := flags.ParseArgs(&opts, args)
-
+	_, err := flags.Parse(&opts)
 	if err != nil {
 		panic(err)
 	}
@@ -86,17 +67,29 @@ func main() {
 	fmt.Printf("StringSlice: %v\n", opts.StringSlice)
 	fmt.Printf("PtrSlice: [%v %v]\n", *opts.PtrSlice[0], *opts.PtrSlice[1])
 	fmt.Printf("IntMap: [a:%v b:%v]\n", opts.IntMap["a"], opts.IntMap["b"])
-	//fmt.Printf("Filename: %v\n", opts.Filename)
 	fmt.Printf("Args.ID: %s\n", opts.Args.ID)
 	fmt.Printf("Args.Num: %d\n", opts.Args.Num)
 	fmt.Printf("Args.Rest: %v\n", opts.Args.Rest)
 
 }
 
-
 /*
 
-$ go run readme0.go
+$ go run readme.go -vv --offset=5 -n Me -p 3 -s hello -s world --ptrslice hello --ptrslice world --intmap a:1 --intmap b:5 id 10 remaining1 remaining2
+Verbosity: [true true]
+Offset: 5
+Name: Me
+Ptr: 3
+StringSlice: [hello world]
+PtrSlice: [hello world]
+IntMap: [a:1 b:5]
+Args.ID: id
+Args.Num: 10
+Args.Rest: [remaining1 remaining2]
+
+$ go run readme.go -vv --offset=5 -n Me -p 3 -s hello -s world --ptrslice hello --ptrslice world --intmap a:1 --intmap b:5 -c 123 -c 678 id 10 remaining1 remaining2
+Calling: 123
+Calling: 678
 Verbosity: [true true]
 Offset: 5
 Name: Me
