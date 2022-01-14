@@ -3,6 +3,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/jessevdk/go-flags"
@@ -27,8 +28,8 @@ type Options struct {
 	Editor EditorOptions `group:"Editor Options"`
 
 	// Example of using environment variables
-	EnvVar1 string `long:"env-var1" default:"Some value" env:"ENV_DEFAULT" description:"Test env-var1 value"`
-	Thresholds  []int     `long:"thresholds" default:"1" default:"2" env:"THRESHOLD_VALUES"  env-delim:"," description:"Environment value array"`
+	EnvVar1    string `long:"env-var1" default:"Some value" env:"ENV_DEFAULT" description:"Test env-var1 value"`
+	Thresholds []int  `long:"thresholds" default:"1" default:"2" env:"THRESHOLD_VALUES"  env-delim:"," description:"Environment value array"`
 }
 
 var options Options
@@ -44,6 +45,9 @@ func main() {
 			}
 			os.Exit(1)
 		default:
+			//fmt.Printf("%v: %v", flagsErr, err)
+			fmt.Println()
+			parser.WriteHelp(os.Stdout)
 			os.Exit(1)
 		}
 	}

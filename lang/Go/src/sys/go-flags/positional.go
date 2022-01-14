@@ -3,9 +3,11 @@
 package main
 
 import (
-	"github.com/jessevdk/go-flags"
+	"fmt"
 	"log"
 	"os"
+
+	"github.com/jessevdk/go-flags"
 )
 
 type args struct {
@@ -17,18 +19,18 @@ type args struct {
 
 func main() {
 	var args args
-	_, err := flags.Parse(&args)
+	p := flags.NewParser(&args, 0)
+	_, err := p.Parse()
 
 	if e, ok := err.(*flags.Error); ok {
 		if e.Type == flags.ErrHelp {
 			os.Exit(0)
 		} else {
-			os.Exit(1)
+			fmt.Println(err)
+			fmt.Println()
+			p.WriteHelp(os.Stdout)
+			os.Exit(0)
 		}
-	}
-
-	if err != nil {
-		log.Fatal(err)
 	}
 
 	log.Println(args)
