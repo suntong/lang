@@ -1,0 +1,422 @@
+left_paren 
+  : '('
+  ;
+
+right_paren 
+  : ')'
+  ;
+
+comma 
+  : ','
+  ;
+
+period 
+  : '.'
+  ;
+
+colon 
+  : ':'
+  ;
+
+equals_operator 
+  : '='
+  ;
+
+left_bracket_or_trigraph 
+  : left_bracket
+  | left_bracket_trigraph
+  ;
+
+right_bracket_or_trigraph 
+  : right_bracket
+  | right_bracket_trigraph
+  ;
+
+literal 
+  : signed_numeric_literal
+  | general_literal
+  ;
+
+identifier 
+  : actual_identifier
+  ;
+
+authorization_identifier 
+  : role_name
+  | user_identifier
+  ;
+
+table_name 
+  : local_or_schema_qualified_name
+  ;
+
+domain_name 
+  : schema_qualified_name
+  ;
+
+qualified_identifier 
+  : identifier
+  ;
+
+column_name 
+  : identifier
+  ;
+
+correlation_name 
+  : identifier
+  ;
+
+schema_qualified_routine_name 
+  : schema_qualified_name
+  ;
+
+method_name 
+  : identifier
+  ;
+
+specific_name 
+  : schema_qualified_name
+  ;
+
+cursor_name 
+  : local_qualified_name
+  ;
+
+host_parameter_name 
+  : colon identifier
+  ;
+
+SQL_parameter_name 
+  : identifier
+  ;
+
+constraint_name 
+  : schema_qualified_name
+  ;
+
+external_routine_name 
+  : identifier
+  | character_string_literal
+  ;
+
+trigger_name 
+  : schema_qualified_name
+  ;
+
+collation_name 
+  : schema_qualified_name
+  ;
+
+transliteration_name 
+  : schema_qualified_name
+  ;
+
+schema_resolved_user_defined_type_name 
+  : user_defined_type_name
+  ;
+
+attribute_name 
+  : identifier
+  ;
+
+savepoint_name 
+  : identifier
+  ;
+
+sequence_generator_name 
+  : schema_qualified_name
+  ;
+
+role_name 
+  : identifier
+  ;
+
+connection_name 
+  : simple_value_specification
+  ;
+
+SQL_server_name 
+  : simple_value_specification
+  ;
+
+connection_user_name 
+  : simple_value_specification
+  ;
+
+SQL_statement_name 
+  : statement_name
+  | extended_statement_name
+  ;
+
+dynamic_cursor_name 
+  : conventional_dynamic_cursor_name
+  | PTF_cursor_name
+  ;
+
+conventional_dynamic_cursor_name 
+  : cursor_name
+  | extended_cursor_name
+  ;
+
+descriptor_name 
+  : conventional_descriptor_name
+  | PTF_descriptor_name
+  ;
+
+conventional_descriptor_name 
+  : non_extended_descriptor_name
+  | extended_descriptor_name
+  ;
+
+PTF_descriptor_name 
+  : PTF simple_value_specification
+  ;
+
+data_type 
+  : predefined_type
+  | row_type
+  | path_resolved_user_defined_type_name
+  | reference_type
+  | collection_type
+  ;
+
+scope_clause 
+  : SCOPE table_name
+  ;
+
+path_resolved_user_defined_type_name 
+  : user_defined_type_name
+  ;
+
+collection_type 
+  : array_type
+  | multiset_type
+  ;
+
+value_specification 
+  : literal
+  | general_value_specification
+  ;
+
+simple_value_specification 
+  : literal
+  | host_parameter_name
+  | SQL_parameter_reference
+  | embedded_variable_name
+  ;
+
+target_specification 
+  : host_parameter_specification
+  | SQL_parameter_reference
+  | column_reference
+  | target_array_element_specification
+  | dynamic_parameter_specification
+  | embedded_variable_specification
+  ;
+
+simple_target_specification 
+  : host_parameter_name
+  | SQL_parameter_reference
+  | column_reference
+  | embedded_variable_name
+  ;
+
+dynamic_parameter_specification 
+  : question_mark
+  ;
+
+contextually_typed_value_specification 
+  : implicitly_typed_value_specification
+  | default_specification
+  ;
+
+implicitly_typed_value_specification 
+  : null_specification
+  | empty_specification
+  ;
+
+value_expression 
+  : common_value_expression
+  | boolean_value_expression
+  | row_value_expression
+  ;
+
+datetime_value_function 
+  : current_date_value_function
+  | current_time_value_function
+  | current_timestamp_value_function
+  | current_local_time_value_function
+  | current_local_timestamp_value_function
+  ;
+
+interval_value_expression 
+  : interval_term
+  | interval_value_expression_1 plus_sign interval_term_1
+  | interval_value_expression_1 minus_sign interval_term_1
+  | left_paren datetime_value_expression minus_sign datetime_term right_paren
+      interval_qualifier
+  ;
+
+contextually_typed_row_value_expression 
+  : row_value_special_case
+  | contextually_typed_row_value_constructor
+  ;
+
+contextually_typed_table_value_constructor 
+  : VALUES contextually_typed_row_value_expression_list
+  ;
+
+table_reference 
+  : table_factor
+  | joined_table
+  ;
+
+point_in_time_1 
+  : point_in_time
+  ;
+
+point_in_time_2 
+  : point_in_time
+  ;
+
+table_subquery 
+  : subquery
+  ;
+
+search_condition 
+  : boolean_value_expression
+  ;
+
+language_clause 
+  : LANGUAGE language_name
+  ;
+
+path_specification 
+  : PATH schema_name_list
+  ;
+
+routine_invocation 
+  : routine_name SQL_argument_list
+  ;
+
+character_set_specification 
+  : standard_character_set_name
+  | implementation_defined_character_set_name
+  | user_defined_character_set_name
+  ;
+
+collate_clause 
+  : COLLATE collation_name
+  ;
+
+constraint_name_definition 
+  : CONSTRAINT constraint_name
+  ;
+
+set_quantifier 
+  : DISTINCT
+  | ALL
+  ;
+
+drop_schema_statement 
+  : DROP SCHEMA schema_name drop_behavior
+  ;
+
+alter_table_statement 
+  : ALTER TABLE table_name alter_table_action
+  ;
+
+drop_table_statement 
+  : DROP TABLE table_name drop_behavior
+  ;
+
+drop_view_statement 
+  : DROP VIEW table_name drop_behavior
+  ;
+
+alter_domain_statement 
+  : ALTER DOMAIN domain_name alter_domain_action
+  ;
+
+drop_domain_statement 
+  : DROP DOMAIN domain_name drop_behavior
+  ;
+
+drop_character_set_statement 
+  : DROP CHARACTER SET character_set_name
+  ;
+
+drop_collation_statement 
+  : DROP COLLATION collation_name drop_behavior
+  ;
+
+drop_transliteration_statement 
+  : DROP TRANSLATION transliteration_name
+  ;
+
+drop_trigger_statement 
+  : DROP TRIGGER trigger_name
+  ;
+
+alter_type_statement 
+  : ALTER TYPE schema_resolved_user_defined_type_name alter_type_action
+  ;
+
+drop_data_type_statement 
+  : DROP TYPE schema_resolved_user_defined_type_name drop_behavior
+  ;
+
+SQL_invoked_routine 
+  : schema_routine
+  ;
+
+alter_routine_statement 
+  : ALTER specific_routine_designator
+      alter_routine_characteristics alter_routine_behavior
+  ;
+
+drop_routine_statement 
+  : DROP specific_routine_designator drop_behavior
+  ;
+
+drop_user_defined_cast_statement 
+  : DROP CAST left_paren source_data_type AS target_data_type right_paren
+      drop_behavior
+  ;
+
+drop_user_defined_ordering_statement 
+  : DROP ORDERING FOR schema_resolved_user_defined_type_name drop_behavior
+  ;
+
+drop_transform_statement 
+  : DROP ( TRANSFORM | TRANSFORMS ) transforms_to_be_dropped
+      FOR schema_resolved_user_defined_type_name drop_behavior
+  ;
+
+alter_sequence_generator_statement 
+  : ALTER SEQUENCE sequence_generator_name alter_sequence_generator_options
+  ;
+
+drop_sequence_generator_statement 
+  : DROP SEQUENCE sequence_generator_name drop_behavior
+  ;
+
+drop_role_statement 
+  : DROP ROLE role_name
+  ;
+
+revoke_statement 
+  : revoke_privilege_statement
+  | revoke_role_statement
+  ;
+
+input_using_clause 
+  : using_arguments
+  | using_input_descriptor
+  ;
+
+output_using_clause 
+  : into_arguments
+  | into_descriptor
+  ;
+

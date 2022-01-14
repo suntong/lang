@@ -1,0 +1,643 @@
+schema_definition 
+  : CREATE SCHEMA schema_name_clause
+      schema_character_set_or_path?
+      schema_element*
+  ;
+
+table_definition 
+  : CREATE  table_scope? TABLE table_name table_contents_source
+      ( WITH system_versioning_clause )?
+      ( ON COMMIT table_commit_action ROWS )?
+  ;
+
+table_element_list 
+  : left_paren table_element ( comma table_element )* right_paren
+  ;
+
+typed_table_clause 
+  : OF path_resolved_user_defined_type_name  subtable_clause?
+       typed_table_element_list?
+  ;
+
+typed_table_element_list 
+  : left_paren typed_table_element
+      ( comma typed_table_element )* right_paren
+  ;
+
+self_referencing_column_specification 
+  : REF IS self_referencing_column_name  reference_generation?
+  ;
+
+column_option_list 
+  : scope_clause? default_clause? column_constraint_definition*
+  ;
+
+like_clause 
+  : LIKE table_name  like_options?
+  ;
+
+like_options 
+  : like_option+
+  ;
+
+as_subquery_clause 
+  : ( left_paren column_name_list right_paren )? AS table_subquery
+      with_or_without_data
+  ;
+
+column_definition 
+  : column_name data_type_or_domain_name?
+      ( default_clause | identity_column_specification | generation_clause
+      | system_time_period_start_column_specification
+      | system_time_period_end_column_specification )?
+      column_constraint_definition*
+      collate_clause?
+  ;
+
+column_constraint_definition 
+  : constraint_name_definition? column_constraint  constraint_characteristics?
+  ;
+
+identity_column_specification 
+  : GENERATED ( ALWAYS | BY DEFAULT ) AS IDENTITY
+      ( left_paren common_sequence_generator_options right_paren )?
+  ;
+
+table_constraint_definition 
+  : constraint_name_definition? table_constraint
+       constraint_characteristics?
+  ;
+
+unique_constraint_definition 
+  : unique_specification left_paren unique_column_list ( comma without_overlap_specification )? right_paren
+  | UNIQUE  VALUE?
+  ;
+
+referential_constraint_definition 
+  : FOREIGN KEY left_paren referencing_column_list
+      ( comma referencing_period_specification )? right_paren
+      references_specification
+  ;
+
+references_specification 
+  : REFERENCES referenced_table_and_columns
+      ( MATCH match_type )?  referential_triggered_action?
+  ;
+
+referenced_table_and_columns 
+  : table_name ( left_paren referenced_column_list
+      ( comma referenced_period_specification )? right_paren )?
+  ;
+
+referential_triggered_action 
+  : update_rule  delete_rule?
+  | delete_rule  update_rule?
+  ;
+
+view_definition 
+  : CREATE  RECURSIVE? VIEW table_name view_specification
+      AS query_expression ( WITH  levels_clause? CHECK OPTION )?
+  ;
+
+regular_view_specification 
+  : ( left_paren view_column_list right_paren )?
+  ;
+
+referenceable_view_specification 
+  : OF path_resolved_user_defined_type_name  subview_clause?
+       view_element_list?
+  ;
+
+view_element_list 
+  : left_paren view_element ( comma view_element )* right_paren
+  ;
+
+domain_definition 
+  : CREATE DOMAIN domain_name AS? predefined_type
+      default_clause?
+      domain_constraint*
+      collate_clause?
+  ;
+
+domain_constraint 
+  : constraint_name_definition? check_constraint_definition
+      constraint_characteristics?
+  ;
+
+character_set_definition 
+  : CREATE CHARACTER SET character_set_name  AS?
+      character_set_source collate_clause?
+  ;
+
+collation_definition 
+  : CREATE COLLATION collation_name FOR character_set_specification
+      FROM existing_collation_name  pad_characteristic?
+  ;
+
+assertion_definition 
+  : CREATE ASSERTION constraint_name
+         CHECK left_paren search_condition right_paren
+          constraint_characteristics?
+  ;
+
+trigger_definition 
+  : CREATE TRIGGER trigger_name trigger_action_time trigger_event
+      ON table_name ( REFERENCING transition_table_or_variable_list )?
+      triggered_action
+  ;
+
+trigger_event 
+  : INSERT
+  | DELETE
+  | UPDATE ( OF trigger_column_list )?
+  ;
+
+triggered_action 
+  : ( FOR EACH ( ROW | STATEMENT ) )?
+       triggered_when_clause?
+      triggered_SQL_statement
+  ;
+
+triggered_SQL_statement 
+  : SQL_procedure_statement
+  | BEGIN ATOMIC ( SQL_procedure_statement semicolon)+ END
+  ;
+
+transition_table_or_variable_list 
+  : transition_table_or_variable+
+  ;
+
+transition_table_or_variable 
+  : OLD  ROW?  AS? old_transition_variable_name
+  | NEW  ROW?  AS? new_transition_variable_name
+  | OLD TABLE  AS? old_transition_table_name
+  | NEW TABLE  AS? new_transition_table_name
+  ;
+
+user_defined_type_body 
+  : schema_resolved_user_defined_type_name
+       subtype_clause?
+      ( AS representation )?
+       user_defined_type_option_list?
+       method_specification_list?
+  ;
+
+user_defined_type_option_list 
+  : user_defined_type_option user_defined_type_option*
+  ;
+
+member_list 
+  : left_paren member ( comma member )* right_paren
+  ;
+
+list_of_attributes 
+  : left_paren attribute_name ( comma attribute_name )* right_paren
+  ;
+
+method_specification_list 
+  : method_specification ( comma method_specification )*
+  ;
+
+original_method_specification 
+  : partial_method_specification ( SELF AS RESULT ) ( SELF AS LOCATOR )
+       method_characteristics?
+  ;
+
+specific_method_name 
+  : ( schema_name period )? qualified_identifier
+  ;
+
+method_characteristics 
+  : method_characteristic+
+  ;
+
+attribute_definition 
+  : attribute_name data_type
+          attribute_default?
+          collate_clause?
+  ;
+
+SQL_parameter_declaration_list 
+  : left_paren ( SQL_parameter_declaration
+      ( comma SQL_parameter_declaration )* )? right_paren
+  ;
+
+SQL_parameter_declaration 
+  : parameter_mode?
+       SQL_parameter_name?
+      parameter_type  RESULT?
+      ( DEFAULT parameter_default )?
+  ;
+
+parameter_type 
+  : data_type  locator_indication?
+ | generic_table_parameter_type
+ | descriptor_parameter_type
+  ;
+
+generic_table_parameter_type 
+  : TABLE  pass_through_option?  generic_table_semantics?
+  ;
+
+generic_table_semantics 
+  : WITH ROW SEMANTICS
+  | WITH SET SEMANTICS  generic_table_pruning?
+  ;
+
+function_specification 
+  : FUNCTION schema_qualified_routine_name SQL_parameter_declaration_list
+      returns_clause
+      routine_characteristics
+       dispatch_clause?
+  ;
+
+method_specification_designator 
+  : SPECIFIC METHOD specific_method_name
+  | ( INSTANCE | STATIC | CONSTRUCTOR )
+      METHOD method_name SQL_parameter_declaration_list
+       returns_clause?
+      FOR schema_resolved_user_defined_type_name
+  ;
+
+routine_characteristics 
+  : routine_characteristic*
+  ;
+
+returns_type 
+  : returns_data_type  result_cast?
+  | returns_table_type
+  ;
+
+returns_table_type 
+  : TABLE  table_function_column_list?
+  | ONLY PASS THROUGH
+  ;
+
+table_function_column_list 
+  : left_paren table_function_column_list_element
+      ( comma table_function_column_list_element )* right_paren
+  ;
+
+result_cast_from_type 
+  : data_type  locator_indication?
+  ;
+
+returns_data_type 
+  : data_type  locator_indication?
+  ;
+
+SQL_routine_spec 
+  : rights_clause? SQL_routine_body
+  ;
+
+external_body_reference 
+  : EXTERNAL ( NAME external_routine_name )?
+       parameter_style_clause?
+       transform_group_specification?
+       external_security_clause?
+  ;
+
+polymorphic_table_function_body 
+  : PTF_private_parameters?
+      ( DESCRIBE WITH PTF_describe_component_procedure )?
+      ( START WITH PTF_start_component_procedure )?
+      FULFILL WITH PTF_fulfill_component_procedure
+      ( FINISH WITH PTF_finish_component_procedure )?
+PTF_private_parameters 
+  : PRIVATE  DATA? private_parameter_declaration_list
+  ;
+
+private_parameter_declaration_list 
+  : left_paren ( SQL_parameter_declaration
+      ( comma SQL_parameter_declaration )* )?
+      right_paren
+  ;
+
+multiple_group_specification 
+  : group_specification ( comma group_specification )*
+  ;
+
+user_defined_cast_definition 
+  : CREATE CAST left_paren source_data_type AS target_data_type right_paren
+      WITH cast_function
+      ( AS ASSIGNMENT )?
+  ;
+
+state_category 
+  : STATE  specific_name?
+  ;
+
+transform_definition 
+  : CREATE ( TRANSFORM | TRANSFORMS ) FOR
+      schema_resolved_user_defined_type_name transform_group+
+  ;
+
+transform_element_list 
+  : transform_element ( comma transform_element )?
+  ;
+
+sequence_generator_definition 
+  : CREATE SEQUENCE sequence_generator_name  sequence_generator_options?
+  ;
+
+sequence_generator_options 
+  : sequence_generator_option+
+  ;
+
+common_sequence_generator_options 
+  : common_sequence_generator_option+
+  ;
+
+grant_privilege_statement 
+  : GRANT privileges TO grantee ( comma grantee )*
+      ( WITH HIERARCHY OPTION )?
+      ( WITH GRANT OPTION )?
+      ( GRANTED BY grantor )?
+  ;
+
+object_name 
+  : TABLE? table_name
+  |   DOMAIN domain_name
+  |   COLLATION collation_name
+  |   CHARACTER SET character_set_name
+  |   TRANSLATION transliteration_name
+  |   TYPE schema_resolved_user_defined_type_name
+  |   SEQUENCE sequence_generator_name
+  |   specific_routine_designator
+  ;
+
+object_privileges 
+  : ALL PRIVILEGES
+  | action ( comma action )*
+  ;
+
+action 
+  : SELECT
+  | SELECT left_paren privilege_column_list right_paren
+  | SELECT left_paren privilege_method_list right_paren
+  | DELETE
+  | INSERT ( left_paren privilege_column_list right_paren )?
+  | UPDATE ( left_paren privilege_column_list right_paren )?
+  | REFERENCES ( left_paren privilege_column_list right_paren )?
+  | USAGE
+  | TRIGGER
+  | UNDER
+  | EXECUTE
+  ;
+
+privilege_method_list 
+  : specific_routine_designator ( comma specific_routine_designator )*
+  ;
+
+role_definition 
+  : CREATE ROLE role_name ( WITH ADMIN grantor )?
+  ;
+
+grant_role_statement 
+  : GRANT role_granted ( comma role_granted )*
+      TO grantee ( comma grantee )*
+      ( WITH ADMIN OPTION )?
+      ( GRANTED BY grantor )?
+  ;
+
+fetch_statement 
+  : FETCH (  fetch_orientation? FROM )? cursor_name INTO fetch_target_list
+  ;
+
+fetch_target_list 
+  : target_specification ( comma target_specification )?
+  ;
+
+select_statement__single_row 
+  : SELECT  set_quantifier? select_list
+      INTO select_target_list
+      table_expression
+  ;
+
+select_target_list 
+  : target_specification ( comma target_specification )*
+  ;
+
+delete_statement__positioned 
+  : DELETE FROM target_table ( AS? correlation_name )?
+         WHERE CURRENT OF cursor_name
+  ;
+
+delete_statement__searched 
+  : DELETE FROM target_table
+      ( FOR PORTION OF application_time_period_name
+        FROM point_in_time_1 TO point_in_time_2 )?
+      (  AS? correlation_name )?
+      ( WHERE search_condition )?
+  ;
+
+truncate_table_statement 
+  : TRUNCATE TABLE target_table  identity_column_restart_option?
+  ;
+
+from_subquery 
+  : ( left_paren insert_column_list right_paren )?
+       override_clause?
+      query_expression
+  ;
+
+from_constructor 
+  : ( left_paren insert_column_list right_paren )
+       override_clause?
+      contextually_typed_table_value_constructor
+  ;
+
+merge_statement 
+  : MERGE INTO target_table ( AS? merge_correlation_name )
+      USING table_reference
+      ON search_condition merge_operation_specification
+  ;
+
+merge_operation_specification 
+  : merge_when_clause+
+  ;
+
+merge_when_matched_clause 
+  : WHEN MATCHED ( AND search_condition )?
+      THEN merge_update_or_delete_specification
+  ;
+
+merge_when_not_matched_clause 
+  : WHEN NOT MATCHED ( AND search_condition )?
+      THEN merge_insert_specification
+  ;
+
+merge_insert_specification 
+  : INSERT ( left_paren insert_column_list right_paren )?
+       override_clause?
+      VALUES merge_insert_value_list
+  ;
+
+merge_insert_value_list 
+  : left_paren
+      merge_insert_value_element ( comma merge_insert_value_element )*
+      right_paren
+  ;
+
+update_statement__positioned 
+  : UPDATE target_table ( AS? correlation_name )?
+         SET set_clause_list
+         WHERE CURRENT OF cursor_name
+  ;
+
+update_statement__searched 
+  : UPDATE target_table
+      ( FOR PORTION OF application_time_period_name
+        FROM point_in_time_1 TO point_in_time_2 )?
+      ( AS? correlation_name )?
+      SET set_clause_list
+      ( WHERE search_condition )?
+  ;
+
+set_clause_list 
+  : set_clause ( comma set_clause )*
+  ;
+
+set_target_list 
+  : left_paren set_target ( comma set_target )* right_paren
+  ;
+
+free_locator_statement 
+  : FREE LOCATOR locator_reference ( comma locator_reference )*
+  ;
+
+hold_locator_statement 
+  : HOLD LOCATOR locator_reference ( comma locator_reference )*
+  ;
+
+start_transaction_statement 
+  : START TRANSACTION  transaction_characteristics?
+  ;
+
+set_transaction_statement 
+  : SET  LOCAL? TRANSACTION transaction_characteristics
+  ;
+
+transaction_characteristics 
+  : ( transaction_mode ( comma transaction_mode )* )?
+  ;
+
+constraint_name_list 
+  : ALL
+  | constraint_name ( comma constraint_name )*
+  ;
+
+commit_statement 
+  : COMMIT  WORK? ( AND  NO? CHAIN )?
+  ;
+
+rollback_statement 
+  : ROLLBACK  WORK? ( AND  NO? CHAIN )?  savepoint_clause?
+  ;
+
+connection_target 
+  : SQL_server_name ( AS connection_name )? ( USER connection_user_name )?
+  | DEFAULT
+  ;
+
+session_characteristic_list 
+  : session_characteristic ( comma session_characteristic )*
+  ;
+
+session_transaction_characteristics 
+  : TRANSACTION transaction_mode ( comma transaction_mode )*
+  ;
+
+set_session_collation_statement 
+  : SET COLLATION collation_specification ( FOR character_set_specification_list )?
+  | SET NO COLLATION ( FOR character_set_specification_list )?
+  ;
+
+allocate_descriptor_statement 
+  : ALLOCATE  SQL? DESCRIPTOR conventional_descriptor_name ( WITH MAX occurrences )?
+  ;
+
+deallocate_descriptor_statement 
+  : DEALLOCATE  SQL? DESCRIPTOR conventional_descriptor_name
+  ;
+
+get_descriptor_statement 
+  : GET  SQL?  DESCRIPTOR descriptor_name get_descriptor_information
+  ;
+
+get_descriptor_information 
+  : get_header_information ( comma get_header_information )*
+  | VALUE item_number get_item_information
+      ( comma get_item_information )*
+  ;
+
+set_descriptor_statement 
+  : SET  SQL? DESCRIPTOR descriptor_name set_descriptor_information
+  ;
+
+set_descriptor_information 
+  : set_header_information ( comma set_header_information )*
+  | VALUE item_number set_item_information
+      ( comma set_item_information )*
+  ;
+
+prepare_statement 
+  : PREPARE SQL_statement_name  attributes_specification?
+      FROM SQL_statement_variable
+  ;
+
+describe_input_statement 
+  : DESCRIBE INPUT SQL_statement_name using_descriptor  nesting_option?
+  ;
+
+describe_output_statement 
+  : DESCRIBE  OUTPUT? described_object using_descriptor  nesting_option?
+  ;
+
+using_descriptor 
+  : USING  SQL? DESCRIPTOR descriptor_name
+  ;
+
+execute_statement 
+  : EXECUTE SQL_statement_name  result_using_clause?  parameter_using_clause?
+  ;
+
+descriptor_column_list 
+  : descriptor_column_specification ( comma descriptor_column_specification )*
+  ;
+
+descriptor_column_specification 
+  : column_name  data_type?
+  ;
+
+allocate_received_cursor_statement 
+  : ALLOCATE cursor_name
+       CURSOR? FOR PROCEDURE specific_routine_designator
+  ;
+
+dynamic_open_statement 
+  : OPEN conventional_dynamic_cursor_name  input_using_clause?
+  ;
+
+dynamic_fetch_statement 
+  : FETCH ( fetch_orientation? FROM )? dynamic_cursor_name output_using_clause
+  ;
+
+statement_information 
+  : statement_information_item ( comma statement_information_item )*
+  ;
+
+condition_information 
+  : CONDITION condition_number condition_information_item
+      ( comma condition_information_item )*
+  ;
+
+all_information 
+  : all_info_target equals_operator ALL  all_qualifier?
+  ;
+
+all_qualifier 
+  : STATEMENT
+  | CONDITION  condition_number?
+  ;
+
