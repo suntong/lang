@@ -1,0 +1,1 @@
+curl -sL 'https://github.com/ronsavage/SQL/raw/master/sql-2016.ebnf' | tee sql-2016.bnf | perl -0777 -wnE's{ (?: /\* .*? \*/ ) }{\n}gsx; for my $bnf (split /\n\n+/) { $bnf =~ s/::=\s*/\n  : /gs; $bnf =~ s/\s*$/\n  ;\n/s; say "$bnf" } ;' > sql-2016.ebnf
