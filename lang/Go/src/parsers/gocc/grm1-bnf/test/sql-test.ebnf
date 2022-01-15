@@ -1,0 +1,87 @@
+signed_numeric_literal 
+  ::= sign? unsigned_numeric_literal
+  ;
+
+unsigned_integer 
+  ::= digit+
+  ;
+
+schema_name 
+  ::= ( catalog_name period )? unqualified_schema_name
+  ;
+
+character_set_name 
+  ::= ( schema_name period )? SQL_language_identifier
+  ;
+
+extended_statement_name 
+  ::= scope_option? simple_value_specification
+  ;
+
+extended_cursor_name 
+  ::= scope_option? simple_value_specification
+  ;
+
+predefined_type 
+  ::= character_string_type ( CHARACTER SET character_set_specification )?
+          collate_clause?
+  |   national_character_string_type collate_clause?
+  |   binary_string_type
+  |   numeric_type
+  |   boolean_type
+  |   datetime_type
+  |   interval_type
+  ;
+
+table_expression 
+  ::= from_clause
+      where_clause?
+      group_by_clause?
+      having_clause?
+      window_clause?
+  ;
+
+column_name_list 
+  ::= column_name ( comma column_name )*
+  ;
+
+select_list 
+  ::= asterisk
+  | select_sublist ( comma select_sublist )*
+  ;
+
+query_expression 
+  ::= with_clause? query_expression_body
+      order_by_clause? result_offset_clause? fetch_first_clause?
+  ;
+
+specific_routine_designator 
+  ::= SPECIFIC routine_type specific_name
+  | routine_type member_name ( FOR schema_resolved_user_defined_type_name )?
+  ;
+
+constraint_characteristics 
+  ::= constraint_check_time ( NOT? DEFERRABLE )?  constraint_enforcement?
+  | NOT? DEFERRABLE  constraint_check_time?  constraint_enforcement?
+  | constraint_enforcement
+  ;
+
+drop_assertion_statement 
+  ::= DROP ASSERTION constraint_name  drop_behavior?
+  ;
+
+alter_transform_statement 
+  ::= ALTER ( TRANSFORM | TRANSFORMS )
+      FOR schema_resolved_user_defined_type_name alter_group+
+  ;
+
+character_set_specification_list 
+  ::= character_set_specification ( comma character_set_specification )*
+  ;
+
+cursor_properties 
+  ::= cursor_sensitivity?  cursor_scrollability? CURSOR
+       cursor_holdability?
+       cursor_returnability?
+  ;
+
