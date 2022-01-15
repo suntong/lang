@@ -10,6 +10,8 @@ import (
 
 var testData = []string{
 	"a : 'b' ;",
+	"grm : (_a | _b);", // OK
+	//"grm : (a | b);",   // NOK!
 }
 
 func TestPass(t *testing.T) {
