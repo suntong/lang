@@ -14,10 +14,10 @@ import (
 var testData = []string{
 	"Grm ::= Prd;",
 	"Grm ::= Prd* ;\n Prd::=N;",
-	"Grm ::= (A | B);",     // OK
-	"Grm ::= C (A | B);",   // OK
-	"Grm ::= C D A;",       // NOK
-	"Grm ::= C D (A | B);", // NOK
+	"Grm ::= (A | B);  // OK\n", // OK
+	"Grm ::= C (A | B); /*OK*/", // OK
+	"Grm ::= C D A;",            // OK
+	"Grm ::= C D (A | B);",      // OK
 	`Grammar
  ::=
 Production*
