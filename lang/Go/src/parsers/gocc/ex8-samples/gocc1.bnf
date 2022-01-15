@@ -70,7 +70,7 @@ LexProductions
   ;
 
 LexProduction 
-  : tokId ":" LexPattern ";"
+  : tokId "::=" LexPattern ";"
   | regDefId ":" LexPattern ";"
   | ignoredTokId ":" LexPattern ";"
   ;
@@ -90,6 +90,7 @@ LexTerm
   | char_lit
   | char_lit "-" char_lit
   | string_lit
+  | tokId
   | regDefId
   | prodId
   | "[" LexPattern "]"
