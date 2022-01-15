@@ -1,0 +1,100 @@
+// Copyright 2021 Tong Sun
+
+/********
+Lexical items
+The basic unit of input to the lexical analyser is a UTF-8 encoded Unicode code point, defined as:
+**********/
+!whitespace : ' ' | '\t' | '\n' | '\r' ;
+!comment : _lineComment | _blockComment ;
+_lineComment : '/' '/' {.} '\n' ;
+_blockComment : '/' '*' {. | '*'} '*' '/' ;
+
+_unicode_char
+  : .                   // Any UTF-8 character literal
+  ;
+
+_letter : 'A' ... 'Z' | 'a' ... 'z' | '_' ;
+
+//_digit : '0' ... '9' ;
+//char : '\'' ( _unicode_value | _byte_value ) '\'' ;
+
+_unicode_value    : _unicode_char | _little_u_value | _big_u_value | _escaped_char ;
+_byte_value       : _octal_byte_value | _hex_byte_value ;
+_octal_byte_value : '\\' _octal_digit _octal_digit _octal_digit ;
+_hex_byte_value   : '\\' 'x' _hex_digit _hex_digit ;
+_little_u_value   : '\\' 'u' _hex_digit _hex_digit _hex_digit _hex_digit ;
+_big_u_value      : '\\' 'U' _hex_digit _hex_digit _hex_digit _hex_digit
+                            _hex_digit _hex_digit _hex_digit _hex_digit ;
+_escaped_char     : '\\' ( 'a' | 'b' | 'f' | 'n' | 'r' | 't' | 'v' | '\\' | '\'' | '"' ) ;
+
+//id : _letter {_letter | _digit} ;
+
+string_lit : _raw_string | _interpreted_string ;
+_raw_string : '`' {_unicode_char} '`' ;
+_interpreted_string : '"' { _unicode_value | _byte_value } '"' ;
+
+g_sdt_lit
+  : '<' '<' {_unicode_char} '>' '>'
+  ;
+
+char_lit
+  : '\'' (_unicode_value | _byte_value) '\''
+  ;
+
+ignoredTokId : '!' _tokId ;
+
+regDefId : '_' {_id_char} ;
+
+prodId
+  : _upcase {_id_char}
+  ;
+
+tokId : _tokId ;
+_tokId : _lowcase {_id_char} ;
+_lowcase : 'a'-'z' ;
+_id_char : _upcase | _lowcase | '_' | _digit ;
+_upcase : 'A'-'Z' ;
+_digit : '0'-'9' ;
+
+_octal_digit : '0' - '7' ;
+_hex_digit
+  : '0' - '9'
+  | 'A' - 'F'
+  | 'a' - 'f'
+  ;
+
+//a : 'a' ;
+
+/*** Syntactic items ***/
+
+
+LexProductions
+  : LexProduction
+  | LexProductions LexProduction
+  ;
+
+LexProduction 
+  : tokId ":" LexPattern ";"
+  | regDefId ":" LexPattern ";"
+  | ignoredTokId ":" LexPattern ";"
+  ;
+
+LexPattern 
+  : LexAlt
+  | LexAlt "|" LexPattern
+  ;
+
+LexAlt 
+  : LexTerm
+  | LexAlt LexTerm
+  ;
+
+LexTerm
+  : "."
+  | char_lit
+  | char_lit "-" char_lit
+  | regDefId
+  | "[" LexPattern "]"
+  | "{" LexPattern "}"
+  | "(" LexPattern ")"
+  ;
