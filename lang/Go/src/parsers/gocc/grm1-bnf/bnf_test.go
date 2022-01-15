@@ -53,7 +53,7 @@ func NoTestFail(t *testing.T) {
 	}
 }
 
-func TestFiles(t *testing.T) {
+func NoTestFiles(t *testing.T) {
 	files := []string{}
 	err := filepath.Walk("test",
 		func(path string, f os.FileInfo, err error) error {
