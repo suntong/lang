@@ -33,10 +33,6 @@ string_lit : _raw_string | _interpreted_string ;
 _raw_string : '`' {_unicode_char} '`' ;
 _interpreted_string : '"' { _unicode_value | _byte_value } '"' ;
 
-g_sdt_lit
-  : '<' '<' {_unicode_char} '>' '>'
-  ;
-
 char_lit
   : '\'' (_unicode_value | _byte_value) '\''
   ;
@@ -93,7 +89,9 @@ LexTerm
   : "."
   | char_lit
   | char_lit "-" char_lit
+  | string_lit
   | regDefId
+  | prodId
   | "[" LexPattern "]"
   | "{" LexPattern "}"
   | "(" LexPattern ")"
