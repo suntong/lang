@@ -14,11 +14,12 @@ _blockComment : '/' '*' {. | '*'} '*' '/' ;
 
 id : _letter {_letter | _digit} ;
 
-_letter : 'A' ... 'Z' | 'a' ... 'z' | '_' ;
-_digit : '0' ... '9' ;
+_letter : 'A' - 'Z' | 'a' - 'z' | '_' ;
+_digit : '0' - '9' ;
 
 char_lit
   : '"' (_unicode_value | _byte_value) '"'
+  | '\'' (_unicode_value | _byte_value) '\''
   ;
 
 string_lit
@@ -42,7 +43,13 @@ _hex_digit
   | 'a' - 'f'
   ;
 
-_escaped_char     : '\\' ( 'a' | 'b' | 'f' | 'n' | 'r' | 't' | 'v' | '\\' | '\'' | '"' ) ;
+_escaped_char : '\\' ( 'a' | 'b' | 'f' | 'n' | 'r' | 't' | 'v' | '\\' | '\'' | '"' ) ;
+repeat_char : ( '?' | '*' | '+' ) ;
+
+url_lit
+  : '[' {_unicode_char} ']' ;
+
+
 
 /* Syntax part */
 
@@ -62,6 +69,10 @@ NCName
 LexPattern 
   : LexAlt
   | LexPattern "|" LexAlt
+  | LexPattern repeat_char
+  | id
+  | string_lit
+  | url_lit
   ;
 
 LexAlt 
@@ -78,33 +89,3 @@ LexTerm
   | "(" LexPattern ")"
   ;
 
-
-Items
-// (Item ( '-' Item | Item* ))?
-  : Item
-  | Items ItemsApp
-  | empty
-  ;
-
-ItemsApp
-// ( '-' Item | Item* )
-  : '-' Item
-  | Item
-  | empty
-  ;
-
-Item
-// Primary ( '?' | '*' | '+' )*
-  : Primary
-// | Primary PrimaryMod
-  ;
-
-Primary
-// NCName | StringLiteral | CharCode | CharClass | '(' Choice ')'
-  : NCName | string_lit
-  ;
-
-//PrimaryMod
-// ( '?' | '*' | '+' )*
-//  : '?'
-//  ;
