@@ -12,16 +12,12 @@ import (
 )
 
 var testData = []string{
+	"Grm ::= Prd;",
+	"Grm ::= Prd* ;\n Prd::=N;",
 	"Grm ::= (A | B);",     // OK
 	"Grm ::= C (A | B);",   // OK
 	"Grm ::= C D A;",       // NOK
 	"Grm ::= C D (A | B);", // NOK
-}
-
-/*
-
-	"Grm ::= Prd",
-	"Grm ::= Prd* ;\n Prd::=N;",
 	`Grammar
  ::=
 Production*
@@ -32,8 +28,17 @@ Production
 NCName '::=' ( Choice | Link )
 ;
 `,
+	`
+CharRange
+ ::= 
+Char '-' ( Char - ']' )
+`,
+}
 
-*/
+/*
+
+
+ */
 
 func TestPass(t *testing.T) {
 	for _, ts := range testData {

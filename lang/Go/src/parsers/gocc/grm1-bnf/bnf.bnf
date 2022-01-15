@@ -82,7 +82,7 @@ LexTerm
   | char_lit "-" char_lit
   | string_lit
   | url_lit
-//| LexPattern repeat_char
+  | LexTerm repeat_char
   | "[" LexPattern "]"
   | "{" LexPattern "}"
   | "(" LexPattern ")"
