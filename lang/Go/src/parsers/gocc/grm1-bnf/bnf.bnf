@@ -1,6 +1,7 @@
 /*
 
 Extracted from https://www.bottlecaps.de/rr/ui on Tue Jan 11, 2022, 22:48 (UTC-05)
+Change it from LR(1) to LR(0) grammar by adding the ending ";" symbol
 
 Copyright (c) 2021 Tong Sun
 
@@ -54,7 +55,8 @@ url_lit
 /* Syntax part */
 
 Grammar
-  : Production
+  : Production ";"
+  | Grammar Production ";"
   ;
 
 Production
