@@ -79,7 +79,7 @@ LexTerm
   : "."
   | id
   | char_lit
-  | char_lit "-" char_lit
+  | LexTerm "-" char_lit
   | string_lit
   | url_lit
   | LexTerm repeat_char

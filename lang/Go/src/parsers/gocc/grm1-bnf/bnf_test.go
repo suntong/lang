@@ -32,6 +32,8 @@ NCName '::=' ( Choice | Link )
 CharRange
  ::= 
 Char '-' ( Char - ']' )
+/* ws: explicit */
+;
 `,
 }
 
@@ -49,7 +51,7 @@ func TestPass(t *testing.T) {
 	}
 }
 
-func NoTestFail(t *testing.T) {
+func TestFail(t *testing.T) {
 	_, err := test([]byte("a : b"))
 	if err == nil {
 		t.Fatal("unexpected parse error")
@@ -58,7 +60,7 @@ func NoTestFail(t *testing.T) {
 	}
 }
 
-func NoTestFiles(t *testing.T) {
+func TestFiles(t *testing.T) {
 	files := []string{}
 	err := filepath.Walk("test",
 		func(path string, f os.FileInfo, err error) error {
