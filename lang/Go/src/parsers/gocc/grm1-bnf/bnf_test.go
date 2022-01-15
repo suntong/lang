@@ -12,22 +12,26 @@ import (
 )
 
 var testData = []string{
-	`Grammar
- ::= 
-Production*
-;
-
-Production
- ::= 
-NCName '::=' ( Choice | Link )
-;
-`,
+	"Grm ::= (A | B);",     // OK
+	"Grm ::= C (A | B);",   // OK
+	"Grm ::= C D A;",       // NOK
+	"Grm ::= C D (A | B);", // NOK
 }
 
 /*
 
 	"Grm ::= Prd",
 	"Grm ::= Prd* ;\n Prd::=N;",
+	`Grammar
+ ::=
+Production*
+;
+
+Production
+ ::=
+NCName '::=' ( Choice | Link )
+;
+`,
 
 */
 

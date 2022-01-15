@@ -24,7 +24,9 @@ char_lit
   ;
 
 string_lit
-  : '"' {_unicode_char} '"' ;
+  : '"' {_unicode_char} '"'
+  | '\''{_unicode_char} '\''
+  ;
 
 _unicode_value    : _unicode_char | _little_u_value | _big_u_value | _escaped_char ;
 _unicode_char
@@ -55,12 +57,12 @@ url_lit
 /* Syntax part */
 
 Grammar
-  : Production ";"
-  | Grammar Production ";"
+  : Production
+  | Grammar Production
   ;
 
 Production
-  : NCName "::=" LexPattern
+  : NCName "::=" LexPattern ";"
   ;
 
 NCName
@@ -70,11 +72,7 @@ NCName
 
 LexPattern 
   : LexAlt
-  | LexPattern "|" LexAlt
-  | LexPattern repeat_char
-  | id
-  | string_lit
-  | url_lit
+  | LexAlt "|" LexPattern
   ;
 
 LexAlt 
@@ -84,10 +82,15 @@ LexAlt
 
 LexTerm
   : "."
+  | id
   | char_lit
   | char_lit "-" char_lit
+  | string_lit
+  | url_lit
+  | LexPattern repeat_char
   | "[" LexPattern "]"
   | "{" LexPattern "}"
   | "(" LexPattern ")"
+  | empty
   ;
 
