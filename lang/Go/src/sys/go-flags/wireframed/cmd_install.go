@@ -27,9 +27,9 @@ var installCommand InstallCommand
 // InstallCommand implements the business logic of command `install`
 func (x *InstallCommand) Execute(args []string) error {
 	fmt.Fprintf(os.Stderr, "Install the network application\n")
-	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
-	// fmt.Printf("Doing Install, with %#v\n", args)
-	// fmt.Println(x.Dir, x.Suffix)
+	fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
+	fmt.Printf("Doing Install, with %#v\n", args)
+	fmt.Println(x.Dir, x.Suffix)
 	// err := ...
 	return nil
 }

@@ -35,9 +35,9 @@ var publishCommand PublishCommand
 // PublishCommand implements the business logic of command `publish`
 func (x *PublishCommand) Execute(args []string) error {
 	fmt.Fprintf(os.Stderr, "Publish the network application\n")
-	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
-	// fmt.Printf("Doing Publish, with %#v\n", args)
-	// fmt.Println(x.Dir, x.Suffix, x.Out, x.Args)
+	fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
+	fmt.Printf("Doing Publish, with %#v\n", args)
+	fmt.Println(x.Dir, x.Suffix, x.Out, x.Args)
 	// err := ...
 	return nil
 }
