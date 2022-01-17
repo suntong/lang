@@ -13,17 +13,20 @@ var opts struct {
 	Verbose uint
 
 	// Example of automatic marshalling to desired type (uint)
-	Offset uint `long:"offset" description:"Offset"`
+	Offset uint `long:"offset" env:"ENV_OFFSET" description:"Offset" default:"3"`
 
 	// Example of a callback, called each time the option is found.
 	Call   func(string) `short:"c" description:"Call phone number"`
 	Called uint
 
 	// Example of a required flag
-	Name string `short:"n" long:"name" description:"A name" required:"true"`
+	Name string `short:"n" long:"name" env:"ENV_NAME" description:"A name" default:"TBD"`
 
 	// Example of a value name
 	File string `short:"f" long:"file" description:"A file" value-name:"FILE"`
+
+	// Example of a bool
+	Force bool `short:"F" long:"force" description:"A boolean" env:"ENV_FORCE"`
 
 	// Example of a pointer
 	Ptr *int `short:"p" description:"A pointer to an integer"`
@@ -74,6 +77,7 @@ func main() {
 	fmt.Printf("StringSlice: %v\n", opts.StringSlice)
 	fmt.Printf("PtrSlice: [%v %v]\n", *opts.PtrSlice[0], *opts.PtrSlice[1])
 	fmt.Printf("IntMap: [a:%v b:%v]\n", opts.IntMap["a"], opts.IntMap["b"])
+	fmt.Printf("Force: %v\n", opts.Force)
 	fmt.Printf("Args.ID: %s\n", opts.Args.ID)
 	fmt.Printf("Args.Num: %d\n", opts.Args.Num)
 	fmt.Printf("Args.Rest: %v\n", opts.Args.Rest)
@@ -93,6 +97,61 @@ Ptr: 3
 StringSlice: [hello world]
 PtrSlice: [hello world]
 IntMap: [a:1 b:5]
+Args.ID: id
+Args.Num: 10
+Args.Rest: [remaining1 remaining2]
+
+$ go run readme.go -vvv -p 3 -s hello -s world --ptrslice hello --ptrslice world --intmap a:1 --intmap b:5 -c 123 -c 678 id 10 remaining1 remaining2
+Calling: 123
+Calling: 678
+Called: 2
+Verbosity: 3
+Offset: 3
+Name: TBD
+Ptr: 3
+StringSlice: [hello world]
+PtrSlice: [hello world]
+IntMap: [a:1 b:5]
+Force: false
+Args.ID: id
+Args.Num: 10
+Args.Rest: [remaining1 remaining2]
+
+$ go run readme.go -F=false
+bool flag `-F, --force' cannot have an argument
+panic: bool flag `-F, --force' cannot have an argument
+
+$ ENV_NAME=me ENV_OFFSET=2 ENV_FORCE=true go run readme.go -vvv -p 3 -s hello -s world --ptrslice hello --ptrslice world --intmap a:1 --intmap b:5 -c 123 -c 678 id 10 remaining1 remaining2
+Calling: 123
+Calling: 678
+Called: 2
+Verbosity: 3
+Offset: 2
+Name: me
+Ptr: 3
+StringSlice: [hello world]
+PtrSlice: [hello world]
+IntMap: [a:1 b:5]
+Force: true
+Args.ID: id
+Args.Num: 10
+Args.Rest: [remaining1 remaining2]
+
+$ ENV_FORCE=false go run readme.go ...
+Force: true
+
+$ ENV_NAME=me ENV_OFFSET=2 ENV_FORCE=false go run readme.go -vvv -p 3 -s hello -s world --ptrslice hello --ptrslice world --intmap a:1 --intmap b:5 -c 123 -c 678 -n me2 --offset=5 -F id 10 remaining1 remaining2
+Calling: 123
+Calling: 678
+Called: 2
+Verbosity: 3
+Offset: 5
+Name: me2
+Ptr: 3
+StringSlice: [hello world]
+PtrSlice: [hello world]
+IntMap: [a:1 b:5]
+Force: true
 Args.ID: id
 Args.Num: 10
 Args.Rest: [remaining1 remaining2]
