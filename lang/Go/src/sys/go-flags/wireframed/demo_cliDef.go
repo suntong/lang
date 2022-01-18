@@ -10,7 +10,7 @@ import (
 //  	"fmt"
 //  	"os"
 
-//	"github.com/jessevdk/go-flags"
+//	"github.com/go-easygen/go-flags"
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -80,6 +80,8 @@ import (
 //  import (
 //	"fmt"
 //	"os"
+//
+//	"github.com/go-easygen/go-flags/clis"
 //  )
 
 // *** Sub-command: build ***
@@ -95,26 +97,30 @@ import (
 //
 //  var buildCommand BuildCommand
 //
-//  func (x *BuildCommand) Execute(args []string) error {
-//  	return x.Exec(args)
-//  }
-//
-// Exec implements the business logic of command `build`
-// func (x *BuildCommand) Exec(args []string) error {
-// 	fmt.Fprintf(os.Stderr, "Build the network application\n")
-// 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
-// 	// fmt.Printf("Doing Build, with %+v, %+v\n", Opts, args)
-// 	// fmt.Println(x.Dir)
-// 	// // err := ...
-// 	return nil
-// }
-//
 //  func init() {
 //  	parser.AddCommand("build",
 //  		"Build the network application",
 //  		"Usage:\n  redo build [Options] Arch(i386|amd64)",
 //  		&buildCommand)
 //  }
+//
+//  func (x *BuildCommand) Execute(args []string) error {
+//  	return x.Exec(args)
+//  }
+//
+// Exec implements the business logic of command `build`
+// func (x *BuildCommand) Exec(args []string) error {
+// 	clis.Setup(fmt.Sprintf("%s::%s", progname, "build"), Opts.Verbose)
+// 	fmt.Fprintf(os.Stderr, "Build the network application\n")
+// 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
+// 	// clis.Verbose(1, "Doing Build, with %+v, %+v\n", Opts, args)
+// 	// fmt.Println(x.Dir)
+// 	// // err := ...
+// 	// // clis.WarnOn("Doing Build", err)
+// 	// // or,
+// 	// // clis.AbortOn("Doing Build", err)
+// 	return nil
+// }
 // Template for "build" CLI handling ends here
 
 // Template for "install" CLI handling starts here
@@ -129,6 +135,8 @@ import (
 //  import (
 //	"fmt"
 //	"os"
+//
+//	"github.com/go-easygen/go-flags/clis"
 //  )
 
 // *** Sub-command: install ***
@@ -138,26 +146,12 @@ import (
 
 // The InstallCommand type defines all the configurable options from cli.
 //  type InstallCommand struct {
-//  	Dir	string	`short:"d description:"source code root dir" default:"./"`
+//  	Dir	string	`short:"d" description:"source code root dir" default:"./"`
 //  	Suffix	string	`long:"suffix" description:"source file suffix" default:".go,.c,.s"`
 //  }
 
 //
 //  var installCommand InstallCommand
-//
-//  func (x *InstallCommand) Execute(args []string) error {
-//  	return x.Exec(args)
-//  }
-//
-// Exec implements the business logic of command `install`
-// func (x *InstallCommand) Exec(args []string) error {
-// 	fmt.Fprintf(os.Stderr, "Install the network application\n")
-// 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
-// 	// fmt.Printf("Doing Install, with %+v, %+v\n", Opts, args)
-// 	// fmt.Println(x.Dir, x.Suffix)
-// 	// // err := ...
-// 	return nil
-// }
 //
 //  func init() {
 //  	parser.AddCommand("install",
@@ -165,6 +159,24 @@ import (
 //  		"The add command adds a file to the repository. Use -a to add all files",
 //  		&installCommand)
 //  }
+//
+//  func (x *InstallCommand) Execute(args []string) error {
+//  	return x.Exec(args)
+//  }
+//
+// Exec implements the business logic of command `install`
+// func (x *InstallCommand) Exec(args []string) error {
+// 	clis.Setup(fmt.Sprintf("%s::%s", progname, "install"), Opts.Verbose)
+// 	fmt.Fprintf(os.Stderr, "Install the network application\n")
+// 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
+// 	// clis.Verbose(1, "Doing Install, with %+v, %+v\n", Opts, args)
+// 	// fmt.Println(x.Dir, x.Suffix)
+// 	// // err := ...
+// 	// // clis.WarnOn("Doing Install", err)
+// 	// // or,
+// 	// // clis.AbortOn("Doing Install", err)
+// 	return nil
+// }
 // Template for "install" CLI handling ends here
 
 // Template for "publish" CLI handling starts here
@@ -179,6 +191,8 @@ import (
 //  import (
 //	"fmt"
 //	"os"
+//
+//	"github.com/go-easygen/go-flags/clis"
 //  )
 
 // *** Sub-command: publish ***
@@ -204,24 +218,28 @@ import (
 //
 //  var publishCommand PublishCommand
 //
-//  func (x *PublishCommand) Execute(args []string) error {
-//  	return x.Exec(args)
-//  }
-//
-// Exec implements the business logic of command `publish`
-// func (x *PublishCommand) Exec(args []string) error {
-// 	fmt.Fprintf(os.Stderr, "Publish the network application\n")
-// 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
-// 	// fmt.Printf("Doing Publish, with %+v, %+v\n", Opts, args)
-// 	// fmt.Println(x.Dir, x.Suffix, x.Out, x.Args)
-// 	// // err := ...
-// 	return nil
-// }
-//
 //  func init() {
 //  	parser.AddCommand("publish",
 //  		"Publish the network application",
 //  		"Publish the built network application to central repo",
 //  		&publishCommand)
 //  }
+//
+//  func (x *PublishCommand) Execute(args []string) error {
+//  	return x.Exec(args)
+//  }
+//
+// Exec implements the business logic of command `publish`
+// func (x *PublishCommand) Exec(args []string) error {
+// 	clis.Setup(fmt.Sprintf("%s::%s", progname, "publish"), Opts.Verbose)
+// 	fmt.Fprintf(os.Stderr, "Publish the network application\n")
+// 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
+// 	// clis.Verbose(1, "Doing Publish, with %+v, %+v\n", Opts, args)
+// 	// fmt.Println(x.Dir, x.Suffix, x.Out, x.Args)
+// 	// // err := ...
+// 	// // clis.WarnOn("Doing Publish", err)
+// 	// // or,
+// 	// // clis.AbortOn("Doing Publish", err)
+// 	return nil
+// }
 // Template for "publish" CLI handling ends here

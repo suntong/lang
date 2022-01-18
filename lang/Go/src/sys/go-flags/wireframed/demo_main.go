@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jessevdk/go-flags"
+	"github.com/go-easygen/go-flags"
 )
 
 //////////////////////////////////////////////////////////////////////////
