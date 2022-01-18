@@ -7,8 +7,8 @@
 package main
 
 import (
-	"fmt"
-	"os"
+//	"fmt"
+//	"os"
 )
 
 // *** Sub-command: publish ***
@@ -19,7 +19,7 @@ import (
 // The PublishCommand type defines all the configurable options from cli.
 type PublishCommand struct {
 	Dir    string   `short:"d" long:"dir" description:"publish dir" required:"true"`
-	Suffix []string `long:"suffix" description:"source file suffix for publish" choice:".go" choice:".c" choice:".h"`
+	Suffix []string `short:"s" long:"suffix" description:"source file suffix for publish" choice:".go" choice:".c" choice:".h"`
 	Out    string   `short:"o" long:"out" description:"output filename"`
 
 	// Example of positional arguments

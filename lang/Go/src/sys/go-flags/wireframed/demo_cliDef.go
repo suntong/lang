@@ -78,8 +78,8 @@ import (
 //  package main
 
 //  import (
-//    	"fmt"
-//    	"os"
+//	"fmt"
+//	"os"
 //  )
 
 // *** Sub-command: build ***
@@ -105,7 +105,7 @@ import (
 // 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
 // 	// fmt.Printf("Doing Build, with %+v, %+v\n", Opts, args)
 // 	// fmt.Println(x.Dir)
-// 	// err := ...
+// 	// // err := ...
 // 	return nil
 // }
 //
@@ -127,8 +127,8 @@ import (
 //  package main
 
 //  import (
-//    	"fmt"
-//    	"os"
+//	"fmt"
+//	"os"
 //  )
 
 // *** Sub-command: install ***
@@ -155,7 +155,7 @@ import (
 // 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
 // 	// fmt.Printf("Doing Install, with %+v, %+v\n", Opts, args)
 // 	// fmt.Println(x.Dir, x.Suffix)
-// 	// err := ...
+// 	// // err := ...
 // 	return nil
 // }
 //
@@ -177,8 +177,8 @@ import (
 //  package main
 
 //  import (
-//    	"fmt"
-//    	"os"
+//	"fmt"
+//	"os"
 //  )
 
 // *** Sub-command: publish ***
@@ -189,7 +189,7 @@ import (
 // The PublishCommand type defines all the configurable options from cli.
 //  type PublishCommand struct {
 //  	Dir	string	`short:"d" long:"dir" description:"publish dir" required:"true"`
-//  	Suffix	[]string	`long:"suffix" description:"source file suffix for publish" choice:".go" choice:".c" choice:".h"`
+//  	Suffix	[]string	`short:"s" long:"suffix" description:"source file suffix for publish" choice:".go" choice:".c" choice:".h"`
 //  	Out	string	`short:"o" long:"out" description:"output filename"`
 //
 //  	// Example of positional arguments
@@ -214,7 +214,7 @@ import (
 // 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
 // 	// fmt.Printf("Doing Publish, with %+v, %+v\n", Opts, args)
 // 	// fmt.Println(x.Dir, x.Suffix, x.Out, x.Args)
-// 	// err := ...
+// 	// // err := ...
 // 	return nil
 // }
 //

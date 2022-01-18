@@ -79,7 +79,7 @@ Command:
 
       - Name: Suffix
         Type: '[]string'
-        Flag: suffix
+        Flag: s,suffix
         Usage: "source file suffix for publish"
         Choices:
           - .go
