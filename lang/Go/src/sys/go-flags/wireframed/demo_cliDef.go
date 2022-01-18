@@ -22,7 +22,7 @@ import (
 //  	Port	int	`short:"p" long:"port" env:"REDO_PORT" description:"listening port" default:"80"`
 //  	Force	bool	`short:"f" long:"force" env:"REDO_FORCE" description:"force start"`
 //  	Verbflg func()  `short:"v" long:"verbose" description:"Verbose mode (Multiple -v options increase the verbosity)"`
-//  	Verbose uint
+//  	Verbose int
 
 //  }
 
