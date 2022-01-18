@@ -18,9 +18,9 @@ import (
 
 // The PublishCommand type defines all the configurable options from cli.
 type PublishCommand struct {
-	Dir    string `short:"d" long:"dir" description:"publish dir" required:"true"`
-	Suffix string `long:"suffix" description:"source file suffix" default:".go,.c,.s"`
-	Out    string `short:"o" long:"out" description:"output filename"`
+	Dir    string   `short:"d" long:"dir" description:"publish dir" required:"true"`
+	Suffix []string `long:"suffix" description:"source file suffix for publish" choice:".go" choice:".c" choice:".h"`
+	Out    string   `short:"o" long:"out" description:"output filename"`
 
 	// Example of positional arguments
 	Args struct {
@@ -32,15 +32,19 @@ type PublishCommand struct {
 
 var publishCommand PublishCommand
 
-// PublishCommand implements the business logic of command `publish`
 func (x *PublishCommand) Execute(args []string) error {
-	fmt.Fprintf(os.Stderr, "Publish the network application\n")
-	fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
-	fmt.Printf("Doing Publish, with %+v, %+v\n", Opts, args)
-	fmt.Println(x.Dir, x.Suffix, x.Out, x.Args)
-	// err := ...
-	return nil
+	return x.Exec(args)
 }
+
+// Exec implements the business logic of command `publish`
+// func (x *PublishCommand) Exec(args []string) error {
+// 	fmt.Fprintf(os.Stderr, "Publish the network application\n")
+// 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
+// 	// fmt.Printf("Doing Publish, with %+v, %+v\n", Opts, args)
+// 	// fmt.Println(x.Dir, x.Suffix, x.Out, x.Args)
+// 	// err := ...
+// 	return nil
+// }
 
 func init() {
 	parser.AddCommand("publish",

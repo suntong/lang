@@ -2,16 +2,10 @@
 ProgramName: redo
 Authors: Myself <me@mine.org>
 
-# package name
-# - For standalone program that does not belong to any package, e.g., 
-#   https://github.com/suntong/easygen/blob/7791e4f0e5605543d27da1671a21376cdb9dcf2a/easygen/easygen.go
-#   just ignore the first line, the `package` output, and copy the rest
-# - If you don't mind using a separated file to handle commandline paramters,
-#   then name the package as "main". see the spin-out "TF-minus1.go" file under
-#   https://github.com/suntong/easygen/tree/d1ab0b5fe80ddac57fe9ef51f6ccb3ab998cd5ee
-# - If you are using it in a pacakge, look no further than
-#   https://github.com/suntong/easygen/blob/master/easygenapi/config.go
-#   which was a direct dump: easygen test/commandlineFlag | gofmt > easygenapi/config.go
+# For the complete demo, refer to the finished code at
+#   https://github.com/suntong/lang/tree/master/lang/Go/src/sys/go-flags/wireframed
+#  and the wiki at
+#   https://github.com/go-easygen/easygen/issues/46
 #
 PackageName: main
 
@@ -84,10 +78,13 @@ Command:
         Required: true
 
       - Name: Suffix
-        Type: string
+        Type: '[]string'
         Flag: suffix
-        Value: ".go,.c,.s"
-        Usage: "source file suffix"
+        Usage: "source file suffix for publish"
+        Choices:
+          - .go
+          - .c
+          - .h
 
       - Name: Out
         Type: string
