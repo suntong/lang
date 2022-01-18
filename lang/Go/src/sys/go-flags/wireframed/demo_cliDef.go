@@ -116,9 +116,9 @@ import (
 // 	// clis.Verbose(1, "Doing Build, with %+v, %+v\n", Opts, args)
 // 	// fmt.Println(x.Dir)
 // 	// // err := ...
-// 	// // clis.WarnOn("Doing Build", err)
+// 	// // clis.WarnOn("Build, Exec", err)
 // 	// // or,
-// 	// // clis.AbortOn("Doing Build", err)
+// 	// // clis.AbortOn("Build, Exec", err)
 // 	return nil
 // }
 // Template for "build" CLI handling ends here
@@ -172,9 +172,9 @@ import (
 // 	// clis.Verbose(1, "Doing Install, with %+v, %+v\n", Opts, args)
 // 	// fmt.Println(x.Dir, x.Suffix)
 // 	// // err := ...
-// 	// // clis.WarnOn("Doing Install", err)
+// 	// // clis.WarnOn("Install, Exec", err)
 // 	// // or,
-// 	// // clis.AbortOn("Doing Install", err)
+// 	// // clis.AbortOn("Install, Exec", err)
 // 	return nil
 // }
 // Template for "install" CLI handling ends here
@@ -237,9 +237,9 @@ import (
 // 	// clis.Verbose(1, "Doing Publish, with %+v, %+v\n", Opts, args)
 // 	// fmt.Println(x.Dir, x.Suffix, x.Out, x.Args)
 // 	// // err := ...
-// 	// // clis.WarnOn("Doing Publish", err)
+// 	// // clis.WarnOn("Publish, Exec", err)
 // 	// // or,
-// 	// // clis.AbortOn("Doing Publish", err)
+// 	// // clis.AbortOn("Publish, Exec", err)
 // 	return nil
 // }
 // Template for "publish" CLI handling ends here
