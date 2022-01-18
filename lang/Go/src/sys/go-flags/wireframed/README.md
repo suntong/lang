@@ -197,3 +197,21 @@ Usage:
 
 ```
 
+### Update 3
+
+After switching to `go-easygen` which has `clis` support functions,
+
+``` sh
+$ wireframed install -v
+Install the network application
+Copyright (C) 2022, Myself <me@mine.org>
+
+[redo::install] Doing Install, with {Host:localhost Port:80 Force:false Verbflg:0x4a92e0 Verbose:1}, []
+
+./ .go,.c,.s
+[redo::install] Warning: Install, Exec, Sample warning: Instance not found
+```
+
+- The `clis.Verbose(1,` will only output if the Verbose level is >=1. 
+- Removing the `-v` option from the command line the "Doing Install" line will disappear.
+- With `clis.WarnOn` & `clis.AbortOn` reporting warning or critical errors (in color) will be a breeze.
