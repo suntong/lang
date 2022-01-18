@@ -103,7 +103,7 @@ Doing Install, with []string{"abc", "def"}
 ../new .go,.c,.s
 ```
 
-### Update
+### Update 1
 
 After [ouput global option](https://github.com/suntong/lang/commit/5ab110dfde2c2a481e14f8cb8afa4d4b3cb4bd23#diff-4040661b6ba228abb2484408a7a62935f7660d89545b11fc65567f54d36d7501),
 
@@ -133,3 +133,67 @@ Copyright (C) 2022, Myself <me@mine.org>
 Doing Publish, with {Host:newserver Port:8888 Force:true Verbflg:0x4a8120 Verbose:2}, []
 ../dist .go,.c,.s  {v1 123 [abc def]}
 ```
+
+### Update 2
+
+After turning `--suffix` to use choices.
+
+``` sh
+$ wireframed publish
+the required flag `-d, --dir' was not specified
+
+Usage:
+  wireframed [OPTIONS] publish [publish-OPTIONS] ID Num Rest...
+
+Publish the built network application to central repo
+
+Application Options:
+  -H, --host=                  host address (default: localhost) [$REDO_HOST]
+  -p, --port=                  listening port (default: 80) [$REDO_PORT]
+  -f, --force                  force start [$REDO_FORCE]
+  -v, --verbose                Verbose mode (Multiple -v options increase the verbosity)
+
+Help Options:
+  -h, --help                   Show this help message
+
+[publish command options]
+      -d, --dir=               publish dir
+      -s, --suffix=[.go|.c|.h] source file suffix for publish
+      -o, --out=               output filename
+
+# see that the --suffix= now use choices
+
+
+
+$ wireframed publish -d ../dist v1 123 abc def
+Publish the network application
+Copyright (C) 2022, Myself <me@mine.org>
+
+Doing Publish, with {Host:localhost Port:80 Force:false Verbflg:0x4a8180 Verbose:0}, []
+../dist []  {v1 123 [abc def]}
+
+# the --suffix= has empty choices by default
+
+
+
+$ wireframed publish -d ../dist -s .c -s .h v1 123 abc def
+Publish the network application
+Copyright (C) 2022, Myself <me@mine.org>
+
+Doing Publish, with {Host:localhost Port:80 Force:false Verbflg:0x4a8180 Verbose:0}, []
+../dist [.c .h]  {v1 123 [abc def]}
+
+# the --suffix= has two choices now
+
+
+
+$ wireframed publish -d ../dist -s .x v1 123 abc def
+Invalid value `.x' for option `-s, --suffix'. Allowed values are: .go, .c or .h
+
+Usage:
+  wireframed . . .
+
+# when the --suffix= has been provided with wrong choice
+
+```
+
