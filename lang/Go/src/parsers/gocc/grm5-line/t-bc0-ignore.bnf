@@ -1,0 +1,16 @@
+
+/* Lexical part */
+
+_digit : '0'-'9' ;
+
+//ignore : '/' '*' { . | '*' } '*' '/' ;
+//ignore : '[' _digit { . | '*' } '*' '/' ;
+//ignore : '[' _digit { . | ' ' } ' ' '-' ;
+ignore : '[' _digit { . } ' ' '-' ;
+
+//ignore :  '['  _digit { . | '*' } ' '  '-'  ' '  'M'  'Y'  'K'  'W'  ' '  '-'  ' ' ;
+
+
+Log
+ : ignore
+ ;

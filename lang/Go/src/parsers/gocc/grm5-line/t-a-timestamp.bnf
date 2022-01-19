@@ -1,0 +1,28 @@
+
+/* Lexical part */
+
+_digit : '0'-'9' ;
+
+_timestamp1 : _digit | ' ' | ':' | '-' | '.' ;
+
+_ignore :  '['  { . } ' '  '-'  ' '  'M'  'Y'  'K'  'W'  ' '  '-'  ' ' ;
+
+timestamp       : _timestamp1 { _timestamp1 } ; 
+ignore :  _ignore ;
+blockComment : '/' '*' { . | '*' } '*' '/' ;
+
+
+/* Syntax part */
+
+<< 
+import (
+	// "github.com/suntong/gocc-grammars/bnf/token"
+	// "github.com/suntong/gocc-grammars/bnf/util"
+)
+>>
+
+
+Log
+ : timestamp ignore
+ | blockComment Log
+ ;
