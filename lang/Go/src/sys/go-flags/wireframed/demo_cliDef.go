@@ -24,7 +24,7 @@ import (
 //  var (
 //          progname  = "redo"
 //          version   = "0.1.0"
-//          date = "2022-01-18"
+//          date = "2022-01-19"
 
 //  	// Opts store all the configurable options
 //  	Opts OptsT
@@ -53,6 +53,7 @@ import (
 
 // DoRedo implements the business logic of command `redo`
 // func DoRedo() error {
+//	return nil
 // }
 
 // Template for type define starts here
@@ -79,10 +80,10 @@ import (
 //  package main
 
 //  import (
-//	"fmt"
-//	"os"
+//  	"fmt"
+//  	"os"
 //
-//	"github.com/go-easygen/go-flags/clis"
+//  	"github.com/go-easygen/go-flags/clis"
 //  )
 
 // *** Sub-command: build ***
@@ -106,20 +107,20 @@ import (
 //  }
 //
 //  func (x *BuildCommand) Execute(args []string) error {
+//   	fmt.Fprintf(os.Stderr, "Build the network application\n")
+//   	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
+//   	clis.Setup(fmt.Sprintf("%s::%s", progname, "build"), Opts.Verbose)
+//   	clis.Verbose(1, "Doing Build, with %+v, %+v", Opts, args)
+//   	fmt.Println(x.Dir)
 //  	return x.Exec(args)
 //  }
 //
 // Exec implements the business logic of command `build`
 // func (x *BuildCommand) Exec(args []string) error {
-// 	clis.Setup(fmt.Sprintf("%s::%s", progname, "build"), Opts.Verbose)
-// 	fmt.Fprintf(os.Stderr, "Build the network application\n")
-// 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
-// 	// clis.Verbose(1, "Doing Build, with %+v, %+v\n", Opts, args)
-// 	// fmt.Println(x.Dir)
-// 	// // err := ...
-// 	// // clis.WarnOn("Build, Exec", err)
-// 	// // or,
-// 	// // clis.AbortOn("Build, Exec", err)
+// 	// err := ...
+// 	// clis.WarnOn("Build, Exec", err)
+// 	// or,
+// 	// clis.AbortOn("Build, Exec", err)
 // 	return nil
 // }
 // Template for "build" CLI handling ends here
@@ -134,10 +135,10 @@ import (
 //  package main
 
 //  import (
-//	"fmt"
-//	"os"
+//  	"fmt"
+//  	"os"
 //
-//	"github.com/go-easygen/go-flags/clis"
+//  	"github.com/go-easygen/go-flags/clis"
 //  )
 
 // *** Sub-command: install ***
@@ -162,20 +163,20 @@ import (
 //  }
 //
 //  func (x *InstallCommand) Execute(args []string) error {
+//   	fmt.Fprintf(os.Stderr, "Install the network application\n")
+//   	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
+//   	clis.Setup(fmt.Sprintf("%s::%s", progname, "install"), Opts.Verbose)
+//   	clis.Verbose(1, "Doing Install, with %+v, %+v", Opts, args)
+//   	fmt.Println(x.Dir, x.Suffix)
 //  	return x.Exec(args)
 //  }
 //
 // Exec implements the business logic of command `install`
 // func (x *InstallCommand) Exec(args []string) error {
-// 	clis.Setup(fmt.Sprintf("%s::%s", progname, "install"), Opts.Verbose)
-// 	fmt.Fprintf(os.Stderr, "Install the network application\n")
-// 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
-// 	// clis.Verbose(1, "Doing Install, with %+v, %+v\n", Opts, args)
-// 	// fmt.Println(x.Dir, x.Suffix)
-// 	// // err := ...
-// 	// // clis.WarnOn("Install, Exec", err)
-// 	// // or,
-// 	// // clis.AbortOn("Install, Exec", err)
+// 	// err := ...
+// 	// clis.WarnOn("Install, Exec", err)
+// 	// or,
+// 	// clis.AbortOn("Install, Exec", err)
 // 	return nil
 // }
 // Template for "install" CLI handling ends here
@@ -190,10 +191,10 @@ import (
 //  package main
 
 //  import (
-//	"fmt"
-//	"os"
+//  	"fmt"
+//  	"os"
 //
-//	"github.com/go-easygen/go-flags/clis"
+//  	"github.com/go-easygen/go-flags/clis"
 //  )
 
 // *** Sub-command: publish ***
@@ -226,20 +227,20 @@ import (
 //  }
 //
 //  func (x *PublishCommand) Execute(args []string) error {
+//   	fmt.Fprintf(os.Stderr, "Publish the network application\n")
+//   	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
+//   	clis.Setup(fmt.Sprintf("%s::%s", progname, "publish"), Opts.Verbose)
+//   	clis.Verbose(1, "Doing Publish, with %+v, %+v", Opts, args)
+//   	fmt.Println(x.Dir, x.Suffix, x.Out, x.Args)
 //  	return x.Exec(args)
 //  }
 //
 // Exec implements the business logic of command `publish`
 // func (x *PublishCommand) Exec(args []string) error {
-// 	clis.Setup(fmt.Sprintf("%s::%s", progname, "publish"), Opts.Verbose)
-// 	fmt.Fprintf(os.Stderr, "Publish the network application\n")
-// 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
-// 	// clis.Verbose(1, "Doing Publish, with %+v, %+v\n", Opts, args)
-// 	// fmt.Println(x.Dir, x.Suffix, x.Out, x.Args)
-// 	// // err := ...
-// 	// // clis.WarnOn("Publish, Exec", err)
-// 	// // or,
-// 	// // clis.AbortOn("Publish, Exec", err)
+// 	// err := ...
+// 	// clis.WarnOn("Publish, Exec", err)
+// 	// or,
+// 	// clis.AbortOn("Publish, Exec", err)
 // 	return nil
 // }
 // Template for "publish" CLI handling ends here
