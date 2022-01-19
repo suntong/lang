@@ -18,15 +18,6 @@ import (
 //////////////////////////////////////////////////////////////////////////
 // Constant and data type/structure definitions
 
-// The OptsT type defines all the configurable options from cli.
-type OptsT struct {
-	Host    string `short:"H" long:"host" env:"REDO_HOST" description:"host address" default:"localhost"`
-	Port    int    `short:"p" long:"port" env:"REDO_PORT" description:"listening port" default:"80"`
-	Force   bool   `short:"f" long:"force" env:"REDO_FORCE" description:"force start"`
-	Verbflg func() `short:"v" long:"verbose" description:"Verbose mode (Multiple -v options increase the verbosity)"`
-	Verbose int
-}
-
 ////////////////////////////////////////////////////////////////////////////
 // Global variables definitions
 
@@ -51,17 +42,9 @@ func main() {
 	}
 
 	if _, err := parser.Parse(); err != nil {
-		switch flagsErr := err.(type) {
-		case flags.ErrorType:
-			if flagsErr == flags.ErrHelp {
-				os.Exit(0)
-			}
-			os.Exit(1)
-		default:
-			fmt.Println()
-			parser.WriteHelp(os.Stdout)
-			os.Exit(1)
-		}
+		fmt.Println()
+		parser.WriteHelp(os.Stdout)
+		os.Exit(1)
 	}
-	fmt.Println("")
+	fmt.Println()
 }

@@ -13,20 +13,10 @@ import (
 //	"github.com/go-easygen/go-flags"
 )
 
-////////////////////////////////////////////////////////////////////////////
-// Constant and data type/structure definitions
-
-// The OptsT type defines all the configurable options from cli.
-//  type OptsT struct {
-//  	Host	string	`short:"H" long:"host" env:"REDO_HOST" description:"host address" default:"localhost"`
-//  	Port	int	`short:"p" long:"port" env:"REDO_PORT" description:"listening port" default:"80"`
-//  	Force	bool	`short:"f" long:"force" env:"REDO_FORCE" description:"force start"`
-//  	Verbflg func()  `short:"v" long:"verbose" description:"Verbose mode (Multiple -v options increase the verbosity)"`
-//  	Verbose int
-
-//  }
-
 // Template for main starts here
+
+//////////////////////////////////////////////////////////////////////////
+// Constant and data type/structure definitions
 
 ////////////////////////////////////////////////////////////////////////////
 // Global variables definitions
@@ -34,7 +24,7 @@ import (
 //  var (
 //          progname  = "redo"
 //          version   = "0.1.0"
-//          date = "2022-01-17"
+//          date = "2022-01-18"
 
 //  	// Opts store all the configurable options
 //  	Opts OptsT
@@ -52,21 +42,32 @@ import (
 //  	}
 //
 //  	if _, err := parser.Parse(); err != nil {
-//  		switch flagsErr := err.(type) {
-//  		case flags.ErrorType:
-//  			if flagsErr == flags.ErrHelp {
-//  				os.Exit(0)
-//  			}
-//  			os.Exit(1)
-//  		default:
-//  			fmt.Println()
-//  			parser.WriteHelp(os.Stdout)
-//  			os.Exit(1)
-//  		}
+//  		fmt.Println()
+//  		parser.WriteHelp(os.Stdout)
+//  		os.Exit(1)
 //  	}
-//  	fmt.Println("")
+//  	fmt.Println()
+//  	//DoRedo()
 //  }
 // Template for main ends here
+
+// DoRedo implements the business logic of command `redo`
+// func DoRedo() error {
+// }
+
+// Template for type define starts here
+////////////////////////////////////////////////////////////////////////////
+// Constant and data type/structure definitions
+
+// The OptsT type defines all the configurable options from cli.
+//  type OptsT struct {
+//  	Host	string	`short:"H" long:"host" env:"REDO_HOST" description:"host address" default:"localhost"`
+//  	Port	int	`short:"p" long:"port" env:"REDO_PORT" description:"listening port" default:"80"`
+//  	Force	bool	`short:"f" long:"force" env:"REDO_FORCE" description:"force start"`
+//  	Verbflg func()  `short:"v" long:"verbose" description:"Verbose mode (Multiple -v options increase the verbosity)"`
+//  	Verbose int
+//  }
+// Template for type define ends here
 
 // Template for "build" CLI handling starts here
 ////////////////////////////////////////////////////////////////////////////
@@ -207,12 +208,11 @@ import (
 //  	Out	string	`short:"o" long:"out" description:"output filename"`
 //
 //  	// Example of positional arguments
-//  Args struct {
-//    ID   string
-//    Num  int
-//    Rest []string
-//  } `positional-args:"yes" required:"yes"`
-
+//  	Args struct {
+//  	  ID   string
+//  	  Num  int
+//  	  Rest []string
+//  	} `positional-args:"yes" required:"yes"`
 //  }
 
 //
