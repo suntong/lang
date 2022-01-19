@@ -4,20 +4,21 @@
 //_letter : 'A'-'Z' | 'a'-'z' | '_' ;
 _digit : '0'-'9' ;
 
-//_timestamp1 : _digit | ' ' | ':' | '-' | '.' ;
-//_timestamp1 : _digit | ':' | '-' | '.' ;
-_timestamp1 : '0'-'9' | '-' ;
+_timestamp1 : _digit | ' ' | ':' | '-' | '.' ;
 _timestamp2 : _digit | ' ' | ':' | '/' | 'A' | 'P' | 'M' ;
 
-_ignore :  '['  { . } ' '  '-'  ' '  'M'  'Y'  'K'  'W'  ' '  '-'  ' ' ;
+ignore : '[' _digit { . | ' ' } ' ' '-' ;
+mykw : ' '  'M'  'Y'  'K'  'W'  ' '  '-'  ' ' ;
 
 _lineend : [ '\r' ] '\n' ;
 
 
-timestamp       : _timestamp1 { _timestamp1 } ' ' ; // _ignore ;
-taskLogStart 	: 'S'  't'  'a'  'r'  't'  ' ' ;
-//taskLogEnd 	: 'E'  'n'  'd'  ' ' ;
-jobName		: { . } _timestamp2 { _timestamp2 } _lineend ;
+timestamp       : _timestamp1 { _timestamp1 } ;
+taskLogStart 	: 'S'  't'  'a'  'r'  't' ;
+//taskLogEnd 	: 'E'  'n'  'd' ;
+jobName		:  ' ' . . { . }  ':' ;
+// expected jobName; got: unknown/invalid token " Ac"
+timestamp2 	: _timestamp2 { _timestamp2 } _lineend ;
 
 blockComment : '/' '*' { . | '*' } '*' '/' ;
 
@@ -33,6 +34,7 @@ import (
 
 
 Log
- : timestamp taskLogStart jobName
+ : timestamp ignore mykw taskLogStart jobName timestamp2
  | blockComment Log
  ;
+
