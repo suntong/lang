@@ -2,11 +2,11 @@
 /* Lexical part */
 
 // ignore : '[' _digit { . | ' ' } ' ' '-' ;
-// mykw : ' '  'M'  'Y'  'K'  'W'  ' '  '-'  ' ' ;
+mykw : ' '  'M'  'Y'  'K'  'W'  ' '  '-'  ' ' ;
 
-// taskLogStart 	: 'S'  't'  'a'  'r'  't' ;
+taskLogStart 	: 'S'  't'  'a'  'r'  't' ;
 jobName : ' '  { . } ':' ;
 
 Log
- : jobName
+ : mykw taskLogStart jobName
  ;
