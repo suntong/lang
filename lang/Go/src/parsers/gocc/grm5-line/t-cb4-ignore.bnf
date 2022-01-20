@@ -13,7 +13,7 @@ mykw : ' '  'M'  'Y'  'K'  'W'  ' '  '-'  ' ' ;
 taskLogStart 	: 'S'  't'  'a'  'r'  't' ;
 jobName : ' '  { . } ':' ;
 
-timestamp2 	: _timestamp2 { _timestamp2 } _lineend ;
+timestamp2 	: _timestamp2 { _timestamp2 } ; // _lineend ;
 // error: expected jobName; got: unknown/invalid token " Ac"
 
 Log
