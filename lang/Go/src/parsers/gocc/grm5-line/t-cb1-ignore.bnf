@@ -1,0 +1,12 @@
+
+/* Lexical part */
+
+// ignore : '[' _digit { . | ' ' } ' ' '-' ;
+// mykw : ' '  'M'  'Y'  'K'  'W'  ' '  '-'  ' ' ;
+
+// taskLogStart 	: 'S'  't'  'a'  'r'  't' ;
+jobName : ' '  { . } ':' ;
+
+Log
+ : jobName
+ ;
