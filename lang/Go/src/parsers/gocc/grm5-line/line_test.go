@@ -9,7 +9,7 @@ import (
 )
 
 var testData = []string{
-	"[21 These to ignore, ]",
+	" [21 These to ignore, ]:",
 	//	"`[21] These to ignore, `",
 	//	"/* [21] These are strings */2022-01-18 11:33:21.9885 [21] These are strings that I need to ignore, until - MYKW - Start Active One: 1/18/2022 11:33:21 AM\n",
 	//	"2022-01-18 2022-01-18 2022-01-18 11:33:21.9885 [21] These are strings that I need to egnore, until - MYKW - Start Active One: 1/18/2022 11:33:21 AM\n",
