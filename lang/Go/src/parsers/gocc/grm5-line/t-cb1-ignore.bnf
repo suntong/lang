@@ -1,12 +1,14 @@
 
 /* Lexical part */
 
-// ignore : '[' _digit { . | ' ' } ' ' '-' ;
+_digit : '0'-'9' ;
+
+ignore : '[' _digit { . | ' ' } ' ' '-' ;
 mykw : ' '  'M'  'Y'  'K'  'W'  ' '  '-'  ' ' ;
 
 taskLogStart 	: 'S'  't'  'a'  'r'  't' ;
 jobName : ' '  { . } ':' ;
 
 Log
- : mykw taskLogStart jobName
+ : ignore mykw taskLogStart jobName
  ;
