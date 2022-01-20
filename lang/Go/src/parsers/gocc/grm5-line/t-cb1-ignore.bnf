@@ -2,7 +2,9 @@
 /* Lexical part */
 
 _digit : '0'-'9' ;
+_timestamp1 : _digit | ' ' | ':' | '-' | '.' ;
 
+timestamp       : _timestamp1 { _timestamp1 } ;
 ignore : '[' _digit { . | ' ' } ' ' '-' ;
 mykw : ' '  'M'  'Y'  'K'  'W'  ' '  '-'  ' ' ;
 
@@ -10,5 +12,5 @@ taskLogStart 	: 'S'  't'  'a'  'r'  't' ;
 jobName : ' '  { . } ':' ;
 
 Log
- : ignore mykw taskLogStart jobName
+ : timestamp ignore mykw taskLogStart jobName
  ;
