@@ -2,12 +2,13 @@
 /* Lexical part */
 
 _digit : '0'-'9' ;
-_timestamp1 : _digit | ' ' | ':' | '-' | '.' ;
-_timestamp2 : _digit | ' ' | ':' | '/' | 'A' | 'P' | 'M' ;
 _lineend : [ '\r' ] '\n' ;
 
-timestamp       : _timestamp1 { _timestamp1 } ;
-ignore : '[' _digit { . | ' ' } ' ' '-' ;
+timestamp
+  : _digit _digit _digit _digit '-' _digit _digit '-' _digit _digit
+    ' ' _digit _digit ':' _digit _digit ':' _digit _digit '.' { _digit }
+  ;
+ignore : ' '  '[' _digit { . | ' ' } ' ' '-' ;
 mykw : ' '  'M'  'Y'  'K'  'W'  ' '  '-'  ' ' ;
 
 taskLogStart 	: 'S'  't'  'a'  'r'  't' ;
@@ -21,26 +22,10 @@ Log
 
 /*
 
-                action:Accept=6, Ignore=
-        pos=103, line=1, col=104, state=13
-        S13, : tok=jobName, rune == ' '(20), next state == -1
-                pos=104, size=1, start=91, end=103
-Token at Pos(offset=91, line=1, column=92): jobName " Active One:"
-Lexer.Scan() pos=103
-        pos=103, line=1, col=104, state=0
-        S0, : tok=INVALID, rune == ' '(20), next state == 1
-                pos=104, size=1, start=103, end=0
-                action:Accept=2, Ignore=
-        pos=104, line=1, col=105, state=1
-        S1, : tok=timestamp, rune == '1'(31), next state == 3
-                pos=105, size=1, start=103, end=104
-                action:Accept=2, Ignore=
-        pos=105, line=1, col=106, state=3
-        S3, : tok=timestamp, rune == '/'(2f), next state == -1
-                pos=106, size=1, start=103, end=105
-Token at Pos(offset=103, line=1, column=104): timestamp " 1"
-    line_test.go:25: 1:104: error: expected ignore2; got: " 1"
+Token at Pos(offset=24, line=1, column=25): jobName " [21] These are strings that I need to ignore, until - MYKW - Start Active One:"
+    line_test.go:25: 1:25: error: expected ignore; got: " [21] These are strings that I need to ignore, until - MYKW - Start Active One:"
 
 */
 
-// offset=103, line=1, column=104): timestamp " 1" !!!!
+// Because it is context-free grammar!!!!
+
