@@ -3,7 +3,9 @@
 
 Check out [`easygen` cli code-gen example for go-flags](https://github.com/go-easygen/easygen/issues/46) on how these Go code were ***automatically** generated*.
 
+### Final Update
 
+Note that the latest development of this project has been moved [under go-easygen](https://github.com/go-easygen/go-flags-demo).
 
 ### Demo
 
