@@ -1,10 +1,14 @@
+// redo - global option redo
+//
+// Redo global option via automatic code-gen
+
+package main
+
 ////////////////////////////////////////////////////////////////////////////
 // Program: redo
 // Purpose: global option redo
 // Authors: Myself <me@mine.org> (c) 2022, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
-
-package main
 
 import (
 //  	"fmt"

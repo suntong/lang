@@ -1,12 +1,17 @@
+// redo - global option redo
+//
+// Redo global option via automatic code-gen
+
+package main
+
 ////////////////////////////////////////////////////////////////////////////
 // Program: redo
 // Purpose: global option redo
 // Authors: Myself <me@mine.org> (c) 2022, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
-package main
-
 //go:generate sh -v demo_cliGen.sh
+//go:generate emd gen -in README.beg.e.md -in README.e.md -in README.end.e.md -out README.md
 
 import (
 	"fmt"
