@@ -24,7 +24,7 @@ import (
 var (
 	progname = "redo"
 	version  = "0.1.0"
-	date     = "2022-01-17"
+	date     = "2022-01-22"
 
 	// Opts store all the configurable options
 	Opts OptsT
@@ -37,6 +37,7 @@ var parser = flags.NewParser(&Opts, flags.Default)
 
 // Function main
 func main() {
+	Opts.Version = showVersion
 	Opts.Verbflg = func() {
 		Opts.Verbose++
 	}
@@ -47,4 +48,13 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println()
+	//DoRedo()
+}
+
+func showVersion() {
+	fmt.Fprintf(os.Stderr, "redo - global option redo\n")
+	fmt.Fprintf(os.Stderr, "Copyright (C) 2022, Myself <me@mine.org>\n\n")
+	fmt.Fprintf(os.Stderr, "Redo global option via automatic code-gen\n\nBuilt on %s\nVersion %s\n",
+		date, version)
+	os.Exit(0)
 }

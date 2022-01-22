@@ -215,3 +215,40 @@ Copyright (C) 2022, Myself <me@mine.org>
 - The `clis.Verbose(1,` will only output if the Verbose level is >=1. 
 - Removing the `-v` option from the command line the "Doing Install" line will disappear.
 - With `clis.WarnOn` & `clis.AbortOn` reporting warning or critical errors (in color) will be a breeze.
+
+### Update on 2022-01-22
+
+After update to new template, which uses `-V, --version` to show program version,
+
+``` sh
+$ wireframed
+Please specify one command of: build, install or publish
+
+Usage:
+  wireframed [OPTIONS] <build | install | publish>
+
+Application Options:
+  -H, --host=    Host address (default: localhost) [$REDO_HOST]
+  -p, --port=    Listening port (default: 80) [$REDO_PORT]
+  -f, --force    Force start [$REDO_FORCE]
+  -v, --verbose  Verbose mode (Multiple -v options increase the verbosity)
+  -V, --version  Show program version and exit
+
+Help Options:
+  -h, --help     Show this help message
+
+Available commands:
+  build    Build the network application
+  install  Install the network application
+  publish  Publish the network application
+
+$ wireframed -V
+redo - global option redo
+Copyright (C) 2022, Myself <me@mine.org>
+
+Redo global option via automatic code-gen
+
+Built on 2022-01-22
+Version 0.1.0
+```
+
