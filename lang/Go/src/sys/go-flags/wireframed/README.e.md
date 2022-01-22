@@ -1,28 +1,8 @@
 
-## {{toc 5}}
-- [Download/install binaries](#downloadinstall-binaries)
-  - [The binary executables](#the-binary-executables)
-  - [Distro package](#distro-package)
-  - [Debian package](#debian-package)
-- [Install Source](#install-source)
-- [Author](#author)
-
-## {{.Name}} - global option redo
-
-`{{.Name}}` will redo global option via automatic code-gen
-
-```sh
-$ {{shell ".Name -V"}}
-```
-
 ### Synopsis
 
 Check out [`easygen` cli code-gen example for go-flags](https://github.com/go-easygen/easygen/issues/46) on how these Go code were ***automatically** generated*.
 
-
-## Usage
-
-### $ {{shell ".Name" | color "sh"}}
 
 
 ### Demo
