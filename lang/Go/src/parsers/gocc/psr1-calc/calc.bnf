@@ -1,0 +1,58 @@
+
+/* Lexical part */
+!whitespace : ' ' | '\t' | '\n' | '\r' ;
+!comment : _lineComment | _blockComment ;
+_lineComment : '/' '/' {.} '\n' ;
+_blockComment : '/' '*' {. | '*'} '*' '/' ;
+
+_letter : 'A' - 'Z' | 'a' - 'z' | '_' ;
+_digit : '0' - '9' ;
+
+_byte_value       : _octal_byte_value | _hex_byte_value ;
+_octal_byte_value : '\\' _octal_digit _octal_digit _octal_digit ;
+_hex_byte_value   : '\\' 'x' _hex_digit _hex_digit ;
+_little_u_value   : '\\' 'u' _hex_digit _hex_digit _hex_digit _hex_digit ;
+_big_u_value      : '\\' 'U' _hex_digit _hex_digit _hex_digit _hex_digit
+                            _hex_digit _hex_digit _hex_digit _hex_digit ;
+
+_octal_digit : '0' - '7' ;
+_hex_digit
+  : '0' - '9'
+  | 'A' - 'F'
+  | 'a' - 'f'
+  ;
+
+
+int : '1'-'9' {_digit} ;
+
+//id : _letter {_letter | _digit} ;
+
+
+/* Syntax part */
+
+<< 
+import (
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr1-calc/token"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr1-calc/util"
+)
+>>
+
+Calc : Expr;
+
+Expr
+  : Expr "+" Term	<< $0.(int) + $2.(int), nil >>
+  | Expr "-" Term	<< $0.(int) - $2.(int), nil >>
+  | Term			
+  ;
+
+Term
+  : Term "*" Factor	<< $0.(int) * $2.(int), nil >>
+  | Term "/" Factor	<< $0.(int) / $2.(int), nil >>
+  | Factor			
+  ;
+
+Factor
+  : "(" Expr ")"	<< $1, nil >>
+  | int    		<< util.IntValue($0.(*token.Token).Lit) >>
+;
+
