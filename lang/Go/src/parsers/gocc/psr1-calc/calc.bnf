@@ -42,7 +42,7 @@ import (
 Calc
   : Expr
   | reg "=" Expr	<< ast.Assign($2.(int64)) >>
-  | Calc ";" Expr	<< $2, nil >>
+  | Calc ";" Calc	<< $2, nil >>
   ;
 
 Expr
