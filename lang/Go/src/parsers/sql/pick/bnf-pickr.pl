@@ -64,3 +64,6 @@ while ( my ($key, $value) = each(%wanted) ) {
 }
 #print STDERR "\n $missing?$missing_last\n";
 }
+
+# print out what's left
+#while ( my ($key, $value) = each(%wanted) ) { print STDERR "$key, " if $value; }
