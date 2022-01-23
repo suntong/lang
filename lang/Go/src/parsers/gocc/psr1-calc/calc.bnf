@@ -25,6 +25,7 @@ _hex_digit
 
 int64 : '1'-'9' {_digit} ;
 
+reg : 'r' ;
 //id : _letter {_letter | _digit} ;
 
 
@@ -32,6 +33,7 @@ int64 : '1'-'9' {_digit} ;
 
 << 
 import (
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr1-calc/ast"
 	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr1-calc/token"
 	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr1-calc/util"
 )
@@ -39,7 +41,8 @@ import (
 
 Calc
   : Expr
-  | Expr ";" Expr	<< $2, nil >>
+  | reg "=" Expr	<< ast.Assign($2.(int64)) >>
+  | Calc ";" Expr	<< $2, nil >>
   ;
 
 Expr
@@ -57,5 +60,6 @@ Term
 Factor
   : "(" Expr ")"	<< $1, nil >>
   | int64    		<< util.IntValue($0.(*token.Token).Lit) >>
-;
+  | reg			<< ast.Reg, nil>>
+  ;
 
