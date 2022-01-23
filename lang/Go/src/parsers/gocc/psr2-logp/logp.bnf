@@ -36,7 +36,7 @@ import (
 >>
 
 EventLog
-  : JobLog
+  : JobLog					<< "", nil >>
   ;
 
 JobLog
