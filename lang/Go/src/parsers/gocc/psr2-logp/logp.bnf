@@ -43,12 +43,14 @@ EventLog
 
 JobLog
   : JobLogStart ProcessLog JobLogEnd << ast.Pair($0.(string),
-						$2.(string)), nil >>
+						$2.(string)) +
+						"\n" + $1.(string), nil >>
   ;
 
 ProcessLog
   : ProcessLogStart TaskLog ProcessLogEnd << ast.Pair($0.(string),
-						$2.(string)), nil >>
+						$2.(string)) +
+						"\n" + $1.(string), nil >>
   ;
 
 TaskLog
