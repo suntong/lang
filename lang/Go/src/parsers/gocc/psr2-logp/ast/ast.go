@@ -1,0 +1,13 @@
+package ast
+
+import (
+	//"strings"
+
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr2-logp/token"
+)
+
+type Attrib interface{}
+
+func AttribToString(a Attrib) string {
+	return string(a.(*token.Token).Lit)
+}

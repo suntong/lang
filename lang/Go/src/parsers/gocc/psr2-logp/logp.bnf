@@ -32,6 +32,8 @@ jobLogEnd     	: _jobLog ' '  'J'  'o'  'b'  ' '  'c'  'o'  'm'  'p'  'l'  'e'  
 
 << 
 import (
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr2-logp/ast"
+	//"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr2-logp/token"
 )
 >>
 
@@ -53,8 +55,9 @@ TaskLog
     TaskLogStart TaskLogEnd
   ;
 
-TaskLogStart : timestamp taskLogStart ;
-TaskLogEnd   : timestamp  taskLogEnd  ;
+TaskLogStart : timestamp taskLogStart		<< ast.AttribToString($0) +
+	       		 			   ast.AttribToString($1), nil >> ;
+TaskLogEnd   : timestamp  taskLogEnd		<< ast.AttribToString($0), nil >>  ;
 
 ProcessLogStart : timestamp processLogStart ;
 ProcessLogEnd   : timestamp  processLogEnd  ;
