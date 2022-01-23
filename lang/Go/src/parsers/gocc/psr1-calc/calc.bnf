@@ -46,7 +46,7 @@ Calcs
 
 Calc
   : Expr
-  | reg "=" Expr	<< ast.Assign($2.(int64)) >>
+  | reg "=" Calc	<< ast.Assign($2.(int64)) >>
   ;
 
 Expr
