@@ -37,7 +37,10 @@ import (
 )
 >>
 
-Calc : Expr;
+Calc
+  : Expr
+  | Expr ";" Expr	<< $2.(int64), nil >>
+  ;
 
 Expr
   : Expr "+" Term	<< $0.(int64) + $2.(int64), nil >>
