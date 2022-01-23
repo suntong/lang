@@ -57,7 +57,9 @@ TaskLog
   : TaskLogStart TaskLogEnd		<< ast.Pair($0.(string),
 						$1.(string)), nil >>
   | TaskLog
-    TaskLogStart TaskLogEnd
+    TaskLogStart TaskLogEnd		<< $0.(string) + "\n" + 
+    		 			   ast.Pair($1.(string),
+					   $2.(string)), nil >>
   ;
 
 TaskLogStart : timestamp taskLogStart	<< ast.AttribToString($0) +

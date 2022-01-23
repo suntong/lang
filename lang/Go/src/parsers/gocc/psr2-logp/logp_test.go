@@ -40,7 +40,23 @@ var testData = []*TI{
 2022-01-18 11:21:24.8027 Start of Post Processing 1/18/2022 11
  ==> 2022-01-18 11:36:24.7238 
 2022-01-18 11:21:24.8027 Start auto generation of data
- ==> 2022-01-18 11:21:24.8027 `},
+ ==> 2022-01-18 11:21:24.8027 
+2022-01-18 11:21:24.8199 Start HR core import SQL
+ ==> 2022-01-18 11:33:21.9885 
+2022-01-18 11:33:21.9885 Start Process Non Active Employees
+ ==> 2022-01-18 11:33:21.9885 
+2022-01-18 11:33:23.9087 Start Updating Employee Management Structure
+ ==> 2022-01-18 11:33:40.8774 
+2022-01-18 11:33:40.8774 Start Salt Passwords
+ ==> 2022-01-18 11:35:13.4284 
+2022-01-18 11:35:13.4445 Start Pay Card Processing
+ ==> 2022-01-18 11:35:13.5237 
+2022-01-18 11:35:13.5237 Start User Account Check
+ ==> 2022-01-18 11:35:13.6597 
+2022-01-18 11:35:13.6597 Start Legal Entity Tax Processing
+ ==> 2022-01-18 11:36:24.4468 
+2022-01-18 11:36:24.4468 Start Newly Active Employee Processing
+ ==> 2022-01-18 11:36:24.4554 `},
 }
 
 func Test1(t *testing.T) {

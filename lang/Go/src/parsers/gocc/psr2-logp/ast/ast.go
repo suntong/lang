@@ -14,6 +14,6 @@ func AttribToString(a Attrib) string {
 
 func Pair(s, e string) string {
 	r := s + " ==> " + e
-	println(r)
+	//println(r)
 	return r
 }
