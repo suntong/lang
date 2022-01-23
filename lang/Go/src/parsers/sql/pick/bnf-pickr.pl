@@ -30,9 +30,11 @@ my $defs = do { local $/; <> };
 
 my %wanted;
 map { $wanted{$_} = 1 } @picked;
-my $missing = 1;
+my $missing = keys(%wanted);
+my $missing_last = 0;
 
-while ($missing) {
+while ($missing && $missing > $missing_last) {
+$missing_last = $missing;
 while ($defs =~ m{(\w+)\s*:(.*?);}gsx) {
     #print "$&\n^^ ($1)\n\n";
     #print "--> $1\n" if (grep $1 eq $_, @picked);
@@ -55,13 +57,10 @@ while ($defs =~ m{(\w+)\s*:(.*?);}gsx) {
 }
 
 $missing = 0;
-print STDERR "]] ";
+#print STDERR "]]: ";
 while ( my ($key, $value) = each(%wanted) ) {
-    #print STDERR "]] $key\n" if $key =~ m/\s+/;
-    #print STDERR "]] $key => $value\n";
-    print STDERR "$key, " if $value;
-    $missing = 1 if $value;
+    #print STDERR "$key, " if $value;
+    $missing++ if $value;
 }
-print STDERR "\n";
-
+#print STDERR "\n $missing?$missing_last\n";
 }
