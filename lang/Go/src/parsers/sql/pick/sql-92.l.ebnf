@@ -1,0 +1,611 @@
+BNF Grammar for ISO/IEC 9075:1992 - Database Language SQL (SQL-92)
+================================================================== ;
+
+@(#)$Id: sql-92.bnf,v 2.5 2017/01/17 01:05:03 jleffler Exp $ ;
+
+// p
+Using Appendix G of "Understanding the New SQL: A Complete Guide" by J
+Melton and A R Simon (Morgan Kaufmann, 1993, ISBN 0-55860-245-3) as the
+source of the syntax, here is (most of) the BNF syntax for SQL-92.  The
+missing parts are the Cobol, Fortran, MUMPS, Pascal and PL/I variable
+definition rules.
+// /p ;
+
+// p
+The plain text version of this grammar is
+// ## a_Href='sql-92.bnf' sql-92.bnf /a.
+// /p ;
+
+// hr
+// h2 Key SQL Statements and Fragments
+// /h2
+// bl
+// li ALLOCATE CURSOR allocate_Cursor_Statement
+// li ALTER DOMAIN alter_Domain_Statement
+// li ALTER TABLE alter_Table_Statement
+// li CLOSE cursor close_Statement dynamic_Close_Statement
+// li Column definition column_Definition
+// li COMMIT WORK commit_Statement
+// li CONNECT connect_Statement
+// li CREATE ASSERTION assertion_Definition
+// li CREATE CHARACTER SET character_Set_Definition
+// li CREATE COLLATION collation_Definition
+// li CREATE DOMAIN domain_Definition
+// li CREATE SCHEMA schema_Definition
+// li CREATE TABLE table_Definition
+// li CREATE TRANSLATION translation_Definition
+// li CREATE VIEW view_Definition
+// li Data type data_Type
+// li DEALLOCATE PREPARE deallocate_Prepared_Statement
+// li DECLARE cursor declare_Cursor dynamic_Declare_Cursor
+// li DECLARE LOCAL TEMPORARY TABLE temporary_Table_Declaration
+// li DELETE delete_Statement:_Positioned delete_Statement:_Searched dynamic_Delete_Statement:_Positioned
+// li DESCRIBE describe_Statement
+// li DESCRIPTOR statements system_Descriptor_Statement
+// li DISCONNECT disconnect_Statement
+// li EXECUTE execute_Statement
+// li EXECUTE IMMEDIATE execute_Immediate_Statement
+// li FETCH cursor fetch_Statement dynamic_Fetch_Statement
+// li GET DIAGNOSTICS get_Diagnostics_Statement
+// li GRANT grant_Statement
+// li INSERT insert_Statement
+// li Literal literal
+// li MODULE module
+// li OPEN cursor open_Statement dynamic_Open_Statement
+// li PREPARE prepare_Statement
+// li Preparable statement preparable_Statement
+// li REVOKE revoke_Statement
+// li ROLLBACK WORK rollback_Statement
+// li Search condition search_Condition
+// li SELECT query_Specification
+// li SET CATALOG set_Catalog_Statement
+// li SET CONNECTION set_Connection_Statement
+// li SET CONSTRAINTS set_Constraints_Mode_Statement
+// li SET NAMES set_Names_Statement
+// li SET SCHEMA set_Schema_Statement
+// li SET SESSION AUTHORIZATION set_Session_Authorization_Identifier_Statement
+// li SET TIME ZONE set_Local_Time_Zone_Statement
+// li SET TRANSACTION set_Transaction_Statement
+// li UPDATE update_Statement:_Positioned update_Statement:_Searched dynamic_Update_Statement:_Positioned
+// li Value expression value_Expression
+// /bl
+// hr ;
+
+// h2 Basic Definitions of Characters Used, Tokens, Symbols, Etc.
+// /h2 ;
+
+sQL_Terminal_Character :
+		sQL_Language_Character
+	|	sQL_Embedded_Language_Character ;
+
+sQL_Language_Character :
+		simple_Latin_Letter
+	|	digit
+	|	sQL_Special_Character ;
+
+simple_Latin_Letter :
+		simple_Latin_Upper_Case_Letter
+	|	simple_Latin_Lower_Case_Letter ;
+
+simple_Latin_Upper_Case_Letter :
+	A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z ;
+
+simple_Latin_Lower_Case_Letter :
+	a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z ;
+
+digit :
+	0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 ;
+
+sQL_Special_Character :
+		space
+	|	double_Quote
+	|	percent
+	|	ampersand
+	|	quote
+	|	left_Paren
+	|	right_Paren
+	|	asterisk
+	|	plus_Sign
+	|	comma
+	|	minus_Sign
+	|	period
+	|	solidus
+	|	colon
+	|	semicolon
+	|	less_Than_Operator
+	|	greater_Than_Operator
+	|	equals_Operator
+	|	question_Mark
+	|	underscore
+	|	vertical_Bar ;
+
+space : !! space character in character set in use ;
+
+double_Quote : " ;
+
+percent : % ;
+
+ampersand : & ;
+
+quote : ' ;
+
+left_Paren : ( ;
+
+right_Paren : ) ;
+
+asterisk : * ;
+
+plus_Sign : + ;
+
+comma : , ;
+
+minus_Sign : - ;
+
+period : . ;
+
+solidus : / ;
+
+colon : : ;
+
+semicolon : ; ;
+
+less_Than_Operator : < ;
+
+equals_Operator : = ;
+
+greater_Than_Operator : > ;
+
+question_Mark : ? ;
+
+underscore : _ ;
+
+vertical_Bar : | ;
+
+sQL_Embedded_Language_Character : left_Bracket | right_Bracket ;
+
+left_Bracket : [ ;
+
+right_Bracket : ] ;
+
+token :
+		nondelimiter_Token
+	|	delimiter_Token ;
+
+nondelimiter_Token :
+		regular_Identifier
+	|	key_Word
+	|	unsigned_Numeric_Literal
+	|	national_Character_String_Literal
+	|	bit_String_Literal
+	|	hex_String_Literal ;
+
+regular_Identifier : identifier_Body ;
+
+identifier_Body : identifier_Start [ { underscore | identifier_Part } ... ] ;
+
+identifier_Start : !! See the Syntax rules ;
+
+identifier_Part : identifier_Start | digit ;
+
+key_Word : reserved_Word | non-reserved_Word ;
+
+reserved_Word :
+		ABSOLUTE | ACTION | ADD | ALL | ALLOCATE | ALTER | AND | ANY | ARE
+	|	AS | ASC | ASSERTION | AT | AUTHORIZATION | AVG
+	|	BEGIN | BETWEEN | BIT | BIT_LENGTH | BOTH | BY
+	|	CASCADE | CASCADED | CASE | CAST | CATALOG | CHAR | CHARACTER | CHARACTER_LENGTH
+	|	CHAR_LENGTH | CHECK | CLOSE | COALESCE | COLLATE | COLLATION | COLUMN | COMMIT
+	|	CONNECT | CONNECTION | CONSTRAINT | CONSTRAINTS | CONTINUE | CONVERT | CORRESPONDING
+	|	CREATE | CROSS | CURRENT | CURRENT_DATE | CURRENT_TIME | CURRENT_TIMESTAMP | CURRENT_USER | CURSOR
+	|	DATE | DAY | DEALLOCATE | DEC | DECIMAL | DECLARE | DEFAULT
+	|	DEFERRABLE | DEFERRED | DELETE | DESC | DESCRIBE | DESCRIPTOR | DIAGNOSTICS
+	|	DISCONNECT | DISTINCT | DOMAIN | DOUBLE | DROP
+	|	ELSE | END | END-EXEC | ESCAPE | EXCEPT | EXCEPTION | EXEC | EXECUTE | EXISTS | EXTERNAL | EXTRACT
+	|	FALSE | FETCH | FIRST | FLOAT | FOR | FOREIGN | FOUND | FROM | FULL
+	|	GET | GLOBAL | GO | GOTO | GRANT | GROUP
+	|	HAVING | HOUR
+	|	IDENTITY | IMMEDIATE | IN | INDICATOR | INITIALLY | INNER | INPUT | INSENSITIVE
+	|	INSERT | INT | INTEGER | INTERSECT | INTERVAL | INTO | IS | ISOLATION
+	|	JOIN
+	|	KEY
+	|	LANGUAGE | LAST | LEADING | LEFT | LEVEL | LIKE | LOCAL | LOWER
+	|	MATCH | MAX | MIN | MINUTE | MODULE | MONTH
+	|	NAMES | NATIONAL | NATURAL | NCHAR | NEXT | NO | NOT | NULL | NULLIF | NUMERIC
+	|	OCTET_LENGTH | OF | ON | ONLY | OPEN | OPTION | OR | ORDER | OUTER | OUTPUT | OVERLAPS
+	|	PAD | PARTIAL | POSITION | PRECISION | PREPARE | PRESERVE | PRIMARY | PRIOR | PRIVILEGES | PROCEDURE | PUBLIC
+	|	READ | REAL | REFERENCES | RELATIVE | RESTRICT | REVOKE | RIGHT | ROLLBACK | ROWS
+	|	SCHEMA | SCROLL | SECOND | SECTION | SELECT | SESSION | SESSION_USER | SET
+	|	SIZE | SMALLINT | SOME | SPACE | SQL | SQLCODE | SQLERROR | SQLSTATE | SUBSTRING | SUM | SYSTEM_USER
+	|	TABLE | TEMPORARY | THEN | TIME | TIMESTAMP | TIMEZONE_HOUR | TIMEZONE_MINUTE
+	|	TO | TRAILING | TRANSACTION | TRANSLATE | TRANSLATION | TRIM | TRUE
+	|	UNION | UNIQUE | UNKNOWN | UPDATE | UPPER | USAGE | USER | USING
+	|	VALUE | VALUES | VARCHAR | VARYING | VIEW
+	|	WHEN | WHENEVER | WHERE | WITH | WORK | WRITE
+	|	YEAR
+	|	ZONE ;
+
+non-reserved_Word :
+		ADA
+	|	C | CATALOG_NAME | CHARACTER_SET_CATALOG | CHARACTER_SET_NAME | CHARACTER_SET_SCHEMA
+	|	CLASS_ORIGIN | COBOL | COLLATION_CATALOG | COLLATION_NAME | COLLATION_SCHEMA
+	|	COLUMN_NAME | COMMAND_FUNCTION | COMMITTED | CONDITION_NUMBER | CONNECTION_NAME
+	|	CONSTRAINT_CATALOG | CONSTRAINT_NAME | CONSTRAINT_SCHEMA | CURSOR_NAME
+	|	DATA | DATETIME_INTERVAL_CODE | DATETIME_INTERVAL_PRECISION | DYNAMIC_FUNCTION
+	|	FORTRAN
+	|	LENGTH
+	|	MESSAGE_LENGTH | MESSAGE_OCTET_LENGTH | MESSAGE_TEXT | MORE | MUMPS
+	|	NAME | NULLABLE | NUMBER
+	|	PASCAL | PLI
+	|	REPEATABLE | RETURNED_LENGTH | RETURNED_OCTET_LENGTH | RETURNED_SQLSTATE | ROW_COUNT
+	|	SCALE | SCHEMA_NAME | SERIALIZABLE | SERVER_NAME | SUBCLASS_ORIGIN
+	|	TABLE_NAME | TYPE
+	|	UNCOMMITTED | UNNAMED ;
+
+// hr
+// h2 Literal Numbers, Strings, Dates and Times
+// /h2 ;
+
+unsigned_Numeric_Literal :
+		exact_Numeric_Literal
+	|	approximate_Numeric_Literal ;
+
+exact_Numeric_Literal :
+		unsigned_Integer [ period [ unsigned_Integer ] ]
+	|	period unsigned_Integer ;
+
+unsigned_Integer : digit ... ;
+
+approximate_Numeric_Literal :
+		mantissa E exponent ;
+
+mantissa : exact_Numeric_Literal ;
+
+exponent : signed_Integer ;
+
+signed_Integer : [ sign ] unsigned_Integer ;
+
+sign : plus_Sign | minus_Sign ;
+
+national_Character_String_Literal :
+		N quote [ character_Representation ... ] quote [ { separator... quote [ character_Representation... ] quote }... ] ;
+
+character_Representation : nonquote_Character | quote_Symbol ;
+
+nonquote_Character : !! See the Syntax rules ;
+
+quote_Symbol : quote quote ;
+
+separator : { comment | space | newline }... ;
+
+comment : comment_Introducer [ comment_Character... ] newline ;
+
+comment_Introducer : minus_Signminus_Sign [minus_Sign...] ;
+
+comment_Character : nonquote_Character | quote ;
+
+newline : !! implementation defined end of line indicator ;
+
+bit_String_Literal :
+		B quote [ bit ... ] quote [ { separator... quote [ bit... ] quote }... ] ;
+
+bit : 0 | 1 ;
+
+hex_String_Literal :
+		X quote [ hexit ... ] quote [ { separator... quote [ hexit... ] quote }... ] ;
+
+hexit : digit | A | B | C | D | E | F | a | b | c | d | e | f ;
+
+delimiter_Token :
+		character_String_Literal
+	|	date_String
+	|	time_String
+	|	timestamp_String
+	|	delimited_Identifier
+	|	sQL_Special_Character
+	|	not_Equals_Operator
+	|	greater_Than_Or_Equals_Operator
+	|	less_Than_Or_Equals_Operator
+	|	concatenation_Operator
+	|	double_Period
+	|	left_Bracket
+	|	right_Bracket ;
+
+character_String_Literal :
+	[ introducercharacter_Set_Specification ] quote [ character_Representation... ] quote [ { separator... quote [ character_Representation... ] quote }... ] ;
+
+introducer : underscore ;
+
+character_Set_Specification :
+		standard_Character_Repertoire_Name
+	|	implementation-defined_Character_Repertoire_Name
+	|	user-defined_Character_Repertoire_Name
+	|	standard_Universal_Character_Form-of-use_Name
+	|	implementation-defined_Universal_Character_Form-of-use_Name ;
+
+standard_Character_Repertoire_Name : character_Set_Name ;
+
+character_Set_Name : [ schema_Name period ] sQL_Language_Identifier ;
+
+schema_Name : [ catalog_Name period ] unqualified_Schema_Name ;
+
+catalog_Name : identifier ;
+
+identifier : [ introducercharacter_Set_Specification ] actual_Identifier ;
+
+actual_Identifier : regular_Identifier | delimited_Identifier ;
+
+delimited_Identifier : double_Quote delimited_Identifier_Body double_Quote ;
+
+delimited_Identifier_Body : delimited_Identifier_Part... ;
+
+delimited_Identifier_Part : nondoublequote_Character | doublequote_Symbol ;
+
+nondoublequote_Character : !! See the syntax rules ;
+
+doublequote_Symbol : double_Quotedouble_Quote ;
+
+unqualified_Schema_Name : identifier ;
+
+sQL_Language_Identifier :
+		sQL_Language_Identifier_Start [ { underscore | sQL_Language_Identifier_Part }... ] ;
+
+sQL_Language_Identifier_Start : simple_Latin_Letter ;
+
+sQL_Language_Identifier_Part : simple_Latin_Letter | digit ;
+
+implementation-defined_Character_Repertoire_Name : character_Set_Name ;
+
+user-defined_Character_Repertoire_Name : character_Set_Name ;
+
+standard_Universal_Character_Form-of-use_Name : character_Set_Name ;
+
+implementation-defined_Universal_Character_Form-of-use_Name : character_Set_Name ;
+
+date_String : quote date_Value quote ;
+
+date_Value : years_Value minus_Sign months_Value minus_Sign days_Value ;
+
+years_Value : datetime_Value ;
+
+datetime_Value : unsigned_Integer ;
+
+months_Value : datetime_Value ;
+
+days_Value : datetime_Value ;
+
+time_String : quote time_Value [ time_Zone_Interval ] quote ;
+
+time_Value : hours_Value colon minutes_Value colon seconds_Value ;
+
+hours_Value : datetime_Value ;
+
+minutes_Value : datetime_Value ;
+
+seconds_Value : seconds_Integer_Value [ period [ seconds_Fraction ] ] ;
+
+seconds_Integer_Value : unsigned_Integer ;
+
+seconds_Fraction : unsigned_Integer ;
+
+time_Zone_Interval : sign hours_Value colon minutes_Value ;
+
+timestamp_String : quote date_Value space time_Value [ time_Zone_Interval ] quote ;
+
+interval_String : quote { year-month_Literal | day-time_Literal } quote ;
+
+year-month_Literal :
+		years_Value
+	|	[ years_Value minus_Sign ] months_Value ;
+
+day-time_Literal : day-time_Interval | time_Interval ;
+
+day-time_Interval :
+		days_Value [ space hours_Value [ colon minutes_Value [ colon seconds_Value ] ] ] ;
+
+time-interval :
+		hours_Value [ colon minutes_Value [ colon seconds_Value ] ]
+	|	minutes_Value [ colon seconds_Value ]
+	|	seconds_Value ;
+
+not_Equals_Operator :  ;
+
+greater_Than_Or_Equals_Operator : >= ;
+
+less_Than_Or_Equals_Operator : <= ;
+
+concatenation_Operator : || ;
+
+double_Period : .. ;
+
+// hr
+// h2 SQL Module
+// /h2 ;
+
+module :
+		module_Name_Clause language_Clause module_Authorization_Clause
+		[ temporary_Table_Declaration... ]
+		module_Contents... ;
+
+module_Name_Clause :
+		MODULE [ module_Name ] [ module_Character_Set_Specification ] ;
+
+module_Name : identifier ;
+
+module_Character_Set_Specification : NAMES ARE character_Set_Specification ;
+
+language_Clause : LANGUAGE language_Name ;
+
+language_Name : ADA | C | COBOL | FORTRAN | MUMPS | PASCAL | PLI ;
+
+module_Authorization_Clause :
+		SCHEMA schema_Name
+	|	AUTHORIZATION module_Authorization_Identifier
+	|	SCHEMA schema_Name AUTHORIZATION module_Authorization_Identifier ;
+
+module_Authorization_Identifier : authorization_Identifier ;
+
+authorization_Identifier : identifier ;
+
+temporary_Table_Declaration :
+	DECLARE LOCAL TEMPORARY TABLE qualified_Local_Table_Name table_Element_List [ ON COMMIT { PRESERVE | DELETE } ROWS ] ;
+
+qualified_Local_Table_Name : MODULE period local_Table_Name ;
+
+local_Table_Name : qualified_Identifier ;
+
+qualified_Identifier : identifier ;
+
+table_Element_List : left_Paren table_Element [ { comma table_Element }... ] right_Paren ;
+
+table_Element : column_Definition | table_Constraint_Definition ;
+
+column_Definition :
+		column_Name { data_Type | domain_Name } [ default_Clause ] [ column_Constraint_Definition... ] [ collate_Clause ] ;
+
+column_Name : identifier ;
+
+// hr
+// h2 Data Types
+// /h2 ;
+
+data_Type :
+		character_String_Type [ CHARACTER SET character_Set_Specification ]
+	|	national_Character_String_Type
+	|	bit_String_Type
+	|	numeric_Type
+	|	datetime_Type
+	|	interval_Type ;
+
+character_String_Type :
+		CHARACTER [ left_Paren length right_Paren ]
+	|	CHAR [ left_Paren length right_Paren ]
+	|	CHARACTER VARYING [ left_Paren length right_Paren ]
+	|	CHAR VARYING [ left_Paren length right_Paren ]
+	|	VARCHAR [ left_Paren length right_Paren ] ;
+
+length : unsigned_Integer ;
+
+national_Character_String_Type :
+		NATIONAL CHARACTER [ left_Paren length right_Paren ]
+	|	NATIONAL CHAR [ left_Paren length right_Paren ]
+	|	NCHAR [ left_Paren length right_Paren ]
+	|	NATIONAL CHARACTER VARYING [ left_Paren length right_Paren ]
+	|	NATIONAL CHAR VARYING [ left_Paren length right_Paren ]
+	|	NCHAR VARYING [ left_Paren length right_Paren ] ;
+
+bit_String_Type :
+		BIT [ left_Paren length right_Paren ]
+	|	BIT VARYING [ left_Paren length right_Paren ] ;
+
+numeric_Type :
+		exact_Numeric_Type
+	|	approximate_Numeric_Type ;
+
+exact_Numeric_Type :
+	 	NUMERIC [ left_Paren precision [ comma scale ] right_Paren ]
+	| 	DECIMAL [ left_Paren precision [ comma scale ] right_Paren ]
+	| 	DEC [ left_Paren precision [ comma scale ] right_Paren ]
+	|	INTEGER
+	|	INT
+	|	SMALLINT ;
+
+precision : unsigned_Integer ;
+
+scale : unsigned_Integer ;
+
+approximate_Numeric_Type :
+	 	FLOAT [ left_Paren precision right_Paren ]
+	|	REAL
+	|	DOUBLE PRECISION ;
+
+datetime_Type :
+		DATE
+	|   TIME [ left_Paren time_Precision right_Paren ] [ WITH TIME ZONE ]
+	|   TIMESTAMP [ left_Paren timestamp_Precision right_Paren ] [ WITH TIME ZONE ] ;
+
+time_Precision : time_Fractional_Seconds_Precision ;
+
+time_Fractional_Seconds_Precision : unsigned_Integer ;
+
+timestamp_Precision : time_Fractional_Seconds_Precision ;
+
+interval_Type : INTERVAL interval_Qualifier ;
+
+interval_Qualifier :
+		start_Field TO end_Field
+	|   single_Datetime_Field ;
+
+start_Field :
+		non-second_Datetime_Field [ left_Paren interval_Leading_Field_Precision right_Paren ] ;
+
+non-second_Datetime_Field : YEAR | MONTH | DAY | HOUR | MINUTE ;
+
+interval_Leading_Field_Precision : unsigned_Integer ;
+
+end_Field :
+		non-second_Datetime_Field
+	|   SECOND [ left_Paren interval_Fractional_Seconds_Precision right_Paren ] ;
+
+interval_Fractional_Seconds_Precision : unsigned_Integer ;
+
+single_Datetime_Field :
+		non-second_Datetime_Field [ left_Paren interval_Leading_Field_Precision right_Paren ]
+	|   SECOND [ left_Paren interval_Leading_Field_Precision [ comma interval_Fractional_Seconds_Precision ] right_Paren ] ;
+
+domain_Name : qualified_Name ;
+
+qualified_Name : [ schema_Name period ] qualified_Identifier ;
+
+default_Clause : DEFAULT default_Option ;
+
+default_Option :
+		literal
+	|	datetime_Value_Function
+	|	USER
+	|	CURRENT_USER
+	|	SESSION_USER
+	|	SYSTEM_USER
+	|	NULL ;
+
+// hr
+// h2 Literals
+// /h2 ;
+
+literal : signed_Numeric_Literal | general_Literal ;
+
+signed_Numeric_Literal : [ sign ] unsigned_Numeric_Literal ;
+
+general_Literal :
+		character_String_Literal
+	|	national_Character_String_Literal
+	|	bit_String_Literal
+	|	hex_String_Literal
+	|	datetime_Literal
+	|	interval_Literal ;
+
+datetime_Literal :
+		date_Literal
+	|	time_Literal
+	|	timestamp_Literal ;
+
+date_Literal : DATE date_String ;
+
+time_Literal : TIME time_String ;
+
+timestamp_Literal : TIMESTAMP timestamp_String ;
+
+interval_Literal : INTERVAL [ sign ] interval_String interval_Qualifier ;
+
+datetime_Value_Function :
+		current_Date_Value_Function
+	|	current_Time_Value_Function
+	|	current_Timestamp_Value_Function ;
+
+current_Date_Value_Function : CURRENT_DATE ;
+
+current_Time_Value_Function : CURRENT_TIME [ left_Paren time_Precision right_Paren ] ;
+
+current_Timestamp_Value_Function : CURRENT_TIMESTAMP [ left_Paren timestamp_Precision right_Paren ] ;
+
+// hr
+// h2 Constraints ;

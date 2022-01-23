@@ -1,0 +1,396 @@
+Schema_Definition :
+		CREATE SCHEMA Schema_Name_Clause
+			[ Schema_Character_Set_Specification ]
+			[ Schema_Element... ] ;
+
+Schema_Name_Clause :
+		Schema_Name
+	|	AUTHORIZATION Schema_Authorization_Identifier
+	|	Schema_Name AUTHORIZATION Schema_Authorization_Identifier ;
+
+Schema_Authorization_Identifier : Authorization_Identifier ;
+
+Schema_Character_Set_Specification : DEFAULT CHARACTER SET Character_Set_Specification ;
+
+Table_Definition :
+		CREATE [ { GLOBAL | LOCAL } TEMPORARY ] TABLE Table_Name Table_Element_List [ ON COMMIT { DELETE | PRESERVE } ROWS ] ;
+
+View_Definition :
+		CREATE VIEW Table_Name [ Left_Paren View_Column_List Right_Paren ]
+			AS Query_Expression [ WITH [ Levels_Clause ] CHECK OPTION ] ;
+
+View_Column_List : Column_Name_List ;
+
+Levels_Clause : CASCADED | LOCAL ;
+
+Table_Name : Qualified_Name | Qualified_Local_Table_Name ;
+
+Column_Name_List : Column_Name [ { Comma Column_Name }... ] ;
+
+Query_Expression : Non-join_Query_Expression | Joined_Table ;
+
+Joined_Table :
+		Cross_Join
+	|   Qualified_Join
+	|   Left_Paren Joined_Table Right_Paren ;
+
+Cross_Join :
+		Table_Reference CROSS JOIN Table_Reference ;
+
+Qualified_Join :
+		Table_Reference [ NATURAL ] [ Join_Type ] JOIN Table_Reference [ Join_Specification ] ;
+
+Join_Type :
+		INNER
+	|   Outer_Join_Type [ OUTER ]
+	|   UNION ;
+
+Outer_Join_Type : LEFT | RIGHT | FULL ;
+
+Join_Specification : Join_Condition | Named_Columns_Join ;
+
+Join_Condition : ON Search_Condition ;
+
+Named_Columns_Join : USING Left_Paren Join_Column_List Right_Paren ;
+
+Join_Column_List : Column_Name_List ;
+
+Search_Condition :
+		Boolean_Term
+	|   Search_Condition OR Boolean_Term ;
+
+Boolean_Term :
+		Boolean_Factor
+	|   Boolean_Term AND Boolean_Factor ;
+
+Boolean_Factor : [ NOT ] Boolean_Test ;
+
+Boolean_Test : Boolean_Primary [ IS [ NOT ] Truth_Value ] ;
+
+Boolean_Primary : Predicate | Left_Paren Search_Condition Right_Paren ;
+
+Predicate :
+		Comparison_Predicate
+	|   Between_Predicate
+	|   In_Predicate
+	|   Like_Predicate
+	|   Null_Predicate
+	|   Quantified_Comparison_Predicate
+	|   Exists_Predicate
+	|   Match_Predicate
+	|   Overlaps_Predicate ;
+
+Comparison_Predicate : Row_Value_Constructor Comp_Op Row_Value_Constructor ;
+
+Row_Value_Constructor :
+		Row_Value_Constructor_Element
+	|   Left_Paren Row_Value_Constructor_List Right_Paren
+	|   Row_Subquery ;
+
+Row_Value_Constructor_Element :
+		Value_Expression
+	|   Null_Specification
+	|   Default_Specification ;
+
+Value_Expression :
+		Numeric_Value_Expression
+	|   String_Value_Expression
+	|   Datetime_Value_Expression
+	|   Interval_Value_Expression ;
+
+Numeric_Value_Expression :
+		Term
+	|   Numeric_Value_Expression Plus_Sign Term
+	|   Numeric_Value_Expression Minus_Sign Term ;
+
+Term :
+		Factor
+	|   Term Asterisk Factor
+	|   Term Solidus Factor ;
+
+Factor : [ Sign ] Numeric_Primary ;
+
+Numeric_Primary : Value_Expression_Primary | Numeric_Value_Function ;
+
+Value_Expression_Primary :
+		Unsigned_Value_Specification
+	|   Column_Reference
+	|   Set_Function_Specification
+	|   Scalar_Subquery
+	|   Case_Expression
+	|   Left_Paren Value_Expression Right_Paren
+	|   Cast_Specification ;
+
+Unsigned_Value_Specification : Unsigned_Literal | General_Value_Specification ;
+
+Unsigned_Literal : Unsigned_Numeric_Literal | General_Literal ;
+
+General_Value_Specification :
+		Parameter_Specification
+	|   Dynamic_Parameter_Specification
+	|   Variable_Specification
+	|   USER
+	|   CURRENT_USER
+	|   SESSION_USER
+	|   SYSTEM_USER
+	|   VALUE ;
+
+Parameter_Specification : Parameter_Name [ Indicator_Parameter ] ;
+
+Parameter_Name : Colon Identifier ;
+
+Indicator_Parameter : [ INDICATOR ] Parameter_Name ;
+
+Dynamic_Parameter_Specification : Question_Mark ;
+
+Variable_Specification : Embedded_Variable_Name [ Indicator_Variable ] ;
+
+Embedded_Variable_Name : ColonHost_Identifier ;
+
+Indicator_Variable : [ INDICATOR ] Embedded_Variable_Name ;
+
+Column_Reference : [ Qualifier Period ] Column_Name ;
+
+Qualifier : Table_Name | Correlation_Name ;
+
+Correlation_Name : Identifier ;
+
+Set_Function_Specification :
+		COUNT Left_Paren Asterisk Right_Paren
+	|   General_Set_Function ;
+
+General_Set_Function :
+		Set_Function_Type Left_Paren [ Set_Quantifier ] Value_Expression Right_Paren ;
+
+Set_Function_Type : AVG | MAX | MIN | SUM | COUNT ;
+
+Set_Quantifier : DISTINCT | ALL ;
+
+Scalar_Subquery : Subquery ;
+
+Subquery : Left_Paren Query_Expression Right_Paren ;
+
+Table_Reference :
+	    Table_Name [ Correlation_Specification ]
+	|   Derived_Table Correlation_Specification
+	|   Joined_Table ;
+
+Correlation_Specification :
+		[ AS ] Correlation_Name [ Left_Paren Derived_Column_List Right_Paren ] ;
+
+Derived_Column_List : Column_Name_List ;
+
+Derived_Table : Table_Subquery ;
+
+Table_Subquery : Subquery ;
+
+Case_Expression : Case_Abbreviation | Case_Specification ;
+
+Case_Abbreviation :
+		NULLIF Left_Paren Value_Expression Comma Value_Expression Right_Paren
+	|	COALESCE Left_Paren Value_Expression { Comma Value_Expression }...  Right_Paren ;
+
+Case_Specification : Simple_Case | Searched_Case ;
+
+Simple_Case :
+		CASE Case_Operand
+			Simple_When_Clause...
+			[ Else_Clause ]
+		END ;
+
+Case_Operand : Value_Expression ;
+
+Else_Clause : ELSE Result ;
+
+Searched_Case :
+		CASE
+		Searched_When_Clause...
+		[ Else_Clause ]
+		END ;
+
+Cast_Specification : CAST Left_Paren Cast_Operand AS Cast_Target Right_Paren ;
+
+Cast_Operand : Value_Expression | NULL ;
+
+Cast_Target : Domain_Name | Data_Type ;
+
+Numeric_Value_Function : Position_Expression | Extract_Expression |	Length_Expression ;
+
+Position_Expression :
+	POSITION Left_Paren Character_Value_Expression IN Character_Value_Expression Right_Paren ;
+
+Character_Value_Expression : Concatenation | Character_Factor ;
+
+Concatenation : Character_Value_Expression Concatenation_Operator Character_Factor ;
+
+Character_Factor : Character_Primary [ Collate_Clause ] ;
+
+Character_Primary : Value_Expression_Primary | String_Value_Function ;
+
+String_Value_Function : Character_Value_Function | Bit_Value_Function ;
+
+Character_Value_Function :
+		Character_Substring_Function
+	|   Fold
+	|   Form-of-use_Conversion
+	|   Character_Translation
+	|   Trim_Function ;
+
+Character_Substring_Function :
+		SUBSTRING Left_Paren Character_Value_Expression FROM Start_Position [ FOR String_Length ] Right_Paren ;
+
+Start_Position : Numeric_Value_Expression ;
+
+String_Length : Numeric_Value_Expression ;
+
+Fold : { UPPER | LOWER } Left_Paren Character_Value_Expression Right_Paren ;
+
+Character_Translation :
+		TRANSLATE Left_Paren Character_Value_Expression USING Translation_Name Right_Paren ;
+
+Translation_Name : Qualified_Name ;
+
+Trim_Function : TRIM Left_Paren Trim_Operands Right_Paren ;
+
+Trim_Operands : [ [ Trim_Specification ] [ Trim_Character ] FROM ] Trim_Source ;
+
+Trim_Specification : LEADING | TRAILING | BOTH ;
+
+Trim_Character : Character_Value_Expression ;
+
+Trim_Source : Character_Value_Expression ;
+
+Bit_Value_Function : Bit_Substring_Function ;
+
+Bit_Substring_Function :
+		SUBSTRING Left_Paren Bit_Value_Expression FROM Start_Position [ FOR String_Length ] Right_Paren ;
+
+Bit_Value_Expression : Bit_Concatenation | Bit_Factor ;
+
+Bit_Concatenation : Bit_Value_Expression Concatenation_Operator Bit_Factor ;
+
+Bit_Factor : Bit_Primary ;
+
+Bit_Primary : Value_Expression_Primary | String_Value_Function ;
+
+Extract_Expression : EXTRACT Left_Paren Extract_Field FROM Extract_Source Right_Paren ;
+
+Extract_Field : Datetime_Field | Time_Zone_Field ;
+
+Datetime_Field : Non-second_Datetime_Field | SECOND ;
+
+Time_Zone_Field : TIMEZONE_HOUR | TIMEZONE_MINUTE ;
+
+Extract_Source : Datetime_Value_Expression | Interval_Value_Expression ;
+
+Datetime_Value_Expression :
+		Datetime_Term
+	|	Interval_Value_Expression Plus_Sign Datetime_Term
+	|	Datetime_Value_Expression Plus_Sign Interval_Term
+	|	Datetime_Value_Expression Minus_Sign Interval_Term ;
+
+Interval_Term :
+		Interval_Factor
+	|	Interval_Term_2 Asterisk Factor
+	|	Interval_Term_2 Solidus Factor
+	|	Term Asterisk Interval_Factor ;
+
+Interval_Factor : [ Sign ] Interval_Primary ;
+
+Interval_Primary : Value_Expression_Primary [ Interval_Qualifier ] ;
+
+Interval_Term_2 : Interval_Term ;
+
+Interval_Value_Expression :
+		Interval_Term
+	|	Interval_Value_Expression_1 Plus_Sign Interval_Term_1
+	|	Interval_Value_Expression_1 Minus_Sign Interval_Term_1
+	|	Left_Paren Datetime_Value_Expression Minus_Sign Datetime_Term Right_Paren Interval_Qualifier ;
+
+Interval_Value_Expression_1 : Interval_Value_Expression ;
+
+Interval_Term_1 : Interval_Term ;
+
+Datetime_Term : Datetime_Factor ;
+
+Datetime_Factor : Datetime_Primary [ Time_Zone ] ;
+
+Datetime_Primary : Value_Expression_Primary | Datetime_Value_Function ;
+
+Time_Zone : AT Time_Zone_Specifier ;
+
+Time_Zone_Specifier : LOCAL | TIME ZONE Interval_Value_Expression ;
+
+Length_Expression : Char_Length_Expression | Octet_Length_Expression | Bit_Length_Expression ;
+
+Char_Length_Expression : { CHAR_LENGTH | CHARACTER_LENGTH } Left_Paren String_Value_Expression Right_Paren ;
+
+String_Value_Expression : Character_Value_Expression | Bit_Value_Expression ;
+
+Octet_Length_Expression : OCTET_LENGTH Left_Paren String_Value_Expression Right_Paren ;
+
+Bit_Length_Expression : BIT_LENGTH Left_Paren String_Value_Expression Right_Paren ;
+
+Null_Specification : NULL ;
+
+Default_Specification : DEFAULT ;
+
+Row_Value_Constructor_List : Row_Value_Constructor_Element [ { Comma Row_Value_Constructor_Element } ... ] ;
+
+Row_Subquery : Subquery ;
+
+Comp_Op :
+		Equals_Operator
+	|   Not_Equals_Operator
+	|   Less_Than_Operator
+	|   Greater_Than_Operator
+	|   Less_Than_Or_Equals_Operator
+	|   Greater_Than_Or_Equals_Operator ;
+
+Between_Predicate :
+		Row_Value_Constructor [ NOT ] BETWEEN Row_Value_Constructor AND Row_Value_Constructor ;
+
+In_Predicate : Row_Value_Constructor [ NOT ] IN In_Predicate_Value ;
+
+In_Predicate_Value : Table_Subquery | Left_Paren In_Value_List Right_Paren ;
+
+In_Value_List : Value_Expression { Comma Value_Expression } ... ;
+
+Like_Predicate : Match_Value [ NOT ] LIKE Pattern [ ESCAPE Escape_Character ] ;
+
+Match_Value : Character_Value_Expression ;
+
+Pattern : Character_Value_Expression ;
+
+Escape_Character : Character_Value_Expression ;
+
+Null_Predicate : Row_Value_Constructor IS [ NOT ] NULL ;
+
+Quantified_Comparison_Predicate : Row_Value_Constructor Comp_Op Quantifier Table_Subquery ;
+
+Quantifier : All | Some ;
+
+All : ALL ;
+
+Some : SOME | ANY ;
+
+Exists_Predicate : EXISTS Table_Subquery ;
+
+Match_Predicate : Row_Value_Constructor MATCH [ UNIQUE ] [ PARTIAL | FULL ] Table_Subquery ;
+
+Overlaps_Predicate : Row_Value_Constructor_1 OVERLAPS Row_Value_Constructor_2 ;
+
+Row_Value_Constructor_1 : Row_Value_Constructor ;
+
+Row_Value_Constructor_2 : Row_Value_Constructor ;
+
+Truth_Value : TRUE | FALSE | UNKNOWN ;
+
+Collate_Clause : COLLATE Collation_Name ;
+
+Collation_Name : Qualified_Name ;
+
+Result : Result_Expression | NULL ;
+
+Result_Expression : Value_Expression ;
+

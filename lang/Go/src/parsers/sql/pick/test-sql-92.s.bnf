@@ -1,0 +1,30 @@
+--h2 SQL Module
+--/h2
+
+<module> ::=
+		<module name clause> <language clause> <module authorization clause>
+		[ <temporary table declaration>... ]
+		<module contents>...
+
+<module name clause> ::=
+		MODULE [ <module name> ] [ <module character set specification> ]
+
+<module name> ::= <identifier>
+
+<module character set specification> ::= NAMES ARE <character set specification>
+
+<language clause> ::= LANGUAGE <language name>
+
+<language name> ::= ADA | C | COBOL | FORTRAN | MUMPS | PASCAL | PLI
+
+<module authorization clause> ::=
+		SCHEMA <schema name>
+	|	AUTHORIZATION <module authorization identifier>
+	|	SCHEMA <schema name> AUTHORIZATION <module authorization identifier>
+
+<module authorization identifier> ::= <authorization identifier>
+
+<authorization identifier> ::= <identifier>
+
+<temporary table declaration> ::=
+	DECLARE LOCAL TEMPORARY TABLE <qualified local table name> <table element list> [ ON COMMIT { PRESERVE | DELETE } ROWS ]

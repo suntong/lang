@@ -1,0 +1,1469 @@
+// h2 Constraints
+// /h2 ;
+
+Column_Constraint_Definition :
+		[ Constraint_Name_Definition ] Column_Constraint [ Constraint_Attributes ] ;
+
+Constraint_Name_Definition : CONSTRAINT Constraint_Name ;
+
+Constraint_Name : Qualified_Name ;
+
+Column_Constraint :
+		NOT NULL
+	|	Unique_Specification
+	|	References_Specification
+	|	Check_Constraint_Definition ;
+
+Unique_Specification : UNIQUE | PRIMARY KEY ;
+
+References_Specification :
+		REFERENCES Referenced_Table_And_Columns [ MATCH Match_Type ] [ Referential_Triggered_Action ] ;
+
+Referenced_Table_And_Columns : Table_Name [ Left_Paren Reference_Column_List Right_Paren ] ;
+
+Table_Name : Qualified_Name | Qualified_Local_Table_Name ;
+
+Reference_Column_List : Column_Name_List ;
+
+Column_Name_List : Column_Name [ { Comma Column_Name }... ] ;
+
+Match_Type : FULL | PARTIAL ;
+
+Referential_Triggered_Action :
+		Update_Rule [ Delete_Rule ]
+	|	Delete_Rule [ Update_Rule ] ;
+
+Update_Rule : ON UPDATE Referential_Action ;
+
+Referential_Action : CASCADE | SET NULL | SET DEFAULT | NO ACTION ;
+
+Delete_Rule : ON DELETE Referential_Action ;
+
+Check_Constraint_Definition : CHECK Left_Paren Search_Condition Right_Paren ;
+
+// hr
+// h2 Search Condition
+// /h2 ;
+
+Search_Condition :
+		Boolean_Term
+	|   Search_Condition OR Boolean_Term ;
+
+Boolean_Term :
+		Boolean_Factor
+	|   Boolean_Term AND Boolean_Factor ;
+
+Boolean_Factor : [ NOT ] Boolean_Test ;
+
+Boolean_Test : Boolean_Primary [ IS [ NOT ] Truth_Value ] ;
+
+Boolean_Primary : Predicate | Left_Paren Search_Condition Right_Paren ;
+
+Predicate :
+		Comparison_Predicate
+	|   Between_Predicate
+	|   In_Predicate
+	|   Like_Predicate
+	|   Null_Predicate
+	|   Quantified_Comparison_Predicate
+	|   Exists_Predicate
+	|   Match_Predicate
+	|   Overlaps_Predicate ;
+
+Comparison_Predicate : Row_Value_Constructor Comp_Op Row_Value_Constructor ;
+
+Row_Value_Constructor :
+		Row_Value_Constructor_Element
+	|   Left_Paren Row_Value_Constructor_List Right_Paren
+	|   Row_Subquery ;
+
+Row_Value_Constructor_Element :
+		Value_Expression
+	|   Null_Specification
+	|   Default_Specification ;
+
+Value_Expression :
+		Numeric_Value_Expression
+	|   String_Value_Expression
+	|   Datetime_Value_Expression
+	|   Interval_Value_Expression ;
+
+Numeric_Value_Expression :
+		Term
+	|   Numeric_Value_Expression Plus_Sign Term
+	|   Numeric_Value_Expression Minus_Sign Term ;
+
+Term :
+		Factor
+	|   Term Asterisk Factor
+	|   Term Solidus Factor ;
+
+Factor : [ Sign ] Numeric_Primary ;
+
+Numeric_Primary : Value_Expression_Primary | Numeric_Value_Function ;
+
+Value_Expression_Primary :
+		Unsigned_Value_Specification
+	|   Column_Reference
+	|   Set_Function_Specification
+	|   Scalar_Subquery
+	|   Case_Expression
+	|   Left_Paren Value_Expression Right_Paren
+	|   Cast_Specification ;
+
+Unsigned_Value_Specification : Unsigned_Literal | General_Value_Specification ;
+
+Unsigned_Literal : Unsigned_Numeric_Literal | General_Literal ;
+
+General_Value_Specification :
+		Parameter_Specification
+	|   Dynamic_Parameter_Specification
+	|   Variable_Specification
+	|   USER
+	|   CURRENT_USER
+	|   SESSION_USER
+	|   SYSTEM_USER
+	|   VALUE ;
+
+Parameter_Specification : Parameter_Name [ Indicator_Parameter ] ;
+
+Parameter_Name : Colon Identifier ;
+
+Indicator_Parameter : [ INDICATOR ] Parameter_Name ;
+
+Dynamic_Parameter_Specification : Question_Mark ;
+
+Variable_Specification : Embedded_Variable_Name [ Indicator_Variable ] ;
+
+Embedded_Variable_Name : ColonHost_Identifier ;
+
+Host_Identifier :
+		Ada_Host_Identifier
+	|	C_Host_Identifier
+	|	Cobol_Host_Identifier
+	|	Fortran_Host_Identifier
+	|	MUMPS_Host_Identifier
+	|	Pascal_Host_Identifier
+	|	PL/I_Host_Identifier ;
+
+Ada_Host_Identifier : !! See syntax rules ;
+
+C_Host_Identifier : !! See syntax rules ;
+
+Cobol_Host_Identifier : !! See syntax rules ;
+
+Fortran_Host_Identifier : !! See syntax rules ;
+
+MUMPS_Host_Identifier : !! See syntax rules ;
+
+Pascal_Host_Identifier : !! See syntax rules ;
+
+PL/I_Host_Identifier : !! See syntax rules ;
+
+Indicator_Variable : [ INDICATOR ] Embedded_Variable_Name ;
+
+Column_Reference : [ Qualifier Period ] Column_Name ;
+
+Qualifier : Table_Name | Correlation_Name ;
+
+Correlation_Name : Identifier ;
+
+Set_Function_Specification :
+		COUNT Left_Paren Asterisk Right_Paren
+	|   General_Set_Function ;
+
+General_Set_Function :
+		Set_Function_Type Left_Paren [ Set_Quantifier ] Value_Expression Right_Paren ;
+
+Set_Function_Type : AVG | MAX | MIN | SUM | COUNT ;
+
+Set_Quantifier : DISTINCT | ALL ;
+
+// hr
+// h2 Queries
+// /h2 ;
+
+Scalar_Subquery : Subquery ;
+
+Subquery : Left_Paren Query_Expression Right_Paren ;
+
+Query_Expression : Non-join_Query_Expression | Joined_Table ;
+
+Non-join_Query_Expression :
+		Non-join_Query_Term
+	|	Query_Expression UNION [ ALL ] [ Corresponding_Spec ] Query_Term
+	|	Query_Expression EXCEPT [ ALL ] [ Corresponding_Spec ] Query_Term ;
+
+Non-join_Query_Term :
+		Non-join_Query_Primary
+	|	Query_Term INTERSECT [ ALL ] [ Corresponding_Spec ] Query_Primary ;
+
+Non-join_Query_Primary : Simple_Table | Left_Paren Non-join_Query_Expression Right_Paren ;
+
+Simple_Table :
+		Query_Specification
+	|	Table_Value_Constructor
+	|	Explicit_Table ;
+
+Query_Specification :
+		SELECT [ Set_Quantifier ] Select_List Table_Expression ;
+
+Select_List :
+		Asterisk
+	|	Select_Sublist [ { Comma Select_Sublist }... ] ;
+
+Select_Sublist : Derived_Column | Qualifier Period Asterisk ;
+
+Derived_Column : Value_Expression [ As_Clause ] ;
+
+As_Clause : [ AS ] Column_Name ;
+
+Table_Expression :
+		From_Clause
+		[ Where_Clause ]
+		[ Group_By_Clause ]
+		[ Having_Clause ] ;
+
+From_Clause : FROM Table_Reference [ { Comma Table_Reference }... ] ;
+
+// small
+// i
+Note that Correlation_Specification does not appear in the ISO/IEC grammar.
+The notation is written out longhand several times, instead.
+// /i
+// /small ;
+
+Table_Reference :
+	    Table_Name [ Correlation_Specification ]
+	|   Derived_Table Correlation_Specification
+	|   Joined_Table ;
+
+Correlation_Specification :
+		[ AS ] Correlation_Name [ Left_Paren Derived_Column_List Right_Paren ] ;
+
+Derived_Column_List : Column_Name_List ;
+
+Derived_Table : Table_Subquery ;
+
+Table_Subquery : Subquery ;
+
+Joined_Table :
+		Cross_Join
+	|   Qualified_Join
+	|   Left_Paren Joined_Table Right_Paren ;
+
+Cross_Join :
+		Table_Reference CROSS JOIN Table_Reference ;
+
+Qualified_Join :
+		Table_Reference [ NATURAL ] [ Join_Type ] JOIN Table_Reference [ Join_Specification ] ;
+
+Join_Type :
+		INNER
+	|   Outer_Join_Type [ OUTER ]
+	|   UNION ;
+
+Outer_Join_Type : LEFT | RIGHT | FULL ;
+
+Join_Specification : Join_Condition | Named_Columns_Join ;
+
+Join_Condition : ON Search_Condition ;
+
+Named_Columns_Join : USING Left_Paren Join_Column_List Right_Paren ;
+
+Join_Column_List : Column_Name_List ;
+
+Where_Clause : WHERE Search_Condition ;
+
+Group_By_Clause : GROUP BY Grouping_Column_Reference_List ;
+
+Grouping_Column_Reference_List :
+		Grouping_Column_Reference [ { Comma Grouping_Column_Reference }... ] ;
+
+Grouping_Column_Reference : Column_Reference [ Collate_Clause ] ;
+
+Collate_Clause : COLLATE Collation_Name ;
+
+Collation_Name : Qualified_Name ;
+
+Having_Clause : HAVING Search_Condition ;
+
+Table_Value_Constructor : VALUES Table_Value_Constructor_List ;
+
+Table_Value_Constructor_List : Row_Value_Constructor [ { Comma Row_Value_Constructor }... ] ;
+
+Explicit_Table : TABLE Table_Name ;
+
+Query_Term : Non-join_Query_Term | Joined_Table ;
+
+Corresponding_Spec : CORRESPONDING [ BY Left_Paren Corresponding_Column_List Right_Paren ] ;
+
+Corresponding_Column_List : Column_Name_List ;
+
+Query_Primary : Non-join_Query_Primary | Joined_Table ;
+
+// hr
+// h2 Query expression components
+// /h2 ;
+
+Case_Expression : Case_Abbreviation | Case_Specification ;
+
+Case_Abbreviation :
+		NULLIF Left_Paren Value_Expression Comma Value_Expression Right_Paren
+	|	COALESCE Left_Paren Value_Expression { Comma Value_Expression }...  Right_Paren ;
+
+Case_Specification : Simple_Case | Searched_Case ;
+
+Simple_Case :
+		CASE Case_Operand
+			Simple_When_Clause...
+			[ Else_Clause ]
+		END ;
+
+Case_Operand : Value_Expression ;
+
+Simple_When_Clause : WHEN When_Operand THEN Result ;
+
+When_Operand : Value_Expression ;
+
+Result : Result_Expression | NULL ;
+
+Result_Expression : Value_Expression ;
+
+Else_Clause : ELSE Result ;
+
+Searched_Case :
+		CASE
+		Searched_When_Clause...
+		[ Else_Clause ]
+		END ;
+
+Searched_When_Clause : WHEN Search_Condition THEN Result ;
+
+Cast_Specification : CAST Left_Paren Cast_Operand AS Cast_Target Right_Paren ;
+
+Cast_Operand : Value_Expression | NULL ;
+
+Cast_Target : Domain_Name | Data_Type ;
+
+Numeric_Value_Function : Position_Expression | Extract_Expression |	Length_Expression ;
+
+Position_Expression :
+	POSITION Left_Paren Character_Value_Expression IN Character_Value_Expression Right_Paren ;
+
+Character_Value_Expression : Concatenation | Character_Factor ;
+
+Concatenation : Character_Value_Expression Concatenation_Operator Character_Factor ;
+
+Character_Factor : Character_Primary [ Collate_Clause ] ;
+
+Character_Primary : Value_Expression_Primary | String_Value_Function ;
+
+String_Value_Function : Character_Value_Function | Bit_Value_Function ;
+
+Character_Value_Function :
+		Character_Substring_Function
+	|   Fold
+	|   Form-of-use_Conversion
+	|   Character_Translation
+	|   Trim_Function ;
+
+Character_Substring_Function :
+		SUBSTRING Left_Paren Character_Value_Expression FROM Start_Position [ FOR String_Length ] Right_Paren ;
+
+Start_Position : Numeric_Value_Expression ;
+
+String_Length : Numeric_Value_Expression ;
+
+Fold : { UPPER | LOWER } Left_Paren Character_Value_Expression Right_Paren ;
+
+Form-of-use_Conversion :
+		CONVERT Left_Paren Character_Value_Expression USING Form-of-use_Conversion_Name Right_Paren ;
+
+Form-of-use_Conversion_Name : Qualified_Name ;
+
+Character_Translation :
+		TRANSLATE Left_Paren Character_Value_Expression USING Translation_Name Right_Paren ;
+
+Translation_Name : Qualified_Name ;
+
+Trim_Function : TRIM Left_Paren Trim_Operands Right_Paren ;
+
+Trim_Operands : [ [ Trim_Specification ] [ Trim_Character ] FROM ] Trim_Source ;
+
+Trim_Specification : LEADING | TRAILING | BOTH ;
+
+Trim_Character : Character_Value_Expression ;
+
+Trim_Source : Character_Value_Expression ;
+
+Bit_Value_Function : Bit_Substring_Function ;
+
+Bit_Substring_Function :
+		SUBSTRING Left_Paren Bit_Value_Expression FROM Start_Position [ FOR String_Length ] Right_Paren ;
+
+Bit_Value_Expression : Bit_Concatenation | Bit_Factor ;
+
+Bit_Concatenation : Bit_Value_Expression Concatenation_Operator Bit_Factor ;
+
+Bit_Factor : Bit_Primary ;
+
+Bit_Primary : Value_Expression_Primary | String_Value_Function ;
+
+Extract_Expression : EXTRACT Left_Paren Extract_Field FROM Extract_Source Right_Paren ;
+
+Extract_Field : Datetime_Field | Time_Zone_Field ;
+
+Datetime_Field : Non-second_Datetime_Field | SECOND ;
+
+Time_Zone_Field : TIMEZONE_HOUR | TIMEZONE_MINUTE ;
+
+Extract_Source : Datetime_Value_Expression | Interval_Value_Expression ;
+
+Datetime_Value_Expression :
+		Datetime_Term
+	|	Interval_Value_Expression Plus_Sign Datetime_Term
+	|	Datetime_Value_Expression Plus_Sign Interval_Term
+	|	Datetime_Value_Expression Minus_Sign Interval_Term ;
+
+Interval_Term :
+		Interval_Factor
+	|	Interval_Term_2 Asterisk Factor
+	|	Interval_Term_2 Solidus Factor
+	|	Term Asterisk Interval_Factor ;
+
+Interval_Factor : [ Sign ] Interval_Primary ;
+
+Interval_Primary : Value_Expression_Primary [ Interval_Qualifier ] ;
+
+Interval_Term_2 : Interval_Term ;
+
+Interval_Value_Expression :
+		Interval_Term
+	|	Interval_Value_Expression_1 Plus_Sign Interval_Term_1
+	|	Interval_Value_Expression_1 Minus_Sign Interval_Term_1
+	|	Left_Paren Datetime_Value_Expression Minus_Sign Datetime_Term Right_Paren Interval_Qualifier ;
+
+Interval_Value_Expression_1 : Interval_Value_Expression ;
+
+Interval_Term_1 : Interval_Term ;
+
+Datetime_Term : Datetime_Factor ;
+
+Datetime_Factor : Datetime_Primary [ Time_Zone ] ;
+
+Datetime_Primary : Value_Expression_Primary | Datetime_Value_Function ;
+
+Time_Zone : AT Time_Zone_Specifier ;
+
+Time_Zone_Specifier : LOCAL | TIME ZONE Interval_Value_Expression ;
+
+Length_Expression : Char_Length_Expression | Octet_Length_Expression | Bit_Length_Expression ;
+
+Char_Length_Expression : { CHAR_LENGTH | CHARACTER_LENGTH } Left_Paren String_Value_Expression Right_Paren ;
+
+String_Value_Expression : Character_Value_Expression | Bit_Value_Expression ;
+
+Octet_Length_Expression : OCTET_LENGTH Left_Paren String_Value_Expression Right_Paren ;
+
+Bit_Length_Expression : BIT_LENGTH Left_Paren String_Value_Expression Right_Paren ;
+
+Null_Specification : NULL ;
+
+Default_Specification : DEFAULT ;
+
+Row_Value_Constructor_List : Row_Value_Constructor_Element [ { Comma Row_Value_Constructor_Element } ... ] ;
+
+Row_Subquery : Subquery ;
+
+Comp_Op :
+		Equals_Operator
+	|   Not_Equals_Operator
+	|   Less_Than_Operator
+	|   Greater_Than_Operator
+	|   Less_Than_Or_Equals_Operator
+	|   Greater_Than_Or_Equals_Operator ;
+
+Between_Predicate :
+		Row_Value_Constructor [ NOT ] BETWEEN Row_Value_Constructor AND Row_Value_Constructor ;
+
+In_Predicate : Row_Value_Constructor [ NOT ] IN In_Predicate_Value ;
+
+In_Predicate_Value : Table_Subquery | Left_Paren In_Value_List Right_Paren ;
+
+In_Value_List : Value_Expression { Comma Value_Expression } ... ;
+
+Like_Predicate : Match_Value [ NOT ] LIKE Pattern [ ESCAPE Escape_Character ] ;
+
+Match_Value : Character_Value_Expression ;
+
+Pattern : Character_Value_Expression ;
+
+Escape_Character : Character_Value_Expression ;
+
+Null_Predicate : Row_Value_Constructor IS [ NOT ] NULL ;
+
+Quantified_Comparison_Predicate : Row_Value_Constructor Comp_Op Quantifier Table_Subquery ;
+
+Quantifier : All | Some ;
+
+All : ALL ;
+
+Some : SOME | ANY ;
+
+Exists_Predicate : EXISTS Table_Subquery ;
+
+Unique_Predicate : UNIQUE Table_Subquery ;
+
+Match_Predicate : Row_Value_Constructor MATCH [ UNIQUE ] [ PARTIAL | FULL ] Table_Subquery ;
+
+Overlaps_Predicate : Row_Value_Constructor_1 OVERLAPS Row_Value_Constructor_2 ;
+
+Row_Value_Constructor_1 : Row_Value_Constructor ;
+
+Row_Value_Constructor_2 : Row_Value_Constructor ;
+
+Truth_Value : TRUE | FALSE | UNKNOWN ;
+
+// hr
+// h2 More about constraints
+// /h2 ;
+
+Constraint_Attributes :
+		Constraint_Check_Time [ [ NOT ] DEFERRABLE ]
+	|	[ NOT ] DEFERRABLE [ Constraint_Check_Time ] ;
+
+Constraint_Check_Time : INITIALLY DEFERRED | INITIALLY IMMEDIATE ;
+
+Table_Constraint_Definition : [ Constraint_Name_Definition ] Table_Constraint [ Constraint_Check_Time ] ;
+
+Table_Constraint :
+		Unique_Constraint_Definition
+	|	Referential_Constraint_Definition
+	|	Check_Constraint_Definition ;
+
+Unique_Constraint_Definition : Unique_Specification Left_Paren Unique_Column_List Right_Paren ;
+
+Unique_Column_List : Column_Name_List ;
+
+Referential_Constraint_Definition :
+		FOREIGN KEY Left_Paren Referencing_Columns Right_Paren References_Specification ;
+
+Referencing_Columns : Reference_Column_List ;
+
+// hr
+// h2 Module contents
+// /h2 ;
+
+Module_Contents :
+		Declare_Cursor
+	|	Dynamic_Declare_Cursor
+	|	Procedure ;
+
+Declare_Cursor :
+		DECLARE Cursor_Name [ INSENSITIVE ] [ SCROLL ] CURSOR FOR Cursor_Specification ;
+
+Cursor_Name : Identifier ;
+
+Cursor_Specification : Query_Expression [ Order_By_Clause ] [ Updatability_Clause ] ;
+
+Order_By_Clause : ORDER BY Sort_Specification_List ;
+
+Sort_Specification_List : Sort_Specification [ { Comma Sort_Specification }... ] ;
+
+Sort_Specification : Sort_Key [ Collate_Clause ] [ Ordering_Specification ] ;
+
+Sort_Key : Column_Name | Unsigned_Integer ;
+
+Ordering_Specification : ASC | DESC ;
+
+Updatability_Clause : FOR { READ ONLY | UPDATE [ OF Column_Name_List ] } ;
+
+Dynamic_Declare_Cursor :
+		DECLARE Cursor_Name [ INSENSITIVE ] [ SCROLL ] CURSOR FOR Statement_Name ;
+
+Statement_Name : Identifier ;
+
+// hr
+// h2 SQL Procedures
+// /h2 ;
+
+Procedure :
+	PROCEDURE Procedure_Name Parameter_Declaration_List Semicolon SQL_Procedure_Statement Semicolon ;
+
+Procedure_Name : Identifier ;
+
+Parameter_Declaration_List :
+		Left_Paren Parameter_Declaration [ { Comma Parameter_Declaration }... ] Right_Paren ;
+
+Parameter_Declaration : Parameter_Name Data_Type | Status_Parameter ;
+
+Status_Parameter : SQLCODE | SQLSTATE ;
+
+SQL_Procedure_Statement :
+		SQL_Schema_Statement
+	|	SQL_Data_Statement
+	|	SQL_Transaction_Statement
+	|	SQL_Connection_Statement
+	|	SQL_Session_Statement
+	|	SQL_Dynamic_Statement
+	|	SQL_Diagnostics_Statement ;
+
+// hr
+// h2 SQL Schema Definition Statements
+// /h2 ;
+
+SQL_Schema_Statement :
+		SQL_Schema_Definition_Statement
+	|	SQL_Schema_Manipulation_Statement ;
+
+SQL_Schema_Definition_Statement :
+		Schema_Definition
+	|	Table_Definition
+	|	View_Definition
+	|	Grant_Statement
+	|	Domain_Definition
+	|	Character_Set_Definition
+	|	Collation_Definition
+	|	Translation_Definition
+	|	Assertion_Definition ;
+
+Schema_Definition :
+		CREATE SCHEMA Schema_Name_Clause
+			[ Schema_Character_Set_Specification ]
+			[ Schema_Element... ] ;
+
+Schema_Name_Clause :
+		Schema_Name
+	|	AUTHORIZATION Schema_Authorization_Identifier
+	|	Schema_Name AUTHORIZATION Schema_Authorization_Identifier ;
+
+Schema_Authorization_Identifier : Authorization_Identifier ;
+
+Schema_Character_Set_Specification : DEFAULT CHARACTER SET Character_Set_Specification ;
+
+Schema_Element :
+		Domain_Definition
+	|	Table_Definition
+	|	View_Definition
+	|	Grant_Statement
+	|	Assertion_Definition
+	|	Character_Set_Definition
+	|	Collation_Definition
+	|	Translation_Definition ;
+
+Domain_Definition :
+		CREATE DOMAIN Domain_Name [ AS ] Data_Type
+			[ Default_Clause ] [ Domain_Constraint ] [ Collate_Clause ] ;
+
+Domain_Constraint :
+		[ Constraint_Name_Definition ] Check_Constraint_Definition [ Constraint_Attributes ] ;
+
+Table_Definition :
+		CREATE [ { GLOBAL | LOCAL } TEMPORARY ] TABLE Table_Name Table_Element_List [ ON COMMIT { DELETE | PRESERVE } ROWS ] ;
+
+View_Definition :
+		CREATE VIEW Table_Name [ Left_Paren View_Column_List Right_Paren ]
+			AS Query_Expression [ WITH [ Levels_Clause ] CHECK OPTION ] ;
+
+View_Column_List : Column_Name_List ;
+
+Levels_Clause : CASCADED | LOCAL ;
+
+Grant_Statement :
+		GRANT Privileges ON Object_Name TO Grantee [ { Comma Grantee }... ] [ WITH GRANT OPTION ] ;
+
+Privileges : ALL PRIVILEGES | Action_List ;
+
+Action_List : Action [ { Comma Action }... ] ;
+
+Action :
+		SELECT
+	|	DELETE
+	|	INSERT [ Left_Paren Privilege_Column_List Right_Paren ]
+	|	UPDATE [ Left_Paren Privilege_Column_List Right_Paren ]
+	|	REFERENCES [ Left_Paren Privilege_Column_List Right_Paren ]
+	|	USAGE ;
+
+Privilege_Column_List : Column_Name_List ;
+
+Object_Name :
+		[ TABLE ] Table_Name
+	|	DOMAIN Domain_Name
+	|	COLLATION Collation_Name
+	|	CHARACTER SET Character_Set_Name
+	|	TRANSLATION Translation_Name ;
+
+Grantee : PUBLIC | Authorization_Identifier ;
+
+Assertion_Definition :
+		CREATE ASSERTION Constraint_Name Assertion_Check [ Constraint_Attributes ] ;
+
+Assertion_Check : CHECK Left_Paren Search_Condition Right_Paren ;
+
+Character_Set_Definition :
+		CREATE CHARACTER SET Character_Set_Name [ AS ] Character_Set_Source
+		[ Collate_Clause | Limited_Collation_Definition ] ;
+
+Character_Set_Source : GET Existing_Character_Set_Name ;
+
+Existing_Character_Set_Name :
+		Standard_Character_Repertoire_Name
+	|	Implementation-defined_Character_Repertoire_Name
+	|	Schema_Character_Set_Name ;
+
+Schema_Character_Set_Name : Character_Set_Name ;
+
+Limited_Collation_Definition :
+		COLLATION FROM Collation_Source ;
+
+Collation_Source : Collating_Sequence_Definition | Translation_Collation ;
+
+Collating_Sequence_Definition :
+		External_Collation
+	|	Schema_Collation_Name
+	|	DESC Left_Paren Collation_Name Right_Paren
+	|	DEFAULT ;
+
+External_Collation :
+	EXTERNAL Left_Paren Quote External_Collation_Name Quote Right_Paren ;
+
+External_Collation_Name : Standard_Collation_Name | Implementation-defined_Collation_Name ;
+
+Standard_Collation_Name : Collation_Name ;
+
+Implementation-defined_Collation_Name : Collation_Name ;
+
+Schema_Collation_Name : Collation_Name ;
+
+Translation_Collation : TRANSLATION Translation_Name [ THEN COLLATION Collation_Name ] ;
+
+Collation_Definition :
+		CREATE COLLATION Collation_Name FOR Character_Set_Specification
+			FROM Collation_Source [ Pad_Attribute ] ;
+
+Pad_Attribute : NO PAD | PAD SPACE ;
+
+Translation_Definition :
+		CREATE TRANSLATION Translation_Name
+			FOR Source_Character_Set_Specification
+			TO Target_Character_Set_Specification
+			FROM Translation_Source ;
+
+Source_Character_Set_Specification : Character_Set_Specification ;
+
+Target_Character_Set_Specification : Character_Set_Specification ;
+
+Translation_Source : Translation_Specification ;
+
+Translation_Specification :
+		External_Translation
+	|	IDENTITY
+	|	Schema_Translation_Name ;
+
+External_Translation :
+		EXTERNAL Left_Paren Quote External_Translation_Name Quote Right_Paren ;
+
+External_Translation_Name :
+		Standard_Translation_Name
+	|	Implementation-defined_Translation_Name ;
+
+Standard_Translation_Name : Translation_Name ;
+
+Implementation-defined_Translation_Name : Translation_Name ;
+
+Schema_Translation_Name : Translation_Name ;
+
+SQL_Schema_Manipulation_Statement :
+		Drop_Schema_Statement
+	|	Alter_Table_Statement
+	|	Drop_Table_Statement
+	|	Drop_View_Statement
+	|	Revoke_Statement
+	|	Alter_Domain_Statement
+	|	Drop_Domain_Statement
+	|	Drop_Character_Set_Statement
+	|	Drop_Collation_Statement
+	|	Drop_Translation_Statement
+	|	Drop_Assertion_Statement ;
+
+Drop_Schema_Statement : DROP SCHEMA Schema_Name Drop_Behaviour ;
+
+Drop_Behaviour : CASCADE | RESTRICT ;
+
+Alter_Table_Statement : ALTER TABLE Table_Name Alter_Table_Action ;
+
+Alter_Table_Action :
+		Add_Column_Definition
+	|	Alter_Column_Definition
+	|	Drop_Column_Definition
+	|	Add_Table_Constraint_Definition
+	|	Drop_Table_Constraint_Definition ;
+
+Add_Column_Definition : ADD [ COLUMN ] Column_Definition ;
+
+Alter_Column_Definition : ALTER [ COLUMN ] Column_Name Alter_Column_Action ;
+
+Alter_Column_Action : Set_Column_Default_Clause | Drop_Column_Default_Clause ;
+
+Set_Column_Default_Clause : SET Default_Clause ;
+
+Drop_Column_Default_Clause : DROP DEFAULT ;
+
+Drop_Column_Definition : DROP [ COLUMN ] Column_Name Drop_Behaviour ;
+
+Add_Table_Constraint_Definition : ADD Table_Constraint_Definition ;
+
+Drop_Table_Constraint_Definition : DROP CONSTRAINT Constraint_Name Drop_Behaviour ;
+
+Drop_Table_Statement : DROP TABLE Table_Name Drop_Behaviour ;
+
+Drop_View_Statement : DROP VIEW Table_Name Drop_Behaviour ;
+
+Revoke_Statement :
+		REVOKE [ GRANT OPTION FOR ] Privileges ON Object_Name
+			FROM Grantee [ { Comma Grantee }... ] Drop_Behaviour ;
+
+Alter_Domain_Statement : ALTER DOMAIN Domain_Name Alter_Domain_Action ;
+
+Alter_Domain_Action :
+		Set_Domain_Default_Clause
+	|	Drop_Domain_Default_Clause
+	|	Add_Domain_Constraint_Definition
+	|	Drop_Domain_Constraint_Definition ;
+
+Set_Domain_Default_Clause : SET Default_Clause ;
+
+Drop_Domain_Default_Clause : DROP DEFAULT ;
+
+Add_Domain_Constraint_Definition : ADD Domain_Constraint ;
+
+Drop_Domain_Constraint_Definition : DROP CONSTRAINT Constraint_Name ;
+
+Drop_Domain_Statement : DROP DOMAIN Domain_Name Drop_Behaviour ;
+
+Drop_Character_Set_Statement : DROP CHARACTER SET Character_Set_Name ;
+
+Drop_Collation_Statement : DROP COLLATION Collation_Name ;
+
+Drop_Translation_Statement : DROP TRANSLATION Translation_Name ;
+
+Drop_Assertion_Statement : DROP ASSERTION Constraint_Name ;
+
+// hr
+// h2 SQL Data Manipulation Statements
+// /h2 ;
+
+SQL_Data_Statement :
+		Open_Statement
+	|	Fetch_Statement
+	|	Close_Statement
+	|	Select_Statement:_Single_Row
+	|	SQL_Data_Change_Statement ;
+
+Open_Statement : OPEN Cursor_Name ;
+
+Fetch_Statement :
+		FETCH [ [ Fetch_Orientation ] FROM ] Cursor_Name INTO Fetch_Target_List ;
+
+Fetch_Orientation :
+		NEXT
+	|	PRIOR
+	|	FIRST
+	|	LAST
+	|	{ ABSOLUTE | RELATIVE } Simple_Value_Specification ;
+
+Simple_Value_Specification : Parameter_Name | Embedded_Variable_Name | Literal ;
+
+Fetch_Target_List : Target_Specification [ { Comma Target_Specification }... ] ;
+
+Target_Specification :
+		Parameter_Specification
+	|	Variable_Specification ;
+
+Close_Statement : CLOSE Cursor_Name ;
+
+Select_Statement:_Single_Row :
+	SELECT [ Set_Quantifier ] Select_List INTO Select_Target_List Table_Expression ;
+
+Select_Target_List : Target_Specification [ { Comma Target_Specification }... ] ;
+
+SQL_Data_Change_Statement :
+		Delete_Statement:_Positioned
+	|	Delete_Statement:_Searched
+	|	Insert_Statement
+	|	Update_Statement:_Positioned
+	|	Update_Statement:_Searched ;
+
+Delete_Statement:_Positioned : DELETE FROM Table_Name WHERE CURRENT OF Cursor_Name ;
+
+Delete_Statement:_Searched : DELETE FROM Table_Name [ WHERE Search_Condition ] ;
+
+Insert_Statement : INSERT INTO Table_Name Insert_Columns_And_Source ;
+
+Insert_Columns_And_Source :
+		[ Left_Paren Insert_Column_List Right_Paren ] Query_Expression
+	|	DEFAULT VALUES ;
+
+Insert_Column_List : Column_Name_List ;
+
+Update_Statement:_Positioned :
+		UPDATE Table_Name SET Set_Clause_List WHERE CURRENT OF Cursor_Name ;
+
+Set_Clause_List : Set_Clause [ { Comma Set_Clause } ... ] ;
+
+Set_Clause : Object_Column Equals_Operator Update_Source ;
+
+Object_Column : Column_Name ;
+
+Update_Source : Value_Expression | Null_Specification | DEFAULT ;
+
+Update_Statement:_Searched :
+		UPDATE Table_Name SET Set_Clause_List [ WHERE Search_Condition ] ;
+
+SQL_Transaction_Statement :
+		Set_Transaction_Statement
+	|	Set_Constraints_Mode_Statement
+	|	Commit_Statement
+	|	Rollback_Statement ;
+
+Set_Transaction_Statement :
+		SET TRANSACTION Transaction_Mode [ { Comma Transaction_Mode }... ] ;
+
+Transaction_Mode :
+		Isolation_Level
+	|	Transaction_Access_Mode
+	|	Diagnostics_Size ;
+
+Isolation_Level : ISOLATION LEVEL Level_Of_Isolation ;
+
+Level_Of_Isolation :
+		READ UNCOMMITTED
+	|	READ COMMITTED
+	|	REPEATABLE READ
+	|	SERIALIZABLE ;
+
+Transaction_Access_Mode : READ ONLY | READ WRITE ;
+
+Diagnostics_Size : DIAGNOSTICS SIZE Number_Of_Conditions ;
+
+Number_Of_Conditions : Simple_Value_Specification ;
+
+Set_Constraints_Mode_Statement :
+		SET CONSTRAINTS Constraint_Name_List { DEFERRED | IMMEDIATE } ;
+
+Constraint_Name_List : ALL | Constraint_Name [ { Comma Constraint_Name }... ] ;
+
+Commit_Statement : COMMIT [ WORK ] ;
+
+Rollback_Statement : ROLLBACK [ WORK ] ;
+
+// hr
+// h2 Connection Management
+// /h2 ;
+
+SQL_Connection_Statement :
+		Connect_Statement
+	|	Set_Connection_Statement
+	|	Disconnect_Statement ;
+
+Connect_Statement : CONNECT TO Connection_Target ;
+
+Connection_Target :
+		SQL-server_Name [ AS Connection_Name ] [ USER User_Name ]
+	|	DEFAULT ;
+
+SQL-server_Name : Simple_Value_Specification ;
+
+Connection_Name : Simple_Value_Specification ;
+
+User_Name : Simple_Value_Specification ;
+
+Set_Connection_Statement : SET CONNECTION Connection_Object ;
+
+Connection_Object : DEFAULT | Connection_Name ;
+
+Disconnect_Statement : DISCONNECT Disconnect_Object ;
+
+Disconnect_Object : Connection_Object | ALL | CURRENT ;
+
+// hr
+// h2 Session Attributes
+// /h2 ;
+
+SQL_Session_Statement :
+		Set_Catalog_Statement
+	|	Set_Schema_Statement
+	|	Set_Names_Statement
+	|	Set_Session_Authorization_Identifier_Statement
+	|	Set_Local_Time_Zone_Statement ;
+
+Set_Catalog_Statement : SET CATALOG Value_Specification ;
+
+Value_Specification : Literal | General_Value_Specification ;
+
+Set_Schema_Statement : SET SCHEMA Value_Specification ;
+
+Set_Names_Statement : SET NAMES Value_Specification ;
+
+Set_Session_Authorization_Identifier_Statement : SET SESSION AUTHORIZATION Value_Specification ;
+
+Set_Local_Time_Zone_Statement : SET TIME ZONE Set_Time_Zone_Value ;
+
+Set_Time_Zone_Value : Interval_Value_Expression | LOCAL ;
+
+// hr
+// h2 Dynamic SQL
+// /h2 ;
+
+SQL_Dynamic_Statement :
+		System_Descriptor_Statement
+	|	Prepare_Statement
+	|	Deallocate_Prepared_Statement
+	|	Describe_Statement
+	|	Execute_Statement
+	|	Execute_Immediate_Statement
+	|	SQL_Dynamic_Data_Statement ;
+
+System_Descriptor_Statement :
+		Allocate_Descriptor_Statement
+	|	Deallocate_Descriptor_Statement
+	|	Get_Descriptor_Statement
+	|	Set_Descriptor_Statement ;
+
+Allocate_Descriptor_Statement : ALLOCATE DESCRIPTOR Descriptor_Name [ WITH MAX Occurrences ] ;
+
+Descriptor_Name : [ Scope_Option ] Simple_Value_Specification ;
+
+Scope_Option : GLOBAL | LOCAL ;
+
+Occurrences : Simple_Value_Specification ;
+
+Deallocate_Descriptor_Statement : DEALLOCATE DESCRIPTOR Descriptor_Name ;
+
+Set_Descriptor_Statement :
+		SET DESCRIPTOR Descriptor_Name Set_Descriptor_Information ;
+
+Set_Descriptor_Information :
+		Set_Count
+	|	VALUE Item_Number Set_Item_Information [ { Comma Set_Item_Information }... ] ;
+
+Set_Count : COUNT Equals_Operator Simple_Value_Specification_1 ;
+
+Simple_Value_Specification_1 : Simple_Value_Specification ;
+
+Item_Number : Simple_Value_Specification ;
+
+Set_Item_Information : Descriptor_Item_Name Equals_Operator Simple_Value_Specification_2 ;
+
+Descriptor_Item_Name :
+		TYPE
+	|	LENGTH
+	|	OCTET_LENGTH
+	|	RETURNED_LENGTH
+	|	RETURNED_OCTET_LENGTH
+	|	PRECISION
+	|	SCALE
+	|	DATETIME_INTERVAL_CODE
+	|	DATETIME_INTERVAL_PRECISION
+	|	NULLABLE
+	|	INDICATOR
+	|	DATA
+	|	NAME
+	|	UNNAMED
+	|	COLLATION_CATALOG
+	|	COLLATION_SCHEMA
+	|	COLLATION_NAME
+	|	CHARACTER_SET_CATALOG
+	|	CHARACTER_SET_SCHEMA
+	|	CHARACTER_SET_NAME ;
+
+Simple_Value_Specification_2 : Simple_Value_Specification ;
+
+Get_Descriptor_Statement : GET DESCRIPTOR Descriptor_Name Get_Descriptor_Information ;
+
+Get_Descriptor_Information :
+		Get_Count
+	|	VALUE Item_Number Get_Item_Information [ { Comma Get_Item_Information }... ] ;
+
+Get_Count : Simple_Target_Specification_1 Equals_Operator COUNT ;
+
+Simple_Target_Specification_1 : Simple_Target_Specification ;
+
+Simple_Target_Specification : Parameter_Name | Embedded_Variable_Name ;
+
+Get_Item_Information : Simple_Target_Specification_2 Equals_Operator Descriptor_Item_Name ;
+
+Simple_Target_Specification_2 : Simple_Target_Specification ;
+
+Prepare_Statement : PREPARE SQL_Statement_Name FROM SQL_Statement_Variable ;
+
+SQL_Statement_Name : Statement_Name | Extended_Statement_Name ;
+
+Extended_Statement_Name : [ Scope_Option ] Simple_Value_Specification ;
+
+SQL_Statement_Variable : Simple_Value_Specification ;
+
+Deallocate_Prepared_Statement : DEALLOCATE PREPARE SQL_Statement_Name ;
+
+Describe_Statement : Describe_Input_Statement | Describe_Output_Statement ;
+
+Describe_Input_Statement : DESCRIBE INPUT SQL_Statement_Name Using_Descriptor ;
+
+Using_Descriptor : { USING | INTO } SQL DESCRIPTOR Descriptor_Name ;
+
+Describe_Output_Statement : DESCRIBE [ OUTPUT ] SQL_Statement_Name Using_Descriptor ;
+
+Execute_Statement : EXECUTE SQL_Statement_Name [ Result_Using_Clause ] [ Parameter_Using_Clause ] ;
+
+Result_Using_Clause : Using_Clause ;
+
+Using_Clause : Using_Arguments | Using_Descriptor ;
+
+Using_Arguments : { USING | INTO } Argument [ { Comma Argument }... ] ;
+
+Argument : Target_Specification ;
+
+Parameter_Using_Clause : Using_Clause ;
+
+Execute_Immediate_Statement : EXECUTE IMMEDIATE SQL_Statement_Variable ;
+
+SQL_Dynamic_Data_Statement :
+		Allocate_Cursor_Statement
+	|	Dynamic_Open_Statement
+	|	Dynamic_Close_Statement
+	|	Dynamic_Fetch_Statement
+	|	Dynamic_Delete_Statement:_Positioned
+	|	Dynamic_Update_Statement:_Positioned ;
+
+Allocate_Cursor_Statement :
+		ALLOCATE Extended_Cursor_Name [ INSENSITIVE ] [ SCROLL ] CURSOR FOR Extended_Statement_Name ;
+
+Extended_Cursor_Name : [ Scope_Option ] Simple_Value_Specification ;
+
+Dynamic_Open_Statement : OPEN Dynamic_Cursor_Name [ Using_Clause ] ;
+
+Dynamic_Cursor_Name : Cursor_Name | Extended_Cursor_Name ;
+
+Dynamic_Close_Statement : CLOSE Dynamic_Cursor_Name ;
+
+Dynamic_Fetch_Statement :
+		FETCH [ [ Fetch_Orientation ] FROM ] Dynamic_Cursor_Name ;
+
+Dynamic_Delete_Statement:_Positioned :
+		DELETE FROM Table_Name WHERE CURRENT OF Dynamic_Cursor_Name ;
+
+Dynamic_Update_Statement:_Positioned :
+		UPDATE Table_Name
+			SET Set_Clause [ { Comma Set_Clause }... ]
+			WHERE CURRENT OF Dynamic_Cursor_Name ;
+
+SQL_Diagnostics_Statement : Get_Diagnostics_Statement ;
+
+Get_Diagnostics_Statement : GET DIAGNOSTICS Sql_Diagnostics_Information ;
+
+Sql_Diagnostics_Information : Statement_Information | Condition_Information ;
+
+Statement_Information :
+		Statement_Information_Item [ { Comma Statement_Information_Item }... ] ;
+
+Statement_Information_Item :
+		Simple_Target_Specification Equals_Operator Statement_Information_Item_Name ;
+
+Statement_Information_Item_Name : NUMBER | MORE | COMMAND_FUNCTION | DYNAMIC_FUNCTION | ROW_COUNT ;
+
+Condition_Information :
+		EXCEPTION Condition_Number Condition_Information_Item [ { Comma Condition_Information_Item }... ] ;
+
+Condition_Number : Simple_Value_Specification ;
+
+Condition_Information_Item :
+		Simple_Target_Specification Equals_Operator Condition_Information_Item_Name ;
+
+Condition_Information_Item_Name :
+		CONDITION_NUMBER
+	|	RETURNED_SQLSTATE
+	|	CLASS_ORIGIN
+	|	SUBCLASS_ORIGIN
+	|	SERVER_NAME
+	|	CONNECTION_NAME
+	|	CONSTRAINT_CATALOG
+	|	CONSTRAINT_SCHEMA
+	|	CONSTRAINT_NAME
+	|	CATALOG_NAME
+	|	SCHEMA_NAME
+	|	TABLE_NAME
+	|	COLUMN_NAME
+	|	CURSOR_NAME
+	|	MESSAGE_TEXT
+	|	MESSAGE_LENGTH
+	|	MESSAGE_OCTET_LENGTH ;
+
+Embedded_SQL_Host_Program :
+		Embedded_SQL_Ada_Program
+	|	Embedded_SQL_C_Program
+	|	Embedded_SQL_Cobol_Program
+	|	Embedded_SQL_Fortran_Program
+	|	Embedded_SQL_MUMPS_Program
+	|	Embedded_SQL_Pascal_Program
+	|	Embedded_SQL_PL/I_Program ;
+
+Embedded_SQL_Ada_Program : !! See the syntax rules ;
+
+Embedded_SQL_C_Program : !! See the syntax rules ;
+
+Embedded_SQL_Cobol_Program : !! See the syntax rules ;
+
+Embedded_SQL_Fortran_Program : !! See the syntax rules ;
+
+Embedded_SQL_MUMPS_Program : !! See the syntax rules ;
+
+Embedded_SQL_Pascal_Program : !! See the syntax rules ;
+
+Embedded_SQL_PL/I_Program : !! See the syntax rules ;
+
+Embedded_SQL_Declare_Section :
+		Embedded_SQL_Begin_Declare
+			[ Embedded_Character_Set_Declaration ]
+			[ Host_Variable_Definition ... ]
+			Embedded_SQL_End_Declare
+	|	Embedded_SQL_MUMPS_Declare ;
+
+Embedded_SQL_Begin_Declare : SQL_Prefix BEGIN DECLARE SECTION [ SQL_Terminator ] ;
+
+SQL_Prefix : EXEC SQL | AmpersandSQLLeft_Paren ;
+
+SQL_Terminator : END-EXEC | Semicolon | Right_Paren ;
+
+Embedded_Character_Set_Declaration : SQL NAMES ARE Character_Set_Specification ;
+
+Host_Variable_Definition :
+		Ada_Variable_Definition
+	|	C_Variable_Definition
+	|	Cobol_Variable_Definition
+	|	Fortran_Variable_Definition
+	|	MUMPS_Variable_Definition
+	|	Pascal_Variable_Definition
+	|	PL/I_Variable_Definition ;
+
+// small
+// i
+Note that Colon is written as a literal colon in the ANSI grammar.
+// /i
+// /small ;
+
+Ada_Variable_Definition :
+		Ada_Host_Identifier [ { Comma Ada_Host_Identifier }... ] Colon
+		Ada_Type_Specification [ Ada_Initial_Value ] ;
+
+Ada_Type_Specification : Ada_Qualified_Type_Specification | Ada_Unqualified_Type_Specification ;
+
+Ada_Qualified_Type_Specification :
+		SQL_STANDARD.CHAR [ CHARACTER SET [ IS ] Character_Set_Specification ] Left_Paren 1 Double_Period Length Right_Paren
+	|	SQL_STANDARD.BIT Left_Paren 1 Double_Period Length Right_Paren
+	|	SQL_STANDARD.SMALLINT
+	|	SQL_STANDARD.INT
+	|	SQL_STANDARD.REAL
+	|	SQL_STANDARD.DOUBLE_PRECISION
+	|	SQL_STANDARD.SQLCODE_TYPE
+	|	SQL_STANDARD.SQLSTATE_TYPE
+	|	SQL_STANDARD.INDICATOR_TYPE ;
+
+Ada_Unqualified_Type_Specification :
+		CHAR Left_Paren 1 Double_Period Length Right_Paren
+	|	BIT Left_Paren 1 Double_Period Length Right_Paren
+	|	SMALLINT
+	|	INT
+	|	REAL
+	|	DOUBLE_PRECISION
+	|	SQLCODE_TYPE
+	|	SQLSTATE_TYPE
+	|	INDICATOR_TYPE ;
+
+Ada_Initial_Value : Ada_Assignment_Operator Character_Representation ;
+
+Ada_Assignment_Operator : ColonEquals_Operator ;
+
+C_Variable_Definition : [ C_Storage_Class ] [ C_Class_Modifier ] C_Variable_Specification Semicolon ;
+
+C_Storage_Class : auto | extern | static ;
+
+C_Class_Modifier : const | volatile ;
+
+C_Variable_Specification :
+		C_Numeric_Variable
+	|	C_Character_Variable
+	|	C_Derived_Variable ;
+
+C_Numeric_Variable :
+		{ long | short | float | double }
+			C_Host_Identifier [ C_Initial_Value ]
+			[ { Comma C_Host_Identifier [ C_Initial_Value ] }... ] ;
+
+C_Initial_Value : Equals_Operator Character_Representation ;
+
+C_Character_Variable :
+		char [ CHARACTER SET [ IS ] Character_Set_Specification ]
+			C_Host_Identifier C_Array_Specification [ C_Initial_Value ]
+			[ { Comma C_Host_Identifier C_Array_Specification [ C_Initial_Value ] }... ] ;
+
+C_Array_Specification : Left_Bracket Length Right_Bracket ;
+
+C_Derived_Variable : C_VARCHAR_Variable | C_Bit_Variable ;
+
+C_VARCHAR_Variable :
+		VARCHAR [ CHARACTER SET [ IS ] Character_Set_Specification ]
+			C_Host_Identifier C_Array_Specification [ C_Initial_Value ]
+			[ { Comma C_Host_Identifier C_Array_Specification [ C_Initial_Value ] }... ] ;
+
+C_Bit_Variable :
+		BIT C_Host_Identifier C_Array_Specification [ C_Initial_Value ]
+			[ { Comma C_Host_Identifier C_Array_Specification [ C_Initial_Value ] }... ] ;
+
+Cobol_Variable_Definition :
+	...omitted... ;
+
+Fortran_Variable_Definition :
+	...omitted... ;
+
+MUMPS_Variable_Definition :
+	...omitted... ;
+
+Pascal_Variable_Definition :
+	...omitted... ;
+
+PL/I_Variable_Definition :
+	...omitted... ;
+
+Embedded_SQL_End_Declare : SQL_Prefix END DECLARE SECTION [ SQL_Terminator ] ;
+
+Embedded_SQL_MUMPS_Declare :
+	SQL_Prefix
+	BEGIN DECLARE SECTION
+		[ Embedded_Character_Set_Declaration ]
+		[ Host_Variable_Definition... ]
+	END DECLARE SECTION
+	SQL_Terminator ;
+
+Embedded_SQL_Statement : SQL_Prefix Statement_Or_Declaration [ SQL_Terminator ] ;
+
+Statement_Or_Declaration :
+		Declare_Cursor
+	|	Dynamic_Declare_Cursor
+	|	Temporary_Table_Declaration
+	|	Embedded_Exception_Declaration
+	|	SQL_Procedure_Statement ;
+
+Embedded_Exception_Declaration : WHENEVER Condition Condition_Action ;
+
+Condition : SQLERROR | NOT FOUND ;
+
+Condition_Action : CONTINUE | Go_To ;
+
+Go_To : { GOTO | GO TO } Goto_Target ;
+
+Goto_Target :
+		Host_Label_Identifier
+	|	Unsigned_Integer
+	|	Host_PL/I_Label_Variable ;
+
+Host_Label_Identifier : !! See the syntax rules ;
+
+Host_PL/I_Label_Variable : !! See the syntax rules ;
+
+Preparable_Statement :
+		Preparable_SQL_Data_Statement
+	|	Preparable_SQL_Schema_Statement
+	|	Preparable_SQL_Transaction_Statement
+	|	Preparable_SQL_Session_Statement
+	|	Preparable_SQL_Implementation-defined_Statement ;
+
+Preparable_SQL_Data_Statement :
+		Delete_Statement:_Searched
+	|	Dynamic_Single_Row_Select_Statement
+	|	Insert_Statement
+	|	Dynamic_Select_Statement
+	|	Update_Statement:_Searched
+	|	Preparable_Dynamic_Delete_Statement:_Positioned
+	|	Preparable_Dynamic_Update_Statement:_Positioned ;
+
+Dynamic_Single_Row_Select_Statement : Query_Specification ;
+
+Dynamic_Select_Statement : Cursor_Specification ;
+
+Preparable_Dynamic_Delete_Statement:_Positioned :
+		DELETE [ FROM Table_Name ] WHERE CURRENT OF Cursor_Name ;
+
+Preparable_Dynamic_Update_Statement:_Positioned :
+		UPDATE [ Table_Name ] SET Set_Clause WHERE CURRENT OF Cursor_Name ;
+
+Preparable_SQL_Schema_Statement : SQL_Schema_Statement ;
+
+Preparable_SQL_Transaction_Statement : SQL_Transaction_Statement ;
+
+Preparable_SQL_Session_Statement : SQL_Session_Statement ;
+
+Preparable_SQL_Implementation-defined_Statement : !! See the syntax rules ;
+
+Direct_SQL_Statement :
+		Direct_SQL_Data_Statement
+	|	SQL_Schema_Statement
+	|	SQL_Transaction_Statement
+	|	SQL_Connection_Statement
+	|	SQL_Session_Statement
+	|	Direct_Implementation-defined_Statement ;
+
+Direct_SQL_Data_Statement :
+		Delete_Statement:_Searched
+	|	Direct_Select_Statement:_Multiple_Rows
+	|	Insert_Statement
+	|	Update_Statement:_Searched
+	|	Temporary_Table_Declaration ;
+
+Direct_Select_Statement:_Multiple_Rows : Query_Expression [ Order_By_Clause ] ;
+
+Direct_Implementation-defined_Statement : !! See the syntax rules ;
+
+// hr
+// h2 Identifying the version of SQL in use
+// /h2 ;
+
+SQL_Object_Identifier : SQL_Provenance SQL_Variant ;
+
+SQL_Provenance : Arc1 Arc2 Arc3 ;
+
+Arc1 : iso | 1 | iso Left_Paren 1 Right_Paren ;
+
+Arc2 : standard | 0 | standard Left_Paren 0 Right_Paren ;
+
+Arc3 : 9075 ;
+
+SQL_Variant : SQL_Edition SQL_Conformance ;
+
+SQL_Edition : 1987 | 1989 | 1992 ;
+
+1987 : 0 | edition1987 Left_Paren 0 Right_Paren ;
+
+1989 : 1989_Base 1989_Package ;
+
+1989_Base : 1 | edition1989 Left_Paren 1 Right_Paren ;
+
+1989_Package : Integrity_No | Integrity_Yes ;
+
+Integrity_No : 0 | IntegrityNo Left_Paren 0 Right_Paren ;
+
+Integrity_Yes : 1 | IntegrityYes Left_Paren 1 Right_Paren ;
+
+1992 : 2 | edition1992 Left_Paren 2 Right_Paren ;
+
+SQL_Conformance : Low | Intermediate | High ;
+
+Low : 0 | Low Left_Paren 0 Right_Paren ;
+
+Intermediate : 1 | Intermediate Left_Paren 1 Right_Paren ;
+
+High : 2 | High Left_Paren 2 Right_Paren ;
+
+// hr
+// h2 END OF SQL-92 GRAMMAR
+// /h2 ;
