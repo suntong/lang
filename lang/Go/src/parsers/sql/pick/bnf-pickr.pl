@@ -30,11 +30,13 @@ my $defs = do { local $/; <> };
 
 my %wanted;
 map { $wanted{$_} = 1 } @picked;
+my $missing = 1;
 
+while ($missing) {
 while ($defs =~ m{(\w+)\s*:(.*?);}gsx) {
     #print "$&\n^^ ($1)\n\n";
     #print "--> $1\n" if (grep $1 eq $_, @picked);
-    if (exists $wanted{$1}) {
+    if (exists $wanted{$1} && $wanted{$1}) {
 	# put every new def from RHS into %wanted hash
 	my $has_quantifiers = 0;
 	for my $nd (split ' ', $2) {
@@ -52,13 +54,14 @@ while ($defs =~ m{(\w+)\s*:(.*?);}gsx) {
     }
 }
 
-my $missedFN = "/tmp/missed.kw";
-open(my $fh, ">", $missedFN) 
-    or die "cannot open > $missedFN: $!";
-
+$missing = 0;
+print STDERR "]] ";
 while ( my ($key, $value) = each(%wanted) ) {
     #print STDERR "]] $key\n" if $key =~ m/\s+/;
     #print STDERR "]] $key => $value\n";
-    #print {$fh} "] $key\n";
-    print {$fh} "$key\n" if $value;
+    print STDERR "$key, " if $value;
+    $missing = 1 if $value;
+}
+print STDERR "\n";
+
 }
