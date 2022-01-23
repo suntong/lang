@@ -24,7 +24,7 @@ var testData = []*TI{
 	{"r = 2; 2 + 1", 3},
 	{"r = 2; r + 3", 5},
 	{"r = 2; r = r + 3; r + 5", 10},
-	{"r = 2; r = r + 3; r = r + 5; r-3", 7},
+	{"r = 2; r = r + 3; r = r + 5; r = r-3", 7},
 }
 
 func Test1(t *testing.T) {
