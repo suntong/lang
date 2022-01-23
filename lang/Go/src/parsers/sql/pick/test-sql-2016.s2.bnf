@@ -1,0 +1,50 @@
+direct_SQL_statement ::=
+  directly_executable_statement semicolon
+
+directly_executable_statement ::=
+    direct_SQL_data_statement
+  | SQL_schema_statement
+  | SQL_transaction_statement
+  | SQL_connection_statement
+  | SQL_session_statement
+  | direct_implementation_defined_statement
+
+direct_SQL_data_statement ::=
+    delete_statement__searched
+  | direct_select_statement__multiple_rows
+  | insert_statement
+  | update_statement__searched
+  | truncate_table_statement
+  | merge_statement
+  | temporary_table_declaration
+
+direct_implementation_defined_statement ::=
+  "!! See the Syntax Rules."
+
+apostrophe ::=
+  "'"
+/*
+5.2     token and separator
+
+Function
+
+Specify lexical units (tokens and separators) that participate in SQL language.
+
+
+Format
+*/
+token ::=
+    nondelimiter_token
+  | delimiter_token
+
+identifier_part ::=
+    identifier_start
+  | identifier_extend
+/*
+identifier_start ::=
+  "!! See the Syntax Rules."
+identifier_extend ::=
+  "!! See the Syntax Rules."
+*/
+large_object_length_token ::=
+  digit+ multiplier
