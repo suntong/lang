@@ -38,15 +38,17 @@ import (
 >>
 
 EventLog
-  : JobLog					<< "", nil >>
+  : JobLog
   ;
 
 JobLog
-  : JobLogStart ProcessLog JobLogEnd
+  : JobLogStart ProcessLog JobLogEnd << ast.Pair($0.(string),
+						$2.(string)), nil >>
   ;
 
 ProcessLog
-  : ProcessLogStart TaskLog ProcessLogEnd
+  : ProcessLogStart TaskLog ProcessLogEnd << ast.Pair($0.(string),
+						$2.(string)), nil >>
   ;
 
 TaskLog
@@ -60,9 +62,11 @@ TaskLogStart : timestamp taskLogStart	<< ast.AttribToString($0) +
 	       		 		   ast.AttribToString($1), nil >> ;
 TaskLogEnd   : timestamp  taskLogEnd	<< ast.AttribToString($0), nil >>  ;
 
-ProcessLogStart : timestamp processLogStart ;
-ProcessLogEnd   : timestamp  processLogEnd  ;
+ProcessLogStart : timestamp processLogStart << ast.AttribToString($0) +
+	       		 		   ast.AttribToString($1), nil >> ;
+ProcessLogEnd   : timestamp  processLogEnd  << ast.AttribToString($0), nil >>;
 
-JobLogStart : timestamp jobLogStart ;
-JobLogEnd   : timestamp  jobLogEnd  ;
+JobLogStart : timestamp jobLogStart	<< ast.AttribToString($0) +
+	       		 		   ast.AttribToString($1), nil >> ;
+JobLogEnd   : timestamp  jobLogEnd	<< ast.AttribToString($0), nil >> ;
 

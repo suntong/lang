@@ -35,7 +35,8 @@ var testData = []*TI{
 2022-01-18 11:36:24.4554 End Newly Active Employee Processing
 2022-01-18 11:36:24.7238 End of Post Processing 1/18/2022 11
 2022-01-18 11:36:24.9746 HRImportJob Job completed
-`, ""},
+`, `2022-01-18 11:19:41.6007 HRImportJob Running job
+ ==> 2022-01-18 11:36:24.9746 `},
 }
 
 func Test1(t *testing.T) {
