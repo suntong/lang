@@ -39,7 +39,7 @@ import (
 
 Calc
   : Expr
-  | Expr ";" Expr	<< $2.(int64), nil >>
+  | Expr ";" Expr	<< $2, nil >>
   ;
 
 Expr
