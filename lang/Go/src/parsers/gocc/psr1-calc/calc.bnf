@@ -23,7 +23,7 @@ _hex_digit
   ;
 
 
-int : '1'-'9' {_digit} ;
+int64 : '1'-'9' {_digit} ;
 
 //id : _letter {_letter | _digit} ;
 
@@ -40,19 +40,19 @@ import (
 Calc : Expr;
 
 Expr
-  : Expr "+" Term	<< $0.(int) + $2.(int), nil >>
-  | Expr "-" Term	<< $0.(int) - $2.(int), nil >>
+  : Expr "+" Term	<< $0.(int64) + $2.(int64), nil >>
+  | Expr "-" Term	<< $0.(int64) - $2.(int64), nil >>
   | Term			
   ;
 
 Term
-  : Term "*" Factor	<< $0.(int) * $2.(int), nil >>
-  | Term "/" Factor	<< $0.(int) / $2.(int), nil >>
+  : Term "*" Factor	<< $0.(int64) * $2.(int64), nil >>
+  | Term "/" Factor	<< $0.(int64) / $2.(int64), nil >>
   | Factor			
   ;
 
 Factor
   : "(" Expr ")"	<< $1, nil >>
-  | int    		<< util.IntValue($0.(*token.Token).Lit) >>
+  | int64    		<< util.IntValue($0.(*token.Token).Lit) >>
 ;
 
