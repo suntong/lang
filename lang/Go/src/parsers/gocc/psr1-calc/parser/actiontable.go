@@ -218,18 +218,18 @@ var actionTab = actionTable{
 	actionRow{ // S12
 		canRecover: false,
 		actions: [numSymbols]action{
-			nil,       // INVALID
-			nil,       // $
-			nil,       // ;
-			shift(22), // reg
-			nil,       // =
-			nil,       // +
-			nil,       // -
-			nil,       // *
-			nil,       // /
-			shift(7),  // (
-			nil,       // )
-			shift(8),  // int64
+			nil,      // INVALID
+			nil,      // $
+			nil,      // ;
+			shift(4), // reg
+			nil,      // =
+			nil,      // +
+			nil,      // -
+			nil,      // *
+			nil,      // /
+			shift(7), // (
+			nil,      // )
+			shift(8), // int64
 		},
 	},
 	actionRow{ // S13
@@ -444,8 +444,8 @@ var actionTab = actionTable{
 			reduce(4), // ;, reduce: Calc
 			nil,       // reg
 			nil,       // =
-			shift(10), // +
-			shift(11), // -
+			nil,       // +
+			nil,       // -
 			nil,       // *
 			nil,       // /
 			nil,       // (

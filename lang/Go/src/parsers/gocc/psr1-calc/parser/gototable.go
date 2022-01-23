@@ -109,8 +109,8 @@ var gotoTab = gotoTable{
 	gotoRow{ // S12
 		-1, // S'
 		-1, // Calcs
-		-1, // Calc
-		25, // Expr
+		25, // Calc
+		3,  // Expr
 		5,  // Term
 		6,  // Factor
 	},

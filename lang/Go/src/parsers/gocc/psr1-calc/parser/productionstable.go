@@ -64,7 +64,7 @@ var productionsTable = ProdTab{
 		},
 	},
 	ProdTabEntry{
-		String: `Calc : reg "=" Expr	<< ast.Assign(X[2].(int64)) >>`,
+		String: `Calc : reg "=" Calc	<< ast.Assign(X[2].(int64)) >>`,
 		Id:         "Calc",
 		NTType:     2,
 		Index:      4,
