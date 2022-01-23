@@ -39,10 +39,14 @@ import (
 )
 >>
 
+Calcs
+  : Calc
+  | Calcs ";" Calc	<< $2, nil >>
+  ;
+
 Calc
   : Expr
   | reg "=" Expr	<< ast.Assign($2.(int64)) >>
-  | Calc ";" Calc	<< $2, nil >>
   ;
 
 Expr
