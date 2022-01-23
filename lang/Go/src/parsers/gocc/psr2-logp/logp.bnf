@@ -1,0 +1,64 @@
+/*
+
+Event Log BNF
+
+Copyright (c) 2022 Tong Sun
+
+*/
+
+/* Lexical part */
+
+
+_digit : '0'-'9' ;
+
+_jobLog     : 'H'  'R'  'I'  'm'  'p'  'o'  'r'  't'  'J'  'o'  'b' ;
+
+_lineend : [ '\r' ] '\n' ;
+
+timestamp
+  : _digit _digit _digit _digit '-' _digit _digit '-' _digit _digit
+    ' ' _digit _digit ':' _digit _digit ':' _digit _digit '.' { _digit } ' '
+  ;
+
+jobLogStart     : _jobLog' '  'R'  'u'  'n'  'n'  'i'  'n'  'g'  ' '  'j'  'o'  'b' _lineend ;
+processLogStart : 'S'  't'  'a'  'r'  't'  ' '  'o'  'f'  ' ' { . } _lineend;
+taskLogStart 	: 'S'  't'  'a'  'r'  't'  ' ' { . } _lineend;
+taskLogEnd 	: 'E'  'n'  'd'  ' ' { . } _lineend;
+processLogEnd  	: 'E'  'n'  'd'  ' '  'o'  'f'  ' ' { . } _lineend;
+jobLogEnd     	: _jobLog ' '  'J'  'o'  'b'  ' '  'c'  'o'  'm'  'p'  'l'  'e'  't'  'e'  'd' _lineend ;
+
+
+/* Syntax part */
+
+<< 
+import (
+)
+>>
+
+EventLog
+  : JobLog
+  ;
+
+JobLog
+  : JobLogStart ProcessLog JobLogEnd
+  ;
+
+ProcessLog
+  : ProcessLogStart TaskLog ProcessLogEnd
+  ;
+
+TaskLog
+  : TaskLogStart TaskLogEnd
+  | TaskLog
+    TaskLogStart TaskLogEnd
+  ;
+
+TaskLogStart : timestamp taskLogStart ;
+TaskLogEnd   : timestamp  taskLogEnd  ;
+
+ProcessLogStart : timestamp processLogStart ;
+ProcessLogEnd   : timestamp  processLogEnd  ;
+
+JobLogStart : timestamp jobLogStart ;
+JobLogEnd   : timestamp  jobLogEnd  ;
+
