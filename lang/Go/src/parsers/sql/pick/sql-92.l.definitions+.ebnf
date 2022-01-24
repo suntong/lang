@@ -1,6 +1,108 @@
-asterisk : * ;
+exact_Numeric_Literal :
+		unsigned_Integer [ period [ unsigned_Integer ] ]
+	|	period unsigned_Integer ;
 
-plus_Sign : + ;
+signed_Integer : [ sign ] unsigned_Integer ;
 
-question_Mark : ? ;
+character_Set_Name : [ schema_Name period ] sQL_Language_Identifier ;
+
+schema_Name : [ catalog_Name period ] unqualified_Schema_Name ;
+
+identifier : [ introducercharacter_Set_Specification ] actual_Identifier ;
+
+sQL_Language_Identifier :
+		sQL_Language_Identifier_Start [ { underscore | sQL_Language_Identifier_Part }... ] ;
+
+table_Element_List : left_Paren table_Element [ { comma table_Element }... ] right_Paren ;
+
+column_Definition :
+		column_Name { data_Type | domain_Name } [ default_Clause ] [ column_Constraint_Definition... ] [ collate_Clause ] ;
+
+data_Type :
+		character_String_Type [ CHARACTER SET character_Set_Specification ]
+	|	national_Character_String_Type
+	|	bit_String_Type
+	|	numeric_Type
+	|	datetime_Type
+	|	interval_Type ;
+
+character_String_Type :
+		CHARACTER [ left_Paren length right_Paren ]
+	|	CHAR [ left_Paren length right_Paren ]
+	|	CHARACTER VARYING [ left_Paren length right_Paren ]
+	|	CHAR VARYING [ left_Paren length right_Paren ]
+	|	VARCHAR [ left_Paren length right_Paren ] ;
+
+national_Character_String_Type :
+		NATIONAL CHARACTER [ left_Paren length right_Paren ]
+	|	NATIONAL CHAR [ left_Paren length right_Paren ]
+	|	NCHAR [ left_Paren length right_Paren ]
+	|	NATIONAL CHARACTER VARYING [ left_Paren length right_Paren ]
+	|	NATIONAL CHAR VARYING [ left_Paren length right_Paren ]
+	|	NCHAR VARYING [ left_Paren length right_Paren ] ;
+
+bit_String_Type :
+		BIT [ left_Paren length right_Paren ]
+	|	BIT VARYING [ left_Paren length right_Paren ] ;
+
+exact_Numeric_Type :
+	 	NUMERIC [ left_Paren precision [ comma scale ] right_Paren ]
+	| 	DECIMAL [ left_Paren precision [ comma scale ] right_Paren ]
+	| 	DEC [ left_Paren precision [ comma scale ] right_Paren ]
+	|	INTEGER
+	|	INT
+	|	SMALLINT ;
+
+approximate_Numeric_Type :
+	 	FLOAT [ left_Paren precision right_Paren ]
+	|	REAL
+	|	DOUBLE PRECISION ;
+
+datetime_Type :
+		DATE
+	|   TIME [ left_Paren time_Precision right_Paren ] [ WITH TIME ZONE ]
+	|   TIMESTAMP [ left_Paren timestamp_Precision right_Paren ] [ WITH TIME ZONE ] ;
+
+start_Field :
+		non-second_Datetime_Field [ left_Paren interval_Leading_Field_Precision right_Paren ] ;
+
+end_Field :
+		non-second_Datetime_Field
+	|   SECOND [ left_Paren interval_Fractional_Seconds_Precision right_Paren ] ;
+
+single_Datetime_Field :
+		non-second_Datetime_Field [ left_Paren interval_Leading_Field_Precision right_Paren ]
+	|   SECOND [ left_Paren interval_Leading_Field_Precision [ comma interval_Fractional_Seconds_Precision ] right_Paren ] ;
+
+qualified_Name : [ schema_Name period ] qualified_Identifier ;
+
+signed_Numeric_Literal : [ sign ] unsigned_Numeric_Literal ;
+
+interval_Literal : INTERVAL [ sign ] interval_String interval_Qualifier ;
+
+current_Time_Value_Function : CURRENT_TIME [ left_Paren time_Precision right_Paren ] ;
+
+current_Timestamp_Value_Function : CURRENT_TIMESTAMP [ left_Paren timestamp_Precision right_Paren ] ;
+
+identifier_Body : identifier_Start [ { underscore | identifier_Part } ... ] ;
+
+national_Character_String_Literal :
+		N quote [ character_Representation ... ] quote [ { separator... quote [ character_Representation... ] quote }... ] ;
+
+bit_String_Literal :
+		B quote [ bit ... ] quote [ { separator... quote [ bit... ] quote }... ] ;
+
+hex_String_Literal :
+		X quote [ hexit ... ] quote [ { separator... quote [ hexit... ] quote }... ] ;
+
+character_String_Literal :
+	[ introducercharacter_Set_Specification ] quote [ character_Representation... ] quote [ { separator... quote [ character_Representation... ] quote }... ] ;
+
+time_String : quote time_Value [ time_Zone_Interval ] quote ;
+
+seconds_Value : seconds_Integer_Value [ period [ seconds_Fraction ] ] ;
+
+timestamp_String : quote date_Value space time_Value [ time_Zone_Interval ] quote ;
+
+interval_String : quote { year-month_Literal | day-time_Literal } quote ;
 

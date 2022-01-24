@@ -42,17 +42,17 @@ while ($defs =~ m{(\w+)\s*:(.*?);}gsx) {
 	# put every new def from RHS into %wanted hash
 	my $has_quantifiers = 0;
 	for my $nd (split ' ', $2) {
-	    if ($nd =~ s/[*?+]$//) {
-		$has_quantifiers = 1;
-	    }
-	    #print STDERR "] $nd\n"; #if $nd =~ m/\s+/;
+	    #print STDERR "] $nd ($wanted{$nd}/$missing)\n" if $nd =~ m/timestamp_String|interval_String/;
 	    $wanted{$nd} = 1 unless exists $wanted{$nd};
 	}
 	# output the definition
-	if ($has_quantifiers) { print STDERR "$&\n\n" }
-	else { print "$&\n\n" }
+	my $org = $&;
+	my $rn = $1;
+	if ($org =~ /\[.*?\]|\{.*?\}/) { print STDERR "$org\n\n" } # *e*bnf
+	else { print "$org\n\n" }
 	# mark this rule as done
-	$wanted{$1} = 0;
+	$wanted{$rn} = 0;
+	#print STDERR "]] $rn ($wanted{$rn}/$missing)\n" if $org =~ m/timestamp_String|interval_String/;
     }
 }
 
