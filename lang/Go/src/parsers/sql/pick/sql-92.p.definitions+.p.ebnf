@@ -1,0 +1,72 @@
+Schema_Definition : schema_Definition ;
+
+Table_Definition : table_Definition ;
+
+View_Definition : view_Definition ;
+
+Column_Name_List : column_Name_List ;
+
+Qualified_Join : qualified_Join ;
+
+Join_Type : join_Type ;
+
+Boolean_Factor : boolean_Factor ;
+
+Boolean_Test : boolean_Test ;
+
+Factor : factor ;
+
+Parameter_Specification : parameter_Specification ;
+
+Indicator_Parameter : indicator_Parameter ;
+
+Variable_Specification : variable_Specification ;
+
+Indicator_Variable : indicator_Variable ;
+
+Column_Reference : column_Reference ;
+
+General_Set_Function : general_Set_Function ;
+
+Table_Reference : table_Reference ;
+
+Correlation_Specification : correlation_Specification ;
+
+Case_Abbreviation : case_Abbreviation ;
+
+Simple_Case : simple_Case ;
+
+Searched_Case : searched_Case ;
+
+Character_Factor : character_Factor ;
+
+Character_Substring_Function : character_Substring_Function ;
+
+Fold : fold ;
+
+Trim_Operands : trim_Operands ;
+
+Bit_Substring_Function : bit_Substring_Function ;
+
+Interval_Factor : interval_Factor ;
+
+Interval_Primary : interval_Primary ;
+
+Datetime_Factor : datetime_Factor ;
+
+Char_Length_Expression : char_Length_Expression ;
+
+Row_Value_Constructor_List : row_Value_Constructor_List ;
+
+Between_Predicate : between_Predicate ;
+
+In_Predicate : in_Predicate ;
+
+In_Value_List : in_Value_List ;
+
+Like_Predicate : like_Predicate ;
+
+Null_Predicate : null_Predicate ;
+
+Match_Predicate : match_Predicate ;
+
