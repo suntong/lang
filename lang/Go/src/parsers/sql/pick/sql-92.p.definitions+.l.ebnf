@@ -7,38 +7,31 @@ table_Definition : CREATE [ { GLOBAL | LOCAL } TEMPORARY ] TABLE _table_Name _ta
 
 view_Definition : CREATE VIEW _table_Name [ _left_Paren _view_Column_List _right_Paren ]
 			AS _query_Expression [ WITH [ _levels_Clause ] CHECK OPTION ] ;
-
-column_Name_List : _column_Name [ { _comma _column_Name }... ] ;
+_column_Name_List : _column_Name [ { _comma _column_Name }... ] ;
 
 qualified_Join : _table_Reference [ NATURAL ] [ _join_Type ] JOIN _table_Reference [ _join_Specification ] ;
-
-join_Type : INNER
+_join_Type : INNER
 	|   _outer_Join_Type [ OUTER ]
 	|   UNION ;
 
 boolean_Factor : [ NOT ] _boolean_Test ;
-
-boolean_Test : _boolean_Primary [ IS [ NOT ] _truth_Value ] ;
+_boolean_Test : _boolean_Primary [ IS [ NOT ] _truth_Value ] ;
 
 factor : [ _sign ] _numeric_Primary ;
 
 parameter_Specification : _parameter_Name [ _indicator_Parameter ] ;
-
-indicator_Parameter : [ INDICATOR ] _parameter_Name ;
+_indicator_Parameter : [ INDICATOR ] _parameter_Name ;
 
 variable_Specification : _embedded_Variable_Name [ _indicator_Variable ] ;
-
-indicator_Variable : [ INDICATOR ] _embedded_Variable_Name ;
+_indicator_Variable : [ INDICATOR ] _embedded_Variable_Name ;
 
 column_Reference : [ _qualifier _period ] _column_Name ;
 
 general_Set_Function : _set_Function_Type _left_Paren [ _set_Quantifier ] _value_Expression _right_Paren ;
-
-table_Reference : _table_Name [ _correlation_Specification ]
+_table_Reference : _table_Name [ _correlation_Specification ]
 	|   _derived_Table _correlation_Specification
 	|   _joined_Table ;
-
-correlation_Specification : [ AS ] _correlation_Name [ _left_Paren _derived_Column_List _right_Paren ] ;
+_correlation_Specification : [ AS ] _correlation_Name [ _left_Paren _derived_Column_List _right_Paren ] ;
 
 case_Abbreviation : NULLIF _left_Paren _value_Expression _comma _value_Expression _right_Paren
 	|	COALESCE _left_Paren _value_Expression { _comma _value_Expression }...  _right_Paren ;
@@ -64,14 +57,12 @@ trim_Operands : [ [ _trim_Specification ] [ _trim_Character ] FROM ] _trim_Sourc
 bit_Substring_Function : SUBSTRING _left_Paren _bit_Value_Expression FROM _start_Position [ FOR _string_Length ] _right_Paren ;
 
 interval_Factor : [ _sign ] _interval_Primary ;
-
-interval_Primary : _value_Expression_Primary [ _interval_Qualifier ] ;
+_interval_Primary : _value_Expression_Primary [ _interval_Qualifier ] ;
 
 datetime_Factor : _datetime_Primary [ _time_Zone ] ;
 
 char_Length_Expression : { CHAR_LENGTH | CHARACTER_LENGTH } _left_Paren _string_Value_Expression _right_Paren ;
-
-row_Value_Constructor_List : _row_Value_Constructor_Element [ { _comma _row_Value_Constructor_Element } ... ] ;
+_row_Value_Constructor_List : _row_Value_Constructor_Element [ { _comma _row_Value_Constructor_Element } ... ] ;
 
 between_Predicate : _row_Value_Constructor [ NOT ] BETWEEN _row_Value_Constructor AND _row_Value_Constructor ;
 
