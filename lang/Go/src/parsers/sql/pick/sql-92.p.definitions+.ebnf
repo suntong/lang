@@ -1,0 +1,100 @@
+Schema_Definition :
+		CREATE SCHEMA Schema_Name_Clause
+			[ Schema_Character_Set_Specification ]
+			[ Schema_Element... ] ;
+
+Table_Definition :
+		CREATE [ { GLOBAL | LOCAL } TEMPORARY ] TABLE Table_Name Table_Element_List [ ON COMMIT { DELETE | PRESERVE } ROWS ] ;
+
+View_Definition :
+		CREATE VIEW Table_Name [ Left_Paren View_Column_List Right_Paren ]
+			AS Query_Expression [ WITH [ Levels_Clause ] CHECK OPTION ] ;
+
+Column_Name_List : Column_Name [ { Comma Column_Name }... ] ;
+
+Qualified_Join :
+		Table_Reference [ NATURAL ] [ Join_Type ] JOIN Table_Reference [ Join_Specification ] ;
+
+Join_Type :
+		INNER
+	|   Outer_Join_Type [ OUTER ]
+	|   UNION ;
+
+Boolean_Factor : [ NOT ] Boolean_Test ;
+
+Boolean_Test : Boolean_Primary [ IS [ NOT ] Truth_Value ] ;
+
+Factor : [ Sign ] Numeric_Primary ;
+
+Parameter_Specification : Parameter_Name [ Indicator_Parameter ] ;
+
+Indicator_Parameter : [ INDICATOR ] Parameter_Name ;
+
+Variable_Specification : Embedded_Variable_Name [ Indicator_Variable ] ;
+
+Indicator_Variable : [ INDICATOR ] Embedded_Variable_Name ;
+
+Column_Reference : [ Qualifier Period ] Column_Name ;
+
+General_Set_Function :
+		Set_Function_Type Left_Paren [ Set_Quantifier ] Value_Expression Right_Paren ;
+
+Table_Reference :
+	    Table_Name [ Correlation_Specification ]
+	|   Derived_Table Correlation_Specification
+	|   Joined_Table ;
+
+Correlation_Specification :
+		[ AS ] Correlation_Name [ Left_Paren Derived_Column_List Right_Paren ] ;
+
+Case_Abbreviation :
+		NULLIF Left_Paren Value_Expression Comma Value_Expression Right_Paren
+	|	COALESCE Left_Paren Value_Expression { Comma Value_Expression }...  Right_Paren ;
+
+Simple_Case :
+		CASE Case_Operand
+			Simple_When_Clause...
+			[ Else_Clause ]
+		END ;
+
+Searched_Case :
+		CASE
+		Searched_When_Clause...
+		[ Else_Clause ]
+		END ;
+
+Character_Factor : Character_Primary [ Collate_Clause ] ;
+
+Character_Substring_Function :
+		SUBSTRING Left_Paren Character_Value_Expression FROM Start_Position [ FOR String_Length ] Right_Paren ;
+
+Fold : { UPPER | LOWER } Left_Paren Character_Value_Expression Right_Paren ;
+
+Trim_Operands : [ [ Trim_Specification ] [ Trim_Character ] FROM ] Trim_Source ;
+
+Bit_Substring_Function :
+		SUBSTRING Left_Paren Bit_Value_Expression FROM Start_Position [ FOR String_Length ] Right_Paren ;
+
+Interval_Factor : [ Sign ] Interval_Primary ;
+
+Interval_Primary : Value_Expression_Primary [ Interval_Qualifier ] ;
+
+Datetime_Factor : Datetime_Primary [ Time_Zone ] ;
+
+Char_Length_Expression : { CHAR_LENGTH | CHARACTER_LENGTH } Left_Paren String_Value_Expression Right_Paren ;
+
+Row_Value_Constructor_List : Row_Value_Constructor_Element [ { Comma Row_Value_Constructor_Element } ... ] ;
+
+Between_Predicate :
+		Row_Value_Constructor [ NOT ] BETWEEN Row_Value_Constructor AND Row_Value_Constructor ;
+
+In_Predicate : Row_Value_Constructor [ NOT ] IN In_Predicate_Value ;
+
+In_Value_List : Value_Expression { Comma Value_Expression } ... ;
+
+Like_Predicate : Match_Value [ NOT ] LIKE Pattern [ ESCAPE Escape_Character ] ;
+
+Null_Predicate : Row_Value_Constructor IS [ NOT ] NULL ;
+
+Match_Predicate : Row_Value_Constructor MATCH [ UNIQUE ] [ PARTIAL | FULL ] Table_Subquery ;
+

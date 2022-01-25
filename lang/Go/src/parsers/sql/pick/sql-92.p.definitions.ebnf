@@ -1,8 +1,3 @@
-Schema_Definition :
-		CREATE SCHEMA Schema_Name_Clause
-			[ Schema_Character_Set_Specification ]
-			[ Schema_Element... ] ;
-
 Schema_Name_Clause :
 		Schema_Name
 	|	AUTHORIZATION Schema_Authorization_Identifier
@@ -12,20 +7,11 @@ Schema_Authorization_Identifier : Authorization_Identifier ;
 
 Schema_Character_Set_Specification : DEFAULT CHARACTER SET Character_Set_Specification ;
 
-Table_Definition :
-		CREATE [ { GLOBAL | LOCAL } TEMPORARY ] TABLE Table_Name Table_Element_List [ ON COMMIT { DELETE | PRESERVE } ROWS ] ;
-
-View_Definition :
-		CREATE VIEW Table_Name [ Left_Paren View_Column_List Right_Paren ]
-			AS Query_Expression [ WITH [ Levels_Clause ] CHECK OPTION ] ;
-
 View_Column_List : Column_Name_List ;
 
 Levels_Clause : CASCADED | LOCAL ;
 
 Table_Name : Qualified_Name | Qualified_Local_Table_Name ;
-
-Column_Name_List : Column_Name [ { Comma Column_Name }... ] ;
 
 Query_Expression : Non-join_Query_Expression | Joined_Table ;
 
@@ -36,14 +22,6 @@ Joined_Table :
 
 Cross_Join :
 		Table_Reference CROSS JOIN Table_Reference ;
-
-Qualified_Join :
-		Table_Reference [ NATURAL ] [ Join_Type ] JOIN Table_Reference [ Join_Specification ] ;
-
-Join_Type :
-		INNER
-	|   Outer_Join_Type [ OUTER ]
-	|   UNION ;
 
 Outer_Join_Type : LEFT | RIGHT | FULL ;
 
@@ -62,10 +40,6 @@ Search_Condition :
 Boolean_Term :
 		Boolean_Factor
 	|   Boolean_Term AND Boolean_Factor ;
-
-Boolean_Factor : [ NOT ] Boolean_Test ;
-
-Boolean_Test : Boolean_Primary [ IS [ NOT ] Truth_Value ] ;
 
 Boolean_Primary : Predicate | Left_Paren Search_Condition Right_Paren ;
 
@@ -108,8 +82,6 @@ Term :
 	|   Term Asterisk Factor
 	|   Term Solidus Factor ;
 
-Factor : [ Sign ] Numeric_Primary ;
-
 Numeric_Primary : Value_Expression_Primary | Numeric_Value_Function ;
 
 Value_Expression_Primary :
@@ -135,21 +107,11 @@ General_Value_Specification :
 	|   SYSTEM_USER
 	|   VALUE ;
 
-Parameter_Specification : Parameter_Name [ Indicator_Parameter ] ;
-
 Parameter_Name : Colon Identifier ;
-
-Indicator_Parameter : [ INDICATOR ] Parameter_Name ;
 
 Dynamic_Parameter_Specification : Question_Mark ;
 
-Variable_Specification : Embedded_Variable_Name [ Indicator_Variable ] ;
-
 Embedded_Variable_Name : ColonHost_Identifier ;
-
-Indicator_Variable : [ INDICATOR ] Embedded_Variable_Name ;
-
-Column_Reference : [ Qualifier Period ] Column_Name ;
 
 Qualifier : Table_Name | Correlation_Name ;
 
@@ -159,9 +121,6 @@ Set_Function_Specification :
 		COUNT Left_Paren Asterisk Right_Paren
 	|   General_Set_Function ;
 
-General_Set_Function :
-		Set_Function_Type Left_Paren [ Set_Quantifier ] Value_Expression Right_Paren ;
-
 Set_Function_Type : AVG | MAX | MIN | SUM | COUNT ;
 
 Set_Quantifier : DISTINCT | ALL ;
@@ -169,14 +128,6 @@ Set_Quantifier : DISTINCT | ALL ;
 Scalar_Subquery : Subquery ;
 
 Subquery : Left_Paren Query_Expression Right_Paren ;
-
-Table_Reference :
-	    Table_Name [ Correlation_Specification ]
-	|   Derived_Table Correlation_Specification
-	|   Joined_Table ;
-
-Correlation_Specification :
-		[ AS ] Correlation_Name [ Left_Paren Derived_Column_List Right_Paren ] ;
 
 Derived_Column_List : Column_Name_List ;
 
@@ -186,27 +137,11 @@ Table_Subquery : Subquery ;
 
 Case_Expression : Case_Abbreviation | Case_Specification ;
 
-Case_Abbreviation :
-		NULLIF Left_Paren Value_Expression Comma Value_Expression Right_Paren
-	|	COALESCE Left_Paren Value_Expression { Comma Value_Expression }...  Right_Paren ;
-
 Case_Specification : Simple_Case | Searched_Case ;
-
-Simple_Case :
-		CASE Case_Operand
-			Simple_When_Clause...
-			[ Else_Clause ]
-		END ;
 
 Case_Operand : Value_Expression ;
 
 Else_Clause : ELSE Result ;
-
-Searched_Case :
-		CASE
-		Searched_When_Clause...
-		[ Else_Clause ]
-		END ;
 
 Cast_Specification : CAST Left_Paren Cast_Operand AS Cast_Target Right_Paren ;
 
@@ -223,8 +158,6 @@ Character_Value_Expression : Concatenation | Character_Factor ;
 
 Concatenation : Character_Value_Expression Concatenation_Operator Character_Factor ;
 
-Character_Factor : Character_Primary [ Collate_Clause ] ;
-
 Character_Primary : Value_Expression_Primary | String_Value_Function ;
 
 String_Value_Function : Character_Value_Function | Bit_Value_Function ;
@@ -236,14 +169,9 @@ Character_Value_Function :
 	|   Character_Translation
 	|   Trim_Function ;
 
-Character_Substring_Function :
-		SUBSTRING Left_Paren Character_Value_Expression FROM Start_Position [ FOR String_Length ] Right_Paren ;
-
 Start_Position : Numeric_Value_Expression ;
 
 String_Length : Numeric_Value_Expression ;
-
-Fold : { UPPER | LOWER } Left_Paren Character_Value_Expression Right_Paren ;
 
 Character_Translation :
 		TRANSLATE Left_Paren Character_Value_Expression USING Translation_Name Right_Paren ;
@@ -252,8 +180,6 @@ Translation_Name : Qualified_Name ;
 
 Trim_Function : TRIM Left_Paren Trim_Operands Right_Paren ;
 
-Trim_Operands : [ [ Trim_Specification ] [ Trim_Character ] FROM ] Trim_Source ;
-
 Trim_Specification : LEADING | TRAILING | BOTH ;
 
 Trim_Character : Character_Value_Expression ;
@@ -261,9 +187,6 @@ Trim_Character : Character_Value_Expression ;
 Trim_Source : Character_Value_Expression ;
 
 Bit_Value_Function : Bit_Substring_Function ;
-
-Bit_Substring_Function :
-		SUBSTRING Left_Paren Bit_Value_Expression FROM Start_Position [ FOR String_Length ] Right_Paren ;
 
 Bit_Value_Expression : Bit_Concatenation | Bit_Factor ;
 
@@ -295,10 +218,6 @@ Interval_Term :
 	|	Interval_Term_2 Solidus Factor
 	|	Term Asterisk Interval_Factor ;
 
-Interval_Factor : [ Sign ] Interval_Primary ;
-
-Interval_Primary : Value_Expression_Primary [ Interval_Qualifier ] ;
-
 Interval_Term_2 : Interval_Term ;
 
 Interval_Value_Expression :
@@ -313,8 +232,6 @@ Interval_Term_1 : Interval_Term ;
 
 Datetime_Term : Datetime_Factor ;
 
-Datetime_Factor : Datetime_Primary [ Time_Zone ] ;
-
 Datetime_Primary : Value_Expression_Primary | Datetime_Value_Function ;
 
 Time_Zone : AT Time_Zone_Specifier ;
@@ -322,8 +239,6 @@ Time_Zone : AT Time_Zone_Specifier ;
 Time_Zone_Specifier : LOCAL | TIME ZONE Interval_Value_Expression ;
 
 Length_Expression : Char_Length_Expression | Octet_Length_Expression | Bit_Length_Expression ;
-
-Char_Length_Expression : { CHAR_LENGTH | CHARACTER_LENGTH } Left_Paren String_Value_Expression Right_Paren ;
 
 String_Value_Expression : Character_Value_Expression | Bit_Value_Expression ;
 
@@ -335,8 +250,6 @@ Null_Specification : NULL ;
 
 Default_Specification : DEFAULT ;
 
-Row_Value_Constructor_List : Row_Value_Constructor_Element [ { Comma Row_Value_Constructor_Element } ... ] ;
-
 Row_Subquery : Subquery ;
 
 Comp_Op :
@@ -347,24 +260,13 @@ Comp_Op :
 	|   Less_Than_Or_Equals_Operator
 	|   Greater_Than_Or_Equals_Operator ;
 
-Between_Predicate :
-		Row_Value_Constructor [ NOT ] BETWEEN Row_Value_Constructor AND Row_Value_Constructor ;
-
-In_Predicate : Row_Value_Constructor [ NOT ] IN In_Predicate_Value ;
-
 In_Predicate_Value : Table_Subquery | Left_Paren In_Value_List Right_Paren ;
-
-In_Value_List : Value_Expression { Comma Value_Expression } ... ;
-
-Like_Predicate : Match_Value [ NOT ] LIKE Pattern [ ESCAPE Escape_Character ] ;
 
 Match_Value : Character_Value_Expression ;
 
 Pattern : Character_Value_Expression ;
 
 Escape_Character : Character_Value_Expression ;
-
-Null_Predicate : Row_Value_Constructor IS [ NOT ] NULL ;
 
 Quantified_Comparison_Predicate : Row_Value_Constructor Comp_Op Quantifier Table_Subquery ;
 
@@ -375,8 +277,6 @@ All : ALL ;
 Some : SOME | ANY ;
 
 Exists_Predicate : EXISTS Table_Subquery ;
-
-Match_Predicate : Row_Value_Constructor MATCH [ UNIQUE ] [ PARTIAL | FULL ] Table_Subquery ;
 
 Overlaps_Predicate : Row_Value_Constructor_1 OVERLAPS Row_Value_Constructor_2 ;
 
