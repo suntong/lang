@@ -13,3 +13,316 @@ _lineComment : '/' '/' {.} '\n' ;
 _blockComment : '/' '*' {. | '*'} '*' '/' ;
 
 /* Lexical from sql-92.gocc.l.ebnf */
+
+_exact_Numeric_Literal :
+		_unsigned_Integer [ _period [ _unsigned_Integer ] ]
+	|	_period _unsigned_Integer ;
+
+_signed_Integer : [ _sign ] _unsigned_Integer ;
+
+_character_Set_Name : [ _schema_Name _period ] _SQL_Language_Identifier ;
+
+_schema_Name : [ _catalog_Name _period ] _unqualified_Schema_Name ;
+
+_identifier : [ _introducercharacter_Set_Specification ] _actual_Identifier ;
+
+_SQL_Language_Identifier :
+		_SQL_Language_Identifier_Start [ { _underscore | _SQL_Language_Identifier_Part } ] ;
+
+_table_Element_List : _left_Paren _table_Element [ { _comma _table_Element } ] _right_Paren ;
+
+_column_Definition :
+		_column_Name { _data_Type | _domain_Name } [ _default_Clause ] [ _column_Constraint_Definition {_column_Constraint_Definition} ] [ _collate_Clause ] ;
+
+_data_Type :
+		_character_String_Type [ 'C' 'H' 'A' 'R' 'A' 'C' 'T' 'E' 'R' 'S' 'E' 'T' _character_Set_Specification ]
+	|	_national_Character_String_Type
+	|	_bit_String_Type
+	|	_numeric_Type
+	|	_datetime_Type
+	|	_interval_Type ;
+
+_character_String_Type :
+		'C' 'H' 'A' 'R' 'A' 'C' 'T' 'E' 'R' [ _left_Paren _length _right_Paren ]
+	|	'C' 'H' 'A' 'R' [ _left_Paren _length _right_Paren ]
+	|	'C' 'H' 'A' 'R' 'A' 'C' 'T' 'E' 'R' 'V' 'A' 'R' 'Y' 'I' 'N' 'G' [ _left_Paren _length _right_Paren ]
+	|	'C' 'H' 'A' 'R' 'V' 'A' 'R' 'Y' 'I' 'N' 'G' [ _left_Paren _length _right_Paren ]
+	|	'V' 'A' 'R' 'C' 'H' 'A' 'R' [ _left_Paren _length _right_Paren ] ;
+
+_national_Character_String_Type :
+		'N' 'A' 'T' 'I' 'O' 'N' 'A' 'L' 'C' 'H' 'A' 'R' 'A' 'C' 'T' 'E' 'R' [ _left_Paren _length _right_Paren ]
+	|	'N' 'A' 'T' 'I' 'O' 'N' 'A' 'L' 'C' 'H' 'A' 'R' [ _left_Paren _length _right_Paren ]
+	|	'N' 'C' 'H' 'A' 'R' [ _left_Paren _length _right_Paren ]
+	|	'N' 'A' 'T' 'I' 'O' 'N' 'A' 'L' 'C' 'H' 'A' 'R' 'A' 'C' 'T' 'E' 'R' 'V' 'A' 'R' 'Y' 'I' 'N' 'G' [ _left_Paren _length _right_Paren ]
+	|	'N' 'A' 'T' 'I' 'O' 'N' 'A' 'L' 'C' 'H' 'A' 'R' 'V' 'A' 'R' 'Y' 'I' 'N' 'G' [ _left_Paren _length _right_Paren ]
+	|	'N' 'C' 'H' 'A' 'R' 'V' 'A' 'R' 'Y' 'I' 'N' 'G' [ _left_Paren _length _right_Paren ] ;
+
+_bit_String_Type :
+		'B' 'I' 'T' [ _left_Paren _length _right_Paren ]
+	|	'B' 'I' 'T' 'V' 'A' 'R' 'Y' 'I' 'N' 'G' [ _left_Paren _length _right_Paren ] ;
+
+_exact_Numeric_Type :
+'	' 	'N' 'U' 'M' 'E' 'R' 'I' 'C' [ _left_Paren _precision [ _comma _scale ] _right_Paren ]
+	| 	'D' 'E' 'C' 'I' 'M' 'A' 'L' [ _left_Paren _precision [ _comma _scale ] _right_Paren ]
+	| 	'D' 'E' 'C' [ _left_Paren _precision [ _comma _scale ] _right_Paren ]
+	|	'I' 'N' 'T' 'E' 'G' 'E' 'R'
+	|	'I' 'N' 'T'
+	|	'S' 'M' 'A' 'L' 'L' 'I' 'N' 'T' ;
+
+_approximate_Numeric_Type :
+'	' 	'F' 'L' 'O' 'A' 'T' [ _left_Paren _precision _right_Paren ]
+	|	'R' 'E' 'A' 'L'
+	|	'D' 'O' 'U' 'B' 'L' 'E' 'P' 'R' 'E' 'C' 'I' 'S' 'I' 'O' 'N' ;
+
+_datetime_Type :
+		'D' 'A' 'T' 'E'
+	|   'T' 'I' 'M' 'E' [ _left_Paren _time_Precision _right_Paren ] [ 'W' 'I' 'T' 'H' 'T' 'I' 'M' 'E' 'Z' 'O' 'N' 'E' ]
+	|   'T' 'I' 'M' 'E' 'S' 'T' 'A' 'M' 'P' [ _left_Paren _timestamp_Precision _right_Paren ] [ 'W' 'I' 'T' 'H' 'T' 'I' 'M' 'E' 'Z' 'O' 'N' 'E' ] ;
+
+_start_Field :
+		_non_second_Datetime_Field [ _left_Paren _interval_Leading_Field_Precision _right_Paren ] ;
+
+_end_Field :
+		_non_second_Datetime_Field
+	|   'S' 'E' 'C' 'O' 'N' 'D' [ _left_Paren _interval_Fractional_Seconds_Precision _right_Paren ] ;
+
+_single_Datetime_Field :
+		_non_second_Datetime_Field [ _left_Paren _interval_Leading_Field_Precision _right_Paren ]
+	|   'S' 'E' 'C' 'O' 'N' 'D' [ _left_Paren _interval_Leading_Field_Precision [ _comma _interval_Fractional_Seconds_Precision ] _right_Paren ] ;
+
+_qualified_Name : [ _schema_Name _period ] _qualified_Identifier ;
+
+_signed_Numeric_Literal : [ _sign ] _unsigned_Numeric_Literal ;
+
+_interval_Literal : 'I' 'N' 'T' 'E' 'R' 'V' 'A' 'L' [ _sign ] _interval_String _interval_Qualifier ;
+
+_current_Time_Value_Function : 'C' 'U' 'R' 'R' 'E' 'N' 'T' '_' 'T' 'I' 'M' 'E' [ _left_Paren _time_Precision _right_Paren ] ;
+
+_current_Timestamp_Value_Function : 'C' 'U' 'R' 'R' 'E' 'N' 'T' '_' 'T' 'I' 'M' 'E' 'S' 'T' 'A' 'M' 'P' [ _left_Paren _timestamp_Precision _right_Paren ] ;
+
+_identifier_Body : _identifier_Start [ { _underscore | _identifier_Part } ] ;
+
+_national_Character_String_Literal :
+		'N' _quote [ _character_Representation {_character_Representation} ] _quote [ { _separator {_separator} _quote [ _character_Representation {_character_Representation} ] _quote } ] ;
+
+_bit_String_Literal :
+		'B' _quote [ _bit {_bit} ] _quote [ { _separator {_separator} _quote [ _bit {_bit} ] _quote } ] ;
+
+_hex_String_Literal :
+		'X' _quote [ _hexit {_hexit} ] _quote [ { _separator {_separator} _quote [ _hexit {_hexit} ] _quote } ] ;
+
+_character_String_Literal :
+	[ _introducercharacter_Set_Specification ] _quote [ _character_Representation {_character_Representation} ] _quote [ { _separator {_separator} _quote [ _character_Representation {_character_Representation} ] _quote } ] ;
+
+_time_String : _quote _time_Value [ _time_Zone_Interval ] _quote ;
+
+_seconds_Value : _seconds_Integer_Value [ _period [ _seconds_Fraction ] ] ;
+
+_timestamp_String : _quote _date_Value _space _time_Value [ _time_Zone_Interval ] _quote ;
+
+_interval_String : _quote { _year_month_Literal | _day_time_Literal } _quote ;
+
+_left_Paren : '(' ;
+
+_right_Paren : ')' ;
+
+_asterisk : '*' ;
+
+_plus_Sign : '+' ;
+
+_comma : ',' ;
+
+_minus_Sign : '-' ;
+
+_period : '.' ;
+
+_solidus : '/' ;
+
+_colon : ':' ;
+
+_less_Than_Operator : '<' ;
+
+_equals_Operator : '=' ;
+
+_greater_Than_Operator : '>' ;
+
+_question_Mark : '?' ;
+
+_unsigned_Numeric_Literal :
+		_exact_Numeric_Literal
+	|	_approximate_Numeric_Literal ;
+
+_unsigned_Integer : _digit {_digit} ;
+
+_approximate_Numeric_Literal :
+		_mantissa 'E' _exponent ;
+
+_mantissa : _exact_Numeric_Literal ;
+
+_exponent : _signed_Integer ;
+
+_sign : _plus_Sign | _minus_Sign ;
+
+_character_Set_Specification :
+		_standard_Character_Repertoire_Name
+	|	_implementation_defined_Character_Repertoire_Name
+	|	_user_defined_Character_Repertoire_Name
+	|	_standard_Universal_Character_Form_of_use_Name
+	|	_implementation_defined_Universal_Character_Form_of_use_Name ;
+
+_standard_Character_Repertoire_Name : _character_Set_Name ;
+
+_catalog_Name : _identifier ;
+
+_actual_Identifier : _regular_Identifier | _delimited_Identifier ;
+
+_delimited_Identifier : _double_Quote _delimited_Identifier_Body _double_Quote ;
+
+_delimited_Identifier_Body : _delimited_Identifier_Part {_delimited_Identifier_Part} ;
+
+_unqualified_Schema_Name : _identifier ;
+
+_SQL_Language_Identifier_Start : _simple_Latin_Letter ;
+
+_SQL_Language_Identifier_Part : _simple_Latin_Letter | _digit ;
+
+_greater_Than_Or_Equals_Operator : '>' '=' ;
+
+_less_Than_Or_Equals_Operator : '<' '=' ;
+
+_concatenation_Operator : '|' '|' ;
+
+_authorization_Identifier : _identifier ;
+
+_qualified_Local_Table_Name : 'M' 'O' 'D' 'U' 'L' 'E' _period _local_Table_Name ;
+
+_local_Table_Name : _qualified_Identifier ;
+
+_qualified_Identifier : _identifier ;
+
+_table_Element : _column_Definition | _table_Constraint_Definition ;
+
+_column_Name : _identifier ;
+
+_length : _unsigned_Integer ;
+
+_numeric_Type :
+		_exact_Numeric_Type
+	|	_approximate_Numeric_Type ;
+
+_precision : _unsigned_Integer ;
+
+_scale : _unsigned_Integer ;
+
+_time_Precision : _time_Fractional_Seconds_Precision ;
+
+_time_Fractional_Seconds_Precision : _unsigned_Integer ;
+
+_timestamp_Precision : _time_Fractional_Seconds_Precision ;
+
+_interval_Type : 'I' 'N' 'T' 'E' 'R' 'V' 'A' 'L' _interval_Qualifier ;
+
+_interval_Qualifier :
+		_start_Field 'T' 'O' _end_Field
+	|   _single_Datetime_Field ;
+
+_interval_Leading_Field_Precision : _unsigned_Integer ;
+
+_interval_Fractional_Seconds_Precision : _unsigned_Integer ;
+
+_domain_Name : _qualified_Name ;
+
+_default_Clause : 'D' 'E' 'F' 'A' 'U' 'L' 'T' _default_Option ;
+
+_default_Option :
+		_literal
+	|	_datetime_Value_Function
+	|	'U' 'S' 'E' 'R'
+	|	'C' 'U' 'R' 'R' 'E' 'N' 'T' '_' 'U' 'S' 'E' 'R'
+	|	'S' 'E' 'S' 'S' 'I' 'O' 'N' '_' 'U' 'S' 'E' 'R'
+	|	'S' 'Y' 'S' 'T' 'E' 'M' '_' 'U' 'S' 'E' 'R'
+	|	'N' 'U' 'L' 'L' ;
+
+_literal : _signed_Numeric_Literal | _general_Literal ;
+
+_general_Literal :
+		_character_String_Literal
+	|	_national_Character_String_Literal
+	|	_bit_String_Literal
+	|	_hex_String_Literal
+	|	_datetime_Literal
+	|	_interval_Literal ;
+
+_datetime_Literal :
+		_date_Literal
+	|	_time_Literal
+	|	_timestamp_Literal ;
+
+_date_Literal : 'D' 'A' 'T' 'E' _date_String ;
+
+_time_Literal : 'T' 'I' 'M' 'E' _time_String ;
+
+_timestamp_Literal : 'T' 'I' 'M' 'E' 'S' 'T' 'A' 'M' 'P' _timestamp_String ;
+
+_datetime_Value_Function :
+		_current_Date_Value_Function
+	|	_current_Time_Value_Function
+	|	_current_Timestamp_Value_Function ;
+
+_current_Date_Value_Function : 'C' 'U' 'R' 'R' 'E' 'N' 'T' '_' 'D' 'A' 'T' 'E' ;
+
+_simple_Latin_Letter :
+		_simple_Latin_Upper_Case_Letter
+	|	_simple_Latin_Lower_Case_Letter ;
+
+_simple_Latin_Upper_Case_Letter :
+	'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z' ;
+
+_simple_Latin_Lower_Case_Letter :
+	'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' ;
+
+_digit :
+	'0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;
+
+_double_Quote : '"' ;
+
+_underscore : '_' ;
+
+_regular_Identifier : _identifier_Body ;
+
+_identifier_Part : _identifier_Start | _digit ;
+
+_character_Representation : _nonquote_Character | _quote_Symbol ;
+
+_quote_Symbol : _quote _quote ;
+
+_bit : '0' | '1' ;
+
+_hexit : _digit | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' ;
+
+_date_String : _quote _date_Value _quote ;
+
+_date_Value : _years_Value _minus_Sign _months_Value _minus_Sign _days_Value ;
+
+_years_Value : _datetime_Value ;
+
+_datetime_Value : _unsigned_Integer ;
+
+_months_Value : _datetime_Value ;
+
+_days_Value : _datetime_Value ;
+
+_time_Value : _hours_Value _colon _minutes_Value _colon _seconds_Value ;
+
+_hours_Value : _datetime_Value ;
+
+_minutes_Value : _datetime_Value ;
+
+_seconds_Integer_Value : _unsigned_Integer ;
+
+_seconds_Fraction : _unsigned_Integer ;
+
+_time_Zone_Interval : _sign _hours_Value _colon _minutes_Value ;
+
+_quote : '\'' ;
+
