@@ -64,14 +64,14 @@ _datetime_Type :
 	|   'T' 'I' 'M' 'E' 'S' 'T' 'A' 'M' 'P' [ _left_Paren _timestamp_Precision _right_Paren ] [ 'W' 'I' 'T' 'H' 'T' 'I' 'M' 'E' 'Z' 'O' 'N' 'E' ] ;
 
 _start_Field :
-		_non-_second_Datetime_Field [ _left_Paren _interval_Leading_Field_Precision _right_Paren ] ;
+		_non_second_Datetime_Field [ _left_Paren _interval_Leading_Field_Precision _right_Paren ] ;
 
 _end_Field :
-		_non-_second_Datetime_Field
+		_non_second_Datetime_Field
 	|   'S' 'E' 'C' 'O' 'N' 'D' [ _left_Paren _interval_Fractional_Seconds_Precision _right_Paren ] ;
 
 _single_Datetime_Field :
-		_non-_second_Datetime_Field [ _left_Paren _interval_Leading_Field_Precision _right_Paren ]
+		_non_second_Datetime_Field [ _left_Paren _interval_Leading_Field_Precision _right_Paren ]
 	|   'S' 'E' 'C' 'O' 'N' 'D' [ _left_Paren _interval_Leading_Field_Precision [ _comma _interval_Fractional_Seconds_Precision ] _right_Paren ] ;
 
 _qualified_Name : [ _schema_Name _period ] _qualified_Identifier ;
@@ -104,7 +104,7 @@ _seconds_Value : _seconds_Integer_Value [ _period [ _seconds_Fraction ] ] ;
 
 _timestamp_String : _quote _date_Value _space _time_Value [ _time_Zone_Interval ] _quote ;
 
-_interval_String : _quote { _year-_month_Literal | _day-_time_Literal } _quote ;
+_interval_String : _quote { _year_month_Literal | _day_time_Literal } _quote ;
 
 _left_Paren : '(' ;
 
@@ -149,10 +149,10 @@ _sign : _plus_Sign | _minus_Sign ;
 
 _character_Set_Specification :
 		_standard_Character_Repertoire_Name
-	|	_implementation-_defined_Character_Repertoire_Name
-	|	_user-_defined_Character_Repertoire_Name
-	|	_standard_Universal_Character_Form-_of-_use_Name
-	|	_implementation-_defined_Universal_Character_Form-_of-_use_Name ;
+	|	_implementation_defined_Character_Repertoire_Name
+	|	_user_defined_Character_Repertoire_Name
+	|	_standard_Universal_Character_Form_of_use_Name
+	|	_implementation_defined_Universal_Character_Form_of_use_Name ;
 
 _standard_Character_Repertoire_Name : _character_Set_Name ;
 
@@ -169,8 +169,6 @@ _unqualified_Schema_Name : _identifier ;
 _SQL_Language_Identifier_Start : _simple_Latin_Letter ;
 
 _SQL_Language_Identifier_Part : _simple_Latin_Letter | _digit ;
-
-_not_Equals_Operator :  ;
 
 _greater_Than_Or_Equals_Operator : '>' '=' ;
 

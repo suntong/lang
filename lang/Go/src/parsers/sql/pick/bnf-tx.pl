@@ -6,6 +6,9 @@ s/: (.) ;/: '$1' ;/g;
 # two-chars difinition
 s/: (.)(.) ;/: '$1' '$2' ;/g;
 
+# fix "non-xxx" as "non_xxx"
+s/(non|year|day|user|implementation|Form|of)-/$1_/g;
+
 # every all-CAP words should be split into quoted characters
 # else all should have leading “_”
 s/[a-z]\w+/_$&/g;
@@ -18,7 +21,7 @@ s/(\s)([^][ ;:|{}])(?=( |\n))/$1'$2'/g;
 s/'''/'\\''/;
 
 # rules to skip
-s/\n_(space|nonquote_Character|identifier_Start)\s*:.*?;\n//gs;
+s/\n_(space|nonquote_Character|identifier_Start|not_Equals_Operator)\s*:.*?;\n//gs;
 
 
 # Repeats
