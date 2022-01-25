@@ -20,4 +20,11 @@ s/'''/'\\''/;
 # rules to skip
 s/\n_(space|nonquote_Character|identifier_Start)\s*:.*?;\n//gs;
 
+
+# Repeats
+# 1. { }... is redundant as { } itself means repeating. Thus need to remove
+# 2. word... need to be changed as word {word}
+s/(\{.*?\})\s*\.\.\./$1/gs;
+s/(\S+)\s*\.\.\./$1 {$1}/gs;
+
 print;

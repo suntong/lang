@@ -11,12 +11,12 @@ _schema_Name : [ _catalog_Name _period ] _unqualified_Schema_Name ;
 _identifier : [ _introducercharacter_Set_Specification ] _actual_Identifier ;
 
 _SQL_Language_Identifier :
-		_SQL_Language_Identifier_Start [ { _underscore | _SQL_Language_Identifier_Part }... ] ;
+		_SQL_Language_Identifier_Start [ { _underscore | _SQL_Language_Identifier_Part } ] ;
 
-_table_Element_List : _left_Paren _table_Element [ { _comma _table_Element }... ] _right_Paren ;
+_table_Element_List : _left_Paren _table_Element [ { _comma _table_Element } ] _right_Paren ;
 
 _column_Definition :
-		_column_Name { _data_Type | _domain_Name } [ _default_Clause ] [ _column_Constraint_Definition... ] [ _collate_Clause ] ;
+		_column_Name { _data_Type | _domain_Name } [ _default_Clause ] [ _column_Constraint_Definition {_column_Constraint_Definition} ] [ _collate_Clause ] ;
 
 _data_Type :
 		_character_String_Type [ 'C' 'H' 'A' 'R' 'A' 'C' 'T' 'E' 'R' 'S' 'E' 'T' _character_Set_Specification ]
@@ -84,19 +84,19 @@ _current_Time_Value_Function : 'C' 'U' 'R' 'R' 'E' 'N' 'T' '_' 'T' 'I' 'M' 'E' [
 
 _current_Timestamp_Value_Function : 'C' 'U' 'R' 'R' 'E' 'N' 'T' '_' 'T' 'I' 'M' 'E' 'S' 'T' 'A' 'M' 'P' [ _left_Paren _timestamp_Precision _right_Paren ] ;
 
-_identifier_Body : _identifier_Start [ { _underscore | _identifier_Part } ... ] ;
+_identifier_Body : _identifier_Start [ { _underscore | _identifier_Part } ] ;
 
 _national_Character_String_Literal :
-		'N' _quote [ _character_Representation ... ] _quote [ { _separator... _quote [ _character_Representation... ] _quote }... ] ;
+		'N' _quote [ _character_Representation {_character_Representation} ] _quote [ { _separator {_separator} _quote [ _character_Representation {_character_Representation} ] _quote } ] ;
 
 _bit_String_Literal :
-		'B' _quote [ _bit ... ] _quote [ { _separator... _quote [ _bit... ] _quote }... ] ;
+		'B' _quote [ _bit {_bit} ] _quote [ { _separator {_separator} _quote [ _bit {_bit} ] _quote } ] ;
 
 _hex_String_Literal :
-		'X' _quote [ _hexit ... ] _quote [ { _separator... _quote [ _hexit... ] _quote }... ] ;
+		'X' _quote [ _hexit {_hexit} ] _quote [ { _separator {_separator} _quote [ _hexit {_hexit} ] _quote } ] ;
 
 _character_String_Literal :
-	[ _introducercharacter_Set_Specification ] _quote [ _character_Representation... ] _quote [ { _separator... _quote [ _character_Representation... ] _quote }... ] ;
+	[ _introducercharacter_Set_Specification ] _quote [ _character_Representation {_character_Representation} ] _quote [ { _separator {_separator} _quote [ _character_Representation {_character_Representation} ] _quote } ] ;
 
 _time_String : _quote _time_Value [ _time_Zone_Interval ] _quote ;
 
@@ -136,7 +136,7 @@ _unsigned_Numeric_Literal :
 		_exact_Numeric_Literal
 	|	_approximate_Numeric_Literal ;
 
-_unsigned_Integer : _digit ... ;
+_unsigned_Integer : _digit {_digit} ;
 
 _approximate_Numeric_Literal :
 		_mantissa 'E' _exponent ;
@@ -162,7 +162,7 @@ _actual_Identifier : _regular_Identifier | _delimited_Identifier ;
 
 _delimited_Identifier : _double_Quote _delimited_Identifier_Body _double_Quote ;
 
-_delimited_Identifier_Body : _delimited_Identifier_Part... ;
+_delimited_Identifier_Body : _delimited_Identifier_Part {_delimited_Identifier_Part} ;
 
 _unqualified_Schema_Name : _identifier ;
 
