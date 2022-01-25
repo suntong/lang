@@ -14,7 +14,7 @@ s!\b[A-Z_]{2,}!join " ", split //, $&!ge;
 s/sQL/SQL/g;
 
 # every single character should be quoted
-s/(\s)([^][ :|{}])(?= )/$1'$2'/g;
+s/(\s)([^][ ;:|{}])(?=( |\n))/$1'$2'/g;
 s/'''/'\\''/;
 
 # rules to skip

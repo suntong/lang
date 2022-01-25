@@ -49,17 +49,17 @@ _exact_Numeric_Type :
 '	' 	'N' 'U' 'M' 'E' 'R' 'I' 'C' [ _left_Paren _precision [ _comma _scale ] _right_Paren ]
 	| 	'D' 'E' 'C' 'I' 'M' 'A' 'L' [ _left_Paren _precision [ _comma _scale ] _right_Paren ]
 	| 	'D' 'E' 'C' [ _left_Paren _precision [ _comma _scale ] _right_Paren ]
-	|	'I' 'N' 'T' 'E' 'G' 'E' R
-	|	'I' 'N' T
+	|	'I' 'N' 'T' 'E' 'G' 'E' 'R'
+	|	'I' 'N' 'T'
 	|	'S' 'M' 'A' 'L' 'L' 'I' 'N' 'T' ;
 
 _approximate_Numeric_Type :
 '	' 	'F' 'L' 'O' 'A' 'T' [ _left_Paren _precision _right_Paren ]
-	|	'R' 'E' 'A' L
+	|	'R' 'E' 'A' 'L'
 	|	'D' 'O' 'U' 'B' 'L' 'E' 'P' 'R' 'E' 'C' 'I' 'S' 'I' 'O' 'N' ;
 
 _datetime_Type :
-		'D' 'A' 'T' E
+		'D' 'A' 'T' 'E'
 	|   'T' 'I' 'M' 'E' [ _left_Paren _time_Precision _right_Paren ] [ 'W' 'I' 'T' 'H' 'T' 'I' 'M' 'E' 'Z' 'O' 'N' 'E' ]
 	|   'T' 'I' 'M' 'E' 'S' 'T' 'A' 'M' 'P' [ _left_Paren _timestamp_Precision _right_Paren ] [ 'W' 'I' 'T' 'H' 'T' 'I' 'M' 'E' 'Z' 'O' 'N' 'E' ] ;
 
@@ -223,10 +223,10 @@ _default_Clause : 'D' 'E' 'F' 'A' 'U' 'L' 'T' _default_Option ;
 _default_Option :
 		_literal
 	|	_datetime_Value_Function
-	|	'U' 'S' 'E' R
-	|	'C' 'U' 'R' 'R' 'E' 'N' 'T' '_' 'U' 'S' 'E' R
-	|	'S' 'E' 'S' 'S' 'I' 'O' 'N' '_' 'U' 'S' 'E' R
-	|	'S' 'Y' 'S' 'T' 'E' 'M' '_' 'U' 'S' 'E' R
+	|	'U' 'S' 'E' 'R'
+	|	'C' 'U' 'R' 'R' 'E' 'N' 'T' '_' 'U' 'S' 'E' 'R'
+	|	'S' 'E' 'S' 'S' 'I' 'O' 'N' '_' 'U' 'S' 'E' 'R'
+	|	'S' 'Y' 'S' 'T' 'E' 'M' '_' 'U' 'S' 'E' 'R'
 	|	'N' 'U' 'L' 'L' ;
 
 _literal : _signed_Numeric_Literal | _general_Literal ;
