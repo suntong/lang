@@ -1,0 +1,15 @@
+/*
+
+SQL-92 definitions gocc ebnf grammar
+
+Copyright (c) 2022 Tong Sun
+
+*/
+
+/* Lexical part */
+!whitespace : ' ' | '\t' | '\n' | '\r' ;
+!comment : _lineComment | _blockComment ;
+_lineComment : '/' '/' {.} '\n' ;
+_blockComment : '/' '*' {. | '*'} '*' '/' ;
+
+/* Lexical from sql-92.gocc.l.ebnf */
