@@ -14,3 +14,4 @@ SEL='equals_Operator unsigned_Numeric_Literal greater_Than_Or_Equals_Operator ta
 
 # for gocc
 cat sql-92.l.definitions*.ebnf | bnf-tx.pl > sql-92.gocc.l.ebnf
+cat sql-92.p.definitions+.ebnf | bnf-tx.p.split.pl 2> sql-92.p.definitions+.p.ebnf | bnf-tx.p.pl > sql-92.p.definitions+.l.ebnf
