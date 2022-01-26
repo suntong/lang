@@ -1,296 +1,296 @@
-Schema_Name_Clause :
-		Schema_Name
-	|	AUTHORIZATION Schema_Authorization_Identifier
-	|	Schema_Name AUTHORIZATION Schema_Authorization_Identifier ;
+_schema_Name_Clause :
+		_schema_Name
+	|	'A' 'U' 'T' 'H' 'O' 'R' 'I' 'Z' 'A' 'T' 'I' 'O' 'N' _schema_Authorization_Identifier
+	|	_schema_Name 'A' 'U' 'T' 'H' 'O' 'R' 'I' 'Z' 'A' 'T' 'I' 'O' 'N' _schema_Authorization_Identifier ;
 
-Schema_Authorization_Identifier : Authorization_Identifier ;
+_schema_Authorization_Identifier : _authorization_Identifier ;
 
-Schema_Character_Set_Specification : DEFAULT CHARACTER SET Character_Set_Specification ;
+_schema_Character_Set_Specification : 'D' 'E' 'F' 'A' 'U' 'L' 'T' 'C' 'H' 'A' 'R' 'A' 'C' 'T' 'E' 'R' 'S' 'E' 'T' _character_Set_Specification ;
 
-View_Column_List : Column_Name_List ;
+_view_Column_List : _column_Name_List ;
 
-Levels_Clause : CASCADED | LOCAL ;
+_levels_Clause : 'C' 'A' 'S' 'C' 'A' 'D' 'E' 'D' | 'L' 'O' 'C' 'A' 'L' ;
 
-Table_Name : Qualified_Name | Qualified_Local_Table_Name ;
+_table_Name : _qualified_Name | _qualified_Local_Table_Name ;
 
-Query_Expression : Non-join_Query_Expression | Joined_Table ;
+_query_Expression : _non-join__query_Expression | _joined_Table ;
 
-Joined_Table :
-		Cross_Join
-	|   Qualified_Join
-	|   Left_Paren Joined_Table Right_Paren ;
+_joined_Table :
+		_cross_Join
+	|   _qualified_Join
+	|   _left_Paren _joined_Table _right_Paren ;
 
-Cross_Join :
-		Table_Reference CROSS JOIN Table_Reference ;
+_cross_Join :
+		_table_Reference 'C' 'R' 'O' 'S' 'S' 'J' 'O' 'I' 'N' _table_Reference ;
 
-Outer_Join_Type : LEFT | RIGHT | FULL ;
+_outer_Join_Type : 'L' 'E' 'F' 'T' | 'R' 'I' 'G' 'H' 'T' | 'F' 'U' 'L' 'L' ;
 
-Join_Specification : Join_Condition | Named_Columns_Join ;
+_join_Specification : _join_Condition | _named_Columns_Join ;
 
-Join_Condition : ON Search_Condition ;
+_join_Condition : 'O' 'N' _search_Condition ;
 
-Named_Columns_Join : USING Left_Paren Join_Column_List Right_Paren ;
+_named_Columns_Join : 'U' 'S' 'I' 'N' 'G' _left_Paren _join_Column_List _right_Paren ;
 
-Join_Column_List : Column_Name_List ;
+_join_Column_List : _column_Name_List ;
 
-Search_Condition :
-		Boolean_Term
-	|   Search_Condition OR Boolean_Term ;
+_search_Condition :
+		_boolean_Term
+	|   _search_Condition 'O' 'R' _boolean_Term ;
 
-Boolean_Term :
-		Boolean_Factor
-	|   Boolean_Term AND Boolean_Factor ;
+_boolean_Term :
+		_boolean_Factor
+	|   _boolean_Term 'A' 'N' 'D' _boolean_Factor ;
 
-Boolean_Primary : Predicate | Left_Paren Search_Condition Right_Paren ;
+_boolean_Primary : _predicate | _left_Paren _search_Condition _right_Paren ;
 
-Predicate :
-		Comparison_Predicate
-	|   Between_Predicate
-	|   In_Predicate
-	|   Like_Predicate
-	|   Null_Predicate
-	|   Quantified_Comparison_Predicate
-	|   Exists_Predicate
-	|   Match_Predicate
-	|   Overlaps_Predicate ;
+_predicate :
+		_comparison_Predicate
+	|   _between_Predicate
+	|   _in_Predicate
+	|   _like_Predicate
+	|   _null_Predicate
+	|   _quantified_Comparison_Predicate
+	|   _exists_Predicate
+	|   _match_Predicate
+	|   _overlaps_Predicate ;
 
-Comparison_Predicate : Row_Value_Constructor Comp_Op Row_Value_Constructor ;
+_comparison_Predicate : _row_Value_Constructor _comp_Op _row_Value_Constructor ;
 
-Row_Value_Constructor :
-		Row_Value_Constructor_Element
-	|   Left_Paren Row_Value_Constructor_List Right_Paren
-	|   Row_Subquery ;
+_row_Value_Constructor :
+		_row_Value_Constructor_Element
+	|   _left_Paren _row_Value_Constructor_List _right_Paren
+	|   _row_Subquery ;
 
-Row_Value_Constructor_Element :
-		Value_Expression
-	|   Null_Specification
-	|   Default_Specification ;
+_row_Value_Constructor_Element :
+		_value_Expression
+	|   _null_Specification
+	|   _default_Specification ;
 
-Value_Expression :
-		Numeric_Value_Expression
-	|   String_Value_Expression
-	|   Datetime_Value_Expression
-	|   Interval_Value_Expression ;
+_value_Expression :
+		_numeric_Value_Expression
+	|   _string_Value_Expression
+	|   _datetime_Value_Expression
+	|   _interval_Value_Expression ;
 
-Numeric_Value_Expression :
-		Term
-	|   Numeric_Value_Expression Plus_Sign Term
-	|   Numeric_Value_Expression Minus_Sign Term ;
+_numeric_Value_Expression :
+		_term
+	|   _numeric_Value_Expression _plus_Sign _term
+	|   _numeric_Value_Expression _minus_Sign _term ;
 
-Term :
-		Factor
-	|   Term Asterisk Factor
-	|   Term Solidus Factor ;
+_term :
+		_factor
+	|   _term _asterisk _factor
+	|   _term _solidus _factor ;
 
-Numeric_Primary : Value_Expression_Primary | Numeric_Value_Function ;
+_numeric_Primary : _value_Expression_Primary | _numeric_Value_Function ;
 
-Value_Expression_Primary :
-		Unsigned_Value_Specification
-	|   Column_Reference
-	|   Set_Function_Specification
-	|   Scalar_Subquery
-	|   Case_Expression
-	|   Left_Paren Value_Expression Right_Paren
-	|   Cast_Specification ;
+_value_Expression_Primary :
+		_unsigned_Value_Specification
+	|   _column_Reference
+	|   _set_Function_Specification
+	|   _scalar_Subquery
+	|   _case_Expression
+	|   _left_Paren _value_Expression _right_Paren
+	|   _cast_Specification ;
 
-Unsigned_Value_Specification : Unsigned_Literal | General_Value_Specification ;
+_unsigned_Value_Specification : _unsigned_Literal | _general_Value_Specification ;
 
-Unsigned_Literal : Unsigned_Numeric_Literal | General_Literal ;
+_unsigned_Literal : _unsigned_Numeric_Literal | _general_Literal ;
 
-General_Value_Specification :
-		Parameter_Specification
-	|   Dynamic_Parameter_Specification
-	|   Variable_Specification
-	|   USER
-	|   CURRENT_USER
-	|   SESSION_USER
-	|   SYSTEM_USER
-	|   VALUE ;
+_general_Value_Specification :
+		_parameter_Specification
+	|   _dynamic_Parameter_Specification
+	|   _variable_Specification
+	|   'U' 'S' 'E' 'R'
+	|   'C' 'U' 'R' 'R' 'E' 'N' 'T' '_' 'U' 'S' 'E' 'R'
+	|   'S' 'E' 'S' 'S' 'I' 'O' 'N' '_' 'U' 'S' 'E' 'R'
+	|   'S' 'Y' 'S' 'T' 'E' 'M' '_' 'U' 'S' 'E' 'R'
+	|   'V' 'A' 'L' 'U' 'E' ;
 
-Parameter_Name : Colon Identifier ;
+_parameter_Name : _colon _identifier ;
 
-Dynamic_Parameter_Specification : Question_Mark ;
+_dynamic_Parameter_Specification : _question_Mark ;
 
-Embedded_Variable_Name : ColonHost_Identifier ;
+_embedded_Variable_Name : _colonHost_Identifier ;
 
-Qualifier : Table_Name | Correlation_Name ;
+_qualifier : _table_Name | _correlation_Name ;
 
-Correlation_Name : Identifier ;
+_correlation_Name : _identifier ;
 
-Set_Function_Specification :
-		COUNT Left_Paren Asterisk Right_Paren
-	|   General_Set_Function ;
+_set_Function_Specification :
+		'C' 'O' 'U' 'N' 'T' _left_Paren _asterisk _right_Paren
+	|   _general_Set_Function ;
 
-Set_Function_Type : AVG | MAX | MIN | SUM | COUNT ;
+_set_Function_Type : 'A' 'V' 'G' | 'M' 'A' 'X' | 'M' 'I' 'N' | 'S' 'U' 'M' | 'C' 'O' 'U' 'N' 'T' ;
 
-Set_Quantifier : DISTINCT | ALL ;
+_set_Quantifier : 'D' 'I' 'S' 'T' 'I' 'N' 'C' 'T' | 'A' 'L' 'L' ;
 
-Scalar_Subquery : Subquery ;
+_scalar_Subquery : _subquery ;
 
-Subquery : Left_Paren Query_Expression Right_Paren ;
+_subquery : _left_Paren _query_Expression _right_Paren ;
 
-Derived_Column_List : Column_Name_List ;
+_derived_Column_List : _column_Name_List ;
 
-Derived_Table : Table_Subquery ;
+_derived_Table : _table_Subquery ;
 
-Table_Subquery : Subquery ;
+_table_Subquery : _subquery ;
 
-Case_Expression : Case_Abbreviation | Case_Specification ;
+_case_Expression : _case_Abbreviation | _case_Specification ;
 
-Case_Specification : Simple_Case | Searched_Case ;
+_case_Specification : _simple_Case | _searched_Case ;
 
-Case_Operand : Value_Expression ;
+_case_Operand : _value_Expression ;
 
-Else_Clause : ELSE Result ;
+_else_Clause : 'E' 'L' 'S' 'E' _result ;
 
-Cast_Specification : CAST Left_Paren Cast_Operand AS Cast_Target Right_Paren ;
+_cast_Specification : 'C' 'A' 'S' 'T' _left_Paren _cast_Operand 'A' 'S' _cast_Target _right_Paren ;
 
-Cast_Operand : Value_Expression | NULL ;
+_cast_Operand : _value_Expression | 'N' 'U' 'L' 'L' ;
 
-Cast_Target : Domain_Name | Data_Type ;
+_cast_Target : _domain_Name | _data_Type ;
 
-Numeric_Value_Function : Position_Expression | Extract_Expression |	Length_Expression ;
+_numeric_Value_Function : _position_Expression | _extract_Expression |	_length_Expression ;
 
-Position_Expression :
-	POSITION Left_Paren Character_Value_Expression IN Character_Value_Expression Right_Paren ;
+_position_Expression :
+	'P' 'O' 'S' 'I' 'T' 'I' 'O' 'N' _left_Paren _character_Value_Expression 'I' 'N' _character_Value_Expression _right_Paren ;
 
-Character_Value_Expression : Concatenation | Character_Factor ;
+_character_Value_Expression : _concatenation | _character_Factor ;
 
-Concatenation : Character_Value_Expression Concatenation_Operator Character_Factor ;
+_concatenation : _character_Value_Expression _concatenation_Operator _character_Factor ;
 
-Character_Primary : Value_Expression_Primary | String_Value_Function ;
+_character_Primary : _value_Expression_Primary | _string_Value_Function ;
 
-String_Value_Function : Character_Value_Function | Bit_Value_Function ;
+_string_Value_Function : _character_Value_Function | _bit_Value_Function ;
 
-Character_Value_Function :
-		Character_Substring_Function
-	|   Fold
-	|   Form-of-use_Conversion
-	|   Character_Translation
-	|   Trim_Function ;
+_character_Value_Function :
+		_character_Substring_Function
+	|   _fold
+	|   _form-of-use__conversion
+	|   _character_Translation
+	|   _trim_Function ;
 
-Start_Position : Numeric_Value_Expression ;
+_start_Position : _numeric_Value_Expression ;
 
-String_Length : Numeric_Value_Expression ;
+_string_Length : _numeric_Value_Expression ;
 
-Character_Translation :
-		TRANSLATE Left_Paren Character_Value_Expression USING Translation_Name Right_Paren ;
+_character_Translation :
+		'T' 'R' 'A' 'N' 'S' 'L' 'A' 'T' 'E' _left_Paren _character_Value_Expression 'U' 'S' 'I' 'N' 'G' _translation_Name _right_Paren ;
 
-Translation_Name : Qualified_Name ;
+_translation_Name : _qualified_Name ;
 
-Trim_Function : TRIM Left_Paren Trim_Operands Right_Paren ;
+_trim_Function : 'T' 'R' 'I' 'M' _left_Paren _trim_Operands _right_Paren ;
 
-Trim_Specification : LEADING | TRAILING | BOTH ;
+_trim_Specification : 'L' 'E' 'A' 'D' 'I' 'N' 'G' | 'T' 'R' 'A' 'I' 'L' 'I' 'N' 'G' | 'B' 'O' 'T' 'H' ;
 
-Trim_Character : Character_Value_Expression ;
+_trim_Character : _character_Value_Expression ;
 
-Trim_Source : Character_Value_Expression ;
+_trim_Source : _character_Value_Expression ;
 
-Bit_Value_Function : Bit_Substring_Function ;
+_bit_Value_Function : _bit_Substring_Function ;
 
-Bit_Value_Expression : Bit_Concatenation | Bit_Factor ;
+_bit_Value_Expression : _bit_Concatenation | _bit_Factor ;
 
-Bit_Concatenation : Bit_Value_Expression Concatenation_Operator Bit_Factor ;
+_bit_Concatenation : _bit_Value_Expression _concatenation_Operator _bit_Factor ;
 
-Bit_Factor : Bit_Primary ;
+_bit_Factor : _bit_Primary ;
 
-Bit_Primary : Value_Expression_Primary | String_Value_Function ;
+_bit_Primary : _value_Expression_Primary | _string_Value_Function ;
 
-Extract_Expression : EXTRACT Left_Paren Extract_Field FROM Extract_Source Right_Paren ;
+_extract_Expression : 'E' 'X' 'T' 'R' 'A' 'C' 'T' _left_Paren _extract_Field 'F' 'R' 'O' 'M' _extract_Source _right_Paren ;
 
-Extract_Field : Datetime_Field | Time_Zone_Field ;
+_extract_Field : _datetime_Field | _time_Zone_Field ;
 
-Datetime_Field : Non-second_Datetime_Field | SECOND ;
+_datetime_Field : _non-second__datetime_Field | 'S' 'E' 'C' 'O' 'N' 'D' ;
 
-Time_Zone_Field : TIMEZONE_HOUR | TIMEZONE_MINUTE ;
+_time_Zone_Field : 'T' 'I' 'M' 'E' 'Z' 'O' 'N' 'E' '_' 'H' 'O' 'U' 'R' | 'T' 'I' 'M' 'E' 'Z' 'O' 'N' 'E' '_' 'M' 'I' 'N' 'U' 'T' 'E' ;
 
-Extract_Source : Datetime_Value_Expression | Interval_Value_Expression ;
+_extract_Source : _datetime_Value_Expression | _interval_Value_Expression ;
 
-Datetime_Value_Expression :
-		Datetime_Term
-	|	Interval_Value_Expression Plus_Sign Datetime_Term
-	|	Datetime_Value_Expression Plus_Sign Interval_Term
-	|	Datetime_Value_Expression Minus_Sign Interval_Term ;
+_datetime_Value_Expression :
+		_datetime_Term
+	|	_interval_Value_Expression _plus_Sign _datetime_Term
+	|	_datetime_Value_Expression _plus_Sign _interval_Term
+	|	_datetime_Value_Expression _minus_Sign _interval_Term ;
 
-Interval_Term :
-		Interval_Factor
-	|	Interval_Term_2 Asterisk Factor
-	|	Interval_Term_2 Solidus Factor
-	|	Term Asterisk Interval_Factor ;
+_interval_Term :
+		_interval_Factor
+	|	_interval_Term_2 _asterisk _factor
+	|	_interval_Term_2 _solidus _factor
+	|	_term _asterisk _interval_Factor ;
 
-Interval_Term_2 : Interval_Term ;
+_interval_Term_2 : _interval_Term ;
 
-Interval_Value_Expression :
-		Interval_Term
-	|	Interval_Value_Expression_1 Plus_Sign Interval_Term_1
-	|	Interval_Value_Expression_1 Minus_Sign Interval_Term_1
-	|	Left_Paren Datetime_Value_Expression Minus_Sign Datetime_Term Right_Paren Interval_Qualifier ;
+_interval_Value_Expression :
+		_interval_Term
+	|	_interval_Value_Expression_1 _plus_Sign _interval_Term_1
+	|	_interval_Value_Expression_1 _minus_Sign _interval_Term_1
+	|	_left_Paren _datetime_Value_Expression _minus_Sign _datetime_Term _right_Paren _interval_Qualifier ;
 
-Interval_Value_Expression_1 : Interval_Value_Expression ;
+_interval_Value_Expression_1 : _interval_Value_Expression ;
 
-Interval_Term_1 : Interval_Term ;
+_interval_Term_1 : _interval_Term ;
 
-Datetime_Term : Datetime_Factor ;
+_datetime_Term : _datetime_Factor ;
 
-Datetime_Primary : Value_Expression_Primary | Datetime_Value_Function ;
+_datetime_Primary : _value_Expression_Primary | _datetime_Value_Function ;
 
-Time_Zone : AT Time_Zone_Specifier ;
+_time_Zone : 'A' 'T' _time_Zone_Specifier ;
 
-Time_Zone_Specifier : LOCAL | TIME ZONE Interval_Value_Expression ;
+_time_Zone_Specifier : 'L' 'O' 'C' 'A' 'L' | 'T' 'I' 'M' 'E' 'Z' 'O' 'N' 'E' _interval_Value_Expression ;
 
-Length_Expression : Char_Length_Expression | Octet_Length_Expression | Bit_Length_Expression ;
+_length_Expression : _char_Length_Expression | _octet_Length_Expression | _bit_Length_Expression ;
 
-String_Value_Expression : Character_Value_Expression | Bit_Value_Expression ;
+_string_Value_Expression : _character_Value_Expression | _bit_Value_Expression ;
 
-Octet_Length_Expression : OCTET_LENGTH Left_Paren String_Value_Expression Right_Paren ;
+_octet_Length_Expression : 'O' 'C' 'T' 'E' 'T' '_' 'L' 'E' 'N' 'G' 'T' 'H' _left_Paren _string_Value_Expression _right_Paren ;
 
-Bit_Length_Expression : BIT_LENGTH Left_Paren String_Value_Expression Right_Paren ;
+_bit_Length_Expression : 'B' 'I' 'T' '_' 'L' 'E' 'N' 'G' 'T' 'H' _left_Paren _string_Value_Expression _right_Paren ;
 
-Null_Specification : NULL ;
+_null_Specification : 'N' 'U' 'L' 'L' ;
 
-Default_Specification : DEFAULT ;
+_default_Specification : 'D' 'E' 'F' 'A' 'U' 'L' 'T' ;
 
-Row_Subquery : Subquery ;
+_row_Subquery : _subquery ;
 
-Comp_Op :
-		Equals_Operator
-	|   Not_Equals_Operator
-	|   Less_Than_Operator
-	|   Greater_Than_Operator
-	|   Less_Than_Or_Equals_Operator
-	|   Greater_Than_Or_Equals_Operator ;
+_comp_Op :
+		_equals_Operator
+	|   _not_Equals_Operator
+	|   _less_Than_Operator
+	|   _greater_Than_Operator
+	|   _less_Than_Or_Equals_Operator
+	|   _greater_Than_Or_Equals_Operator ;
 
-In_Predicate_Value : Table_Subquery | Left_Paren In_Value_List Right_Paren ;
+_in_Predicate_Value : _table_Subquery | _left_Paren _in_Value_List _right_Paren ;
 
-Match_Value : Character_Value_Expression ;
+_match_Value : _character_Value_Expression ;
 
-Pattern : Character_Value_Expression ;
+_pattern : _character_Value_Expression ;
 
-Escape_Character : Character_Value_Expression ;
+_escape_Character : _character_Value_Expression ;
 
-Quantified_Comparison_Predicate : Row_Value_Constructor Comp_Op Quantifier Table_Subquery ;
+_quantified_Comparison_Predicate : _row_Value_Constructor _comp_Op _quantifier _table_Subquery ;
 
-Quantifier : All | Some ;
+_quantifier : _all | _some ;
 
-All : ALL ;
+_all : 'A' 'L' 'L' ;
 
-Some : SOME | ANY ;
+_some : 'S' 'O' 'M' 'E' | 'A' 'N' 'Y' ;
 
-Exists_Predicate : EXISTS Table_Subquery ;
+_exists_Predicate : 'E' 'X' 'I' 'S' 'T' 'S' _table_Subquery ;
 
-Overlaps_Predicate : Row_Value_Constructor_1 OVERLAPS Row_Value_Constructor_2 ;
+_overlaps_Predicate : _row_Value_Constructor_1 'O' 'V' 'E' 'R' 'L' 'A' 'P' 'S' _row_Value_Constructor_2 ;
 
-Row_Value_Constructor_1 : Row_Value_Constructor ;
+_row_Value_Constructor_1 : _row_Value_Constructor ;
 
-Row_Value_Constructor_2 : Row_Value_Constructor ;
+_row_Value_Constructor_2 : _row_Value_Constructor ;
 
-Truth_Value : TRUE | FALSE | UNKNOWN ;
+_truth_Value : 'T' 'R' 'U' 'E' | 'F' 'A' 'L' 'S' 'E' | 'U' 'N' 'K' 'N' 'O' 'W' 'N' ;
 
-Collate_Clause : COLLATE Collation_Name ;
+_collate_Clause : 'C' 'O' 'L' 'L' 'A' 'T' 'E' _collation_Name ;
 
-Collation_Name : Qualified_Name ;
+_collation_Name : _qualified_Name ;
 
-Result : Result_Expression | NULL ;
+_result : _result_Expression | 'N' 'U' 'L' 'L' ;
 
-Result_Expression : Value_Expression ;
+_result_Expression : _value_Expression ;
 
