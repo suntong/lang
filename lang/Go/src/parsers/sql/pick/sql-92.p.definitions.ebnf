@@ -13,7 +13,7 @@ _levels_Clause : 'C' 'A' 'S' 'C' 'A' 'D' 'E' 'D' | 'L' 'O' 'C' 'A' 'L' ;
 
 _table_Name : _qualified_Name | _qualified_Local_Table_Name ;
 
-_query_Expression : _non-join__query_Expression | _joined_Table ;
+_query_Expression : _non_join__query_Expression | _joined_Table ;
 
 _joined_Table :
 		_cross_Join
@@ -165,7 +165,7 @@ _string_Value_Function : _character_Value_Function | _bit_Value_Function ;
 _character_Value_Function :
 		_character_Substring_Function
 	|   _fold
-	|   _form-of-use__conversion
+	|   _form_of_use__conversion
 	|   _character_Translation
 	|   _trim_Function ;
 
@@ -200,7 +200,7 @@ _extract_Expression : 'E' 'X' 'T' 'R' 'A' 'C' 'T' _left_Paren _extract_Field 'F'
 
 _extract_Field : _datetime_Field | _time_Zone_Field ;
 
-_datetime_Field : _non-second__datetime_Field | 'S' 'E' 'C' 'O' 'N' 'D' ;
+_datetime_Field : _non_second__datetime_Field | 'S' 'E' 'C' 'O' 'N' 'D' ;
 
 _time_Zone_Field : 'T' 'I' 'M' 'E' 'Z' 'O' 'N' 'E' '_' 'H' 'O' 'U' 'R' | 'T' 'I' 'M' 'E' 'Z' 'O' 'N' 'E' '_' 'M' 'I' 'N' 'U' 'T' 'E' ;
 

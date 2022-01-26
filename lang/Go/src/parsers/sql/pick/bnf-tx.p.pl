@@ -5,6 +5,9 @@
 s!\b[A-Z_]{2,}!join " ", split //, $&!ge;
 s/[A-Z][a-z]\w+/"_${\( lcfirst($&) )}"/ge;
 
+# fix "non-xxx" as "non_xxx"
+s/(non|form|of)-/$1_/g;
+
 # every single character should be quoted
 s/(\s)([^][ ;:|{}])(?=( |\n))/$1'$2'/g;
 

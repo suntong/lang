@@ -28,10 +28,6 @@ s/(?:\n|^)($re)/_$1/g;
 
 # == Transforms from the original bnf-tx.p.pl
 
-
-# fix "Non-xxx" as "Non_xxx"
-s/(Non|Form|of)-/$1_/g;
-
 # every all-CAP words should be split into quoted characters
 s!\b[A-Z_]{2,}!join " ", split //, $&!ge;
 
