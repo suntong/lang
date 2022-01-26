@@ -326,3 +326,7 @@ _time_Zone_Interval : _sign _hours_Value _colon _minutes_Value ;
 
 _quote : '\'' ;
 
+
+/* Lexical from sql-92.p.definitions+.l.ebnf */
+
+
