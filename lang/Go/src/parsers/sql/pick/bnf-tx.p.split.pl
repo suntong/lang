@@ -10,7 +10,8 @@ sub cookit {
         $regDefIds{$wants} = 1;
         "_$wants"
         /gex;
-    return "\n${\( lcfirst($lhs) )} : $rhs"
+    # and for LHS too
+    return "\n_${\( lcfirst($lhs) )} : $rhs"
 }
 
 # split each *e*bnf rule into two parts, lexical & syntax parts
