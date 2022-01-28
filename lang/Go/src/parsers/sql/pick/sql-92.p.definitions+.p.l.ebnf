@@ -1,0 +1,72 @@
+schema_Definition : _schema_Definition ;
+
+table_Definition : _table_Definition ;
+
+view_Definition : _view_Definition ;
+
+column_Name_List : _column_Name_List ;
+
+qualified_Join : _qualified_Join ;
+
+join_Type : _join_Type ;
+
+boolean_Factor : _boolean_Factor ;
+
+boolean_Test : _boolean_Test ;
+
+factor : _factor ;
+
+parameter_Specification : _parameter_Specification ;
+
+indicator_Parameter : _indicator_Parameter ;
+
+variable_Specification : _variable_Specification ;
+
+indicator_Variable : _indicator_Variable ;
+
+column_Reference : _column_Reference ;
+
+general_Set_Function : _general_Set_Function ;
+
+table_Reference : _table_Reference ;
+
+correlation_Specification : _correlation_Specification ;
+
+case_Abbreviation : _case_Abbreviation ;
+
+simple_Case : _simple_Case ;
+
+searched_Case : _searched_Case ;
+
+character_Factor : _character_Factor ;
+
+character_Substring_Function : _character_Substring_Function ;
+
+fold : _fold ;
+
+trim_Operands : _trim_Operands ;
+
+bit_Substring_Function : _bit_Substring_Function ;
+
+interval_Factor : _interval_Factor ;
+
+interval_Primary : _interval_Primary ;
+
+datetime_Factor : _datetime_Factor ;
+
+char_Length_Expression : _char_Length_Expression ;
+
+row_Value_Constructor_List : _row_Value_Constructor_List ;
+
+between_Predicate : _between_Predicate ;
+
+in_Predicate : _in_Predicate ;
+
+in_Value_List : _in_Value_List ;
+
+like_Predicate : _like_Predicate ;
+
+null_Predicate : _null_Predicate ;
+
+match_Predicate : _match_Predicate ;
+
