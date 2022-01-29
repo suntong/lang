@@ -1,0 +1,29 @@
+
+/* Lexical part */
+!whitespace : ' ' | '\t' | '\n' | '\r' ;
+
+_nl : [ '\r' ] '\n' ;
+
+title6 : {_nl} '#' '#' '#' '#' '#' '#' {.} _nl {_nl} ;
+title5 : {_nl} '#' '#' '#' '#' '#' {.} _nl {_nl} ;
+title4 : {_nl} '#' '#' '#' '#' {.} _nl {_nl} ;
+title3 : {_nl} '#' '#' '#' {.} _nl {_nl} ;
+title2 : {_nl} '#' '#' {.} _nl {_nl} ;
+title1 : {_nl} '#' {.} _nl {_nl} ;
+
+
+/* Syntax part */
+
+Content
+  : Title
+  | Content Title
+  ;
+
+Title
+  : title6
+  | title5
+  | title4
+  | title3
+  | title2
+  | title1
+  ;
