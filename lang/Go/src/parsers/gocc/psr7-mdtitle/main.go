@@ -26,3 +26,10 @@ func check(e error) {
 		panic(e)
 	}
 }
+
+/*
+
+$ psr7-mdtitle
+ast value: "# This is title\n\n## This is another title\n\n\n\n# Heading level 1\n\n## Heading level 2\n\n### Heading level 3\n\n#### Heading level 4\n\n##### Heading level 5\n\n###### Heading level 6\n\n"
+
+*/

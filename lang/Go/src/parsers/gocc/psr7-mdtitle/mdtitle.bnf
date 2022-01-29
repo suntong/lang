@@ -22,14 +22,14 @@ import (
 
 Content
   : Title
-  | Content Title
+  | Content Title	<< $0.(string) + $1.(string), nil >>
   ;
 
 Title
-  : title6
-  | title5
-  | title4
-  | title3
-  | title2
+  : title6	<< ast.AttribToString($0), nil >>
+  | title5	<< ast.AttribToString($0), nil >>
+  | title4	<< ast.AttribToString($0), nil >>
+  | title3	<< ast.AttribToString($0), nil >>
+  | title2	<< ast.AttribToString($0), nil >>
   | title1	<< ast.AttribToString($0), nil >>
   ;
