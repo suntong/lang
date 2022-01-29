@@ -1,6 +1,6 @@
 
 /* Lexical part */
-!whitespace : ' ' | '\t' | '\n' | '\r' ;
+//!whitespace : ' ' | '\t' | '\n' | '\r' ;
 
 _nl : [ '\r' ] '\n' ;
 
