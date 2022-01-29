@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	parseError "github.com/suntong/lang/lang/Go/src/parsers/gocc/psr7-mdtitle/errors"
-	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr7-mdtitle/token"
+	parseError "github.com/suntong/lang/lang/Go/src/parsers/gocc/psr3-mdtitle/errors"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr3-mdtitle/token"
 )
 
 const (

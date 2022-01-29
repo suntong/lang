@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"unicode/utf8"
 
-	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr7-mdtitle/token"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr3-mdtitle/token"
 )
 
 const (

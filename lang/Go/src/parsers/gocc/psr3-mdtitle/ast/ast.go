@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr7-mdtitle/token"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr3-mdtitle/token"
 )
 
 type Attrib interface{}

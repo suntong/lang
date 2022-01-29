@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr7-mdtitle/lexer"
-	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr7-mdtitle/parser"
-	//"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr7-mdtitle/token"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr3-mdtitle/lexer"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr3-mdtitle/parser"
+	//"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr3-mdtitle/token"
 )
 
 func main() {
@@ -29,7 +29,7 @@ func check(e error) {
 
 /*
 
-$ psr7-mdtitle
+$ psr3-mdtitle
 ast value: "# This is title\n\n## This is another title\n\n\n\n# Heading level 1\n## Heading level 2\n\n### Heading level 3\n\n\n#### Heading level 4\n\n\n\n##### Heading level 5\n\n\n###### Heading level 6\n\n"
 
 */

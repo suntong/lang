@@ -3,7 +3,7 @@
 package parser
 
 import (
-	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr7-mdtitle/ast"
+	"github.com/suntong/lang/lang/Go/src/parsers/gocc/psr3-mdtitle/ast"
 )
 
 type (
