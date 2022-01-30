@@ -37,40 +37,29 @@ sys     5m40.899s
 _implementation_defined_Universal_Character_Form_of_use_Name.
 See https://github.com/goccmack/gocc/issues/132.
 
-Let's check:
-
-$ grep _implementation_defined_Universal_Character_Form_of_use_Name sqldef.bnf 
-        | _implementation_defined_Universal_Character_Form_of_use_Name ;
-_implementation_defined_Universal_Character_Form_of_use_Name : 'a';
-
-$ grep -B5 _implementation_defined_Universal_Character_Form_of_use_Name sqldef.bnf 
-_character_Set_Specification :
-          _standard_Character_Repertoire_Name
-        | _ . . .
-        | _implementation_defined_Universal_Character_Form_of_use_Name ;
---
-_day_time_Literal : 'a';
-_ . . .
-_implementation_defined_Universal_Character_Form_of_use_Name : 'a';
 
 
 whereas using ebnf-missing.pl:
 
 $ time ebnf-missing.pl < sqldef.bnf
-] _implementation_defined_Universal_Character_Form_of_use_Name (2)
-6
-Parameter_Specification
-Bit_Substring_Function
+] _implementation_defined_Universal_Character_Form_of_use_Name (1)
+row_Value_Constructor_List
+qualified_Join
+_user_defined_Character_Repertoire_Name
 . . .
 real    0m0.005s
-user    0m0.000s
-sys     0m0.005s
+user    0m0.005s
+sys     0m0.000s
 
 
 =cut
 
 # Read whole STDIN into variable bnf defs
 my $defs = do { local $/; <> };
+
+# remove comments
+$defs =~ s{/\*.*?\*/}{\n}gs;
+$defs =~ s{\n\s*\/\/.*?\n}{\n}gs;
 
 # collections of LHS & RHS
 my %clhs;
@@ -108,5 +97,6 @@ for my $element (keys %count) {
 }
 
 for my $element (@difference) {
+    next if length $element == 1;
     print "$element\n";
 }
