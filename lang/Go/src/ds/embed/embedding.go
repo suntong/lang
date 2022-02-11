@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
-// Porgram: embeding.go
+// Porgram: embedding.go
 // Purpose: Go:embed and command line flags demo
-// Authors: Tong Sun (c) 2021, All rights reserved
+// Authors: Tong Sun (c) 2021-22, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
 
@@ -15,6 +15,7 @@ import (
 )
 
 //go:embed cpuArch.txt
+// see https://pkg.go.dev/embed
 var cpuArch string
 
 func usage() {
@@ -46,7 +47,7 @@ func main() {
 
 /*
 
-$ go run embeding.go .
+$ go run embedding.go .
 Before parsing the flags
 CPU: 'Intel32'
 
@@ -54,7 +55,7 @@ After parsing the flags
 CPU: 'AMD64'
 
 
-$ go run embeding.go -cpu AMD32 .
+$ go run embedding.go -cpu AMD32 .
 Before parsing the flags
 CPU: 'Intel32'
 
