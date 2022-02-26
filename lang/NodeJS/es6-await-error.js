@@ -62,23 +62,22 @@ try {
 
 console.log('\n---------- *await promise rejection*');
 async function arun() {
+  let varInTry;
   try {
-    // const varInTry = "val from within try";
-    // let varInTry = "val from within try";
-    var varInTry = "val from within try";
-    // ReferenceError: varInTry is not defined
+    // let // ReferenceError: varInTry is not defined
+    varInTry = "Val from within try";
     await thisThrows();
     return 1;
   } catch (e) {
     console.error(e);
     return 2;
   } finally {
+    console.log(varInTry);
     console.log('We do cleanup here');
     return 3;
   }
 }
 
-//console.log(varInTry); // NOK!
 console.log(arun());
 // Output:
 // Error: Thrown from thisThrows()
