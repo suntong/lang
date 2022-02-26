@@ -21,11 +21,25 @@ try {
 
 console.log('\n---------- throw from try');
 // https://stackoverflow.com/questions/38050857/what-happen-to-return-statement-in-catch-block
-function example() { 
-  try { 
+function example0() {
+  try {
     throw new Error()
     return 1;
-  } 
+  }
+  catch(e) {
+    return 2;
+  }
+  console.log(5)
+  return 4;
+}
+
+console.log(example0()); // 2! not 4
+
+function example() {
+  try {
+    throw new Error()
+    return 1;
+  }
   catch(e) {
     return 2;
   }
