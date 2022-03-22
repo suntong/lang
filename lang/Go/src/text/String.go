@@ -15,11 +15,30 @@ import (
 )
 
 func main() {
+	stringHadling()
+	stringsExamples()
+}
 
+func stringHadling() {
+	s := "Hello, 世界"
 	// left(s, n) ~ s[:n]
 	// right(s, n) ~ s[len(s)-n:]
 	// substr(s, m, n) ~ s[m:n]
+	fmt.Printf("%s, %s\n", s[1:5], s[7:10]) // ello, 世
 
+	for i, r := range s {
+		fmt.Printf("%d\t%q\t%x\n", i, r, r)
+	}
+
+	// 统计字符串长度
+	n := 0
+	for range s {
+		n++
+	}
+	fmt.Printf("%d, %d\n", len(s), n) // 13, 9
+}
+
+func stringsExamples() {
 	// http://tip.golang.org/pkg/strings/#pkg-examples
 
 	//////
