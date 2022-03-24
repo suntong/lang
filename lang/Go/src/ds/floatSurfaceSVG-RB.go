@@ -30,7 +30,7 @@ func main() {
 			bx, by, r, g, b := corner(i, j, min, max)
 			cx, cy, r, g, b := corner(i, j+1, min, max)
 			dx, dy, r, g, b := corner(i+1, j+1, min, max)
-			fmt.Printf("<polygon points='%g,%g %g,%g %g,%g %g,%g' fill='#%x%x%x'/>\n",
+			fmt.Printf("<polygon points='%g,%g %g,%g %g,%g %g,%g' fill='#%02x%02x%02x'/>\n",
 				ax, ay, bx, by, cx, cy, dx, dy, r, g, b)
 		}
 	}
