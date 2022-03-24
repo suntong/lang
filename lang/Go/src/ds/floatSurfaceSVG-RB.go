@@ -1,3 +1,6 @@
+// https://www.zoulei.net/2018/06/06/the_go_programming_lang_usage_answer_3/
+// by 邹雷
+
 package main
 
 import (
@@ -6,15 +9,15 @@ import (
 )
 
 const (
-	width, height = 600, 320
-	cells         = 100
-	xyrange       = 30.0
-	xyscale       = width / 2 / xyrange
-	zscale        = height * 0.4
-	angle         = math.Pi / 6
+	width, height = 600, 320            // canvas size in pixels
+	cells         = 100                 // number of grid cells
+	xyrange       = 30.0                // axis ranges (-xyrange..+xyrange)
+	xyscale       = width / 2 / xyrange // pixels per x or y unit
+	zscale        = height * 0.4        // pixels per z unit
+	angle         = math.Pi / 6         // angle of x, y axes (=30°)
 )
 
-var sin30, cos30 = math.Sin(angle), math.Cos(angle)
+var sin30, cos30 = math.Sin(angle), math.Cos(angle) // sin(30°), cos(30°)
 
 func main() {
 	fmt.Printf("<svg xmlns='http://www.w3.org/2000/svg' "+
@@ -63,9 +66,11 @@ func getMinMax() (float64, float64) {
 }
 
 func corner(i, j int, min, max float64) (float64, float64, int, int, int) {
+	// Find point (x,y) at corner of cell (i,j).
 	x := xyrange * (float64(i)/cells - 0.5)
 	y := xyrange * (float64(j)/cells - 0.5)
 
+	// Compute surface height z.
 	z := f(x, y)
 	// 将(x,y,z)等角投射到二维SVG绘图平面上,坐标是(sx,sy)
 	sx := width/2 + (x-y)*cos30*xyscale
@@ -74,7 +79,7 @@ func corner(i, j int, min, max float64) (float64, float64, int, int, int) {
 	return sx, sy, r, g, b
 }
 
-func f(x float64, y float64) float64 {
-	r := math.Hypot(x, y)
+func f(x, y float64) float64 {
+	r := math.Hypot(x, y) // distance from (0,0)
 	return math.Sin(r) / r
 }
