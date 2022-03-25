@@ -57,7 +57,7 @@ type statusV struct {
 
 // var st = statusV{ st: make([]string, bLen) }
 
-func newStatusV(butchers int) statusV {
+func newStatusV(butchers int) *statusV {
 	st := statusV{st: make([]string, butchers)}
 	for i := 1; i < butchers; i++ {
 		// st.st[i] = statusA[Initialized]
@@ -71,7 +71,7 @@ func newStatusV(butchers int) statusV {
 	fmt.Printf(" %s: %s\n\n", Left, "Left")
 	fmt.Println(strings.Join(bNms, " "))
 	fmt.Println(strings.Repeat("--", butchers))
-	return st
+	return &st
 }
 
 func (st *statusV) statusUpdate(i int, status statusN) {
@@ -88,13 +88,13 @@ type choppingActivity struct {
 	sync.WaitGroup
 }
 
-func newChoppingActivity(butchers int) choppingActivity {
+func newChoppingActivity(butchers int) *choppingActivity {
 	chopping := choppingActivity{}
 	chopping.Add(butchers)
-	return chopping
+	return &chopping
 }
 
-func (chopping choppingActivity) choppingAction(
+func (chopping *choppingActivity) choppingAction(
 	i int, dominantHand, otherHand *sync.Mutex, st *statusV) {
 	bName := bNms[i]
 	st.statusUpdate(i, Positioned)
@@ -120,16 +120,16 @@ func (chopping choppingActivity) choppingAction(
 	st.statusUpdate(i, Left)
 }
 
-func (chopping choppingActivity) choppingSimulation(butchers int) {
+func (chopping *choppingActivity) choppingSimulation(butchers int) {
 	st := newStatusV(butchers)
 	knife0 := &sync.Mutex{}
 	knifeLeft := knife0
 	for i := 1; i < bLen; i++ {
 		knifeRight := &sync.Mutex{}
-		go chopping.choppingAction(i, knifeLeft, knifeRight, &st)
+		go chopping.choppingAction(i, knifeLeft, knifeRight, st)
 		knifeLeft = knifeRight
 	}
-	go chopping.choppingAction(0, knife0, knifeLeft, &st)
+	go chopping.choppingAction(0, knife0, knifeLeft, st)
 	chopping.Wait() // wait for butchers to finish
 	fmt.Println("Work place empty")
 }
