@@ -4,6 +4,7 @@
 package cake_test
 
 import (
+	"flag"
 	"testing"
 	"time"
 
@@ -14,6 +15,7 @@ var defaults cake.Shop
 
 func init() {
 	testing.Init()
+	flag.Parse()
 	defaults = cake.Shop{
 		Verbose:      testing.Verbose(),
 		Cakes:        20,
