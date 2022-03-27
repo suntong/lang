@@ -10,13 +10,18 @@ import (
 	"github.com/suntong/lang/lang/Go/src/async/cake"
 )
 
-var defaults = cake.Shop{
-	Verbose:      testing.Verbose(),
-	Cakes:        20,
-	BakeTime:     10 * time.Millisecond,
-	NumIcers:     1,
-	IceTime:      10 * time.Millisecond,
-	InscribeTime: 10 * time.Millisecond,
+var defaults cake.Shop
+
+func init() {
+	testing.Init()
+	defaults = cake.Shop{
+		Verbose:      testing.Verbose(),
+		Cakes:        20,
+		BakeTime:     10 * time.Millisecond,
+		NumIcers:     1,
+		IceTime:      10 * time.Millisecond,
+		InscribeTime: 10 * time.Millisecond,
+	}
 }
 
 func Benchmark(b *testing.B) {
