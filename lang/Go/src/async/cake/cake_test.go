@@ -79,3 +79,21 @@ func BenchmarkSlowIcingManyIcers(b *testing.B) {
 	cakeshop.NumIcers = 5
 	cakeshop.Work(b.N) // 288ms
 }
+
+/*
+
+$ go test -bench=. github.com/suntong/lang/lang/Go/src/async/cake
+goos: linux
+goarch: amd64
+pkg: github.com/suntong/lang/lang/Go/src/async/cake
+cpu: Intel(R) Xeon(R) CPU E5-1650 0 @ 3.20GHz
+Benchmark-12                                 5   225641032 ns/op
+BenchmarkBuffers-12                          5   223561843 ns/op
+BenchmarkVariable-12                         4   269953964 ns/op
+BenchmarkVariableBuffers-12                  4   250085640 ns/op
+BenchmarkSlowIcing-12                        1  1031772493 ns/op
+BenchmarkSlowIcingManyIcers-12               4   270255823 ns/op
+PASS
+ok   github.com/suntong/lang/lang/Go/src/async/cake     11.122s
+
+*/
