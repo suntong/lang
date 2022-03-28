@@ -13,13 +13,12 @@ func _() {
 	_ = x[Collecting-2]
 	_ = x[Working-3]
 	_ = x[Resting-4]
-	_ = x[Done-5]
-	_ = x[Left-6]
+	_ = x[Left-5]
 }
 
-const _statusN_name = "_PCWRD."
+const _statusN_name = "_PCWR."
 
-var _statusN_index = [...]uint8{0, 1, 2, 3, 4, 5, 6, 7}
+var _statusN_index = [...]uint8{0, 1, 2, 3, 4, 5, 6}
 
 func (i statusN) String() string {
 	if i < 0 || i >= statusN(len(_statusN_index)-1) {

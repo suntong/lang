@@ -40,7 +40,6 @@ const (
 	Collecting                 // C
 	Working                    // W
 	Resting                    // R
-	Done                       // D
 	Left                       // .
 )
 
@@ -67,7 +66,6 @@ func newStatusV(butchers int) *statusV {
 	fmt.Printf(" %s: %s ->\n", Positioned, "Positioned")
 	fmt.Printf(" %s: %s ->\n", Collecting, "Collecting")
 	fmt.Printf(" %s: %s ->\n", Resting, "Resting")
-	fmt.Printf(" %s: %s ->\n", Done, "Done")
 	fmt.Printf(" %s: %s\n\n", Left, "Left")
 	fmt.Println(strings.Join(bNms, " "))
 	fmt.Println(strings.Repeat("--", butchers))
