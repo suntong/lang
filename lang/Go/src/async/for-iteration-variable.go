@@ -21,7 +21,9 @@ var payloads = []Payload{Payload{1},Payload{2},Payload{3},Payload{4}}
 
 func main() {
 	testNOK()
+	testOK2()
 	testOK()
+	testPointer()
 }
 
 func testNOK() {  
@@ -30,7 +32,7 @@ func testNOK() {
         go payload.UploadToS3()
     }
 
-    time.Sleep(2 * time.Second)
+    time.Sleep(1 * time.Second)
     /*
     PRINTS:
     
@@ -41,6 +43,16 @@ func testNOK() {
     */
 }
 
+func testOK2() {
+	fmt.Println("OK2 test results:")
+	payloads := []*Payload{{1},{2},{3},{4}}
+	for _,payload := range payloads {
+		go payload.UploadToS3()
+   }
+
+	time.Sleep(1 * time.Second)
+}
+
 func testOK() {  
 	fmt.Println("OK test results:")
 	for _,payload := range payloads {
@@ -48,6 +60,23 @@ func testOK() {
 		go p.UploadToS3()
     }
 
-    time.Sleep(2 * time.Second)
+    time.Sleep(1 * time.Second)
 }
 
+
+func testPointer() {
+	data := []*field{{"one"}, {"two"}, {"three"}}
+	for _, v := range data {    // 此时迭代值 v 是三个元素值的地址，每次 v 指向的值不同
+		go v.print()
+	}
+	time.Sleep(1 * time.Second)
+	// 输出 one two three
+}
+
+type field struct {
+    name string
+}
+
+func (p *field) print() {
+    fmt.Println(p.name)
+}
