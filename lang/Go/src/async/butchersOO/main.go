@@ -86,12 +86,6 @@ type choppingActivity struct {
 	sync.WaitGroup
 }
 
-func newChoppingActivity(butchers int) *choppingActivity {
-	chopping := choppingActivity{}
-	chopping.Add(butchers)
-	return &chopping
-}
-
 func (chopping *choppingActivity) choppingAction(
 	i int, dominantHand, otherHand *sync.Mutex, st *statusV) {
 	bName := bNms[i]
@@ -120,6 +114,7 @@ func (chopping *choppingActivity) choppingAction(
 
 func (chopping *choppingActivity) choppingSimulation(butchers int) {
 	st := newStatusV(butchers)
+	chopping.Add(butchers)
 	knife0 := &sync.Mutex{}
 	knifeLeft := knife0
 	for i := 1; i < bLen; i++ {
@@ -136,6 +131,6 @@ func (chopping *choppingActivity) choppingSimulation(butchers int) {
 // Main
 
 func main() {
-	c := newChoppingActivity(bLen)
+	c := &choppingActivity{}
 	c.choppingSimulation(bLen)
 }
