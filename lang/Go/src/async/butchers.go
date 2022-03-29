@@ -19,7 +19,7 @@ var (
 	gt = &sync.Mutex{}
 )
 
-const hunger = 3                // Number of times each butcher works
+const rounds = 3                // Number of times each butcher works
 const rest = time.Second / 10		// Mean rest time
 const work = time.Second / 10		// Mean work time
 
@@ -44,15 +44,15 @@ func choppingProblem(i int, dominantHand, otherHand *sync.Mutex) {
 	rSleep := func(t time.Duration) {
 		time.Sleep(t/2 + time.Duration(rg.Int63n(int64(t))))
 	}
-	for h := hunger; h > 0; h-- {
+	for h := rounds; h > 0; h-- {
 		//fmt.Println("\t\t", bName, "Collecting")
 		status(i, "C")
-		dominantHand.Lock() // pick up knifes
+		dominantHand.Lock() // pick up knives
 		otherHand.Lock()
 		//fmt.Println("\t\t", bName, "Working")
 		status(i, "W")
 		rSleep(work)
-		dominantHand.Unlock() // put down knifes
+		dominantHand.Unlock() // put down knives
 		otherHand.Unlock()
 		//fmt.Println("\t\t", bName, "Resting")
 		status(i, "R")

@@ -20,7 +20,7 @@ var (
 	bLen = len(bNms)
 )
 
-const hunger = 3              // Number of times each butcher works
+const rounds = 3              // Number of times each butcher works
 const rest = time.Second / 10 // Mean rest time
 const work = time.Second / 10 // Mean work time
 
@@ -96,13 +96,13 @@ func (chopping *choppingActivity) choppingAction(
 	rSleep := func(t time.Duration) {
 		time.Sleep(t/2 + time.Duration(rg.Int63n(int64(t))))
 	}
-	for h := hunger; h > 0; h-- {
+	for h := rounds; h > 0; h-- {
 		st.statusUpdate(i, Collecting)
-		dominantHand.Lock() // pick up knifes
+		dominantHand.Lock() // pick up knives
 		otherHand.Lock()
 		st.statusUpdate(i, Working)
 		rSleep(work)
-		dominantHand.Unlock() // put down knifes
+		dominantHand.Unlock() // put down knives
 		otherHand.Unlock()
 		st.statusUpdate(i, Resting)
 		rSleep(rest)
