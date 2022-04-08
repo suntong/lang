@@ -87,3 +87,18 @@ func newResource() *resource.Resource {
 	)
 	return r
 }
+
+/*
+
+$ fib
+What Fibonacci number would you like to know:
+42
+Fibonacci(42) = 267914296
+What Fibonacci number would you like to know:
+100
+Fibonacci(100): unsupported fibonacci number 100: too large
+What Fibonacci number would you like to know:
+^C
+goodbye
+
+*/
