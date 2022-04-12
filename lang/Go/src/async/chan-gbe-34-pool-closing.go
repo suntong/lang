@@ -3,8 +3,13 @@
 
 package main
 
-import "fmt"
-import "time"
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+var wg sync.WaitGroup
 
 // Here's the worker, of which we'll run several
 // concurrent instances. These workers will receive
@@ -12,6 +17,7 @@ import "time"
 // results on `results`. We'll sleep a second per job to
 // simulate an expensive task.
 func worker(id int, jobs <-chan int, results chan<- int) {
+	defer wg.Done()
 	for j := range jobs {
 		fmt.Println("worker", id, "started  job", j)
 		time.Sleep(time.Second)
@@ -30,7 +36,9 @@ func main() {
 
 	// This starts up 3 workers, initially blocked
 	// because there are no jobs yet.
+	//wg = sync.WaitGroup{}
 	for w := 1; w <= 3; w++ {
+		wg.Add(1)
 		go worker(w, jobs, results)
 	}
 
@@ -41,9 +49,13 @@ func main() {
 	}
 	close(jobs)
 
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
 	// Finally we collect all the results of the work.
-	for a := 1; a <= 5; a++ {
-		<-results
+	for range results {
 	}
 }
 
