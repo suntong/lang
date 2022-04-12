@@ -9,14 +9,12 @@ import (
 	"time"
 )
 
-var wg sync.WaitGroup
-
 // Here's the worker, of which we'll run several
 // concurrent instances. These workers will receive
 // work on the `jobs` channel and send the corresponding
 // results on `results`. We'll sleep a second per job to
 // simulate an expensive task.
-func worker(id int, jobs <-chan int, results chan<- int) {
+func worker(id int, wg *sync.WaitGroup, jobs <-chan int, results chan<- int) {
 	defer wg.Done()
 	for j := range jobs {
 		fmt.Println("worker", id, "started  job", j)
@@ -36,10 +34,10 @@ func main() {
 
 	// This starts up 3 workers, initially blocked
 	// because there are no jobs yet.
-	//wg = sync.WaitGroup{}
+	wg := &sync.WaitGroup{}
 	for w := 1; w <= 3; w++ {
 		wg.Add(1)
-		go worker(w, jobs, results)
+		go worker(w, wg, jobs, results)
 	}
 
 	// Here we send 5 `jobs` and then `close` that
