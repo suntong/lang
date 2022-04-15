@@ -36,8 +36,10 @@ func main() {
 	fmt.Println("-------- Connecting")
 	fmt.Println("Successfully connected!")
 
-	fmt.Println("\n-------- Querying record(s)")
+	fmt.Println("\n-------- Querying record(s) as-is")
 	query1(db)
+	fmt.Println("\n-------- Querying record(s) parsed")
+	query2(db)
 }
 
 // https://www.mohitkhare.com/blog/json-in-postgres-with-golang/
@@ -72,7 +74,23 @@ func (c *Cart) Scan(value interface{}) error {
 }
 
 func query1(db *sql.DB) {
-	// https://www.calhoun.io/querying-for-a-single-record-using-gos-database-sql-package/
+	sqlStatement := `SELECT cart_id, cart FROM orders WHERE cart_id=$1;`
+	var cartId int
+	var c string
+	row := db.QueryRow(sqlStatement, 1)
+	err := row.Scan(&cartId, &c)
+	switch err {
+	case sql.ErrNoRows:
+		fmt.Println("No rows were returned!")
+		return
+	case nil:
+		fmt.Println(cartId, c)
+	default:
+		panic(err)
+	}
+}
+
+func query2(db *sql.DB) {
 	sqlStatement := `SELECT cart_id, cart FROM orders WHERE cart_id=$1;`
 	var cartId int
 	var c Cart
