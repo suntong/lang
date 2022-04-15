@@ -26,16 +26,10 @@ type Item struct {
 	Attrs Attrs
 }
 
-// The Attrs struct represents the data in the JSON/JSONB column. We can use
-// struct tags to control how each field is encoded.
-type Attrs struct {
-	Name        string   `json:"name,omitempty"`
-	Ingredients []string `json:"ingredients,omitempty"`
-	Organic     bool     `json:"organic,omitempty"`
-	Dimensions  struct {
-		Weight float64 `json:"weight,omitempty"`
-	} `json:"dimensions,omitempty"`
-}
+// The Attrs struct represents the data in the JSON/JSONB column,
+// when we don't know in advance what keys and values from JSONB data.
+// thus need to map the contents of the JSONB column to and from a map[string]interface{} instead. The big downside of this is that you will need to type assert any values that you retrieve from the database in order to use them.
+type Attrs map[string]interface{}
 
 // Make the Attrs struct implement the driver.Valuer interface. This method
 // simply returns the JSON-encoded representation of the struct.
@@ -65,34 +59,50 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("\n-------- Querying record(s) with known fields")
+	fmt.Println("\n-------- Querying record(s) with unknown fields")
 	query(db)
 }
 
 func query(db *sql.DB) {
-	// Initialize a new Attrs struct and add some values.
-	attrs := new(Attrs)
-	attrs.Name = "Pesto"
-	attrs.Ingredients = []string{"Basil", "Garlic", "Parmesan", "Pine nuts", "Olive oil"}
-	attrs.Organic = false
-	attrs.Dimensions.Weight = 100.00
+	item := new(Item)
+	item.Attrs = Attrs{
+		"name":        "Passata",
+		"ingredients": []string{"Tomatoes", "Onion", "Olive oil", "Garlic"},
+		"organic":     true,
+		"dimensions": map[string]interface{}{
+			"weight": 250.00,
+		},
+	}
 
 	// The database driver will call the Value() method and and marshall the
 	// attrs struct to JSON before the INSERT.
-	_, err := db.Exec("INSERT INTO items (attrs) VALUES($1)", attrs)
+	_, err := db.Exec("INSERT INTO items (attrs) VALUES($1)", item.Attrs)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Similarly, we can also fetch data from the database, and the driver
 	// will call the Scan() method to unmarshal the data to an Attr struct.
-	item := new(Item)
+	item = new(Item)
 	err = db.QueryRow("SELECT id, attrs FROM items ORDER BY id DESC LIMIT 1").Scan(&item.ID, &item.Attrs)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// You can then use the struct fields as normal...
-	weightKg := item.Attrs.Dimensions.Weight / 1000
-	log.Printf("Item: %d, Name: %s, Weight: %.2fkg", item.ID, item.Attrs.Name, weightKg)
+	// As you cannot use the struct fields as normal...
+	name, ok := item.Attrs["name"].(string)
+	if !ok {
+		log.Fatal("unexpected type for name")
+	}
+	dimensions, ok := item.Attrs["dimensions"].(map[string]interface{})
+	if !ok {
+		log.Fatal("unexpected type for dimensions")
+	}
+	weight, ok := dimensions["weight"].(float64)
+	if !ok {
+		log.Fatal("unexpected type for weight")
+	}
+	weightKg := weight / 1000
+	log.Printf("%s: %.2fkg", name, weightKg)
+
 }
