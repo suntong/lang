@@ -73,16 +73,17 @@ func (c *Cart) Scan(value interface{}) error {
 
 func query1(db *sql.DB) {
 	// https://www.calhoun.io/querying-for-a-single-record-using-gos-database-sql-package/
-	sqlStatement := `SELECT cart FROM orders WHERE cart_id=$1;`
+	sqlStatement := `SELECT cart_id, cart FROM orders WHERE cart_id=$1;`
+	var cartId int
 	var c Cart
 	row := db.QueryRow(sqlStatement, 1)
-	err := row.Scan(&c)
+	err := row.Scan(&cartId, &c)
 	switch err {
 	case sql.ErrNoRows:
 		fmt.Println("No rows were returned!")
 		return
 	case nil:
-		fmt.Println(c)
+		fmt.Println(cartId, c)
 	default:
 		panic(err)
 	}
