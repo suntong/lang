@@ -91,6 +91,8 @@ func query(db *sql.DB) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	b, _ := json.Marshal(item)
+	log.Printf("Item string: %s", string(b))
 
 	// You can then use the struct fields as normal...
 	weightKg := item.Attrs.Dimensions.Weight / 1000
