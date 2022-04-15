@@ -50,12 +50,7 @@ func (a *Attrs) Scan(value interface{}) error {
 
 func main() {
 	// db, err := sql.Open("postgres", "postgres://user:pass@localhost/db")
-	// db, err := sql.Open("postgres", "postgres://postgres:password@localhost/postgres")
-	// X: pq: SSL is not enabled on the server
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
+	db, err := sql.Open("postgres", "postgres://postgres:password@localhost/postgres?sslmode=disable")
 	if err != nil {
 		log.Fatal(err)
 	}
