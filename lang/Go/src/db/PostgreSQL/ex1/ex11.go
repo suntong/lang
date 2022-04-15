@@ -31,9 +31,13 @@ func main() {
 		panic(err)
 	}
 
+	fmt.Println("-------- Connecting")
 	fmt.Println("Successfully connected!")
 
+	fmt.Println("\n-------- Querying single record")
 	query1(db)
+	fmt.Println("\n-------- Querying multiple records")
+	query2(db)
 }
 
 type User struct {
@@ -58,6 +62,31 @@ func query1(db *sql.DB) {
 	case nil:
 		fmt.Println(user)
 	default:
+		panic(err)
+	}
+}
+
+func query2(db *sql.DB) {
+	// https://www.calhoun.io/querying-for-multiple-records-with-gos-sql-package/
+	rows, err := db.Query("SELECT id, first_name FROM users LIMIT $1", 3)
+	if err != nil {
+		// handle this error better than this
+		panic(err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var id int
+		var firstName string
+		err = rows.Scan(&id, &firstName)
+		if err != nil {
+			// handle this error
+			panic(err)
+		}
+		fmt.Println(id, firstName)
+	}
+	// get any error encountered during iteration
+	err = rows.Err()
+	if err != nil {
 		panic(err)
 	}
 }
