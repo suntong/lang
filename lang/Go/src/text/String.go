@@ -26,9 +26,17 @@ func stringHadling() {
 	// right(s, n) ~ s[len(s)-n:]
 	// substr(s, m, n) ~ s[m:n]
 	fmt.Printf("%s, %s\n", s[1:5], s[7:10]) // ello, 世
+	fmt.Printf("%c%c%c, %v, %s\n",
+		// == https://yourbasic.org/golang/convert-string-to-rune-slice/
+		// Convert string to runes
+		[]rune(s[:1]), []rune(s[:1])[0], []rune(s[7:10])[0], []rune("ABC€"),
+		// Convert runes to string
+		string([]rune{'\u0041', '\u0042', '\u0043', '\u20AC', -1}), // ABC€�
+	)
 
 	for i, r := range s {
-		fmt.Printf("%d\t%q\t%x\n", i, r, r)
+		fmt.Printf("%[1]d\t%[2]q\t%[3]q\t%#[2]x\n", i, r,
+			strings.ToUpper(string(r))) // on rune, use unicode.ToLower(r)
 	}
 
 	// 统计字符串长度
