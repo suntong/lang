@@ -17,6 +17,7 @@ import (
 func main() {
 	stringHadling()
 	stringsExamples()
+	stringsContainsAny()
 }
 
 func stringHadling() {
@@ -36,6 +37,25 @@ func stringHadling() {
 		n++
 	}
 	fmt.Printf("%d, %d\n", len(s), n) // 13, 9
+}
+
+func stringsContainsAny() {
+	// https://www.geeksforgeeks.org/strings-containsany-function-in-golang-with-examples/
+	str1 := "Welcome to Geeks for Geeks"
+	str2 := "We are here to learn about go strings"
+
+	// Checking the string present or not using the ContainsAny() function
+	res1 := strings.ContainsAny(str1, "ksGee")         // true
+	res2 := strings.ContainsAny(str2, "GFG")           // false // "GFGW" // true
+	res3 := strings.ContainsAny("GeeksforGeeks", "Gz") // true
+	res4 := strings.ContainsAny("GeeksforGeeks", "ue") // true
+	res5 := strings.ContainsAny("GeeksforGeeks", "a ") // false
+
+	fmt.Println("\nResult 1: ", res1)
+	fmt.Println("Result 2: ", res2)
+	fmt.Println("Result 3: ", res3)
+	fmt.Println("Result 4: ", res4)
+	fmt.Println("Result 5: ", res5)
 }
 
 func stringsExamples() {
