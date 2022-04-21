@@ -38,12 +38,15 @@ func TestIt(t *testing.T) {
 
 	for _, tc := range testData {
 		tcs := tc.tCase
-		res := lengthOfLongestSubstringBucket(tcs)
-		if res != tc.result {
-			t.Errorf(`expected "%d" but got "%d" matches`, tc.result, res)
-		} else {
-			fmt.Println("matched")
-		}
+		mustEqual(t, lengthOfLongestSubstringBucket(tcs), tc.result)
+	}
+}
+
+func mustEqual(t *testing.T, res, result int) {
+	if res != result {
+		t.Errorf(`expected "%d" but got "%d" matches`, result, res)
+	} else {
+		fmt.Println("matched")
 	}
 }
 
