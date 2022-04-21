@@ -38,6 +38,7 @@ func TestIt(t *testing.T) {
 
 	for _, tc := range testData {
 		tcs := tc.tCase
+		mustEqual(t, lengthOfLongestSubstringSlidingWindow(tcs), tc.result)
 		mustEqual(t, lengthOfLongestSubstringHashSet(tcs), tc.result)
 	}
 }
@@ -48,6 +49,27 @@ func mustEqual(t *testing.T, res, result int) {
 	} else {
 		fmt.Println("matched")
 	}
+}
+
+func lengthOfLongestSubstringSlidingWindow(s string) int {
+	if len(s) == 0 {
+		return 0
+	}
+	var freq [127]int
+	result, left, right := 0, 0, -1
+
+	for left < len(s) {
+		if right+1 < len(s) && freq[s[right+1]] == 0 {
+			freq[s[right+1]]++
+			right++
+
+		} else {
+			freq[s[left]]--
+			left++
+		}
+		result = max(result, right-left+1)
+	}
+	return result
 }
 
 // HashSet -- Optimised Sliding Window
