@@ -1,5 +1,4 @@
-// https://www.enjoyalgorithms.com/blog/longest-substring-without-repeating-characters
-// https://www.geeksforgeeks.org/length-of-the-longest-substring-without-repeating-characters/
+// https://leetcode.com/problems/longest-substring-without-repeating-characters/
 
 package main
 
@@ -31,6 +30,7 @@ func main() {
 
 func TestIt(t *testing.T) {
 	testData := []testCase{
+		{"ABCABCBB", 3},
 		{"ABDEFGABEF", 6},
 		{"BBBB", 1},
 		{"GEEKSFORGEEKS", 7},
@@ -38,7 +38,7 @@ func TestIt(t *testing.T) {
 
 	for _, tc := range testData {
 		tcs := tc.tCase
-		mustEqual(t, lengthOfLongestSubstringBucket(tcs), tc.result)
+		mustEqual(t, lengthOfLongestSubstringHashSet(tcs), tc.result)
 	}
 }
 
@@ -50,7 +50,9 @@ func mustEqual(t *testing.T, res, result int) {
 	}
 }
 
-// Bucket
+// HashSet -- Optimised Sliding Window
+// https://www.geeksforgeeks.org/length-of-the-longest-substring-without-repeating-characters/
+// https://www.interviewbit.com/blog/longest-substring-without-repeating-characters/
 /*
 
    This solution uses extra space to store the last indexes of already
@@ -70,7 +72,7 @@ func mustEqual(t *testing.T, res, result int) {
 
 */
 
-func lengthOfLongestSubstringBucket(s string) int {
+func lengthOfLongestSubstringHashSet(s string) int {
 	fmt.Printf("------ %s\n", s)
 	i, j, res := 0, 0, 0
 	lastIndex := make(map[byte]int, len(s))
