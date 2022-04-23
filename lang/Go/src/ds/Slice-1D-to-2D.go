@@ -4,17 +4,19 @@ package main
 
 import "fmt"
 
+type si2D [][]int
+
 func main() {
 	fmt.Println(construct2DArray([]int{1, 2, 3, 4}, 2, 2))
 	fmt.Println(construct2DArray([]int{1, 2, 3}, 1, 3))
 	fmt.Println(construct2DArray([]int{1, 2}, 1, 1))
 }
 
-func construct2DArray(original []int, m int, n int) [][]int {
+func construct2DArray(original []int, m int, n int) si2D {
 	if m*n != len(original) {
-		return [][]int{}
+		return si2D{}
 	}
-	res := make([][]int, m)
+	res := make(si2D, m)
 	for i := 0; i < m; i++ {
 		res[i] = original[n*i : n*(i+1)]
 	}
