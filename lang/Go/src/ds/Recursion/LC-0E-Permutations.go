@@ -8,10 +8,10 @@ import (
 )
 
 func main() {
-	fmt.Print(subsets([]int{1, 2, 3}))
+	fmt.Print(permute([]int{1, 2, 3}))
 }
 
-func subsets(nums []int) [][]int {
+func permute(nums []int) [][]int {
 	res := [][]int{}
 	dfs(nums, []int{}, &res)
 	return res
@@ -20,9 +20,11 @@ func subsets(nums []int) [][]int {
 func dfs(nums, path []int, res *[][]int) {
 	b := make([]int, len(path))
 	copy(b, path)
-	*res = append(*res, b)
+	if len(nums) == 0 {
+		*res = append(*res, b)
+	}
 	for i := 0; i < len(nums); i++ {
 		// last n elements of slice
-		dfs(nums[i+1:], append(b, nums[i]), res)
+		dfs(append(nums[:i], nums[i+1:]...), append(b, nums[i]), res)
 	}
 }
