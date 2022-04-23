@@ -24,7 +24,11 @@ func dfs(nums, path []int, res *[][]int) {
 		*res = append(*res, b)
 	}
 	for i := 0; i < len(nums); i++ {
-		// last n elements of slice
-		dfs(append(nums[:i], nums[i+1:]...), append(b, nums[i]), res)
+		available := []int{}
+		available = append(available, nums[:i]...)
+		// fmt.Println(i, available)
+		available = append(available, nums[i+1:]...)
+		// fmt.Println(i, available)
+		dfs(available, append(b, nums[i]), res)
 	}
 }
