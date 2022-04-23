@@ -18,10 +18,13 @@ func main() {
 		fmt.Println(shiftGrid(grid, k))
 		fmt.Println(shiftGrid2(grid, k))
 	}
+	fmt.Println()
+	fmt.Println(shiftGrid2(grid, 17))
 }
 
 func shiftGrid(grid [][]int, k int) [][]int {
 	x, y := len(grid[0]), len(grid)
+	k = k % (x * y)
 	// Create a new 2D grid
 	newGrid := make([][]int, y)
 	for i := 0; i < y; i++ {
@@ -42,6 +45,7 @@ func shiftGrid(grid [][]int, k int) [][]int {
 func shiftGrid2(grid [][]int, k int) [][]int {
 	newGrid := slice2Dto1D(grid)
 	x, y := len(grid[0]), len(grid)
+	k = k % (x * y)
 	ng := newGrid[x*y-k:]
 	return slice1Dto2D(append(ng, newGrid[:x*y-k]...), x, y)
 }
