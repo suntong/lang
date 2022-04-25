@@ -8,18 +8,20 @@ import (
 )
 
 func main() {
-	fmt.Print(subsets("123"))
+	fmt.Print(permute("123"))
 }
 
-func subsets(nums string) []string {
+func permute(nums string) []string {
 	res := []string{}
 	dfs(nums, "", &res)
 	return res
 }
 
 func dfs(nums, path string, res *[]string) {
-	*res = append(*res, path)
+	if len(nums) == 0 {
+		*res = append(*res, path)
+	}
 	for i := 0; i < len(nums); i++ {
-		dfs(nums[i+1:], path+string(nums[i]), res)
+		dfs(nums[:i]+nums[i+1:], path+string(nums[i]), res)
 	}
 }
