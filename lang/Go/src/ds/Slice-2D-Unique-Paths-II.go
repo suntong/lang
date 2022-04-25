@@ -94,14 +94,16 @@ func uniquePathsWithObstacles(obstacleGrid [][]int) int {
 	}
 	dp[0][0] = 1
 	for i := 1; i < n; i++ {
-		if dp[0][i-1] != 0 && obstacleGrid[0][i] != 1 {
-			dp[0][i] = 1
+		if obstacleGrid[0][i] == 1 {
+			break
 		}
+		dp[0][i] = 1
 	}
 	for i := 1; i < m; i++ {
-		if dp[i-1][0] != 0 && obstacleGrid[i][0] != 1 {
-			dp[i][0] = 1
+		if obstacleGrid[i][0] == 1 {
+			break
 		}
+		dp[i][0] = 1
 	}
 	for i := 1; i < m; i++ {
 		for j := 1; j < n; j++ {
