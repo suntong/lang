@@ -1,7 +1,4 @@
-/*
- * Author, Copyright: Oleg Borodin <onborodin@gmail.com>
- * https://wiki.unix7.org/go/graphql
- */
+// https://stackoverflow.com/questions/24455147/how-do-i-send-a-json-string-in-a-post-request-in-go
 
 package main
 
@@ -16,15 +13,12 @@ import (
 
 func main() {
 	query := map[string]string{
-		"query": `
-            {
-                hello(id: 5) {
-                }
-            }
-        `,
+		"query": `{ countries { code name } }`,
 	}
 	queryJson, _ := json.Marshal(query)
-	request, err := http.NewRequest("POST", "http://localhost:8080/query", bytes.NewBuffer(queryJson))
+	request, err := http.NewRequest("POST", "https://countries.trevorblades.com/", bytes.NewBuffer(queryJson))
+	request.Header.Set("Content-Type", "application/json")
+
 	client := &http.Client{Timeout: time.Second * 10}
 	response, err := client.Do(request)
 	defer response.Body.Close()
