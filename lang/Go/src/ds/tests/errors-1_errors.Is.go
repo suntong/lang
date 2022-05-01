@@ -9,7 +9,7 @@ import (
 
 const badInput = "abc"
 
-var ErrBadInput = errors.New("bad input")
+var ErrBadInput = errors.New("BadInput")
 
 func validateInput(input string) error {
 	if input == badInput {
@@ -19,7 +19,7 @@ func validateInput(input string) error {
 }
 
 // https://medium.com/@felipedutratine/golang-how-to-handle-errors-in-v1-13-fda7f035d027
-var e1 = errors.New("error 1")
+var e1 = errors.New("InternalError1")
 
 func x() error {
 	return fmt.Errorf("adding more context: %w", e1)
