@@ -41,6 +41,60 @@ func TestTime(t *testing.T) {
 	}
 }
 
+// https://gist.github.com/posener/92a55c4cd441fc5e5e85f27bca008721
+func TestTLog(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name  string
+		value int
+	}{
+		{name: "test 1", value: 1},
+		{name: "test 2", value: 2},
+		{name: "test 3", value: 3},
+		{name: "test 4", value: 4},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Here you test tc.value against a test function.
+			// Let's use t.Log as our test function :-)
+			t.Log(tc.value)
+		})
+	}
+}
+
+func TestGroupedParallel(t *testing.T) {
+	//t.Parallel()
+	/*
+
+	   The outer test will not complete until all parallel tests started by
+	   Run have completed. As a result, no other parallel tests can run in
+	   parallel to these parallel tests.
+
+	   Note that we need to capture the range variable to ensure that tc gets
+	   bound to the correct instance.
+
+	*/
+	tests := []struct {
+		name  string
+		value int
+	}{
+		{name: "test 1", value: 1},
+		{name: "test 2", value: 2},
+		{name: "test 3", value: 3},
+		{name: "test 4", value: 4},
+	}
+	for _, tc := range tests {
+		tc := tc // capture range variable
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			// Here you test tc.value against a test function.
+			// Let's use t.Log as our test function :-)
+			t.Log(tc.value)
+		})
+	}
+
+}
+
 /*
 
 $ go test -v test-subtests-1_test.go
@@ -99,6 +153,55 @@ FAIL
    unique. So one could just pass an empty string to Run if there is no
    obvious naming scheme for subtests and the subtests can easily be
    identified by their sequence number.
+
+
+$ go test -v -run=TestTLog test-subtests-1_test.go
+=== RUN   TestTLog
+=== PAUSE TestTLog
+=== CONT  TestTLog
+=== RUN   TestTLog/test_1
+    test-subtests-1_test.go:60: 1
+=== RUN   TestTLog/test_2
+    test-subtests-1_test.go:60: 2
+=== RUN   TestTLog/test_3
+    test-subtests-1_test.go:60: 3
+=== RUN   TestTLog/test_4
+    test-subtests-1_test.go:60: 4
+--- PASS: TestTLog (0.00s)
+    --- PASS: TestTLog/test_1 (0.00s)
+    --- PASS: TestTLog/test_2 (0.00s)
+    --- PASS: TestTLog/test_3 (0.00s)
+    --- PASS: TestTLog/test_4 (0.00s)
+PASS
+ok      command-line-arguments  0.003s
+
+
+$ go test -v -run=TestGroupedParallel test-subtests-1_test.go
+=== RUN   TestGroupedParallel
+=== RUN   TestGroupedParallel/test_1
+=== PAUSE TestGroupedParallel/test_1
+=== RUN   TestGroupedParallel/test_2
+=== PAUSE TestGroupedParallel/test_2
+=== RUN   TestGroupedParallel/test_3
+=== PAUSE TestGroupedParallel/test_3
+=== RUN   TestGroupedParallel/test_4
+=== PAUSE TestGroupedParallel/test_4
+=== CONT  TestGroupedParallel/test_1
+=== CONT  TestGroupedParallel/test_4
+    test-subtests-1_test.go:92: 4
+=== CONT  TestGroupedParallel/test_1
+    test-subtests-1_test.go:92: 1
+=== CONT  TestGroupedParallel/test_3
+    test-subtests-1_test.go:92: 3
+=== CONT  TestGroupedParallel/test_2
+    test-subtests-1_test.go:92: 2
+--- PASS: TestGroupedParallel (0.00s)
+    --- PASS: TestGroupedParallel/test_4 (0.00s)
+    --- PASS: TestGroupedParallel/test_1 (0.00s)
+    --- PASS: TestGroupedParallel/test_3 (0.00s)
+    --- PASS: TestGroupedParallel/test_2 (0.00s)
+PASS
+ok      command-line-arguments  0.004s
 
 
 */
