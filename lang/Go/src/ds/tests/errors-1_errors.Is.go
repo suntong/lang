@@ -18,7 +18,20 @@ func validateInput(input string) error {
 	return nil
 }
 
+// https://medium.com/@felipedutratine/golang-how-to-handle-errors-in-v1-13-fda7f035d027
+var e1 = errors.New("error 1")
+
+func x() error {
+	return fmt.Errorf("adding more context: %w", e1)
+}
+
 func main() {
+	e := x()
+	if errors.Is(e, e1) { // Magical it works
+		// handle gracefully
+		fmt.Printf("Catching successfully: %s\n", e)
+	}
+
 	input := badInput
 
 	err := validateInput(input)

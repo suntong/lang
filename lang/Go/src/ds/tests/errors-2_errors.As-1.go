@@ -24,7 +24,31 @@ func validateInput(input string) error {
 	return nil
 }
 
+// https://medium.com/@felipedutratine/golang-how-to-handle-errors-in-v1-13-fda7f035d027
+type myError struct {
+	err  string
+	more string
+}
+
+func (e *myError) Error() string {
+	return fmt.Sprintf("%s: %s", e.more, e.err)
+}
+func x() error {
+	return fmt.Errorf("adding more context: %w", &myError{"error", "more"})
+}
+
 func main() {
+	{
+		e := x()
+
+		var err *myError
+		if ok := errors.As(e, &err); ok {
+			// handle gracefully
+			fmt.Printf("Catching '%s' error for '%s' successfully: %s\n",
+				err.err, err.more, err.Error())
+		}
+	}
+
 	input := badInput
 
 	err := validateInput(input)
