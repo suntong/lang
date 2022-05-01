@@ -19,6 +19,7 @@ func validateInput(input string) error {
 }
 
 // https://medium.com/@felipedutratine/golang-how-to-handle-errors-in-v1-13-fda7f035d027
+// https://go.dev/play/p/m5DmFnHsbo9
 var e1 = errors.New("InternalError1")
 
 func x() error {
