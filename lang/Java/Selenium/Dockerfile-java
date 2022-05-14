@@ -1,0 +1,8 @@
+FROM selenium/standalone-firefox:91.0-20210823
+
+ARG CLS_FILE=target.java
+COPY ${CLS_FILE} app.java
+
+# entrypoint
+
+ENTRYPOINT ["java","/app.java"]
