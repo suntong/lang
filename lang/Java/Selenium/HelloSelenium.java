@@ -20,7 +20,7 @@ public class HelloSelenium {
 
     driver.get("https://google.com");
 
-    driver.getTitle(); // => "Google"
+    System.out.println(driver.getTitle()); // => "Google"
 
     driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
 
@@ -31,7 +31,7 @@ public class HelloSelenium {
     searchButton.click();
 
     searchBox = driver.findElement(By.name("q"));
-    searchBox.getAttribute("value"); // => "Selenium"
+    System.out.println(searchBox.getAttribute("value")); // => "Selenium"
 
     driver.quit();
   }
