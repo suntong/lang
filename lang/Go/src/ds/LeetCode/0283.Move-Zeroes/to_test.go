@@ -38,7 +38,7 @@ func Test_Problem283(t *testing.T) {
 
 		{
 			para283{[]int{0, 1, 0, 3, 0, 0, 0, 0, 1, 12}},
-			ans283{[]int{1, 3, 1, 12, 0, 0, 0, 0, 0}},
+			ans283{[]int{1, 3, 1, 12, 0, 0, 0, 0, 0, 0}},
 		},
 
 		{
@@ -60,10 +60,11 @@ func Test_Problem283(t *testing.T) {
 	fmt.Printf("------------------------Leetcode Problem 283------------------------\n")
 
 	for _, q := range qs {
-		_, p := q.ans283, q.para283
-		fmt.Printf("【input】:%v      ", p.one)
+		a, p := q.ans283, q.para283
+		fmt.Printf("%v\n", p.one)
+		fmt.Printf("%v\n", a.one)
 		moveZeroes(p.one)
-		fmt.Printf("【output】:%v\n", p.one)
+		fmt.Printf("%v\n\n", p.one)
 	}
 	fmt.Printf("\n\n\n")
 }
