@@ -39,7 +39,7 @@ var args argsT
 func main() {
 	p := arg.MustParse(&args)
 	if p.Subcommand() == nil {
-		p.WriteUsage(os.Stdout)
+		p.WriteHelp(os.Stdout)
 		os.Exit(1)
 	}
 }
