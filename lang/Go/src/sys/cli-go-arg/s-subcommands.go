@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"fmt"
+	"fmt"
 	"os"
 
 	arg "github.com/alexflint/go-arg"
@@ -13,8 +13,8 @@ type CheckoutCmd struct {
 }
 
 type CommitCmd struct {
-	All     bool   `arg:"-a"`
-	Message string `arg:"-m"`
+	All     bool   `arg:"-a" help:"commit all"`
+	Message string `arg:"-m" help:"commit message"`
 }
 
 type PushCmd struct {
@@ -25,9 +25,9 @@ type PushCmd struct {
 
 type argsT struct {
 	Checkout *CheckoutCmd `arg:"subcommand:checkout"`
-	Commit   *CommitCmd   `arg:"subcommand:commit"`
+	Commit   *CommitCmd   `arg:"subcommand:commit" help:"record changes to the repository"`
 	Push     *PushCmd     `arg:"subcommand:push"`
-	Quiet    bool         `arg:"-q"` // this flag is global to all subcommands
+	Quiet    bool         `arg:"-q" help:"be quiet"` // this flag is global to all subcommands
 }
 
 func (argsT) Description() string {
@@ -41,5 +41,8 @@ func main() {
 	if p.Subcommand() == nil {
 		p.WriteHelp(os.Stdout)
 		os.Exit(1)
+	}
+	if args.Commit != nil {
+		fmt.Printf("commit requested with message \"%s\"\n", args.Commit.Message)
 	}
 }
