@@ -16,10 +16,16 @@ import (
 var f embed.FS
 
 //go:embed html/index.html
+var f2 embed.FS
+
+//go:embed html
 var content embed.FS
 
 func main() {
 	data, _ := f.ReadFile("hello.txt")
+	fmt.Printf("'%s'\n", string(data))
+
+	data, _ = f2.ReadFile("html/index.html")
 	fmt.Printf("'%s'\n", string(data))
 
 	data, _ = content.ReadFile("html/index.html")
@@ -30,6 +36,8 @@ func main() {
 
 $ go run embedFS.go
 'hello world!
+'
+'html
 '
 'html
 '
