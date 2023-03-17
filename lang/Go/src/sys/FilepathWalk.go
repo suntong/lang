@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
 // Porgram: FilepathWalk.go
 // Purpose: filepath Walk demo
-// Authors: Tong Sun (c) 2013, All rights reserved
+// Authors: Tong Sun (c) 2013-2023, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
 package main
@@ -16,7 +16,7 @@ func visit(path string, f os.FileInfo, err error) error {
 	if f.IsDir() {
 		fmt.Printf("  Directory: %s\n", path)
 	} else {
-		fmt.Printf("  File: %s with %d bytes\n", path, f.Size())
+		fmt.Printf("  File: %s (%s) with %d bytes\n", path, f.Name(), f.Size())
 	}
 	return nil
 }
