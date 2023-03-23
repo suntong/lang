@@ -45,11 +45,11 @@ func main() {
 	}
 
 	personArr, err := js.Get("person").Array()
-	fmt.Println(len(personArr))
+	fmt.Printf("personArr(%d): %v\n", len(personArr), personArr)
 
 	// 遍历
-	for i, _ := range personArr {
-		//fmt.Println(i, v)
+	for i, v := range personArr {
+		fmt.Println(i, v)
 		person := js.Get("person").GetIndex(i)
 		name := person.Get("name").MustString()
 		age := person.Get("age").MustInt()
