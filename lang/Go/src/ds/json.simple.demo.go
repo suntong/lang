@@ -7,7 +7,7 @@ import (
 )
 
 var jsonStr = `
-       {
+       {"success":true,"selectedTag":{},"selectedTab":1,"cards":[{"component":"hotList",
            "person": [{
               "name": "piao",
               "age": 30,
@@ -33,7 +33,7 @@ var jsonStr = `
                   "13984997777"
               ]
            }]
-       }-->
+       }]}-->
             <div bla bla bla
        `
 
@@ -44,13 +44,14 @@ func main() {
 		panic(err.Error())
 	}
 
-	personArr, err := js.Get("person").Array()
+	person := js.Get("cards").GetIndex(0).Get("person")
+	personArr, err := person.Array()
 	fmt.Printf("personArr(%d): %v\n", len(personArr), personArr)
 
 	// 遍历
 	for i, v := range personArr {
 		fmt.Println(i, v)
-		person := js.Get("person").GetIndex(i)
+		person := person.GetIndex(i)
 		name := person.Get("name").MustString()
 		age := person.Get("age").MustInt()
 		email := person.Get("email").MustString()
