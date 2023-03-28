@@ -5,13 +5,11 @@ func isIsomorphic(s string, t string) bool {
 		return false
 	}
 
-	tByte := []byte(t)
-	sByte := []byte(s)
-	sMap := map[byte]byte{}
-	for i, b := range sByte {
+	sMap := map[rune]byte{}
+	for i, b := range s {
 		if _, ok := sMap[b]; !ok {
-			sMap[b] = tByte[i]
-		} else if sMap[b] != tByte[i] {
+			sMap[b] = t[i]
+		} else if sMap[b] != t[i] {
 			return false
 		}
 	}
