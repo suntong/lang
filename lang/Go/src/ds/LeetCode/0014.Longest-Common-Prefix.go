@@ -3,6 +3,9 @@ package main
 import "fmt"
 
 /*
+
+Find the longest common prefix string amongst an array of strings
+
 Example 1:
 Input: strs = ["flower","flow","flight"]
 Output: "fl"
@@ -22,6 +25,8 @@ Output: ""
 */
 
 func main() {
+	findPrefix := findPrefix0
+	findPrefix = findPrefix2
 	fmt.Println(findPrefix([]string{"flower", "flow", "flight"}))
 	fmt.Println("---")
 	fmt.Println(findPrefix([]string{"dog", "racecar", "car"}))
@@ -29,7 +34,7 @@ func main() {
 	fmt.Println(findPrefix([]string{"flower", "flow", "flowing"}))
 }
 
-func findPrefix(input []string) string {
+func findPrefix2(input []string) string {
 	prefix := ""
 
 Loop:
