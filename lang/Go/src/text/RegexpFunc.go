@@ -34,7 +34,7 @@ func main() {
 	ExExpand2()
 }
 
-// How to get $0, $1, $2 etc sub matches?
+// How to get $0, $1, $2 etc sub matches *by Index*?
 func ExFindAllStringSubmatchIndex() {
 	v := "pinch punch peach plum"
 	for _, h := range regexp.MustCompile(`(p)([a-z]+)(ch)`).

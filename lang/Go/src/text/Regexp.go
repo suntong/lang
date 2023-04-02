@@ -46,21 +46,23 @@ func Summary() {
 	fmt.Println(regexp.MustCompile(`(?i)html|uml`).
 		ReplaceAllLiteralString("html HTML Html aa uml bb Uml", "XML"))
 	// XML XML XML aa XML bb XML
-	
+
 	// These methods return a []string which is indexed by the match group position.
 	// - The 0th item of the slice corresponds to the entire match.
 	fmt.Println(regexp.MustCompile(`(\d+)(\D+(\d+))`).FindStringSubmatch("1000abcd123"))
 	// [1000abcd123 1000 abcd123 123]
-	
+
 	re := regexp.MustCompile(`(?i)t(his|h[eo]se)`)
 	sourceStr := "This and these are for THOSE people"
 	fmt.Println(re.FindStringSubmatch("Nothing match"))
 	// []
 	fmt.Println(re.FindStringSubmatch(sourceStr))
 	// [This his]
-	fmt.Println(re.FindAllStringSubmatch(sourceStr,-1))
-	// [[This his] [these hese] [THOSE HOSE]]
-	fmt.Println(re.ReplaceAllString(sourceStr , "<b>${0}</b>"))
+	// Use FindAllStringSubmatch to get $0, $1, $2 etc sub matches!
+	fmt.Println(regexp.MustCompile(`(?i)(th)(is|[eo]se)`).
+		FindAllStringSubmatch(sourceStr, -1))
+	// [[This Th is] [these th ese] [THOSE TH OSE]]
+	fmt.Println(re.ReplaceAllString(sourceStr, "<b>${0}</b>"))
 	// <b>This</b> and <b>these</b> are for <b>THOSE</b> people
 }
 
