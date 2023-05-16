@@ -4,6 +4,7 @@ import "fmt"
 
 //go:generate stringer -type=Pill
 //go:generate stringer -type=Token -linecomment=true
+//go:generate stringer -type=Note -linecomment=true
 //go:generate stringer -type=MessageType -linecomment=true
 
 // https://pkg.go.dev/golang.org/x/tools/cmd/stringer
@@ -18,14 +19,26 @@ const (
 )
 
 // https://www.reddit.com/r/golang/comments/7l05zx/stringer_now_supports_inline_comments/
+// https://go.dev/play/p/t8n91_GF0Od
 type Token int
 
 const (
-	And Token = iota // &
-	Or               // |
-	Add              // +
-	Sub              // -
-	Period // .
+	And    Token = iota // &
+	Or                  // |
+	Add                 // +
+	Sub                 // -
+	Period              // .
+)
+
+type Note int
+
+const (
+	_  Note = iota //
+	C              // 261.63
+	Db             // 277.18
+	D              // 293.66
+	Eb             // 311.13
+	E              // 329.63
 )
 
 type MessageType int
@@ -69,18 +82,30 @@ func main() {
 	fmt.Printf("%d: %s\n", Aspirin, Aspirin)
 	fmt.Printf("%d: %s\n", Paracetamol, Paracetamol)
 	fmt.Printf("%d: %s\n", Acetaminophen, Acetaminophen)
+
 	fmt.Printf("%d: %s\n", Add, Add)
+	fmt.Printf("%d: %v\n", C, C)
+	fmt.Printf("%d: %v\n", E, Eb)
+
 	fmt.Printf("%d: %s\n", MsgtypeImage, MsgtypeImage)
 	fmt.Printf("%d: %s\n", MsgtypeVoipmsg, MsgtypeVoipmsg)
 	fmt.Printf("%d: %s\n", MsgtypeSys, MsgtypeSys)
 }
 
-/* 
+/*
 
+ go install golang.org/x/tools/cmd/stringer@latest
+ or,
+ go install golang.org/x/tools/cmd/stringer
+
+# must build then run, not `go run main.go`
+$ stringer_ex
 1: Aspirin
 3: Paracetamol
 3: Paracetamol
 2: +
+1: 261.63
+5: 311.13
 3: 图片消息
 50: VOIP消息
 10000: 系统消息
