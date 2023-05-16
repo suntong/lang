@@ -55,6 +55,8 @@ const (
 
 var Pitch = map[string]string{
 	"C":  "261.63",
+	"C#": "277.18",
+	//	"Db": Pitch["C#"], // X: initialization loop for Pitch
 	"Db": "277.18",
 	"D":  "293.66",
 	"Eb": "311.13",
