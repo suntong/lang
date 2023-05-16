@@ -36,6 +36,8 @@ func main() {
 		c = &Car{*v}
 		fmt.Printf("Hello, %#v\n", c)
 		fmt.Printf("Wheels: %d\n", c.wheelCount)
+		c.wheelCount = 5
+		fmt.Printf("Wheels: %d\n", c.wheelCount)
 	}
 	{
 		t1 := Truck{Vehicle{4}, "1.5T"}
