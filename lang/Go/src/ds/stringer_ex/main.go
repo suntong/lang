@@ -33,13 +33,33 @@ const (
 type Note int
 
 const (
-	_  Note = iota //
-	C              // 261.63
-	Db             // 277.18
-	D              // 293.66
-	Eb             // 311.13
-	E              // 329.63
+	_ Note = iota
+	C
+	Db
+	D
+	Eb
+	E
 )
+
+// type Pitch int
+
+// const (
+// 	_  Pitch = iota //
+// 	C               // 261.63
+// 	Db              // 277.18
+// 	D               // 293.66
+// 	Eb              // 311.13
+// 	E               // 329.63
+// )
+// X: xx redeclared in this block
+
+var Pitch = map[string]string{
+	"C":  "261.63",
+	"Db": "277.18",
+	"D":  "293.66",
+	"Eb": "311.13",
+	"E":  "329.63",
+}
 
 type MessageType int
 
@@ -84,13 +104,26 @@ func main() {
 	fmt.Printf("%d: %s\n", Acetaminophen, Acetaminophen)
 
 	fmt.Printf("%d: %s\n", Add, Add)
-	fmt.Printf("%d: %v\n", C, C)
-	fmt.Printf("%d: %v\n", E, Eb)
+	fmt.Printf("%d: %s\n", C, C)
+	fmt.Printf("%d: %s\n", E, Eb)
+	fmt.Printf("%v %s\n", mapNoteToEnum, Pitch["Eb"])
 
 	fmt.Printf("%d: %s\n", MsgtypeImage, MsgtypeImage)
 	fmt.Printf("%d: %s\n", MsgtypeVoipmsg, MsgtypeVoipmsg)
 	fmt.Printf("%d: %s\n", MsgtypeSys, MsgtypeSys)
 }
+
+var mapNoteToEnum = func() map[string]Note {
+	m := make(map[string]Note)
+	for i := C; i <= E; i++ {
+		m[i.String()] = i
+	}
+	return m
+}()
+
+// func getNotePitch(n string) string {
+// 	return Pitch(mapNoteToEnum[n])
+// }
 
 /*
 

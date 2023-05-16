@@ -15,9 +15,9 @@ func _() {
 	_ = x[E-5]
 }
 
-const _Note_name = "261.63277.18293.66311.13329.63"
+const _Note_name = "CDbDEbE"
 
-var _Note_index = [...]uint8{0, 6, 12, 18, 24, 30}
+var _Note_index = [...]uint8{0, 1, 3, 4, 6, 7}
 
 func (i Note) String() string {
 	i -= 1
