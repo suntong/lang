@@ -22,6 +22,7 @@ func main() {
 
 	emp := employee{name: "Sam", age: 31, salary: 2000, address: address}
 
+	fmt.Printf("%+v\n", emp)
 	fmt.Printf("City: %s\n", emp.address.city)
 	fmt.Printf("Country: %s\n", emp.address.country)
 
@@ -30,23 +31,29 @@ func main() {
 	flag.StringVar(&emp.city, "c", "foo", "a city var")
 	flag.Parse()
 	fmt.Printf("City: %s\n", emp.city)
+	emp.city = "--"
+	fmt.Printf("City: %s\n", emp.city)
+	flag.Parse()
+	fmt.Printf("City: %s\n", emp.city)
 	fmt.Printf("Country: %s\n", emp.country)
-	fmt.Printf("%+v\n", emp)
 }
 
 /*
 
 $ go run StructAnonymousFlag.go
+{name:Sam age:31 salary:2000 address:{city:London country:UK}}
 City: London
 Country: UK
-City: foo
+City: --
+City: --
 Country: Canada
 
 $ go run StructAnonymousFlag.go -c Toronto
 City: London
 Country: UK
 City: Toronto
+City: --
+City: Toronto
 Country: Canada
-{name:Sam age:31 salary:2000 address:{city:Toronto country:Canada}}
 
 */
