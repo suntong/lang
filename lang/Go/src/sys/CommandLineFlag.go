@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
 // Porgram: CommandLineFlag
 // Purpose: Go command line flags/switches/arguments demo
-// Authors: Tong Sun (c) 2013, All rights reserved
+// Authors: Tong Sun (c) 2023, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
 // Style: gofmt -tabs=false -tabwidth=2 -w
@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 )
 
 var (
@@ -21,6 +22,8 @@ var (
 
 	// layout control
 	tabWidth = flag.Int("tabwidth", 8, "tab width\n\t\tDefault: Standard")
+
+	batch = flag.Duration("batch", 120*time.Second, "batch interval")
 
 	// debugging
 	cpuprofile = flag.String("cpuprofile", "", "write cpu profile to this file\n\t\tDefault: no default")
@@ -52,8 +55,8 @@ func main() {
 	}
 
 	fmt.Printf("\nAfter parsing the flags\n")
-	fmt.Printf("T: %d\nW: %s\nC: '%s'\nS: '%s'\n",
-		*tabWidth, strconv.FormatBool(*write), *cpuprofile, svar)
+	fmt.Printf("T: %d\nB: %v\nW: %s\nC: '%s'\nS: '%s'\n",
+		*tabWidth, *batch, strconv.FormatBool(*write), *cpuprofile, svar)
 
 	fmt.Println()
 	for index, element := range flag.Args() {
@@ -63,10 +66,26 @@ func main() {
 
 /*
 
+Usage: CommandLineFlag [flags] file [path ...]
+
+  -batch duration
+    	batch interval (default 2m0s)
+  -cpuprofile string
+    	write cpu profile to this file
+    			Default: no default
+  -svar string
+    	a string var (default "bar")
+  -tabwidth int
+    	tab width
+    			Default: Standard (default 8)
+  -w	write result back instead of stdout
+    			Default: No write back
+
 To Test:
 
   go run CommandLineFlag.go
   go run CommandLineFlag.go -tabwidth=6 aa bb
+  go run CommandLineFlag.go -batch 0.51h a b
 
 */
 
