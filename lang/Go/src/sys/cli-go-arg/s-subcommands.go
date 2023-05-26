@@ -40,9 +40,16 @@ func main() {
 	p := arg.MustParse(&args)
 	if p.Subcommand() == nil {
 		p.WriteHelp(os.Stdout)
-		os.Exit(1)
+		os.Exit(0)
 	}
 	if args.Commit != nil {
-		fmt.Printf("commit requested with message \"%s\"\n", args.Commit.Message)
+		//fmt.Printf("commit requested with message \"%s\"\n", args.Commit.Message)
+		p.WriteHelpForSubcommand(os.Stdout, "commit")
+	} else if args.Push != nil {
+		if args.Push.Remote == "" {
+			p.WriteHelpForSubcommand(os.Stdout, "commit")
+		} else {
+			fmt.Printf("pushing to \"%s\"\n", args.Push.Remote)
+		}
 	}
 }
