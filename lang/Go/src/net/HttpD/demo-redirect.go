@@ -15,6 +15,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"regexp"
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -73,7 +74,14 @@ func login(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "ParseForm() err: %v", err)
 			return
 		}
+		//fmt.Printf("%+v\n", r)
 		userName = r.FormValue("u") // saveChoice
+		if userName == "" {
+			// for empty user name, use remote port as anonymous name
+			userName = r.RemoteAddr
+			re := regexp.MustCompile(`.*:.(.*)$`)
+			userName = re.ReplaceAllString(userName, "${1}")
+		}
 		log.Println("user", userName, "signed in")
 	default:
 		fmt.Fprintf(w, "Only GET and POST methods supported.")
