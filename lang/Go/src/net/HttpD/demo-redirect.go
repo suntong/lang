@@ -25,8 +25,6 @@ const chatUrl = "/chat"
 ////////////////////////////////////////////////////////////////////////////
 // Global variables definitions
 
-var userName string
-
 ////////////////////////////////////////////////////////////////////////////
 // Main
 
@@ -46,6 +44,7 @@ func main() {
 // login
 // https://www.golangprograms.com/example-to-handle-get-and-post-request-in-golang.html
 func login(w http.ResponseWriter, r *http.Request) {
+	userName := ""
 	switch r.Method {
 	case "GET":
 		// Check GET params first
@@ -64,16 +63,28 @@ func login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		userName = r.FormValue("u") // saveChoice
-		fmt.Println("username:", userName, r.Form["u"])
+		log.Println("user", userName, "signed in")
 	default:
 		fmt.Fprintf(w, "Only GET and POST methods supported.")
 	}
+	http.SetCookie(w, &http.Cookie{
+		Name:  "username",
+		Value: userName,
+		Path:  "/",
+	})
 	http.Redirect(w, r, chatUrl, http.StatusSeeOther)
 }
 
 //==========================================================================
 // chat
 func chat(w http.ResponseWriter, r *http.Request) {
+	c, err := r.Cookie("username")
+	if err != nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	userName := c.Value
 	fmt.Fprintf(w, "Hello "+userName+"!") // write data to response
 }
 
