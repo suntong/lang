@@ -20,7 +20,10 @@ import (
 ////////////////////////////////////////////////////////////////////////////
 // Constant and data type/structure definitions
 
-const chatUrl = "/chat"
+const (
+	rootUrl = "/"
+	chatUrl = "/chat"
+)
 
 ////////////////////////////////////////////////////////////////////////////
 // Global variables definitions
@@ -29,8 +32,9 @@ const chatUrl = "/chat"
 // Main
 
 func main() {
-	http.HandleFunc("/", login)
+	http.HandleFunc(rootUrl, login)
 	http.HandleFunc(chatUrl, chat)
+	http.HandleFunc("/logout", logout)
 	err := http.ListenAndServe(":9090", nil) // setting listening port
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
@@ -70,7 +74,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:  "username",
 		Value: userName,
-		Path:  "/",
+		Path:  rootUrl,
 	})
 	http.Redirect(w, r, chatUrl, http.StatusSeeOther)
 }
@@ -78,14 +82,35 @@ func login(w http.ResponseWriter, r *http.Request) {
 //==========================================================================
 // chat
 func chat(w http.ResponseWriter, r *http.Request) {
+	userName := getUserName(w, r)
+	fmt.Fprintf(w, chat_html_beg+"Hello "+userName+"!"+chat_html_end)
+}
+
+//==========================================================================
+// logout
+func logout(w http.ResponseWriter, r *http.Request) {
+	userName := getUserName(w, r)
+	log.Println("user", userName, "signed out")
+	// https://stackoverflow.com/a/59736764/2125837
+	http.SetCookie(w, &http.Cookie{
+		Name:   "username",
+		Value:  "",
+		Path:   rootUrl,
+		MaxAge: -1,
+	})
+	http.Redirect(w, r, rootUrl, http.StatusSeeOther)
+}
+
+//==========================================================================
+// getUserName
+func getUserName(w http.ResponseWriter, r *http.Request) string {
 	c, err := r.Cookie("username")
 	if err != nil {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
+		http.Redirect(w, r, rootUrl, http.StatusSeeOther)
+		return ""
 	}
 
-	userName := c.Value
-	fmt.Fprintf(w, "Hello "+userName+"!") // write data to response
+	return c.Value // userName
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -102,6 +127,25 @@ var login_html = `
    Username:<input type="text" name="u">
    <input type="submit" value="Login">
   </form>
+ </body>
+</html>
+`
+
+// https://stackoverflow.com/a/2906586/2125837
+var chat_html_beg = `
+<!DOCTYPE html>
+<html>
+ <head>
+ <title>Chat</title>
+ </head>
+ <body>
+  <form action="/logout" method="post">
+   <input type="submit" value="Logout">
+  </form>
+  <hr>
+`
+
+var chat_html_end = `
  </body>
 </html>
 `
