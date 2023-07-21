@@ -48,10 +48,15 @@ func main() {
 func login(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		// https://pkg.go.dev/html/template#Template.Parse
-		t := template.Must(template.New("l").Parse(login_html))
-		t.Execute(w, nil)
-		return
+		// Check GET params first
+		userName = r.URL.Query().Get("u")
+		if userName == "" {
+			// https://pkg.go.dev/html/template#Template.Parse
+			t := template.Must(template.New("l").Parse(login_html))
+			t.Execute(w, nil)
+			return
+		}
+		// Else: userName passed as GET param, go to redirect
 	case "POST":
 		// Call ParseForm() to parse the raw query and update r.PostForm and r.Form.
 		if err := r.ParseForm(); err != nil {
