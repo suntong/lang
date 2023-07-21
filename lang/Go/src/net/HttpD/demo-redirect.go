@@ -11,11 +11,14 @@
 package main
 
 import (
+	"bytes"
+	"encoding/gob"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"regexp"
+	"strings"
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -38,11 +41,18 @@ type session struct {
 // Main
 
 func main() {
+	// Importantly, we need to tell the encoding/gob package about the Go type
+	// that we want to encode. We do this by passing *an instance* of the type
+	// to gob.Register(). In this case we pass a pointer to an initialized (but
+	// empty) instance of the session struct.
+	gob.Register(&session{})
+
 	// routing
 	http.HandleFunc(rootUrl, login)
 	http.HandleFunc(chatUrl, chat)
 	http.HandleFunc("/logout", logout)
 	// server start
+	log.Print("Listening...")
 	err := http.ListenAndServe(":9090", nil) // setting listening port
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
@@ -86,9 +96,16 @@ func login(w http.ResponseWriter, r *http.Request) {
 	default:
 		fmt.Fprintf(w, "Only GET and POST methods supported.")
 	}
+	var buf bytes.Buffer
+	err := gob.NewEncoder(&buf).Encode(session{Name: userName, Text: ""})
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "server error: gob encoding", http.StatusInternalServerError)
+		return
+	}
 	http.SetCookie(w, &http.Cookie{
-		Name:  "username",
-		Value: userName,
+		Name:  "session",
+		Value: buf.String(),
 		Path:  rootUrl,
 	})
 	http.Redirect(w, r, chatUrl, http.StatusSeeOther)
@@ -123,13 +140,23 @@ func logout(w http.ResponseWriter, r *http.Request) {
 //==========================================================================
 // getUserName
 func getUserName(w http.ResponseWriter, r *http.Request) string {
-	c, err := r.Cookie("username")
+	c, err := r.Cookie("session")
 	if err != nil {
 		http.Redirect(w, r, rootUrl, http.StatusSeeOther)
 		return ""
 	}
+	log.Println("session raw", c.Value)
 
-	return c.Value // userName
+	var s session
+	fmt.Printf("%+v\n", s)
+	reader := strings.NewReader(c.Value)
+	if err := gob.NewDecoder(reader).Decode(&s); err != nil {
+		log.Println(err)
+		http.Error(w, "server error: gob decoding", http.StatusInternalServerError)
+		return ""
+	}
+
+	return s.Name // userName
 }
 
 ////////////////////////////////////////////////////////////////////////////
