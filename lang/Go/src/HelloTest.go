@@ -6,6 +6,9 @@
 //          https://semaphoreci.com/community/tutorials/how-to-test-in-go
 ////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////
+// Program start
+
 package main
 
 import (
@@ -14,23 +17,31 @@ import (
 	"github.com/suntong/testing"
 )
 
+////////////////////////////////////////////////////////////////////////////
+// Constant and data type/structure definitions
+
+////////////////////////////////////////////////////////////////////////////
+// Global variables definitions
+
+var (
+	progname = "easygen"
+	version  = "5.2.1"
+	date     = "2022-07-10"
+)
+
+////////////////////////////////////////////////////////////////////////////
+// Main
+
 func main() {
 	fmt.Println("Hello World")
 	TestThem()
 }
 
-/*
+////////////////////////////////////////////////////////////////////////////
+// Function definitions
 
-Hello World
-true
---- PASS:  (0.00s)
-Say hi
---- PASS:  (0.00s)
-        HelloTest.go:42: Say bye
---- PASS:  (0.00s)
-
-*/
-
+//==========================================================================
+// TestThem
 // https://golang.org/src/testing/testing.go
 func TestThem() {
 	var t *testing.T = testing.NewT()
@@ -48,6 +59,8 @@ func TestSomething(t *testing.T) {
 	//t.Fail()
 }
 
+//==========================================================================
+// TestPrintSomething
 // http://stackoverflow.com/questions/23205419
 func TestPrintSomething(t *testing.T) {
 	fmt.Println("Say hi")
@@ -73,3 +86,15 @@ func Sum(numbers []int) int {
 	}
 	return sum
 }
+
+/*
+
+Hello World
+true
+--- PASS:  (0.00s)
+Say hi
+--- PASS:  (0.00s)
+        HelloTest.go:42: Say bye
+--- PASS:  (0.00s)
+
+*/
