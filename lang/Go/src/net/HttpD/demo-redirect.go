@@ -25,6 +25,11 @@ const (
 	chatUrl = "/chat"
 )
 
+type session struct {
+	Name string
+	Text string
+}
+
 ////////////////////////////////////////////////////////////////////////////
 // Global variables definitions
 
@@ -32,9 +37,11 @@ const (
 // Main
 
 func main() {
+	// routing
 	http.HandleFunc(rootUrl, login)
 	http.HandleFunc(chatUrl, chat)
 	http.HandleFunc("/logout", logout)
+	// server start
 	err := http.ListenAndServe(":9090", nil) // setting listening port
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
@@ -55,7 +62,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		userName = r.URL.Query().Get("u")
 		if userName == "" {
 			// https://pkg.go.dev/html/template#Template.Parse
-			t := template.Must(template.New("l").Parse(login_html))
+			t := template.Must(template.New("").Parse(login_html))
 			t.Execute(w, nil)
 			return
 		}
@@ -83,7 +90,11 @@ func login(w http.ResponseWriter, r *http.Request) {
 // chat
 func chat(w http.ResponseWriter, r *http.Request) {
 	userName := getUserName(w, r)
-	fmt.Fprintf(w, chat_html_beg+"Hello "+userName+"!"+chat_html_end)
+	t := template.Must(template.New("").Parse(chat_html))
+	t.Execute(w, session{
+		Name: userName,
+		Text: "",
+	})
 }
 
 //==========================================================================
@@ -132,7 +143,7 @@ var login_html = `
 `
 
 // https://stackoverflow.com/a/2906586/2125837
-var chat_html_beg = `
+var chat_html = `
 <!DOCTYPE html>
 <html>
  <head>
@@ -143,9 +154,7 @@ var chat_html_beg = `
    <input type="submit" value="Logout">
   </form>
   <hr>
-`
-
-var chat_html_end = `
+  Hello {{.Name}}!
  </body>
 </html>
 `
