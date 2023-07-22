@@ -12,6 +12,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/gob"
 	"fmt"
 	"html/template"
@@ -105,7 +106,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 	http.SetCookie(w, &http.Cookie{
 		Name:  "session",
-		Value: buf.String(),
+		Value: base64.StdEncoding.EncodeToString(buf.Bytes()),
 		Path:  rootUrl,
 	})
 	http.Redirect(w, r, chatUrl, http.StatusSeeOther)
@@ -129,7 +130,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	log.Println("user", userName, "signed out")
 	// https://stackoverflow.com/a/59736764/2125837
 	http.SetCookie(w, &http.Cookie{
-		Name:   "username",
+		Name:   "session",
 		Value:  "",
 		Path:   rootUrl,
 		MaxAge: -1,
@@ -145,11 +146,10 @@ func getUserName(w http.ResponseWriter, r *http.Request) string {
 		http.Redirect(w, r, rootUrl, http.StatusSeeOther)
 		return ""
 	}
-	log.Println("session raw", c.Value)
+	sr, err := base64.StdEncoding.DecodeString(c.Value) // session raw
 
 	var s session
-	fmt.Printf("%+v\n", s)
-	reader := strings.NewReader(c.Value)
+	reader := strings.NewReader(string(sr))
 	if err := gob.NewDecoder(reader).Decode(&s); err != nil {
 		log.Println(err)
 		http.Error(w, "server error: gob decoding", http.StatusInternalServerError)
