@@ -30,7 +30,7 @@ const (
 	chatUrl = "/chat"
 )
 
-type session struct {
+type sessionT struct {
 	Name string
 	Text string
 }
@@ -42,12 +42,6 @@ type session struct {
 // Main
 
 func main() {
-	// Importantly, we need to tell the encoding/gob package about the Go type
-	// that we want to encode. We do this by passing *an instance* of the type
-	// to gob.Register(). In this case we pass a pointer to an initialized (but
-	// empty) instance of the session struct.
-	gob.Register(&session{})
-
 	// routing
 	http.HandleFunc(rootUrl, login)
 	http.HandleFunc(chatUrl, chat)
@@ -98,7 +92,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Only GET and POST methods supported.")
 	}
 	var buf bytes.Buffer
-	err := gob.NewEncoder(&buf).Encode(session{Name: userName, Text: ""})
+	session := sessionT{Name: userName, Text: ""}
+	err := gob.NewEncoder(&buf).Encode(session)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "server error: gob encoding", http.StatusInternalServerError)
@@ -115,19 +110,16 @@ func login(w http.ResponseWriter, r *http.Request) {
 //==========================================================================
 // chat
 func chat(w http.ResponseWriter, r *http.Request) {
-	userName := getUserName(w, r)
+	session := getSession(w, r)
 	t := template.Must(template.New("").Parse(chat_html))
-	t.Execute(w, session{
-		Name: userName,
-		Text: "",
-	})
+	t.Execute(w, session)
 }
 
 //==========================================================================
 // logout
 func logout(w http.ResponseWriter, r *http.Request) {
-	userName := getUserName(w, r)
-	log.Println("user", userName, "signed out")
+	session := getSession(w, r)
+	log.Println("user", session.Name, "signed out")
 	// https://stackoverflow.com/a/59736764/2125837
 	http.SetCookie(w, &http.Cookie{
 		Name:   "session",
@@ -139,24 +131,26 @@ func logout(w http.ResponseWriter, r *http.Request) {
 }
 
 //==========================================================================
-// getUserName
-func getUserName(w http.ResponseWriter, r *http.Request) string {
+// getSession
+func getSession(w http.ResponseWriter, r *http.Request) sessionT {
+	emptySession := sessionT{}
+
 	c, err := r.Cookie("session")
 	if err != nil {
 		http.Redirect(w, r, rootUrl, http.StatusSeeOther)
-		return ""
+		return emptySession
 	}
 	sr, err := base64.StdEncoding.DecodeString(c.Value) // session raw
 
-	var s session
+	var s sessionT
 	reader := strings.NewReader(string(sr))
 	if err := gob.NewDecoder(reader).Decode(&s); err != nil {
 		log.Println(err)
 		http.Error(w, "server error: gob decoding", http.StatusInternalServerError)
-		return ""
+		return emptySession
 	}
 
-	return s.Name // userName
+	return s
 }
 
 ////////////////////////////////////////////////////////////////////////////
