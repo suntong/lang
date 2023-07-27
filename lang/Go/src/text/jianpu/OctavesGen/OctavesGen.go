@@ -102,7 +102,7 @@ func main() {
 			vars["Inc"] = noteJP[nn]
 			tmpl2.Execute(file, vars)
 		}
-		fmt.Fprintln(file)
+		fmt.Fprintf(file, "%s  - 0 \\break \n", vars["Cur"])
 		nn++ // skip cur
 		// up to next octave
 		for ; nn < cur+7; nn++ {
@@ -110,14 +110,14 @@ func main() {
 			tmpl2.Execute(file, vars)
 		}
 		vars["Inc"] = noteJP[nn]
-		fmt.Fprintf(file, "%s %s ( - %[2]s - ) 0\n", vars["Cur"], vars["Inc"])
+		fmt.Fprintf(file, "%s %s ( - %[2]s - ) 0 \\break \n", vars["Cur"], vars["Inc"])
 
 		// == downwards
 		for ; nn > cur; nn-- {
 			vars["Inc"] = noteJP[nn]
 			tmpl3.Execute(file, vars)
 		}
-		fmt.Fprintln(file)
+		fmt.Fprintf(file, "%s  - 0 \\break \n", vars["Cur"])
 		nn-- // skip cur
 		for ; nn >= cur-7; nn-- {
 			vars["Inc"] = noteJP[nn]
