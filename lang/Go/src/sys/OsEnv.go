@@ -13,9 +13,13 @@
 
 package main
 
-import "os"
-import "strings"
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"strings"
+)
+
+var date = "1970-01-01"
 
 func main() {
 
@@ -44,6 +48,10 @@ func main() {
 	fmt.Println()
 	for _, e := range os.Environ() {
 		pair := strings.Split(e, "=")
-		fmt.Println(pair[0])
+		if pair[0][0] == 'H' {
+			fmt.Println(pair[0])
+		}
 	}
+	fmt.Println()
+	fmt.Println(date)
 }
