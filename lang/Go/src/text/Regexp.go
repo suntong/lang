@@ -42,14 +42,11 @@ func Summary() {
 	p(r.MatchString("https://site/")) // => true
 	p(r.MatchString("HTTPS://site/")) // => true
 
-	// -- "(?i)" Case insensitive string match/replace
-	fmt.Println(regexp.MustCompile(`(?i)html|uml`).
-		ReplaceAllLiteralString("html HTML Html aa uml bb Uml", "XML"))
-	// XML XML XML aa XML bb XML
-
-	// These methods return a []string which is indexed by the match group position.
+	// FindStringSubmatch return a []string which is indexed by the match group position.
 	// - The 0th item of the slice corresponds to the entire match.
-	fmt.Println(regexp.MustCompile(`(\d+)(\D+(\d+))`).FindStringSubmatch("1000abcd123"))
+	p(regexp.MustCompile(`(?P<first>\d+)\.(\d+).(?P<second>\d+)`).
+		FindStringSubmatch("1234.5678.9")) // [1234.5678.9 1234 5678 9]
+	p(regexp.MustCompile(`(\d+)(\D+(\d+))`).FindStringSubmatch("1000abcd123"))
 	// [1000abcd123 1000 abcd123 123]
 
 	re := regexp.MustCompile(`(?i)t(his|h[eo]se)`)
@@ -58,12 +55,20 @@ func Summary() {
 	// []
 	fmt.Println(re.FindStringSubmatch(sourceStr))
 	// [This his]
-	// Use FindAllStringSubmatch to get $0, $1, $2 etc sub matches!
-	fmt.Println(regexp.MustCompile(`(?i)(th)(is|[eo]se)`).
+
+	// FindAllStringSubmatch *each match* is a []string
+	fmt.Printf("%#v\n", regexp.MustCompile(`(?i)(th)(is|[eo]se)`).
 		FindAllStringSubmatch(sourceStr, -1))
 	// [[This Th is] [these th ese] [THOSE TH OSE]]
+	// [][]string{[]string{"This", "Th", "is"}, []string{"these", "th", "ese"}, []string{"THOSE", "TH", "OSE"}}
+
 	fmt.Println(re.ReplaceAllString(sourceStr, "<b>${0}</b>"))
 	// <b>This</b> and <b>these</b> are for <b>THOSE</b> people
+
+	// -- "(?i)" Case insensitive string match/replace
+	fmt.Println(regexp.MustCompile(`(?i)html|uml`).
+		ReplaceAllLiteralString("html HTML Html aa uml bb Uml", "XML"))
+	// XML XML XML aa XML bb XML
 }
 
 func RegexNotes() {
