@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+
+  db:
+    image: mongo
+    container_name: test-mongo
+    #restart: always
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=michael
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+
+  db-client:
+    image: mongo-express
+    #restart: always
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=michael
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=secret
+      - ME_CONFIG_MONGODB_URL=mongodb://michael:secret@db:27017/
+    depends_on:
+      - db
