@@ -8,6 +8,24 @@ import (
 	"os"
 )
 
+const (
+	LevelTrace  = slog.Level(-8)
+	LevelDbg3   = slog.Level(-7)
+	LevelDbg2   = slog.Level(-6)
+	LevelDbg1   = slog.Level(-5)
+	LevelNotice = slog.Level(2)
+	LevelFatal  = slog.Level(12)
+)
+
+var LevelNames = map[slog.Leveler]string{
+	LevelTrace:  "TRC",
+	LevelDbg3:   "D-3",
+	LevelDbg2:   "D-2",
+	LevelDbg1:   "D-1",
+	LevelNotice: "NTC",
+	LevelFatal:  "FTL",
+}
+
 func main() {
 	slog.Debug("Debug message")
 	slog.Info("Info message")
@@ -78,4 +96,33 @@ func main() {
 		slog.String("available_space", "900.1 mb"),
 	)
 
+	// custom log levels
+	{
+		opts := &slog.HandlerOptions{
+			Level: LevelTrace,
+			ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
+				if a.Key == slog.LevelKey {
+					level := a.Value.Any().(slog.Level)
+					levelLabel, exists := LevelNames[level]
+					if !exists {
+						levelLabel = level.String()
+					}
+
+					a.Value = slog.StringValue(levelLabel)
+				}
+
+				return a
+			},
+		}
+
+		logger := slog.New(slog.NewTextHandler(os.Stdout, opts))
+
+		ctx := context.Background()
+		logger.Log(ctx, LevelDbg1, "Hidden debug message level1")
+		logger.Log(ctx, LevelDbg2, "Hidden debug message level2")
+		logger.Log(ctx, LevelDbg3, "Hidden debug message level3")
+		logger.Log(ctx, LevelTrace, "Trace message")
+		logger.Log(ctx, LevelNotice, "Notice message")
+		logger.Log(ctx, LevelFatal, "Fatal level")
+	}
 }
