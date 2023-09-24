@@ -8,14 +8,18 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+
+	"github.com/teris-io/shortid"
 )
 
 // Book - We will be using this Book type to perform crud operations
 type Book struct {
+	ID        string `bson:"_id"`
 	Title     string
 	Author    string
 	ISBN      string
@@ -23,7 +27,11 @@ type Book struct {
 	Copies    int
 }
 
+var shortIDGenerator *shortid.Shortid
+
 func main() {
+	shortIDGenerator = shortid.MustNew(1, shortid.DefaultABC, uint64(time.Now().UnixNano()))
+
 	// Set client options
 	clientOptions := options.Client().ApplyURI(os.Getenv("MGDB_CONN"))
 
@@ -45,17 +53,21 @@ func main() {
 	booksCollection := client.Database("testdb").Collection("books")
 
 	// Insert One document
-	book1 := Book{"Animal Farm", "George Orwell", "0451526341", "Signet Classics", 100}
+	id := shortIDGenerator.MustGenerate()
+	book1 := Book{id, "Animal Farm", "George Orwell", "0451526341", "Signet Classics", 100}
 	insertResult, err := booksCollection.InsertOne(context.TODO(), book1)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	fmt.Printf("Inserted single document: %+v\n", insertResult)
 	fmt.Println("Inserted a single document: ", insertResult.InsertedID)
 
 	// Insert multiple documents
-	book2 := Book{"Super Freakonomics", "Steven D. Levitt", "0062312871", "HARPER COLLINS USA", 100}
-	book3 := Book{"The Alchemist", "Paulo Coelho", "0062315005", "HarperOne", 100}
+	id = shortIDGenerator.MustGenerate()
+	book2 := Book{id, "Super Freakonomics", "Steven D. Levitt", "0062312871", "HARPER COLLINS USA", 100}
+	id = shortIDGenerator.MustGenerate()
+	book3 := Book{id, "The Alchemist", "Paulo Coelho", "0062315005", "HarperOne", 100}
 	multipleBooks := []interface{}{book2, book3}
 
 	insertManyResult, err := booksCollection.InsertMany(context.TODO(), multipleBooks)
@@ -122,11 +134,12 @@ func main() {
 
 $ go run main.go
 Connected to MongoDB!
-Inserted a single document:  ObjectID("64e626c83e1752e13beacad4")
-Inserted multiple documents:  [ObjectID("64e626c83e1752e13beacad5") ObjectID("64e626c83e1752e13beacad6")]
+Inserted single document: &{InsertedID:k0359TIcu}
+Inserted a single document:  k0359TIcu
+Inserted multiple documents:  [ag_x9cqTl kgp5fcIcuu]
 Matched 1 documents and updated 1 documents.
-Found a single document: {Title:Animal Farm Author:George Orwell ISBN:0451526341 Publisher:Signet Classics Copies:101}
-[{Animal Farm George Orwell 0451526341 Signet Classics 101} {Super Freakonomics Steven D. Levitt 0062312871 HARPER COLLINS USA 100} {The Alchemist Paulo Coelho 0062315005 HarperOne 100}]
+Found a single document: {ID:k0359TIcu Title:Animal Farm Author:George Orwell ISBN:0451526341 Publisher:Signet Classics Copies:101}
+[{k0359TIcu Animal Farm George Orwell 0451526341 Signet Classics 101} {ag_x9cqTl Super Freakonomics Steven D. Levitt 0062312871 HARPER COLLINS USA 100} {kgp5fcIcuu The Alchemist Paulo Coelho 0062315005 HarperOne 100}]
 Deleted 3 documents in the books collection
 Connection to MongoDB closed.
 
