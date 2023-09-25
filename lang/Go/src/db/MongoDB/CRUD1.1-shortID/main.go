@@ -17,6 +17,16 @@ import (
 	"github.com/teris-io/shortid"
 )
 
+type anys []interface{}
+
+func (a anys) ToStringSlice() []string {
+	aString := make([]string, len(a))
+	for i, v := range a {
+		aString[i] = v.(string)
+	}
+	return aString
+}
+
 // Book - We will be using this Book type to perform crud operations
 type Book struct {
 	ID        string `bson:"_id"`
@@ -62,6 +72,7 @@ func main() {
 
 	fmt.Printf("Inserted single document: %+v\n", insertResult)
 	fmt.Println("Inserted a single document: ", insertResult.InsertedID)
+	id1 := insertResult.InsertedID
 
 	// Insert multiple documents
 	id = shortIDGenerator.MustGenerate()
@@ -76,6 +87,9 @@ func main() {
 	}
 
 	fmt.Println("Inserted multiple documents: ", insertManyResult.InsertedIDs)
+	ids := append(insertManyResult.InsertedIDs, id1)
+	fmt.Printf("IDs: %#v\n", ids)
+	// IDs: []interface {}{"EPpeg1l-Z", "Eiper15-ZZ", "kZSeg1l-Z"}
 
 	//Update one document
 	filter := bson.D{{"isbn", "0451526341"}}
@@ -104,6 +118,26 @@ func main() {
 
 	fmt.Printf("Found a single document: %+v\n", result)
 
+	// Find multiple documents by id
+	// https://stackoverflow.com/questions/32264225/
+	//objectIDs := []string{"ObjectId1", "ObjectId2"}
+	// https://goplay.tools/snippet/w_A7Ca7MNO0
+	objectIDs := anys(ids.([]interface{})).ToStringSlice()
+	fmt.Printf("IDs: %#v\n", objectIDs)
+	filter = bson.M{"_id": bson.M{"$in": objectIDs}}
+	{
+		cursor, err := booksCollection.Find(context.TODO(), filter)
+		if err != nil {
+			log.Fatal(err)
+		}
+		var books []Book
+		if err = cursor.All(context.TODO(), &books); err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("Found multiple documents by ids of", ids)
+		fmt.Println(books)
+	}
+
 	// Find multiple documents
 	cursor, err := booksCollection.Find(context.TODO(), bson.D{{}})
 	if err != nil {
@@ -113,6 +147,7 @@ func main() {
 	if err = cursor.All(context.TODO(), &books); err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println("Found all documents")
 	fmt.Println(books)
 
 	//Delete Documents
