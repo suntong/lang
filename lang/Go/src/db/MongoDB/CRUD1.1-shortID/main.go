@@ -118,14 +118,19 @@ func main() {
 
 	fmt.Printf("Found a single document: %+v\n", result)
 
-	// Find multiple documents by id
-	// https://stackoverflow.com/questions/32264225/
 	//objectIDs := []string{"ObjectId1", "ObjectId2"}
+	//fmt.Printf("IDs: %#v\n", objectIDs)
+	// https://goplay.tools/snippet/gZeN_KCxxTA
 	// https://goplay.tools/snippet/w_A7Ca7MNO0
-	objectIDs := anys(ids.([]interface{})).ToStringSlice()
-	fmt.Printf("IDs: %#v\n", objectIDs)
-	filter = bson.M{"_id": bson.M{"$in": objectIDs}}
+	//objectIDs := anys(ids).ToStringSlice()
+	//fmt.Printf("IDs: %#v\n", objectIDs)
+
 	{
+		// Find multiple documents by id
+		// https://stackoverflow.com/questions/32264225/
+		//   find({"_id" : {"$in" : [ObjectId("..."), ObjectId("...")]}});
+		// https://go.dev/play/p/APEmInJhet3
+		filter := bson.M{"_id": bson.M{"$in": ids}}
 		cursor, err := booksCollection.Find(context.TODO(), filter)
 		if err != nil {
 			log.Fatal(err)
