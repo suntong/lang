@@ -39,7 +39,7 @@ func main() {
 	fmt.Println("---")
 }
 
-func lengthOfLongestSubstring1(s string) int {
+func lengthOfLongestSubstring0(s string) int {
 	ll, rr, res, str := 0, 0, 0, ""
 	lastAt := make(map[byte]int, len(s)) // last pos such char was at
 
@@ -61,10 +61,31 @@ func lengthOfLongestSubstring1(s string) int {
 	return res
 }
 
-func lengthOfLongestSubstring0(s string) int {
-	res, left, right := 0, 0, -1
-	if res < right-left {
-		res = right - left
+func lengthOfLongestSubstring1(s string) int {
+	// Speed beats 100.00%of users with Go
+	// Memory beats 92.78%of users with Go
+	if len(s) == 0 {
+		return 0
 	}
-	return res
+	var freq [127]int
+	result, left, right := 0, 0, 0
+
+	for left < len(s) {
+		if right < len(s) && freq[s[right]] == 0 {
+			freq[s[right]]++
+			right++
+		} else {
+			freq[s[left]]--
+			left++
+		}
+		result = max(result, right-left)
+	}
+	return result
+}
+
+func max(a int, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
