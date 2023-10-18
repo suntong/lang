@@ -27,6 +27,8 @@ func main() {
 	// fmt.Println("------")
 	ExampleCmd_Output()
 	fmt.Println("------")
+	ExampleCmd_AllOutput()
+	fmt.Println("------")
 	ExampleCmd_Pipes()
 	fmt.Println("------")
 	ExampleCmd_Start()
@@ -78,6 +80,15 @@ func ExampleCmd_Output() {
 		log.Fatal(err)
 	}
 	fmt.Printf("The date is %s\n", out)
+}
+
+func ExampleCmd_AllOutput() {
+	cmd := exec.Command("sh", "-c", "echo to stdout; echo to stderr 1>&2")
+	stdoutStderr, err := cmd.CombinedOutput()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%s\n", stdoutStderr)
 }
 
 func ExampleCmd_Pipes() {
