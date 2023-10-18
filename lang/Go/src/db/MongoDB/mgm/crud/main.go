@@ -9,18 +9,22 @@ func init() {
 	_ = mgm.SetDefaultConfig(nil, "mgm_lab", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
 }
 
+type bookT struct {
+        Name             string `json:"name" bson:"name"`
+        Pages            int    `json:"pages" bson:"pages"`
+}
+
 
 type book struct {
 	mgm.DefaultModel `bson:",inline"`
-	Name             string `json:"name" bson:"name"`
-	Pages            int    `json:"pages" bson:"pages"`
+	bookT
 }
 
 func newBook(name string, pages int) *book {
-	return &book{
+	return &book{bookT: bookT{
 		Name:  name,
 		Pages: pages,
-	}
+	}}
 }
 
 func crud() error {
