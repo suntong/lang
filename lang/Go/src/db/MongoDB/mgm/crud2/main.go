@@ -1,22 +1,31 @@
 package main
 
 import (
+	"log"
+	"os"
+
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func init() {
-	_ = mgm.SetDefaultConfig(nil, "mgm_lab", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
+	connectionString := os.Getenv("MONGODB_CONNECTION_STRING")
+	if len(connectionString) == 0 {
+		connectionString = "mongodb://localhost:27017"
+	}
+	err := mgm.SetDefaultConfig(nil, "mgm_lab", options.Client().ApplyURI(connectionString))
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 type bookT struct {
-        Name             string `json:"name" bson:"name"`
-        Pages            int    `json:"pages" bson:"pages"`
+	Name  string `json:"name" bson:"name"`
+	Pages int    `json:"pages" bson:"pages"`
 }
 
-
 type book struct {
-	mgm.DefaultModel `bson:",inline"`
+	MgmB // base type for mgm
 	bookT
 }
 
@@ -24,7 +33,7 @@ func newBook(name string, pages int) *book {
 	return &book{bookT: bookT{
 		Name:  name,
 		Pages: pages,
-	}}
+	}, MgmB: MgmB{ID: NewID()}}
 }
 
 func crud() error {
