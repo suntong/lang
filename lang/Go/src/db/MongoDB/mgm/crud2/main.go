@@ -25,8 +25,8 @@ type BookT struct {
 }
 
 type book struct {
-	MgmB // base type for mgm
-	BookT
+	MgmB `bson:",inline"` // base type for mgm
+	BookT `bson:",inline"`
 }
 
 func newBook(name string, pages int) *book {
