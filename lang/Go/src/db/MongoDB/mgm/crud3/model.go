@@ -18,3 +18,9 @@ func newBook(name string, pages int) *book {
 		Pages: pages,
 	}
 }
+
+
+// GetID method returns a model's ID
+func (b *book) GetID() interface{} {
+	return b.ID
+}
