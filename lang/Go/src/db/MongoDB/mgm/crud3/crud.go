@@ -18,3 +18,7 @@ func crud() error {
 
 	return booksColl.Delete(book)
 }
+
+func main() {
+	crud()
+}
