@@ -47,7 +47,7 @@ func NewID() string {
 	return shortIDGenerator.MustGenerate()
 }
 
-// MakeID makes/creates the model's ID.
-func (f *MgmB) MakeID() {
+// NewID creates the model's ID.
+func (f *MgmB) NewID() {
 	f.ID = NewID()
 }
