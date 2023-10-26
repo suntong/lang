@@ -6,6 +6,8 @@ import (
 	"os"
 
 	"github.com/kamva/mgm/v3"
+	"github.com/kamva/mgm/v3/operator"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -82,6 +84,19 @@ func crud() error {
 	return nil // personsColl.Delete(person)
 }
 
+func find() error {
+	scores := []int{75, 90}
+	persons := []person{}
+	err := mgm.Coll(&person{}).SimpleFind(&persons,
+		bson.M{"Scores": bson.M{operator.In: scores}})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("%+v\n", persons)
+	return nil
+}
+
 func main() {
 	crud()
+	find()
 }
