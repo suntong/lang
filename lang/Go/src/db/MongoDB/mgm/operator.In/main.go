@@ -88,7 +88,7 @@ func find() error {
 	scores := []int{75, 90}
 	persons := []person{}
 	err := mgm.Coll(&person{}).SimpleFind(&persons,
-		bson.M{"Scores": bson.M{operator.In: scores}})
+		bson.M{"scores": bson.M{operator.In: scores}})
 	if err != nil {
 		log.Fatal(err)
 	}
