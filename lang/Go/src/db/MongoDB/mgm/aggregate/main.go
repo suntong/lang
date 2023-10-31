@@ -39,6 +39,11 @@ func newAuthor(name string) *author {
 	}
 }
 
+type book2 struct {
+	book
+	author []author
+}
+
 func init() {
 	connectionString := os.Getenv("MONGODB_CONNECTION_STRING")
 	if len(connectionString) == 0 {
@@ -64,10 +69,20 @@ func delSeededData() {
 	_, _ = mgm.Coll(&author{}).DeleteMany(nil, bson.M{})
 }
 
-func lookup() error {
-	seed()
+func lookup1() {
+	authorCollName := mgm.Coll(&author{}).Name()
+	//result := []book{} // X: will miss the author field!
+	// var result bson.M
+	// X: results argument must be a pointer to a slice, but was a pointer to map
+	// result := []book2{} // X: all empty
+	result := []bson.M{}
+	err := mgm.Coll(&book{}).SimpleAggregate(&result,
+		builder.S(builder.Lookup(authorCollName, "author_id", "_id", "author")))
+	checkError(err)
+	fmt.Printf("1] %v\n   %+[1]v\n", result)
+}
 
-	defer delSeededData()
+func lookup() error {
 
 	// Author model's collection
 	authorColl := mgm.Coll(&author{})
@@ -77,27 +92,33 @@ func lookup() error {
 	}
 
 	cur, err := mgm.Coll(&book{}).Aggregate(mgm.Ctx(), pipeline)
-
-	if err != nil {
-		return err
-	}
+	checkError(err)
 
 	defer cur.Close(nil)
 
 	for cur.Next(nil) {
 		var result bson.M
 		err := cur.Decode(&result)
-		if err != nil {
-			return err
-		}
+		checkError(err)
 
 		// do something with result....
-		fmt.Printf("%+v\n", result)
+		fmt.Printf("2] %+v\n", result)
 	}
 
 	return nil
 }
 
 func main() {
+	seed()
+	defer delSeededData()
+
+	lookup1()
 	lookup()
+}
+
+func checkError(err error) {
+	if err != nil {
+		fmt.Println("Fatal error ", err.Error())
+		os.Exit(1)
+	}
 }
