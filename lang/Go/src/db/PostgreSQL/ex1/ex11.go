@@ -31,7 +31,9 @@ func main() {
 		os.Getenv("DB_NAME"),
 		os.Getenv("DB_SSL_MODE"),
 	)
-	db, err := sql.Open("postgres", psqlInfo)
+	connStr := psqlInfo
+	connStr = os.Getenv("PGDB_CONN")
+	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		panic(err)
 	}
