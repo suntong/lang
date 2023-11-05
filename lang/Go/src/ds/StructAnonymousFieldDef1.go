@@ -72,8 +72,9 @@ func test2() {
 	// mixture of field:value and value elements in struct literal
 	// X: t := T2{T2_Text: "Test", T1{T1_Text: "Test"}}
 	// https://stackoverflow.com/a/47379416/2125837
+	t := T2{"Test", T1{"Test"}}
 	t2 := T2{T2_Text: "Test2", T1: T1{T1_Text: "Test1"}}
-	fmt.Println(t2)
+	fmt.Println(t, t2)
 }
 
 func main() {
