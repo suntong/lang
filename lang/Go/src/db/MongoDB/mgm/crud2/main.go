@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/kamva/mgm/v3"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -25,7 +26,7 @@ type BookT struct {
 }
 
 type book struct {
-	MgmB `bson:",inline"` // base type for mgm
+	MgmB  `bson:",inline"` // base type for mgm
 	BookT `bson:",inline"`
 }
 
@@ -50,11 +51,21 @@ func crud() error {
 	if err := booksColl.Update(book); err != nil {
 		return err
 	}
-        log.Printf("%#v\n", book)
+	log.Printf("%#v\n", book)
 
 	return nil // booksColl.Delete(book)
 }
 
+func simpleFind() {
+	log.Println("\n\n## SimpleFind")
+	result := []book{}
+	if err := mgm.Coll(&book{}).SimpleFind(&result, bson.M{}); err != nil {
+		return
+	}
+	log.Printf("%#v\n", result)
+}
+
 func main() {
 	crud()
+	simpleFind()
 }
