@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/tls"
 	"log"
 	"time"
 
@@ -78,7 +77,7 @@ func main() {
 
 	// Set TLSConfig to provide custom TLS configuration. For example,
 	// to skip TLS verification (useful for testing):
-	server.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+	//server.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
 	// SMTP client
 	smtpClient, err := server.Connect()
