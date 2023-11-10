@@ -129,8 +129,12 @@ func httpError() {
 
 	{
 		// using plain error & wrapping more info
-		err0 := errors.New(strconv.Itoa(StatusBadRequest))
-		err := fmt.Errorf("Error %w: Invalid payload body.", err0)
+		err0 := errors.New("Unmarshal body failure")    // from go operation
+		err := fmt.Errorf("%w: Invalid payload.", err0) // my wrapped error
+		fmt.Println(errors.Unwrap(err), err)
+		fmt.Println("\n\t wrapped again ......")
+		err0 = errors.New(strconv.Itoa(StatusBadRequest))
+		err = fmt.Errorf("Error %w: %s", err0, err)
 		fmt.Printf("(%T) %[1]s\n", errors.Unwrap(err))         // low-level error
 		fmt.Printf("(%T) %[1]s\n", errors.Unwrap(err).Error()) // low-level error
 		fmt.Println(err)                                       // wrapped error
@@ -148,8 +152,11 @@ Unmarshal body failure: Invalid payload body.
 
 400 Bad Request - Unmarshal body failure: Invalid payload body.
 
+Unmarshal body failure Unmarshal body failure: Invalid payload.
+
+        wrapped again ......
 (*errors.errorString) 400
 (string) 400
-Error 400: Invalid payload body.
+Error 400: Unmarshal body failure: Invalid payload.
 
 */
