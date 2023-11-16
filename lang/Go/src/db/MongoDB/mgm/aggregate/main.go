@@ -40,8 +40,8 @@ func newAuthor(name string) *author {
 }
 
 type book2 struct {
-	book
-	author []author
+	book   `bson:",inline"`
+	Author []author `bson:"author"` // will get `author:[]` if just use `author`
 }
 
 func init() {
@@ -70,16 +70,26 @@ func delSeededData() {
 }
 
 func lookup1() {
-	authorCollName := mgm.Coll(&author{}).Name()
+	authorColl := mgm.Coll(&author{})
 	//result := []book{} // X: will miss the author field!
 	// var result bson.M
 	// X: results argument must be a pointer to a slice, but was a pointer to map
-	// result := []book2{} // X: all empty
-	result := []bson.M{}
+	// result := []book2{} // X: all empty when book is not inline
+	// result := []bson.M{} // cannot get the author field, see below
+	result := []book2{}
 	err := mgm.Coll(&book{}).SimpleAggregate(&result,
-		builder.S(builder.Lookup(authorCollName, "author_id", "_id", "author")))
+		builder.S(builder.Lookup(authorColl.Name(), "author_id", "_id", "author")))
 	checkError(err)
-	fmt.Printf("1] %v\n   %+[1]v\n", result)
+	fmt.Printf("1b] %v\n   %+[1]v\n", result)
+
+	a := []author{}
+	for _, val := range result {
+		// r := val["author"].(primitive.A)[0]
+		// var a1 author
+		// bson.Unmarshal(r.([]byte), &a1)
+		a = append(a, val.Author[0])
+	}
+	fmt.Printf("1a] %+v\n", a)
 }
 
 func lookup() error {
