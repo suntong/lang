@@ -8,6 +8,7 @@ import (
 	"github.com/kamva/mgm/v3"
 	"github.com/kamva/mgm/v3/builder"
 	"github.com/kamva/mgm/v3/field"
+	"github.com/kamva/mgm/v3/operator"
 	. "go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -60,7 +61,10 @@ func lookup() error {
 	// Author model's collection
 	authorColl := mgm.Coll(&author{})
 
+	// db.books.aggregate([ { $match: { "name": "Test2", "pages": 126 } }, { $lookup: { from: "authors", localField: "author_id", foreignField: "_id", as: "author" } }] )
+	// https://github.com/Kamva/mgm#aggregation
 	pipeline := A{
+		builder.S(builder.New(operator.Match, M{"name": "Test2", "pages": 126})),
 		builder.S(builder.Lookup(authorColl.Name(), "author_id", field.ID, "author")),
 	}
 
