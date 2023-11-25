@@ -8,7 +8,7 @@ import (
 	"github.com/kamva/mgm/v3"
 	"github.com/kamva/mgm/v3/builder"
 	"github.com/kamva/mgm/v3/field"
-	"go.mongodb.org/mongo-driver/bson"
+	. "go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -55,49 +55,12 @@ func init() {
 	}
 }
 
-func seed() {
-	author := newAuthor("Mehran")
-	_ = mgm.Coll(author).Create(author)
-
-	book := newBook("Test", 124, author.ID)
-	_ = mgm.Coll(book).Create(book)
-
-}
-
-func delSeededData() {
-	_, _ = mgm.Coll(&book{}).DeleteMany(nil, bson.M{})
-	_, _ = mgm.Coll(&author{}).DeleteMany(nil, bson.M{})
-}
-
-func lookup1() {
-	authorColl := mgm.Coll(&author{})
-	//result := []book{} // X: will miss the author field!
-	// var result bson.M
-	// X: results argument must be a pointer to a slice, but was a pointer to map
-	// result := []book2{} // X: all empty when book is not inline
-	// result := []bson.M{} // cannot get the author field, see below
-	result := []book2{}
-	err := mgm.Coll(&book{}).SimpleAggregate(&result,
-		builder.S(builder.Lookup(authorColl.Name(), "author_id", "_id", "author")))
-	checkError(err)
-	fmt.Printf("1b] %v\n   %+[1]v\n", result)
-
-	a := []author{}
-	for _, val := range result {
-		// r := val["author"].(primitive.A)[0]
-		// var a1 author
-		// bson.Unmarshal(r.([]byte), &a1)
-		a = append(a, val.Author[0])
-	}
-	fmt.Printf("1a] %+v\n", a)
-}
-
 func lookup() error {
 
 	// Author model's collection
 	authorColl := mgm.Coll(&author{})
 
-	pipeline := bson.A{
+	pipeline := A{
 		builder.S(builder.Lookup(authorColl.Name(), "author_id", field.ID, "author")),
 	}
 
@@ -107,7 +70,7 @@ func lookup() error {
 	defer cur.Close(nil)
 
 	for cur.Next(nil) {
-		var result bson.M
+		var result M
 		err := cur.Decode(&result)
 		checkError(err)
 
@@ -119,10 +82,6 @@ func lookup() error {
 }
 
 func main() {
-	seed()
-	//defer delSeededData()
-
-	lookup1()
 	lookup()
 }
 
