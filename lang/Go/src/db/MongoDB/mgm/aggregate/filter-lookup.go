@@ -68,13 +68,16 @@ func lookup() error {
 		builder.S(builder.Lookup(authorColl.Name(), "author_id", field.ID, "author")),
 	}
 
+	// X: err := mgm.Coll(&book{}).SimpleAggregate(&result, pipeline)
+	// Fatal error: cannot marshal type primitive.A to a BSON Document
+
 	cur, err := mgm.Coll(&book{}).Aggregate(mgm.Ctx(), pipeline)
 	checkError(err)
 
 	defer cur.Close(nil)
 
 	for cur.Next(nil) {
-		var result M
+		var result = book2{} // M
 		err := cur.Decode(&result)
 		checkError(err)
 
