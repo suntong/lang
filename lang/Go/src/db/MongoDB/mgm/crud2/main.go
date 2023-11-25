@@ -59,13 +59,14 @@ func crud() error {
 func simpleFind() {
 	log.Println("\n\n## SimpleFind")
 	result := []book{}
-	if err := mgm.Coll(&book{}).SimpleFind(&result, bson.M{}); err != nil {
+	if err := mgm.Coll(&book{}).SimpleFind(&result, bson.M{}, &options.FindOptions{
+		Sort: map[string]int{"updated_at": -1}}); err != nil {
 		return
 	}
 	log.Printf("%#v\n", result)
 }
 
 func main() {
-	crud()
+	//crud()
 	simpleFind()
 }
