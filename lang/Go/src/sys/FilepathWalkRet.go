@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func main() {
@@ -29,7 +30,16 @@ func main() {
 		return
 	}
 
-	fmt.Println(files)
+	b := &strings.Builder{}
+	fmt.Fprintf(b, "[")
+	for i, f := range files {
+		if i != 0 {
+			fmt.Fprintf(b, ",")
+		}
+		fmt.Fprintf(b, "{src: '%s'}", f)
+	}
+	fmt.Fprintf(b, "]")
+	fmt.Println(b.String())
 }
 
 // TO_LIST=. go run FilepathWalkRet.go
