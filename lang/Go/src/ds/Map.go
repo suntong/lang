@@ -117,6 +117,9 @@ func dotnetperls2() {
 
 	// There are three pairs in the map.
 	fmt.Println(len(names)) // 3
+
+	// missing key?
+	fmt.Printf("has '%s', '%s'not", names[990], names[991])
 }
 
 // == Delete, uses delete built-in
