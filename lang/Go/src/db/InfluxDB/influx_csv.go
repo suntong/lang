@@ -49,6 +49,9 @@ type csvI interface {
 	parseRecord(record []string) (tags map[string]string, fields map[string]interface{})
 }
 
+//==========================================================================
+// csvS
+
 type csvS struct {
 	expectedHeader []string
 }
@@ -151,9 +154,8 @@ func (c *csvS) process(d csvI) {
 	fmt.Println("Data successfully written to InfluxDB!")
 }
 
-// func (c *csvS) parseRecord(record []string) (tags map[string]string, fields map[string]interface{}) {
-// 	fmt.Println("Base function should not be called.")
-// }
+//==========================================================================
+// ages
 
 type ages struct {
 	csvS
@@ -191,11 +193,59 @@ func (a *ages) parseRecord(record []string) (tags map[string]string, fields map[
 	return //tags, fields
 }
 
+//==========================================================================
+// cpu
+
+type cpu struct {
+	csvS
+}
+
+func newCpu() cpu {
+	return cpu{csvS: csvS{expectedHeader: []string{"timeStamp", "elapsed", "label"}}}
+}
+
+func (c *cpu) process(d csvI) {
+	c.csvS.process(d)
+}
+
+func (c *cpu) getExpectedHeader() []string {
+	return c.expectedHeader
+}
+
+func (c *cpu) parseRecord(record []string) (tags map[string]string, fields map[string]interface{}) {
+
+	// Parse the fields
+	cpuv, err := strconv.Atoi(record[1])
+	if err != nil {
+		log.Fatalf("could not convert cpu to int: %v", err)
+	}
+
+	// Create a point
+	tags = map[string]string{
+		"runId": influxRunID,
+		"label": record[2],
+	}
+	fields = map[string]interface{}{
+		"cpu": float64(cpuv) / 1000,
+	}
+
+	return //tags, fields
+}
+
 ////////////////////////////////////////////////////////////////////////////
 // Function definitions
 
-// Function main
-func main() {
+func testAges() {
 	a := newAges()
 	a.process(&a)
+}
+
+func testCpu() {
+	c := newCpu()
+	c.process(&c)
+}
+
+// Function main
+func main() {
+	testCpu()
 }
