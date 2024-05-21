@@ -43,6 +43,21 @@ var (
 
 // Function main
 func main() {
+	// Init vars from system environment
+	if ev, ok := os.LookupEnv("c_cfg_Influxdb"); ok {
+		influxAddr = ev
+	}
+	if ev, ok := os.LookupEnv("c_cfg_DbNmae"); ok {
+		influxDBNm = ev
+	}
+	if ev, ok := os.LookupEnv("c_cfg_Measure"); ok {
+		influxMeas = ev
+	}
+	if ev, ok := os.LookupEnv("c_cfg_CSV"); ok {
+		influxSCsv = ev
+	}
+	influxRunID := os.Getenv("c_cfg_RunID")
+
 	// Open the CSV file
 	file, err := os.Open(influxSCsv)
 	if err != nil {
@@ -115,7 +130,8 @@ func main() {
 
 		// Create a point
 		tags := map[string]string{
-			"aget": record[1],
+			"runId": influxRunID,
+			"aget":  record[1],
 			// "tagKey2": record[2],
 		}
 		fields := map[string]interface{}{
