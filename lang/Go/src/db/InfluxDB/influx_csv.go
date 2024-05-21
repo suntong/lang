@@ -36,13 +36,28 @@ var (
 	influxDBNm = "influx"
 	influxMeas = "example_measurement"
 	influxSCsv = "data.csv" // source CSV
+
+	influxRunID = ""
 )
 
-////////////////////////////////////////////////////////////////////////////
-// Function definitions
+//////////////////////////////////////////////////////////////////////////
+// interface/structure definitions
 
-// Function main
-func main() {
+type csvI interface {
+	getExpectedHeader() []string
+	process(d csvI)
+	parseRecord(record []string) (tags map[string]string, fields map[string]interface{})
+}
+
+type csvS struct {
+	expectedHeader []string
+}
+
+func (c *csvS) getExpectedHeader() []string {
+	return c.expectedHeader
+}
+
+func (c *csvS) process(d csvI) {
 	// Init vars from system environment
 	if ev, ok := os.LookupEnv("c_cfg_Influxdb"); ok {
 		influxAddr = ev
@@ -56,7 +71,7 @@ func main() {
 	if ev, ok := os.LookupEnv("c_cfg_CSV"); ok {
 		influxSCsv = ev
 	}
-	influxRunID := os.Getenv("c_cfg_RunID")
+	influxRunID = os.Getenv("c_cfg_RunID")
 
 	// Open the CSV file
 	file, err := os.Open(influxSCsv)
@@ -76,7 +91,7 @@ func main() {
 	}
 
 	// Validate header
-	expectedHeader := []string{"timestamp", "aget", "agev"}
+	expectedHeader := d.getExpectedHeader()
 	for i, v := range expectedHeader {
 		if header[i] != v {
 			log.Fatalf("Invalid CSV header, expected %s but got %s", expectedHeader, header)
@@ -117,27 +132,7 @@ func main() {
 			log.Fatalf("Error parsing timestamp: %v", err)
 		}
 
-		// Parse the fields
-		agev, err := strconv.Atoi(record[2])
-		if err != nil {
-			log.Fatalf("could not convert age to int: %v", err)
-		}
-
-		// field2, err := strconv.ParseFloat(record[4], 64)
-		// if err != nil {
-		// 	log.Fatalf("Error parsing field2: %v", err)
-		// }
-
-		// Create a point
-		tags := map[string]string{
-			"runId": influxRunID,
-			"aget":  record[1],
-			// "tagKey2": record[2],
-		}
-		fields := map[string]interface{}{
-			"agev": agev,
-			// "field2": field2,
-		}
+		tags, fields := d.parseRecord(record)
 
 		pt, err := influxdb.NewPoint(influxMeas, tags, fields, timestamp)
 		if err != nil {
@@ -154,4 +149,53 @@ func main() {
 	}
 
 	fmt.Println("Data successfully written to InfluxDB!")
+}
+
+// func (c *csvS) parseRecord(record []string) (tags map[string]string, fields map[string]interface{}) {
+// 	fmt.Println("Base function should not be called.")
+// }
+
+type ages struct {
+	csvS
+}
+
+func newAges() ages {
+	return ages{csvS: csvS{expectedHeader: []string{"timestamp", "aget", "agev"}}}
+}
+
+func (a *ages) process(d csvI) {
+	a.csvS.process(d)
+}
+
+func (a *ages) getExpectedHeader() []string {
+	return a.expectedHeader
+}
+
+func (a *ages) parseRecord(record []string) (tags map[string]string, fields map[string]interface{}) {
+
+	// Parse the fields
+	agev, err := strconv.Atoi(record[2])
+	if err != nil {
+		log.Fatalf("could not convert age to int: %v", err)
+	}
+
+	// Create a point
+	tags = map[string]string{
+		"runId": influxRunID,
+		"aget":  record[1],
+	}
+	fields = map[string]interface{}{
+		"agev": agev,
+	}
+
+	return //tags, fields
+}
+
+////////////////////////////////////////////////////////////////////////////
+// Function definitions
+
+// Function main
+func main() {
+	a := newAges()
+	a.process(&a)
 }
