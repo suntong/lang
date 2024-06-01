@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -15,8 +14,12 @@ import (
 )
 
 const (
-	webSocketURL     = "ws://ws.vi-server.org/mirror/" // Replace with your WebSocket server URL
 	webSocketTimeout = 3
+)
+
+var (
+	webSocketURL = os.Getenv("WS_URL") // WebSocket server URL
+	webSocketMsg = os.Getenv("WS_MSG") // WebSocket message
 )
 
 func main() {
@@ -44,7 +47,7 @@ func main() {
 	}
 	defer conn.Close(websocket.StatusInternalError, "the client is shutting down")
 
-	log.Println("Connected to WebSocket server: ", webSocketURL)
+	log.Println("Connected to WebSocket server:", webSocketURL)
 	// WaitGroup to wait for goroutines to finish
 	var wg sync.WaitGroup
 	wg.Add(2)
@@ -82,8 +85,8 @@ func sendMessages(ctx context.Context, conn *websocket.Conn, sendChan chan struc
 		case <-ctx.Done():
 			log.Println("Context cancelled, stopping sendMessages goroutine")
 			return
-		case t := <-ticker.C:
-			message := fmt.Sprintf("Hello, the time is %s", t)
+		case <-ticker.C:
+			message := webSocketMsg
 			sendCtx, sendCancel := context.WithTimeout(ctx, webSocketTimeout*time.Second)
 			defer sendCancel()
 			startTime = time.Now() // Record start time
@@ -127,21 +130,21 @@ func receiveMessages(ctx context.Context, conn *websocket.Conn, sendChan chan st
 /*
 
 go get -v nhooyr.io/websocket
-go build -o demo2 demo2.go
+go build -o demor demor.go
 
-$ demo2
-2024/05/31 19:36:22 Sent: Hello, the time is 2024-05-31 19:36:22.490033 -0400 EDT m=+5.276632459
-2024/05/31 19:36:22 Time from send to receive: 572.333µs
-2024/05/31 19:36:22 Received: Hello, the time is 2024-05-31 19:36:22.490033 -0400 EDT m=+5.276632459
-2024/05/31 19:36:27 Sent: Hello, the time is 2024-05-31 19:36:27.492419 -0400 EDT m=+10.278983542
-2024/05/31 19:36:27 Time from send to receive: 377.625µs
-2024/05/31 19:36:27 Received: Hello, the time is 2024-05-31 19:36:27.492419 -0400 EDT m=+10.278983542
-2024/05/31 19:36:32 Sent: Hello, the time is 2024-05-31 19:36:32.489689 -0400 EDT m=+15.276219376
-2024/05/31 19:36:32 Received: Hello, the time is 2024-05-31 19:36:32.489689 -0400 EDT m=+15.276219376
-^C
-2024/05/31 19:36:33 Received interrupt signal, shutting down...
-2024/05/31 19:36:33 Context cancelled, stopping sendMessages goroutine
-2024/05/31 19:36:33 Failed to receive message: failed to read JSON message: failed to get reader: use of closed network connection
-2024/05/31 19:36:33 Connection closed gracefully
+export WS_URL="ws://ws.vi-server.org/mirror/" WS_MSG="Request payload"
+
+$ demor
+2024/06/01 10:51:59 Connected to WebSocket server: ws://ws.vi-server.org/mirror/
+2024/06/01 10:52:04 Sent: Request payload
+2024/06/01 10:52:04 Time from send to receive: 421.375µs
+2024/06/01 10:52:04 Received: Request payload
+2024/06/01 10:52:09 Sent: Request payload
+2024/06/01 10:52:09 Time from send to receive: 372.584µs
+2024/06/01 10:52:09 Received: Request payload
+^C2024/06/01 10:52:10 Received interrupt signal, shutting down...
+2024/06/01 10:52:10 Context cancelled, stopping sendMessages goroutine
+2024/06/01 10:52:10 Context cancelled, stopping receiveMessages goroutine
+2024/06/01 10:52:10 Connection closed gracefully
 
 */
