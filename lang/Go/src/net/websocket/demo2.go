@@ -15,7 +15,8 @@ import (
 )
 
 const (
-	webSocketURL = "ws://ws.vi-server.org/mirror/" // Replace with your WebSocket server URL
+	webSocketURL     = "ws://ws.vi-server.org/mirror/" // Replace with your WebSocket server URL
+	webSocketTimeout = 3
 )
 
 func main() {
@@ -32,13 +33,18 @@ func main() {
 		cancel()
 	}()
 
-	// Connect to WebSocket server
-	conn, _, err := websocket.Dial(ctx, webSocketURL, nil)
+	// Create a timeout context for the connection
+	connCtx, connCancel := context.WithTimeout(ctx, webSocketTimeout*time.Second)
+	defer connCancel()
+
+	// Connect to WebSocket server with timeout
+	conn, _, err := websocket.Dial(connCtx, webSocketURL, nil)
 	if err != nil {
 		log.Fatalf("Failed to connect to WebSocket server: %v", err)
 	}
 	defer conn.Close(websocket.StatusInternalError, "the client is shutting down")
 
+	log.Println("Connected to WebSocket server: ", webSocketURL)
 	// WaitGroup to wait for goroutines to finish
 	var wg sync.WaitGroup
 	wg.Add(2)
@@ -74,7 +80,9 @@ func sendMessages(ctx context.Context, conn *websocket.Conn) {
 			return
 		case t := <-ticker.C:
 			message := fmt.Sprintf("Hello, the time is %s", t)
-			err := wsjson.Write(ctx, conn, message)
+			sendCtx, sendCancel := context.WithTimeout(ctx, webSocketTimeout*time.Second)
+			defer sendCancel()
+			err := wsjson.Write(sendCtx, conn, message)
 			if err != nil {
 				log.Printf("Failed to send message: %v", err)
 				return
@@ -91,9 +99,16 @@ func receiveMessages(ctx context.Context, conn *websocket.Conn) {
 			log.Println("Context cancelled, stopping receiveMessages goroutine")
 			return
 		default:
+			// err := wsjson.Read(ctx, conn, &message)
+			recvCtx, recvCancel := context.WithTimeout(ctx, webSocketTimeout*2*time.Second)
+			defer recvCancel()
 			var message string
-			err := wsjson.Read(ctx, conn, &message)
+			err := wsjson.Read(recvCtx, conn, &message)
 			if err != nil {
+				if websocket.CloseStatus(err) == websocket.StatusNormalClosure {
+					log.Println("WebSocket connection closed by server")
+					return
+				}
 				log.Printf("Failed to receive message: %v", err)
 				return
 			}
