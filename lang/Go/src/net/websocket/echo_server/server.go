@@ -21,19 +21,12 @@ type echoServer struct {
 }
 
 func (s echoServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c, err := websocket.Accept(w, r, &websocket.AcceptOptions{
-		Subprotocols: []string{"echo"},
-	})
+	c, err := websocket.Accept(w, r, &websocket.AcceptOptions{})
 	if err != nil {
 		s.logf("%v", err)
 		return
 	}
 	defer c.CloseNow()
-
-	if c.Subprotocol() != "echo" {
-		c.Close(websocket.StatusPolicyViolation, "client must speak the echo subprotocol")
-		return
-	}
 
 	l := rate.NewLimiter(rate.Every(time.Millisecond*100), 10)
 	for {
