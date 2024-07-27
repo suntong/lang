@@ -11,25 +11,34 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
+type wsDialer struct {
+	url     string
+	headers http.Header
+}
+
+func (d *wsDialer) Dial(network, address string) (net.Conn, error) {
+	wsConn, _, err := websocket.DefaultDialer.Dial(d.url, d.headers)
+	if err != nil {
+		return nil, err
+	}
+	return websocket.NetConn(nil, wsConn, websocket.MessageBinary), nil
+}
+
 func main() {
 	// WebSocket server URL
-	u := url.URL{Scheme: "wss", Host: "localhost:58220", Path: "/"}
+	u := url.URL{Scheme: "ws", Host: "localhost:58220"}
 	log.Printf("Connecting to %s", u.String())
 
-	// Create a WebSocket dialer
-	dialer := websocket.DefaultDialer
-
-	// Dial the WebSocket server
-	wsConn, _, err := dialer.Dial(u.String(), http.Header{})
-	if err != nil {
-		log.Fatal("Error connecting to WebSocket server:", err)
+	// Create a custom WebSocket dialer
+	d := &wsDialer{
+		url: u.String(),
+		headers: http.Header{
+			"Origin": {"http://localhost"},
+		},
 	}
-	defer wsConn.Close()
 
-	// Create a NATS encoded connection over the WebSocket
-	nc, err := nats.Connect("", nats.CustomDialer(func(_, _ string) (net.Conn, error) {
-		return wsConn.UnderlyingConn(), nil
-	}))
+	// Create a NATS connection using the custom WebSocket dialer
+	nc, err := nats.Connect("", nats.CustomDialer(d))
 	if err != nil {
 		log.Fatal("Error creating NATS connection:", err)
 	}
