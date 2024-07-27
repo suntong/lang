@@ -87,7 +87,8 @@ func main() {
 	}
 
 	// Create a NATS connection using the custom WebSocket dialer
-	nc, err := nats.Connect("", nats.CustomDialer(d))
+	opts := nats.SetCustomDialer(d)
+	nc, err := nats.Connect("", opts)
 	if err != nil {
 		log.Fatal("Error creating NATS connection:", err)
 	}
