@@ -21,7 +21,56 @@ func (d *wsDialer) Dial(network, address string) (net.Conn, error) {
 	if err != nil {
 		return nil, err
 	}
-	return websocket.NetConn(nil, wsConn, websocket.MessageBinary), nil
+	return newWebSocketConn(wsConn), nil
+}
+
+type webSocketConn struct {
+	*websocket.Conn
+}
+
+func newWebSocketConn(ws *websocket.Conn) *webSocketConn {
+	return &webSocketConn{Conn: ws}
+}
+
+func (c *webSocketConn) Read(b []byte) (n int, err error) {
+	_, r, err := c.Conn.NextReader()
+	if err != nil {
+		return 0, err
+	}
+	return r.Read(b)
+}
+
+func (c *webSocketConn) Write(b []byte) (n int, err error) {
+	w, err := c.Conn.NextWriter(websocket.BinaryMessage)
+	if err != nil {
+		return 0, err
+	}
+	defer w.Close()
+	return w.Write(b)
+}
+
+func (c *webSocketConn) Close() error {
+	return c.Conn.Close()
+}
+
+func (c *webSocketConn) LocalAddr() net.Addr {
+	return c.Conn.LocalAddr()
+}
+
+func (c *webSocketConn) RemoteAddr() net.Addr {
+	return c.Conn.RemoteAddr()
+}
+
+func (c *webSocketConn) SetDeadline(t time.Time) error {
+	return c.Conn.UnderlyingConn().SetDeadline(t)
+}
+
+func (c *webSocketConn) SetReadDeadline(t time.Time) error {
+	return c.Conn.UnderlyingConn().SetReadDeadline(t)
+}
+
+func (c *webSocketConn) SetWriteDeadline(t time.Time) error {
+	return c.Conn.UnderlyingConn().SetWriteDeadline(t)
 }
 
 func main() {
