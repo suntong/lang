@@ -31,18 +31,11 @@ func (d *wsDialer) Dial(network, address string) (net.Conn, error) {
 // webSocketConn wraps the nhooyr.io/websocket connection to implement net.Conn
 type webSocketConn struct {
 	*websocket.Conn
-	readCtx  context.Context
-	writeCtx context.Context
-	cancel   context.CancelFunc
-}
-
-func newWebSocketConn(ws *websocket.Conn) *webSocketConn {
-	return &webSocketConn{Conn: ws, readCtx: context.Background(), writeCtx: context.Background()}
 }
 
 // Read reads from the WebSocket connection
 func (c *webSocketConn) Read(b []byte) (n int, err error) {
-	_, r, err := c.Conn.Reader(c.readCtx)
+	_, r, err := c.Conn.Reader(context.Background())
 	if err != nil {
 		return 0, err
 	}
@@ -51,7 +44,7 @@ func (c *webSocketConn) Read(b []byte) (n int, err error) {
 
 // Write writes to the WebSocket connection
 func (c *webSocketConn) Write(b []byte) (n int, err error) {
-	w, err := c.Conn.Writer(c.writeCtx, websocket.MessageBinary)
+	w, err := c.Conn.Writer(context.Background(), websocket.MessageBinary)
 	if err != nil {
 		return 0, err
 	}
@@ -76,20 +69,16 @@ func (c *webSocketConn) RemoteAddr() net.Addr {
 
 // SetDeadline sets the read and write deadlines (not implemented)
 func (c *webSocketConn) SetDeadline(t time.Time) error {
-	c.readCtx, c.cancel = context.WithDeadline(context.Background(), t)
-	c.writeCtx, c.cancel = context.WithDeadline(context.Background(), t)
 	return nil
 }
 
 // SetReadDeadline sets the read deadline (not implemented)
 func (c *webSocketConn) SetReadDeadline(t time.Time) error {
-	c.readCtx, c.cancel = context.WithDeadline(context.Background(), t)
 	return nil
 }
 
 // SetWriteDeadline sets the write deadline (not implemented)
 func (c *webSocketConn) SetWriteDeadline(t time.Time) error {
-	c.writeCtx, c.cancel = context.WithDeadline(context.Background(), t)
 	return nil
 }
 
