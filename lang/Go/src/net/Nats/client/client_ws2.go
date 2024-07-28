@@ -42,7 +42,7 @@ func newWebSocketConn(ws *websocket.Conn) *webSocketConn {
 
 // Read reads from the WebSocket connection
 func (c *webSocketConn) Read(b []byte) (n int, err error) {
-	_, r, err := c.Conn.Reader(context.Background())
+	_, r, err := c.Conn.Reader(c.readCtx)
 	if err != nil {
 		return 0, err
 	}
@@ -51,7 +51,7 @@ func (c *webSocketConn) Read(b []byte) (n int, err error) {
 
 // Write writes to the WebSocket connection
 func (c *webSocketConn) Write(b []byte) (n int, err error) {
-	w, err := c.Conn.Writer(context.Background(), websocket.MessageBinary)
+	w, err := c.Conn.Writer(c.writeCtx, websocket.MessageBinary)
 	if err != nil {
 		return 0, err
 	}
