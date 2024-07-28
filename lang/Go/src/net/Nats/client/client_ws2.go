@@ -11,10 +11,12 @@ import (
 	"nhooyr.io/websocket"
 )
 
+// wsDialer is a simple struct to hold the WebSocket URL
 type wsDialer struct {
 	url string
 }
 
+// Dial establishes a WebSocket connection and wraps it in a net.Conn
 func (d *wsDialer) Dial(network, address string) (net.Conn, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -23,9 +25,10 @@ func (d *wsDialer) Dial(network, address string) (net.Conn, error) {
 	if err != nil {
 		return nil, err
 	}
-	return newWebSocketConn(wsConn), nil
+	return &webSocketConn{Conn: wsConn}, nil
 }
 
+// webSocketConn wraps the nhooyr.io/websocket connection to implement net.Conn
 type webSocketConn struct {
 	*websocket.Conn
 	readCtx  context.Context
@@ -37,16 +40,18 @@ func newWebSocketConn(ws *websocket.Conn) *webSocketConn {
 	return &webSocketConn{Conn: ws, readCtx: context.Background(), writeCtx: context.Background()}
 }
 
+// Read reads from the WebSocket connection
 func (c *webSocketConn) Read(b []byte) (n int, err error) {
-	_, r, err := c.Conn.Reader(c.readCtx)
+	_, r, err := c.Conn.Reader(context.Background())
 	if err != nil {
 		return 0, err
 	}
 	return r.Read(b)
 }
 
+// Write writes to the WebSocket connection
 func (c *webSocketConn) Write(b []byte) (n int, err error) {
-	w, err := c.Conn.Writer(c.writeCtx, websocket.MessageBinary)
+	w, err := c.Conn.Writer(context.Background(), websocket.MessageBinary)
 	if err != nil {
 		return 0, err
 	}
@@ -54,29 +59,35 @@ func (c *webSocketConn) Write(b []byte) (n int, err error) {
 	return w.Write(b)
 }
 
+// Close closes the WebSocket connection
 func (c *webSocketConn) Close() error {
 	return c.Conn.Close(websocket.StatusNormalClosure, "")
 }
 
+// LocalAddr returns the local network address (not implemented)
 func (c *webSocketConn) LocalAddr() net.Addr {
 	return nil
 }
 
+// RemoteAddr returns the remote network address (not implemented)
 func (c *webSocketConn) RemoteAddr() net.Addr {
 	return nil
 }
 
+// SetDeadline sets the read and write deadlines (not implemented)
 func (c *webSocketConn) SetDeadline(t time.Time) error {
 	c.readCtx, c.cancel = context.WithDeadline(context.Background(), t)
 	c.writeCtx, c.cancel = context.WithDeadline(context.Background(), t)
 	return nil
 }
 
+// SetReadDeadline sets the read deadline (not implemented)
 func (c *webSocketConn) SetReadDeadline(t time.Time) error {
 	c.readCtx, c.cancel = context.WithDeadline(context.Background(), t)
 	return nil
 }
 
+// SetWriteDeadline sets the write deadline (not implemented)
 func (c *webSocketConn) SetWriteDeadline(t time.Time) error {
 	c.writeCtx, c.cancel = context.WithDeadline(context.Background(), t)
 	return nil
