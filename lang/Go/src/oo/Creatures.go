@@ -18,7 +18,12 @@ func Dump(c *Creature) {
 }
 
 func (c Creature) Dump() {
-	fmt.Printf("Name: '%s', Real: %t\n", c.Name, c.Real)
+	//fmt.Printf("Name: '%s', Real: %t\n", c.Name, c.Real)
+	fmt.Printf("%v, %+v\n", c, c)
+}
+
+func (c Creature) String() {
+	fmt.Printf("`%+v`", c)
 }
 
 //==========================================================================
@@ -95,6 +100,17 @@ func (d Door) Dump() {
 	fmt.Printf("Door => Thickness: %d, Color: %s", d.Thickness, d.Color)
 }
 
+type BaseRecord struct {
+	RawLine string
+	Index   string
+	Valid   bool
+}
+
+func (b BaseRecord) String() string {
+	//return fmt.Sprintf("%+v", b)
+	return fmt.Sprintf("ID: %s, Status: %v", b.Index, b.Valid)
+}
+
 ////////////////////////////////////////////////////////////////////////////
 // Global variables definitions
 
@@ -103,6 +119,15 @@ func (d Door) Dump() {
 
 // Function main
 func main() {
+	r := BaseRecord{
+		Index:   "2",
+		RawLine: "Test",
+		Valid:   false,
+	}
+	t := fmt.Sprintf("%v", r)
+	_ = t
+	//fmt.Sprintf("%s", t)
+
 	creature := &Creature{
 		"some creature",
 		false,
