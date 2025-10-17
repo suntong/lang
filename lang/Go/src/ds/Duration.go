@@ -86,13 +86,20 @@ func test4() {
 
 func test5() {
 	var passTime time.Duration
-	passTime, _ = time.ParseDuration("00:15:13.58")
-	fmt.Printf("Duration: %v\n", passTime)
+	input := "00:15:13.58"
+	passTime, err := time.ParseDuration(input) // NOK!
+	if err != nil {
+		fmt.Printf("❌ FAIL: Input '%s', Got Error: %v\n", input, err)
+	}
+	fmt.Printf("Duration: %v\n", passTime) // Duration: 0s
 
 	d1, _ := time.Parse("15:04:05", "00:15:13.58")
 	fmt.Println(d1)
 
 	d0, _ := time.Parse("15:04:05", "00:00:00")
+	fmt.Printf("d0: %v\n", d0)
+	// X: d0 = time.Time(0) cannot convert to type time.Time
+	// fmt.Printf("d0: %v\n", d0)
 	passTime = d1.Sub(d0)
 	fmt.Printf("Duration: %v\n", passTime)
 	fmt.Printf("in seconds: %d", int(passTime.Seconds()))
